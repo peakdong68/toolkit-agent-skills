@@ -1,6 +1,6 @@
 ---
 name: senior-architect
-description: "Use when the user needs system design, architecture decision records, scalability analysis, trade-off evaluation, or non-functional requirements planning. Triggers: new system design, technology selection, scaling strategy, ADR creation, infrastructure topology, service boundary definition."
+description: 'Use when the user needs system design, architecture decision records, scalability analysis, trade-off evaluation, or non-functional requirements planning. Triggers: new system design, technology selection, scaling strategy, ADR creation, infrastructure topology, service boundary definition.'
 ---
 
 # Senior Architect
@@ -26,6 +26,7 @@ Provide architecture-level guidance for system design decisions. This skill prod
 5. Establish success criteria and SLOs
 
 ### STOP — Do NOT proceed to Phase 2 until:
+
 - [ ] Functional requirements are listed
 - [ ] Non-functional requirements are quantified (not vague)
 - [ ] Constraints are explicit
@@ -47,15 +48,15 @@ Provide architecture-level guidance for system design decisions. This skill prod
 
 ### Architecture Style Decision Table
 
-| Factor | Monolith | Modular Monolith | Microservices | Serverless |
-|--------|----------|-----------------|---------------|------------|
-| Team size < 10 | Preferred | Strong fit | Overkill | Good for bursty |
-| Team size > 30 | Challenging | Good | Preferred | Depends |
-| Domain well-understood | Good fit | Good fit | Not needed yet | Good fit |
-| Domain evolving rapidly | Fine to start | Good fit | Too early | Good fit |
-| Need independent deployment | Not possible | Limited | Key benefit | Built-in |
-| Operational maturity low | Good fit | Good fit | High risk | Managed risk |
-| Variable/bursty load | Over-provisioned | Over-provisioned | Possible | Strong fit |
+| Factor                      | Monolith         | Modular Monolith | Microservices  | Serverless      |
+| --------------------------- | ---------------- | ---------------- | -------------- | --------------- |
+| Team size < 10              | Preferred        | Strong fit       | Overkill       | Good for bursty |
+| Team size > 30              | Challenging      | Good             | Preferred      | Depends         |
+| Domain well-understood      | Good fit         | Good fit         | Not needed yet | Good fit        |
+| Domain evolving rapidly     | Fine to start    | Good fit         | Too early      | Good fit        |
+| Need independent deployment | Not possible     | Limited          | Key benefit    | Built-in        |
+| Operational maturity low    | Good fit         | Good fit         | High risk      | Managed risk    |
+| Variable/bursty load        | Over-provisioned | Over-provisioned | Possible       | Strong fit      |
 
 ### Default Recommendation
 
@@ -63,14 +64,14 @@ Start with **Modular Monolith**: clear module boundaries, single deployment. Ext
 
 ### Trade-Off Analysis: Common Pairs
 
-| Improving | May Degrade |
-|-----------|-------------|
-| Consistency | Availability, Latency |
-| Performance | Maintainability, Cost |
-| Security | Usability, Performance |
-| Scalability | Simplicity, Cost |
-| Flexibility | Performance, Complexity |
-| Time to Market | Quality, Scalability |
+| Improving      | May Degrade             |
+| -------------- | ----------------------- |
+| Consistency    | Availability, Latency   |
+| Performance    | Maintainability, Cost   |
+| Security       | Usability, Performance  |
+| Scalability    | Simplicity, Cost        |
+| Flexibility    | Performance, Complexity |
+| Time to Market | Quality, Scalability    |
 
 ### Decision Matrix Template
 
@@ -87,6 +88,7 @@ Weight each quality attribute (1-5), score each option (1-5), multiply and sum.
 ```
 
 ### STOP — Do NOT proceed to Phase 3 until:
+
 - [ ] At least 2 architectural options have been evaluated
 - [ ] Trade-offs are explicitly documented
 - [ ] Decision matrix scores support the recommendation
@@ -106,51 +108,61 @@ Weight each quality attribute (1-5), score each option (1-5), multiply and sum.
 4. Identify risks and mitigation strategies
 5. Define evolutionary architecture guardrails
 
-### ADR Format
+### ADR Template Format
+
+Store ADRs in `docs/decisions/` with sequential numbering:
 
 ```markdown
 # ADR-{number}: {Title}
 
 ## Status
+
 Proposed | Accepted | Deprecated | Superseded by ADR-{number}
 
 ## Context
+
 What is the issue motivating this decision?
 
 ## Decision
+
 What change are we proposing?
 
 ## Consequences
 
 ### Positive
+
 - [Benefit 1]
 - [Benefit 2]
 
 ### Negative
+
 - [Trade-off 1]
 - [Trade-off 2]
 
 ### Risks
+
 - [Risk and mitigation]
 
 ## Alternatives Considered
-| Option | Pros | Cons | Verdict |
-|--------|------|------|---------|
-| Option A | ... | ... | Chosen |
-| Option B | ... | ... | Rejected because... |
+
+| Option   | Pros | Cons | Verdict             |
+| -------- | ---- | ---- | ------------------- |
+| Option A | ...  | ...  | Chosen              |
+| Option B | ...  | ...  | Rejected because... |
 ```
 
 ### C4 Model Levels
 
-| Level | Shows | When to Use |
-|-------|-------|-------------|
-| Level 1: System Context | Users and external systems | Always |
-| Level 2: Container | Major technical building blocks | Always |
-| Level 3: Component | Components within containers | Complex services |
-| Level 4: Code | Class-level detail | Critical/complex areas only |
+| Level                   | Shows                           | When to Use                 |
+| ----------------------- | ------------------------------- | --------------------------- |
+| Level 1: System Context | Users and external systems      | Always                      |
+| Level 2: Container      | Major technical building blocks | Always                      |
+| Level 3: Component      | Components within containers    | Complex services            |
+| Level 4: Code           | Class-level detail              | Critical/complex areas only |
 
 ### STOP — Documentation complete when:
-- [ ] ADRs written for all key decisions
+
+- [ ] ADRs written for all key decisions and saved
 - [ ] System context diagram created
 - [ ] NFRs validated against design
 - [ ] Risks documented with mitigations
@@ -161,21 +173,21 @@ What change are we proposing?
 
 ### Horizontal Scaling Decision Table
 
-| Pattern | Use When | Implementation |
-|---------|----------|---------------|
-| Load Balancing | Multiple instances of same service | Round-robin, least connections, IP hash |
-| Stateless Services | Need to add/remove instances freely | JWT/external session store |
-| Auto-scaling | Variable load patterns | CPU/memory/request-rate triggers |
-| Read Replicas | Read-heavy workloads | Route reads to replicas, writes to primary |
+| Pattern            | Use When                            | Implementation                             |
+| ------------------ | ----------------------------------- | ------------------------------------------ |
+| Load Balancing     | Multiple instances of same service  | Round-robin, least connections, IP hash    |
+| Stateless Services | Need to add/remove instances freely | JWT/external session store                 |
+| Auto-scaling       | Variable load patterns              | CPU/memory/request-rate triggers           |
+| Read Replicas      | Read-heavy workloads                | Route reads to replicas, writes to primary |
 
 ### Sharding Strategy Decision Table
 
-| Strategy | How | Good For |
-|----------|-----|----------|
-| Hash-based | Consistent hash of key | Even distribution |
-| Range-based | Date range, ID range | Time-series data |
-| Geographic | By region/country | Data locality |
-| Tenant-based | Per customer | Multi-tenant SaaS |
+| Strategy     | How                    | Good For          |
+| ------------ | ---------------------- | ----------------- |
+| Hash-based   | Consistent hash of key | Even distribution |
+| Range-based  | Date range, ID range   | Time-series data  |
+| Geographic   | By region/country      | Data locality     |
+| Tenant-based | Per customer           | Multi-tenant SaaS |
 
 ### Caching Layers
 
@@ -190,26 +202,31 @@ Application Cache (Redis) -> Database Query Cache -> Database
 
 ```markdown
 ## Performance
+
 - Response time: p95 < 200ms, p99 < 500ms for API calls
 - Throughput: 1000 RPS sustained, 5000 RPS peak
 - Batch processing: 1M records/hour
 
 ## Availability
+
 - Target: 99.9% (8.76h downtime/year)
 - RTO (Recovery Time Objective): < 15 minutes
 - RPO (Recovery Point Objective): < 5 minutes
 
 ## Scalability
+
 - Current: 10K DAU
 - 12-month target: 100K DAU
 - Scale dimension: users, data volume, request rate
 
 ## Security
+
 - Authentication: OAuth 2.0 / OIDC
 - Authorization: RBAC with resource-level permissions
 - Data encryption: at rest (AES-256) and in transit (TLS 1.3)
 
 ## Observability
+
 - Logging: structured JSON, 30-day retention
 - Metrics: RED method, custom business metrics
 - Tracing: distributed tracing across all services
@@ -218,37 +235,37 @@ Application Cache (Redis) -> Database Query Cache -> Database
 
 ### SLO/SLA/SLI Framework
 
-| Term | Definition | Example |
-|------|-----------|---------|
-| **SLI** | Measurable metric | Request latency, error rate |
-| **SLO** | Target value | 99.9% availability |
-| **SLA** | Contractual commitment | 99.5% with penalty clause |
-| **Error Budget** | 1 - SLO | 0.1% = 8.76h/year |
+| Term             | Definition             | Example                     |
+| ---------------- | ---------------------- | --------------------------- |
+| **SLI**          | Measurable metric      | Request latency, error rate |
+| **SLO**          | Target value           | 99.9% availability          |
+| **SLA**          | Contractual commitment | 99.5% with penalty clause   |
+| **Error Budget** | 1 - SLO                | 0.1% = 8.76h/year           |
 
 ---
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
-|-------------|----------------|-----------------|
-| Resume-driven architecture | Complexity without benefit | Choose simplest solution that works |
-| Distributed monolith | All downsides of both | Either true monolith or true microservices |
-| Premature optimization | Scaling for 1M users with 100 | Design for current + 10x, not 1000x |
-| Golden hammer | One technology for everything | Right tool for each problem |
-| Architecture without validation | Untested assumptions | Load test, failure test, validate |
-| Big upfront design without iteration | Requirements change | Evolutionary architecture with guardrails |
-| Vague NFRs ("fast", "scalable") | Cannot be validated | Quantified targets with measurement |
+| Anti-Pattern                         | Why It Is Wrong               | Correct Approach                           |
+| ------------------------------------ | ----------------------------- | ------------------------------------------ |
+| Resume-driven architecture           | Complexity without benefit    | Choose simplest solution that works        |
+| Distributed monolith                 | All downsides of both         | Either true monolith or true microservices |
+| Premature optimization               | Scaling for 1M users with 100 | Design for current + 10x, not 1000x        |
+| Golden hammer                        | One technology for everything | Right tool for each problem                |
+| Architecture without validation      | Untested assumptions          | Load test, failure test, validate          |
+| Big upfront design without iteration | Requirements change           | Evolutionary architecture with guardrails  |
+| Vague NFRs ("fast", "scalable")      | Cannot be validated           | Quantified targets with measurement        |
 
 ---
 
 ## Subagent Dispatch Opportunities
 
-| Task Pattern | Dispatch To | When |
-|---|---|---|
-| Analyzing different architecture layers | `Agent` tool with `subagent_type="Explore"` (one per layer) | When reviewing frontend, backend, and infra independently |
-| Security assessment of architecture | `Agent` tool invoking `security-review` skill | When architecture involves auth, data flow, or external APIs |
-| Performance implications analysis | `Agent` tool invoking `performance-optimization` skill | When architecture decisions affect latency or throughput |
-| Code quality review of existing patterns | `Agent` tool dispatching `code-reviewer` agent | When evaluating current codebase for refactoring |
+| Task Pattern                             | Dispatch To                                                 | When                                                         |
+| ---------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------ |
+| Analyzing different architecture layers  | `Agent` tool with `subagent_type="Explore"` (one per layer) | When reviewing frontend, backend, and infra independently    |
+| Security assessment of architecture      | `Agent` tool invoking `security-review` skill               | When architecture involves auth, data flow, or external APIs |
+| Performance implications analysis        | `Agent` tool invoking `performance-optimization` skill      | When architecture decisions affect latency or throughput     |
+| Code quality review of existing patterns | `Agent` tool dispatching `code-reviewer` agent              | When evaluating current codebase for refactoring             |
 
 Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 
@@ -256,15 +273,15 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 
 ## Integration Points
 
-| Skill | Relationship |
-|-------|-------------|
-| `senior-backend` | Backend implementation follows architecture decisions |
-| `senior-fullstack` | Full-stack architecture follows service boundaries |
-| `security-review` | Security is a cross-cutting architectural concern |
-| `performance-optimization` | Performance NFRs drive optimization targets |
-| `planning` | Architecture decisions inform implementation planning |
-| `code-review` | Review validates architectural consistency |
-| `acceptance-testing` | NFRs become acceptance criteria |
+| Skill                      | Relationship                                          |
+| -------------------------- | ----------------------------------------------------- |
+| `senior-backend`           | Backend implementation follows architecture decisions |
+| `senior-fullstack`         | Full-stack architecture follows service boundaries    |
+| `security-review`          | Security is a cross-cutting architectural concern     |
+| `performance-optimization` | Performance NFRs drive optimization targets           |
+| `planning`                 | Architecture decisions inform implementation planning |
+| `code-review`              | Review validates architectural consistency            |
+| `acceptance-testing`       | NFRs become acceptance criteria                       |
 
 ---
 
