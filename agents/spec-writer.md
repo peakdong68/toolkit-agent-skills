@@ -78,9 +78,11 @@ model: inherit
 
 使用 `<int>-<descriptive-name>.md` 命名规范：
 ```
-specs/<date>_<id>_<topic>/01-user-registration.md
-specs/<date>_<id>_<topic>/02-email-verification.md
-specs/<date>_<id>_<topic>/03-password-reset.md
+docs/specs/YYYY-MM-DD-<topic>/
+├── 01-color-extraction.md
+├── 02-palette-rendering.md
+├── 03-export-formats.md
+└── 04-color-accessibility.md
 ```
 
 ## 质量标准
