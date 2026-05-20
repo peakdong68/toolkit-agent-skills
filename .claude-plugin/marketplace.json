@@ -1,0 +1,20 @@
+{
+  "name": "toolkit-agents",
+  "owner": {
+    "name": "Peak Dong"
+  },
+  "version": "1.0.0",
+  "metadata": {
+    "description": "Production-grade engineering skills for AI coding agents — covering the full software development lifecycle from spec to ship."
+  },
+  "plugins": [
+    {
+      "name": "toolkit",
+      "source": {
+        "source": "github",
+        "repo": "peakdong68/toolkit-agent-skills"
+      },
+      "description": "Complete AI-optimized development environment with planning, code review, PRD generation, self-learning, task management, and more"
+    }
+  ]
+}
