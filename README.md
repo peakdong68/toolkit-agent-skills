@@ -2,6 +2,24 @@
 
 ## Quick Start
 
+**Marketplace install:**
+
+```
+/plugin marketplace add peakdong68/toolkit-agent-skills
+
+/plugin install toolkit@toolkit-agents
+```
+
+**Local / development:**
+
+```bash
+
+git clone https://github.com/peakdong68/toolkit-agent-skills.git
+
+claude --plugin-dir /path/to/toolkit-agent-skills
+
+```
+
 ## What You Get
 
 | 64 Skills | 20 Agents | 31 Commands | Hooks | Memory System |
