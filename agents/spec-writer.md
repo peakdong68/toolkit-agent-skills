@@ -77,10 +77,13 @@ For each spec file, verify:
 ## File Naming
 
 Use `<int>-<descriptive-name>.md` convention:
+
 ```
-docs/specs/<date>_<topic>/01-user-registration.md
-docs/specs/<date>_<topic>/02-email-verification.md
-docs/specs/<date>_<topic>/03-password-reset.md
+docs/specs/YYYY-MM-DD-<topic>/
+├── 01-color-extraction.md
+├── 02-palette-rendering.md
+├── 03-export-formats.md
+└── 04-color-accessibility.md
 ```
 
 ## Quality Standards

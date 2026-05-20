@@ -68,7 +68,7 @@ STOP after topic breakdown — confirm the list of spec files before writing the
 **File naming convention:** `<int>-<descriptive-name>.md`
 
 ```
-specs/
+docs/specs/YYYY-MM-DD-<topic>/
 ├── 01-color-extraction.md
 ├── 02-palette-rendering.md
 ├── 03-export-formats.md
