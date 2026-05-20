@@ -1,263 +1,264 @@
 ---
 name: finishing-a-development-branch
 description: >
-  Use when completing work on a feature branch, preparing to merge, or cleaning up after development
-  is done. Triggers: branch work is complete, user says "merge", "create PR", "finish branch",
-  "done with this branch", ready for code review.
+  用于完成功能分支上的工作、准备合并或开发完成后进行清理时触发。
+  触发条件：分支工作已完成、用户提及“合并”、“创建 PR”、“结束分支”、“此分支已处理完毕”、准备进行代码审查。
 ---
 
-# Finishing a Development Branch
+# 完成开发分支
 
-## Overview
+## 概述
 
-Provide a structured, safe process for completing work on a development branch, including verification, merge strategy selection, and cleanup. This skill ensures no branch is merged without passing tests, and every destructive operation requires explicit user confirmation.
+提供一个结构化且安全的流程，用于完成开发分支上的工作，包括验证、合并策略选择及清理。该技能确保在测试未通过时绝不合并分支，且每项破坏性操作均需用户明确确认。
 
-## When to Use
+## 适用场景
 
-- All planned work on a feature branch is complete
-- A branch is ready for code review or merge
-- Cleaning up after development work is finished
-- Preparing a pull request for team review
+- 功能分支上的所有计划工作已完成
+- 分支已准备好进行代码审查或合并
+- 开发工作完成后进行清理
+- 为团队审查准备拉取请求（PR）
 
-## Phase 1: Verify All Tests Pass
+## 第一阶段：验证所有测试通过
 
-[HARD-GATE] Do NOT proceed to any merge or PR activity without passing verification.
+[HARD-GATE] 在通过验证前，切勿进行任何合并或 PR 操作。
 
-Before any merge or PR activity, invoke **verification-before-completion** to confirm:
+在任何合并或 PR 操作之前，调用 **verification-before-completion**（完成前验证）以确认：
 
-- All tests pass (unit, integration, e2e as applicable)
-- No lint errors or warnings
-- Build succeeds
-- No untracked files that should be committed
+- 所有测试均通过（单元测试、集成测试、端到端测试等，视情况而定）
+- 无 lint 错误或警告
+- 构建成功
+- 无应提交但未追踪的文件
 
 ```bash
-# Run the project's full verification suite
-# Do NOT skip this step even if "tests were passing earlier"
+# 运行项目的完整验证套件
+# 即使“之前测试是通过的”，也绝不可跳过此步骤
 ```
 
-If verification fails, STOP. Fix the failures before proceeding. Do NOT create PRs or merge branches with failing tests.
+若验证失败，立即停止。在继续前修复失败项。切勿创建 PR 或合并包含失败测试的分支。
 
-**STOP — Verification must pass before continuing to Phase 2.**
+**停止 — 验证必须通过后方可进入第二阶段。**
 
-## Phase 2: Determine Base Branch
+## 第二阶段：确定目标分支（Base Branch）
 
-Identify the branch to merge into, using this detection logic:
+使用以下检测逻辑确定要合并到的目标分支：
 
-### Auto-Detection
+### 自动检测
 
 ```bash
-# Check for common base branch names
+# 检查常见的目标分支名称
 git branch -a | grep -E 'remotes/origin/(main|master|develop)$'
 
-# Check what branch was the fork point
+# 检查当前分支是从哪个分支分叉出来的
 git log --oneline --decorate --graph HEAD...main --first-parent 2>/dev/null
 git log --oneline --decorate --graph HEAD...master --first-parent 2>/dev/null
 ```
 
-### Base Branch Selection Decision Table
+### 目标分支选择决策表
 
-| Condition | Base Branch | Confidence |
-|---|---|---|
-| `main` exists | `main` | High |
-| Only `master` exists | `master` | High |
-| `develop` exists and project uses GitFlow | `develop` | Medium |
-| Multiple candidates found | Ask user | Required |
-| None of the above exist | Ask user | Required |
+| 条件                             | 目标分支  | 置信度 |
+| -------------------------------- | --------- | ------ |
+| `main` 存在                      | `main`    | 高     |
+| 仅 `master` 存在                 | `master`  | 高     |
+| `develop` 存在且项目使用 GitFlow | `develop` | 中     |
+| 发现多个候选分支                 | 询问用户  | 必需   |
+| 以上均不存在                     | 询问用户  | 必需   |
 
-### Verify Base Branch is Up to Date
+### 验证目标分支是否为最新状态
 
 ```bash
 git fetch origin
 git log HEAD..<base-branch> --oneline
 ```
 
-If the base branch has advanced since the feature branch was created, inform the user. They may want to rebase or merge base into the feature branch first.
+如果自功能分支创建以来目标分支已有更新，请通知用户。他们可能希望先基于目标分支进行 rebase 或将目标分支合并到功能分支中。
 
-### Base Branch Divergence Decision Table
+### 目标分支分歧决策表
 
-| Divergence | Action |
-|---|---|
-| Base has 0 new commits | Proceed normally |
-| Base has 1-5 new commits | Inform user, suggest rebase |
-| Base has 6+ new commits | Warn user, recommend merge or rebase before proceeding |
-| Merge conflicts detected | STOP — resolve conflicts first |
+| 分歧情况                    | 操作                                   |
+| --------------------------- | -------------------------------------- |
+| 目标分支无新提交            | 正常继续                               |
+| 目标分支有 1-5 个新提交     | 通知用户，建议 rebase                  |
+| 目标分支有 6 个及以上新提交 | 警告用户，建议先合并或 rebase 后再继续 |
+| 检测到合并冲突              | 停止 — 先解决冲突                      |
 
-**STOP — Confirm the base branch with the user before proceeding.**
+**停止 — 在继续前，必须与用户确认目标分支。**
 
-## Phase 3: Present Merge Options
+## 第三阶段：提供合并选项
 
-Present exactly these four options to the user. Do NOT add or remove options.
+向用户准确提供以下四个选项。切勿添加或删除选项。
 
 ```
-How would you like to finish this branch?
+您希望如何结束此分支？
 
-  A) Create PR    -- push and open a pull request for review
-  B) Merge        -- merge into <base> with a merge commit
-  C) Squash merge -- squash into one commit, merge into <base>
-  D) Leave as-is  -- keep the branch, decide later
+  A) 创建 PR    -- 推送并打开拉取请求以供审查
+  B) 合并        -- 通过合并提交将其合并到 <base>
+  C) 压缩合并 -- 压缩为单个提交，合并到 <base>
+  D) 保持原样  -- 保留分支，稍后决定
 ```
 
-### Option Selection Decision Table
+### 选项选择决策表
 
-| Context | Recommended Option | Why |
-|---|---|---|
-| Team project with code review | A) Create PR | Enables review workflow |
-| Solo project, clean history | B) Merge | Preserves full branch history |
-| Many WIP commits, messy history | C) Squash merge | Clean single commit on base |
-| Work incomplete or uncertain | D) Leave as-is | No risk, decide later |
+| 上下文/场景                 | 推荐选项    | 原因                           |
+| --------------------------- | ----------- | ------------------------------ |
+| 需要代码审查的团队项目      | A) 创建 PR  | 启用审查工作流                 |
+| 个人项目，需保持历史整洁    | B) 合并     | 保留完整的分支历史             |
+| 包含大量 WIP 提交，历史杂乱 | C) 压缩合并 | 在目标分支上生成整洁的单一提交 |
+| 工作未完成或尚不确定        | D) 保持原样 | 无风险，留待日后决定           |
 
-**STOP — Wait for user to select an option. Do NOT assume a default.**
+**停止 — 等待用户选择选项。切勿假设默认值。**
 
-## Phase 4: Execute Chosen Option
+## 第四阶段：执行所选选项
 
-### Option A: Create Pull Request
+### 选项 A：创建拉取请求（PR）
 
 ```bash
-# Push the branch
+# 推送分支
 git push -u origin <branch-name>
 
-# Generate PR title from branch name or recent commits
-# Generate PR body from commit messages and diff summary
+# 根据分支名称或近期提交生成 PR 标题
+# 根据提交信息和差异摘要生成 PR 描述
 gh pr create --title "<title>" --body "<body>"
 ```
 
-**PR Title Generation:**
-- Derive from branch name: `feature/add-auth` becomes `Add authentication`
-- Keep under 70 characters
-- Use imperative mood
+**PR 标题生成：**
 
-**PR Body Generation:**
-- Summarize the changes (what and why)
-- List key modifications
-- Note any breaking changes
-- Include test plan
+- 基于分支名称提取：`feature/add-auth` 转换为 `Add authentication`（添加身份验证）
+- 长度控制在 70 个字符以内
+- 使用祈使句
 
-### Option B: Merge Locally
+**PR 描述生成：**
+
+- 总结更改内容（做了什么及原因）
+- 列出关键修改点
+- 注明任何破坏性更改
+- 包含测试方案
+
+### 选项 B：本地合并
 
 ```bash
-# Switch to base branch
+# 切换至目标分支
 git checkout <base-branch>
 
-# Merge feature branch
+# 合并功能分支
 git merge <feature-branch>
 
-# Delete the feature branch
+# 删除功能分支
 git branch -d <feature-branch>
 ```
 
-**Confirmation required** before executing the merge.
+执行合并前**必须获得确认**。
 
-### Option C: Squash Merge
+### 选项 C：压缩合并
 
 ```bash
-# Switch to base branch
+# 切换至目标分支
 git checkout <base-branch>
 
-# Squash merge
+# 执行压缩合并
 git merge --squash <feature-branch>
 
-# Commit with a comprehensive message
+# 使用综合性提交信息进行提交
 git commit -m "<squash commit message>"
 
-# Delete the feature branch
+# 删除功能分支
 git branch -d <feature-branch>
 ```
 
-**Squash commit message** should summarize all changes from the branch, not just the last commit.
+**压缩提交信息**应总结该分支的所有更改，而不仅仅是最后一次提交。
 
-**Confirmation required** before executing the squash merge.
+执行压缩合并前**必须获得确认**。
 
-### Option D: Leave Branch As-Is
+### 选项 D：保持分支原样
 
-No action needed. Inform the user:
+无需操作。告知用户：
 
 ```
-Branch <branch-name> left as-is.
-You can return to it later with: git checkout <branch-name>
+分支 <branch-name> 已保持原样。
+您稍后可通过以下命令切回：git checkout <branch-name>
 ```
 
-## Phase 5: Cleanup
+## 第五阶段：清理
 
-After executing options A, B, or C, perform cleanup:
+执行选项 A、B 或 C 后，进行清理：
 
-### Remove Worktree (if applicable)
+### 移除工作树（如适用）
 
-If the branch was developed in a git worktree:
+如果分支是在 git worktree 中开发的：
 
 ```bash
-# Navigate out of the worktree first
+# 先退出该工作树
 git worktree remove <worktree-path>
 git worktree prune
 ```
 
-### Clean Up Remote Tracking (Option B and C only)
+### 清理远程追踪分支（仅选项 B 和 C）
 
-If the branch was previously pushed:
+如果该分支此前已推送：
 
 ```bash
-# Delete remote branch after local merge
+# 本地合并后删除远程分支
 git push origin --delete <branch-name>
 ```
 
-**Confirmation required** before deleting remote branches.
+删除远程分支前**必须获得确认**。
 
-### Verify Final State
+### 验证最终状态
 
 ```bash
 git status
 git log --oneline -5
 ```
 
-Confirm the base branch is in the expected state.
+确认目标分支处于预期状态。
 
-## Confirmation Requirements
+## 确认要求
 
-[HARD-GATE] The following operations require explicit user confirmation before execution. Do NOT proceed on assumption. Always ask.
+[HARD-GATE] 以下操作在执行前必须获得用户的明确确认。切勿基于假设继续。始终进行询问。
 
-| Operation | Why Confirmation Is Required |
-|---|---|
-| Merge into base branch | Changes base branch history |
-| Squash merge | Loses individual commit history |
-| Delete local branch | Cannot be undone if not pushed |
-| Delete remote branch | Affects other collaborators |
-| Force remove worktree | May discard uncommitted changes |
-| Rebase onto updated base | Rewrites commit history |
+| 操作                            | 为何需要确认           |
+| ------------------------------- | ---------------------- |
+| 合并到目标分支                  | 会更改目标分支历史     |
+| 压缩合并                        | 会丢失独立的提交历史   |
+| 删除本地分支                    | 若未推送则无法撤销     |
+| 删除远程分支                    | 会影响其他协作者       |
+| 强制移除工作树                  | 可能会丢弃未提交的更改 |
+| 基于更新后的目标分支进行 Rebase | 会重写提交历史         |
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | What to Do Instead |
-|---|---|---|
-| Merging without running tests | Broken code reaches base branch | Always run full verification first |
-| Skipping base branch freshness check | Merge conflicts discovered late | `git fetch` and check divergence |
-| Auto-selecting merge strategy | User may prefer different approach | Always present all four options |
-| Deleting branch without confirmation | Data loss risk | Ask before every deletion |
-| Creating PR with failing CI | Wastes reviewer time | Fix CI before creating PR |
-| Squash message from last commit only | Loses context of full branch work | Summarize all changes in squash msg |
-| Leaving stale remote branches | Cluttered repository | Clean up remote after merge |
-| Force-pushing after PR creation | Destroys review comments | Avoid force-push on PR branches |
+| 反模式                         | 为何错误                 | 正确做法                    |
+| ------------------------------ | ------------------------ | --------------------------- |
+| 未运行测试即合并               | 损坏的代码会进入目标分支 | 始终先运行完整验证          |
+| 跳过目标分支新鲜度检查         | 合并冲突发现过晚         | 执行 `git fetch` 并检查分歧 |
+| 自动选择合并策略               | 用户可能偏好其他方式     | 始终提供全部四个选项        |
+| 未经确认删除分支               | 存在数据丢失风险         | 每次删除前均需询问          |
+| 创建 CI 失败的 PR              | 浪费审查者时间           | 创建 PR 前修复 CI           |
+| 仅使用最后一次提交作为压缩信息 | 丢失整个分支工作的上下文 | 在压缩信息中总结所有更改    |
+| 遗留过期的远程分支             | 仓库杂乱                 | 合并后清理远程分支          |
+| 创建 PR 后强制推送             | 会破坏审查评论           | 避免在 PR 分支上强制推送    |
 
-## Error Handling
+## 错误处理
 
-| Error | Action |
-|---|---|
-| Merge conflicts | Report conflicts, ask user to resolve, do NOT auto-resolve |
-| Push rejected | Fetch and check if rebase/merge is needed |
-| PR creation fails | Check `gh auth status`, report error details |
-| Branch already deleted | Skip deletion, continue with remaining cleanup |
-| Tests fail | STOP immediately, do NOT merge or create PR |
-| Base branch does not exist on remote | Ask user to confirm the correct base |
+| 错误               | 操作                                |
+| ------------------ | ----------------------------------- |
+| 合并冲突           | 报告冲突，请用户解决，切勿自动解决  |
+| 推送被拒绝         | 拉取并检查是否需要 rebase/合并      |
+| PR 创建失败        | 检查 `gh auth status`，报告错误详情 |
+| 分支已删除         | 跳过删除，继续剩余清理步骤          |
+| 测试失败           | 立即停止，切勿合并或创建 PR         |
+| 远程不存在目标分支 | 请用户确认正确的目标分支            |
 
-## Integration Points
+## 集成点
 
-| Skill | Integration |
-|---|---|
-| `verification-before-completion` | Must invoke in Phase 1 before any merge activity |
-| `using-git-worktrees` | Cleanup includes worktree removal if applicable |
-| `git-commit-helper` | Squash commit message follows conventional commit format |
-| `code-review` | PR creation (Option A) feeds into code review workflow |
-| `planning` | Branch completion is the final step of plan execution |
-| `deployment` | Merge to main/release may trigger deployment pipeline |
+| 技能                             | 集成方式                                 |
+| -------------------------------- | ---------------------------------------- |
+| `verification-before-completion` | 必须在第一阶段调用，方可进行任何合并活动 |
+| `using-git-worktrees`            | 如适用，清理步骤包含移除工作树           |
+| `git-commit-helper`              | 压缩提交信息遵循约定式提交格式           |
+| `code-review`                    | PR 创建（选项 A）将接入代码审查工作流    |
+| `planning`                       | 分支完成是计划执行的最后一步             |
+| `deployment`                     | 合并到 main/release 可能会触发部署流水线 |
 
-## Skill Type
+## 技能类型
 
-**RIGID** — Follow this process exactly. Every phase must be completed in order. Do NOT skip verification. Do NOT merge without user confirmation. Do NOT assume a merge strategy. Do NOT delete branches without asking.
+**RIGID** — 必须严格遵循此流程。每个阶段必须按顺序完成。切勿跳过验证。未经用户确认切勿合并。切勿假设合并策略。未经询问切勿删除分支。

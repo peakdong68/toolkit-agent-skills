@@ -1,137 +1,137 @@
 ---
 name: seo-optimizer
 description: >
-  Use when the user needs technical SEO audits, meta tag optimization, structured data markup,
-  Core Web Vitals improvement, or search engine visibility enhancement.
-  Trigger conditions: site audit request, meta tag review, Schema.org implementation,
-  page speed optimization, indexability issues, sitemap or robots.txt configuration,
-  hreflang setup, Open Graph or Twitter Card tags, rich snippet eligibility.
+  当用户需要技术SEO审计、元标签优化、结构化数据标记、
+  Core Web Vitals改进或搜索引擎可见性增强时使用。
+  触发条件：网站审计请求、元标签审查、Schema.org实施、
+  页面速度优化、可索引性问题、sitemap或robots.txt配置、
+  hreflang设置、Open Graph或Twitter Card标签、富媒体摘要资格。
 ---
 
-# SEO Optimizer
+# SEO优化器
 
-## Overview
+## 概述
 
-Optimize websites for search engine visibility through technical SEO, on-page optimization, structured data implementation, and Core Web Vitals performance tuning. This skill covers crawlability, indexability, meta tag strategy, Schema.org markup, sitemap generation, canonical URL management, internationalization (hreflang), and performance optimization for Google's ranking signals.
+通过技术SEO、页面内优化、结构化数据实施和Core Web Vitals性能调优来优化网站的搜索引擎可见性。本技能涵盖可抓取性、可索引性、元标签策略、Schema.org标记、sitemap生成、规范URL管理、国际化（hreflang）以及针对Google排名信号的性能优化。
 
-Apply this skill whenever a site needs better organic search performance, whether for a single page audit or a full-site overhaul.
+每当网站需要提升自然搜索表现时应用此技能，无论是单页审计还是全站改造。
 
-## Multi-Phase Process
+## 多阶段流程
 
-### Phase 1: Technical Audit
+### 阶段1：技术审计
 
-1. Crawl the site (Screaming Frog, Sitebulb, or custom script)
-2. Check robots.txt and XML sitemap validity
-3. Identify crawl errors, redirect chains, and broken links
-4. Verify canonical URLs and duplicate content handling
-5. Assess mobile-friendliness and responsive design
-6. Check HTTPS implementation and mixed content
-7. Evaluate page load performance (Core Web Vitals)
+1. 抓取网站（使用Screaming Frog、Sitebulb或自定义脚本）
+2. 检查robots.txt和XML sitemap的有效性
+3. 识别抓取错误、重定向链和死链接
+4. 验证规范URL和重复内容处理
+5. 评估移动友好性和响应式设计
+6. 检查HTTPS实施和混合内容问题
+7. 评估页面加载性能（Core Web Vitals）
 
-> **STOP — Do NOT proceed to Phase 2 until audit findings are documented and prioritized.**
+> **停止 — 在记录并优先处理审计发现之前，切勿进入阶段2。**
 
-### Phase 2: On-Page Optimization
+### 阶段2：页面内优化
 
-1. Audit title tags (unique, 50-60 chars, keyword placement)
-2. Review meta descriptions (unique, 150-160 chars, compelling CTAs)
-3. Analyze heading hierarchy (single H1, logical H2-H6 structure)
-4. Optimize image alt text and file names
-5. Review internal linking structure and anchor text
-6. Check URL structure (short, descriptive, hyphenated)
-7. Validate Open Graph and Twitter Card tags
+1. 审计标题标签（唯一性、50-60字符、关键词放置）
+2. 审查元描述（唯一性、150-160字符、吸引人的行动号召）
+3. 分析标题层级结构（单个H1、逻辑清晰的H2-H6结构）
+4. 优化图片alt文本和文件名
+5. 审查内部链接结构和锚文本
+6. 检查URL结构（简短、描述性、使用连字符）
+7. 验证Open Graph和Twitter Card标签
 
-> **STOP — Do NOT proceed to Phase 3 until on-page changes are implemented and verified.**
+> **停止 — 在实施并验证页面内更改之前，切勿进入阶段3。**
 
-### Phase 3: Structured Data Implementation
+### 阶段3：结构化数据实施
 
-1. Identify applicable Schema.org types for content
-2. Implement JSON-LD structured data
-3. Validate with Google Rich Results Test
-4. Test for rich snippet eligibility
-5. Monitor Search Console for structured data errors
+1. 识别内容适用的Schema.org类型
+2. 实施JSON-LD结构化数据
+3. 使用Google富媒体结果测试工具验证
+4. 测试富媒体摘要资格
+5. 在Search Console中监控结构化数据错误
 
-> **STOP — Do NOT proceed to Phase 4 until structured data passes validation.**
+> **停止 — 在结构化数据通过验证之前，切勿进入阶段4。**
 
-### Phase 4: Monitoring and Iteration
+### 阶段4：监控与迭代
 
-1. Set up Google Search Console monitoring
-2. Track Core Web Vitals over time
-3. Monitor indexation status and coverage
-4. Review search performance (clicks, impressions, CTR, position)
-5. Set up alerts for crawl errors and ranking drops
+1. 设置Google Search Console监控
+2. 持续追踪Core Web Vitals表现
+3. 监控索引状态和覆盖率
+4. 审查搜索表现（点击量、展示量、CTR、排名位置）
+5. 设置抓取错误和排名下降的警报
 
-## Audit Priority Decision Table
+## 审计优先级决策表
 
-| Finding | Severity | Fix Priority | Impact |
+| 发现项 | 严重程度 | 修复优先级 | 影响 |
 |---|---|---|---|
-| No HTTPS / mixed content | Critical | Immediate | Ranking penalty, trust signals |
-| Missing canonical URLs | Critical | Immediate | Duplicate content dilution |
-| Broken redirect chains (3+ hops) | High | This sprint | Crawl budget waste, link equity loss |
-| Missing or duplicate title tags | High | This sprint | CTR drop, ranking confusion |
-| No structured data | Medium | Next sprint | Missing rich snippets |
-| Missing alt text on images | Medium | Next sprint | Accessibility and image search loss |
-| Suboptimal Core Web Vitals | Medium | Next sprint | Ranking signal, user experience |
-| Missing hreflang tags (multi-language) | Low | Backlog | Geo-targeting issues |
-| Non-descriptive URL slugs | Low | Backlog | Minor ranking and CTR effect |
+| 无HTTPS/混合内容 | 严重 | 立即 | 排名惩罚、信任信号受损 |
+| 缺少规范URL | 严重 | 立即 | 重复内容权重稀释 |
+| 断裂的重定向链（3+跳） | 高 | 本冲刺周期 | 抓取预算浪费、链接权重损失 |
+| 缺失或重复的标题标签 | 高 | 本冲刺周期 | CTR下降、排名混淆 |
+| 无结构化数据 | 中 | 下一冲刺周期 | 错过富媒体摘要机会 |
+| 图片缺少alt文本 | 中 | 下一冲刺周期 | 无障碍访问和图片搜索损失 |
+| Core Web Vitals不达标 | 中 | 下一冲刺周期 | 排名信号、用户体验受损 |
+| 缺少hreflang标签（多语言） | 低 | 待办列表 | 地理定位问题 |
+| 非描述性URL片段 | 低 | 待办列表 | 对排名和CTR影响轻微 |
 
-## Meta Tag Reference
+## 元标签参考
 
-### Essential Meta Tags
+### 核心元标签
 ```html
 <head>
-  <!-- Primary -->
-  <title>Primary Keyword - Secondary Keyword | Brand Name</title>
-  <meta name="description" content="Compelling 150-160 char description with target keyword and clear value proposition.">
+  <!-- 主要标签 -->
+  <title>主关键词 - 次关键词 | 品牌名称</title>
+  <meta name="description" content="引人注目的150-160字符描述，包含目标关键词和清晰的价值主张。">
   <link rel="canonical" href="https://example.com/page">
 
-  <!-- Robots -->
+  <!-- 机器人指令 -->
   <meta name="robots" content="index, follow">
-  <!-- or noindex, nofollow for pages that shouldn't be indexed -->
+  <!-- 或针对不应被索引的页面使用 noindex, nofollow -->
 
-  <!-- Viewport (mobile) -->
+  <!-- 视口（移动端） -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Page Title for Social Sharing">
-  <meta property="og:description" content="Description optimized for social sharing.">
+  <meta property="og:title" content="用于社交分享的页面标题">
+  <meta property="og:description" content="针对社交分享优化的描述。">
   <meta property="og:image" content="https://example.com/og-image.jpg">
   <meta property="og:url" content="https://example.com/page">
-  <meta property="og:site_name" content="Brand Name">
+  <meta property="og:site_name" content="品牌名称">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Page Title">
-  <meta name="twitter:description" content="Twitter-optimized description.">
+  <meta name="twitter:title" content="页面标题">
+  <meta name="twitter:description" content="针对Twitter优化的描述。">
   <meta name="twitter:image" content="https://example.com/twitter-image.jpg">
 
-  <!-- Internationalization -->
+  <!-- 国际化 -->
   <link rel="alternate" hreflang="en" href="https://example.com/en/page">
   <link rel="alternate" hreflang="de" href="https://example.com/de/page">
   <link rel="alternate" hreflang="x-default" href="https://example.com/page">
 </head>
 ```
 
-### Meta Tag Optimization Matrix
+### 元标签优化矩阵
 
-| Element | Max Length | Priority Keywords | Common Mistakes |
+| 元素 | 最大长度 | 优先关键词 | 常见错误 |
 |---|---|---|---|
-| Title tag | 50-60 chars | Front-load primary keyword | Too long, keyword stuffing, duplicate |
-| Meta description | 150-160 chars | Include CTA and keyword | Missing, duplicate, no CTA |
-| H1 | N/A (single per page) | Primary keyword variation | Multiple H1s, missing H1 |
-| URL slug | 3-5 words | Target keyword | Too long, parameters, underscores |
-| Image alt | 125 chars | Descriptive, keyword if natural | Empty, "image of...", keyword stuffing |
-| OG title | 60-90 chars | Engaging, shareable | Same as title tag (missed opportunity) |
+| 标题标签 | 50-60字符 | 前置主关键词 | 过长、关键词堆砌、重复 |
+| 元描述 | 150-160字符 | 包含行动号召和关键词 | 缺失、重复、无行动号召 |
+| H1 | 不适用（每页单个） | 主关键词变体 | 多个H1、缺失H1 |
+| URL片段 | 3-5个词 | 目标关键词 | 过长、含参数、使用下划线 |
+| 图片alt | 125字符 | 描述性、自然融入关键词 | 空白、"图片显示..."、关键词堆砌 |
+| OG标题 | 60-90字符 | 吸引人、易分享 | 与标题标签相同（错失机会） |
 
-## Structured Data (JSON-LD)
+## 结构化数据（JSON-LD）
 
-### Article
+### 文章
 ```html
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "How to Optimize Core Web Vitals",
+  "headline": "如何优化Core Web Vitals",
   "author": {
     "@type": "Person",
     "name": "Jane Smith",
@@ -148,19 +148,19 @@ Apply this skill whenever a site needs better organic search performance, whethe
       "url": "https://example.com/logo.png"
     }
   },
-  "description": "A comprehensive guide to improving LCP, FID, and CLS scores."
+  "description": "一份提升LCP、FID和CLS分数的综合指南。"
 }
 </script>
 ```
 
-### Product
+### 产品
 ```html
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Product",
   "name": "Widget Pro",
-  "description": "Professional-grade widget for enterprise use.",
+  "description": "面向企业使用的专业级小部件。",
   "image": "https://example.com/widget-pro.jpg",
   "brand": { "@type": "Brand", "name": "WidgetCo" },
   "offers": {
@@ -179,7 +179,7 @@ Apply this skill whenever a site needs better organic search performance, whethe
 </script>
 ```
 
-### FAQ Page
+### FAQ页面
 ```html
 <script type="application/ld+json">
 {
@@ -188,10 +188,10 @@ Apply this skill whenever a site needs better organic search performance, whethe
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is Core Web Vitals?",
+      "name": "什么是Core Web Vitals？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Core Web Vitals are a set of metrics that measure real-world user experience for loading, interactivity, and visual stability."
+        "text": "Core Web Vitals是一组衡量加载、交互性和视觉稳定性方面真实用户体验的指标。"
       }
     }
   ]
@@ -199,78 +199,78 @@ Apply this skill whenever a site needs better organic search performance, whethe
 </script>
 ```
 
-### Schema Type Decision Guide
+### Schema类型决策指南
 
-| Content Type | Schema Type | Rich Result |
+| 内容类型 | Schema类型 | 富媒体结果 |
 |---|---|---|
-| Blog post | Article | Article snippet |
-| Product page | Product | Price, rating, availability |
-| FAQ section | FAQPage | Expandable Q&A |
-| How-to guide | HowTo | Step-by-step snippet |
-| Recipe | Recipe | Image, time, rating |
-| Event | Event | Date, location, price |
-| Local business | LocalBusiness | Map pack, hours |
-| Software | SoftwareApplication | Rating, price |
-| Breadcrumbs | BreadcrumbList | Breadcrumb trail |
-| Video | VideoObject | Thumbnail, duration |
+| 博客文章 | Article | 文章摘要 |
+| 产品页面 | Product | 价格、评分、库存状态 |
+| FAQ板块 | FAQPage | 可展开的问答 |
+| 操作指南 | HowTo | 步骤摘要 |
+| 食谱 | Recipe | 图片、时间、评分 |
+| 活动 | Event | 日期、地点、价格 |
+| 本地商家 | LocalBusiness | 地图包、营业时间 |
+| 软件应用 | SoftwareApplication | 评分、价格 |
+| 面包屑导航 | BreadcrumbList | 面包屑路径 |
+| 视频 | VideoObject | 缩略图、时长 |
 
 ## Core Web Vitals
 
-### Metrics and Thresholds
+### 指标与阈值
 
-| Metric | Good | Needs Improvement | Poor | Measures |
+| 指标 | 良好 | 需要改进 | 较差 | 衡量内容 |
 |---|---|---|---|---|
-| LCP (Largest Contentful Paint) | <= 2.5s | <= 4.0s | > 4.0s | Loading performance |
-| INP (Interaction to Next Paint) | <= 200ms | <= 500ms | > 500ms | Interactivity |
-| CLS (Cumulative Layout Shift) | <= 0.1 | <= 0.25 | > 0.25 | Visual stability |
+| LCP（最大内容绘制） | <= 2.5秒 | <= 4.0秒 | > 4.0秒 | 加载性能 |
+| INP（下次绘制交互） | <= 200毫秒 | <= 500毫秒 | > 500毫秒 | 交互性 |
+| CLS（累积布局偏移） | <= 0.1 | <= 0.25 | > 0.25 | 视觉稳定性 |
 
-### LCP Optimization
+### LCP优化
 ```html
-<!-- Preload hero image -->
+<!-- 预加载首屏图片 -->
 <link rel="preload" as="image" href="/hero.webp" fetchpriority="high">
 
-<!-- Use modern image formats -->
+<!-- 使用现代图片格式 -->
 <picture>
   <source srcset="/hero.avif" type="image/avif">
   <source srcset="/hero.webp" type="image/webp">
-  <img src="/hero.jpg" alt="Hero description" width="1200" height="600"
+  <img src="/hero.jpg" alt="首屏图片描述" width="1200" height="600"
        fetchpriority="high" decoding="async">
 </picture>
 ```
 
-### CLS Prevention
+### CLS预防
 ```css
-/* Always set dimensions on images and video */
+/* 始终为图片和视频设置尺寸 */
 img, video {
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
 }
 
-/* Reserve space for dynamic content */
+/* 为动态内容预留空间 */
 .ad-slot {
   min-height: 250px;
 }
 
-/* Avoid inserting content above existing content */
+/* 避免在现有内容上方插入内容 */
 .notification-bar {
-  position: fixed; /* doesn't shift layout */
+  position: fixed; /* 不会导致布局偏移 */
 }
 ```
 
-### INP Optimization
+### INP优化
 ```javascript
-// Break long tasks with yield
+// 通过yield拆分长任务
 async function processLargeDataset(data) {
   for (let i = 0; i < data.length; i++) {
     processItem(data[i]);
     if (i % 100 === 0) {
-      await new Promise(resolve => setTimeout(resolve, 0)); // yield to main thread
+      await new Promise(resolve => setTimeout(resolve, 0)); // 让出主线程
     }
   }
 }
 
-// Use requestIdleCallback for non-critical work
+// 使用requestIdleCallback处理非关键工作
 requestIdleCallback(() => {
   loadAnalytics();
   initNonCriticalFeatures();
@@ -279,7 +279,7 @@ requestIdleCallback(() => {
 
 ## XML Sitemap
 
-### Generation Pattern
+### 生成模式
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -298,14 +298,14 @@ requestIdleCallback(() => {
 </urlset>
 ```
 
-### Sitemap Best Practices
-- Maximum 50,000 URLs per sitemap file
-- Use sitemap index for larger sites
-- Include only canonical, indexable URLs
-- Update `lastmod` only when content genuinely changes
-- Submit via Google Search Console and robots.txt
+### Sitemap最佳实践
+- 每个sitemap文件最多50,000个URL
+- 大型网站使用sitemap索引
+- 仅包含规范的、可索引的URL
+- 仅在内容真正变更时更新`lastmod`
+- 通过Google Search Console和robots.txt提交
 
-## robots.txt Template
+## robots.txt模板
 ```
 User-agent: *
 Allow: /
@@ -318,23 +318,23 @@ Disallow: /*?filter=
 Sitemap: https://example.com/sitemap.xml
 ```
 
-## Next.js / React SEO Patterns
+## Next.js / React SEO模式
 
-### Next.js Metadata API (App Router)
+### Next.js Metadata API（App Router）
 ```typescript
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Brand Name',
-    default: 'Brand Name - Tagline',
+    template: '%s | 品牌名称',
+    default: '品牌名称 - 标语',
   },
-  description: 'Site-wide default description.',
+  description: '全站默认描述。',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://example.com',
-    siteName: 'Brand Name',
+    siteName: '品牌名称',
   },
   twitter: {
     card: 'summary_large_image',
@@ -349,7 +349,7 @@ export const metadata: Metadata = {
 };
 ```
 
-### Dynamic Metadata per Page
+### 每页动态元数据
 ```typescript
 export async function generateMetadata({ params }): Promise<Metadata> {
   const product = await getProduct(params.slug);
@@ -366,40 +366,40 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 }
 ```
 
-## Anti-Patterns / Common Mistakes
+## 反模式/常见错误
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
+| 反模式 | 失败原因 | 替代方案 |
 |---|---|---|
-| Keyword stuffing in titles/content | Triggers spam filters, reduces CTR | Use primary keyword once naturally, add variations |
-| Same title/description across pages | Duplicate content signals, wasted opportunity | Unique, page-specific meta for every indexable URL |
-| Blocking CSS/JS in robots.txt | Googlebot cannot render pages | Allow all rendering resources |
-| Structured data mismatching page content | Google penalties, rich snippet removal | Schema must reflect visible content exactly |
-| Redirect chains > 2 hops | Crawl budget waste, link equity loss | Redirect directly to final destination |
-| JS-only navigation without SSR links | Crawler cannot discover pages | Server-render navigation links |
-| Ignoring Core Web Vitals | Ranking signal degradation | Profile and optimize LCP, INP, CLS |
-| Missing canonical URLs | Duplicate content penalties | Set canonical on every indexable page |
-| Over-optimized anchor text | Unnatural link patterns trigger penalties | Use descriptive, varied anchor text |
-| Hiding content with CSS for SEO | Cloaking violation | All SEO content must be visible to users |
+| 标题/内容中关键词堆砌 | 触发垃圾过滤、降低CTR | 自然使用一次主关键词，添加变体 |
+| 多页使用相同标题/描述 | 重复内容信号、浪费机会 | 为每个可索引URL设置独特、页面专属的元数据 |
+| 在robots.txt中屏蔽CSS/JS | Googlebot无法渲染页面 | 允许所有渲染资源 |
+| 结构化数据与页面内容不匹配 | Google惩罚、富媒体摘要被移除 | Schema必须精确反映可见内容 |
+| 重定向链超过2跳 | 抓取预算浪费、链接权重损失 | 直接重定向到最终目标 |
+| 仅使用JS导航且无SSR链接 | 爬虫无法发现页面 | 服务器渲染导航链接 |
+| 忽略Core Web Vitals | 排名信号降级 | 分析并优化LCP、INP、CLS |
+| 缺少规范URL | 重复内容惩罚 | 为每个可索引页面设置规范链接 |
+| 过度优化的锚文本 | 非自然链接模式触发惩罚 | 使用描述性、多样化的锚文本 |
+| 用CSS隐藏内容以优化SEO | 违反伪装政策 | 所有SEO内容必须对用户可见 |
 
-## Anti-Rationalization Guards
+## 反合理化防护
 
-- Do NOT skip the technical audit because "the site looks fine" -- crawl it.
-- Do NOT add structured data without validating it passes the Rich Results Test.
-- Do NOT assume meta tags are correct without checking every page type.
-- Do NOT deploy SEO changes without before/after measurement.
-- Do NOT optimize for search engines at the expense of user experience.
+- 切勿因"网站看起来没问题"而跳过技术审计 — 请实际抓取。
+- 切勿在未通过富媒体结果测试验证前添加结构化数据。
+- 切勿在未检查每种页面类型前假设元标签正确。
+- 切勿在未进行前后对比测量的情况下部署SEO更改。
+- 切勿以牺牲用户体验为代价优化搜索引擎。
 
-## Integration Points
+## 集成点
 
-| Skill | How It Connects |
+| 技能 | 连接方式 |
 |---|---|
-| `content-creator` | SEO informs keyword targeting and headline strategy for marketing content |
-| `content-research-writer` | Research-backed content needs SEO-optimized structure and meta tags |
-| `senior-frontend` | Core Web Vitals optimization requires frontend performance tuning |
-| `performance-optimization` | Page speed directly affects LCP and INP scores |
-| `deployment` | SEO changes need proper cache invalidation and redirect configuration |
-| `tech-docs-generator` | Documentation sites need sitemap, canonical, and structured data setup |
+| `content-creator` | SEO为营销内容的关键词定位和标题策略提供指导 |
+| `content-research-writer` | 基于研究的内容需要SEO优化的结构和元标签 |
+| `senior-frontend` | Core Web Vitals优化需要前端性能调优 |
+| `performance-optimization` | 页面速度直接影响LCP和INP分数 |
+| `deployment` | SEO更改需要正确的缓存失效和重定向配置 |
+| `tech-docs-generator` | 文档网站需要sitemap、规范链接和结构化数据设置 |
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt the optimization strategy to the site's technology stack, content type, and competitive landscape. Technical SEO fundamentals and structured data best practices are strongly recommended; specific implementation patterns vary by framework.
+**灵活** — 根据网站的技术栈、内容类型和竞争格局调整优化策略。技术SEO基础知识和结构化数据最佳实践强烈推荐；具体实施模式因框架而异。

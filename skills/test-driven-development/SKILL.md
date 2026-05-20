@@ -1,273 +1,272 @@
 ---
 name: test-driven-development
-description: "Use when writing any new code, adding features, or fixing bugs that require code changes. Enforces strict RED-GREEN-REFACTOR cycle with no production code without a failing test first. Triggers: new feature implementation, bug fix, refactoring existing code, adding behavior to existing modules."
+description: "适用于编写任何新代码、添加功能或修复需要代码更改的 bug 时。严格执行 RED-GREEN-REFACTOR（红-绿-重构）循环，在没有失败的测试之前绝不编写生产代码。触发条件：实现新功能、修复 bug、重构现有代码、为现有模块添加行为。"
 ---
 
-# Test-Driven Development
+# 测试驱动开发 (TDD)
 
-## Overview
+## 概述
 
-TDD enforces the RED-GREEN-REFACTOR cycle as an unbreakable discipline: write a failing test, make it pass with minimal code, then clean up. This skill prevents untested production code from ever existing and ensures every line of implementation is driven by a verified requirement.
+TDD 将 RED-GREEN-REFACTOR（红-绿-重构）循环作为一项不可违背的纪律来执行：先写一个失败的测试，然后用最少的代码使其通过，最后进行清理。这项技能确保未经测试的生产代码永远不存在，并保证每一行实现代码都由经过验证的需求驱动。
 
-**Announce at start:** "I'm using the test-driven-development skill with the RED-GREEN-REFACTOR cycle."
+**开始时声明：**“我正在使用测试驱动开发技能，并遵循 RED-GREEN-REFACTOR 循环。”
 
 ---
 
-## Iron Law
+## 铁律
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  HARD-GATE: NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST    │
+│  硬关卡：没有失败的测试在先，绝不编写生产代码                    │
 │                                                                 │
-│  This is non-negotiable. There are no exceptions. If you are   │
-│  writing production code and there is no failing test demanding │
-│  that code, you are violating this skill. STOP immediately     │
-│  and write the test first.                                     │
+│  此规定不容商量，没有例外。如果你正在编写生产代码，却没有任何     │
+│  失败的测试要求这段代码，你就违反了本技能的规定。立即停止       │
+│  并先写测试。                                                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Phase 1: RED (Write a Failing Test)
+## 第一阶段：RED（编写失败的测试）
 
-**Goal:** Write exactly ONE test that fails for the right reason.
+**目标：** 精确编写 **1** 个因正确原因而失败的测试。
 
-### Actions
+### 操作步骤
 
-1. Identify the smallest unit of behavior to implement next
-2. Write a test that asserts that behavior exists
-3. Run the test suite — confirm the new test FAILS
-4. Read the failure message — confirm it fails for the RIGHT reason (missing functionality, not syntax error or import error)
-5. If it fails for the wrong reason, fix the test until it fails correctly
+1. 确定下一个要实现的最小行为单元
+2. 编写一个断言该行为存在的测试
+3. 运行测试套件 —— 确认新测试 **失败**
+4. 阅读失败信息 —— 确认它因 **正确的** 原因失败（是缺少功能，而非语法错误或导入错误）
+5. 如果因错误原因失败，修复测试直到它正确失败
 
-### STOP — HARD-GATE: Do NOT proceed to GREEN until:
-- [ ] Test is written and saved
-- [ ] Test suite has been run
-- [ ] New test fails
-- [ ] Failure reason is correct (tests the intended behavior)
-
----
-
-## Phase 2: GREEN (Make It Pass)
-
-**Goal:** Write the MINIMUM production code to make the failing test pass.
-
-### Actions
-
-1. Write only enough code to make the failing test pass
-2. Do NOT refactor. Do NOT clean up. Do NOT optimize
-3. Hardcode values if that makes the test pass — that is fine
-4. Run the full test suite
-5. ALL tests must pass (not just the new one)
-
-### STOP — HARD-GATE: Do NOT proceed to REFACTOR until:
-- [ ] Production code is written
-- [ ] Full test suite has been run
-- [ ] ALL tests pass (new and existing)
-- [ ] No more code was written than necessary
+### 停止 —— 硬关卡：在满足以下条件前，**绝不**进入 GREEN 阶段：
+- [ ] 测试已编写并保存
+- [ ] 已运行测试套件
+- [ ] 新测试失败
+- [ ] 失败原因正确（测试了预期行为）
 
 ---
 
-## Phase 3: REFACTOR (Clean Up)
+## 第二阶段：GREEN（使其通过）
 
-**Goal:** Improve code quality without changing behavior.
+**目标：** 编写 **最少** 的生产代码使失败的测试通过。
 
-### Actions
+### 操作步骤
 
-1. Look for duplication, poor naming, long methods, code smells
-2. Make ONE refactoring change at a time
-3. Run the full test suite after EACH change
-4. If any test fails, undo the refactoring immediately
-5. Continue until the code is clean
+1. 仅编写足以让失败测试通过的代码
+2. **不要** 重构。**不要** 清理。**不要** 优化
+3. 如果硬编码值能让测试通过，那就这么做 —— 这没问题
+4. 运行完整测试套件
+5. **所有** 测试必须通过（不仅仅是新测试）
 
-### STOP — HARD-GATE: Do NOT proceed to next RED until:
-- [ ] Code is clean and readable
-- [ ] All tests still pass after refactoring
-- [ ] No behavior was changed during refactoring
+### 停止 —— 硬关卡：在满足以下条件前，**绝不**进入 REFACTOR 阶段：
+- [ ] 生产代码已编写
+- [ ] 已运行完整测试套件
+- [ ] **所有** 测试通过（新的和现有的）
+- [ ] 未编写超出必要范围的代码
 
 ---
 
-## HARD-GATE Enforcement
+## 第三阶段：REFACTOR（清理/重构）
+
+**目标：** 在不改变行为的前提下提升代码质量。
+
+### 操作步骤
+
+1. 寻找重复代码、命名不当、方法过长、代码异味
+2. 每次仅进行 **一次** 重构修改
+3. **每次** 修改后运行完整测试套件
+4. 如果任何测试失败，立即撤销该重构
+5. 持续进行直到代码整洁
+
+### 停止 —— 硬关卡：在满足以下条件前，**绝不**进入下一个 RED 阶段：
+- [ ] 代码整洁且易读
+- [ ] 重构后所有测试仍通过
+- [ ] 重构过程中未改变任何行为
+
+---
+
+## 硬关卡强制执行
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  HARD-GATE: PHASE COMPLETION CHECK                          │
+│  硬关卡：阶段完成检查                                        │
 │                                                             │
-│  Before moving to next phase, ALL items in the              │
-│  STOP MARKER checklist must be satisfied.                   │
+│  在进入下一阶段前，STOP（停止）标记清单中的 **所有** 项必须   │
+│  已满足。                                                    │
 │                                                             │
-│  If ANY item is not satisfied:                              │
-│  → STOP                                                    │
-│  → Complete the missing item                               │
-│  → Re-verify ALL items                                     │
-│  → ONLY THEN proceed                                       │
+│  如果 **任何** 一项未满足：                                  │
+│  → 停止                                                     │
+│  → 完成缺失的项                                             │
+│  → 重新验证所有项                                           │
+│  → 仅在此之后方可继续                                       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Watch Mode Discipline
+## 监听模式纪律
 
-After every change to any file (test or production), run the relevant test suite. No exceptions.
+每次更改任何文件（测试或生产代码）后，运行相关测试套件。没有例外。
 
-| Action | Run Tests? | Expected Result |
+| 操作 | 运行测试？ | 预期结果 |
 |--------|-----------|----------------|
-| Write a test | Yes | Failure (RED) |
-| Write production code | Yes | Pass (GREEN) |
-| Refactor code | Yes | Pass (still GREEN) |
-| Any other edit | Yes | No regressions |
+| 编写测试 | 是 | 失败 (RED) |
+| 编写生产代码 | 是 | 通过 (GREEN) |
+| 重构代码 | 是 | 通过 (保持 GREEN) |
+| 任何其他编辑 | 是 | 无回归 |
 
-If your test runner supports watch mode, use it. If not, run tests manually after every save.
+如果你的测试运行器支持监听模式（watch mode），请使用它。如果不支持，请在每次保存后手动运行测试。
 
 ---
 
-## Decision Table: Test Type Selection
+## 决策表：测试类型选择
 
-| Behavior Being Tested | Test Type | Framework Example |
+| 待测试行为 | 测试类型 | 框架示例 |
 |-----------------------|-----------|-------------------|
-| Pure function logic | Unit test | Vitest, pytest, cargo test |
-| API endpoint request/response | Integration test | Supertest, httpx |
-| Database query correctness | Integration test | Testcontainers |
-| UI component rendering | Unit test | React Testing Library |
-| Full user workflow | E2E test | Playwright |
-| Error handling path | Unit test | Vitest, pytest |
+| 纯函数逻辑 | 单元测试 | Vitest, pytest, cargo test |
+| API 端点请求/响应 | 集成测试 | Supertest, httpx |
+| 数据库查询正确性 | 集成测试 | Testcontainers |
+| UI 组件渲染 | 单元测试 | React Testing Library |
+| 完整用户工作流 | E2E（端到端）测试 | Playwright |
+| 错误处理路径 | 单元测试 | Vitest, pytest |
 
 ---
 
-## Example Cycle
+## 示例循环
 
 ```
-Requirement: "Users can register with email and password"
+需求：“用户可以使用邮箱和密码注册”
 
-Behavior List:
-1. Registration with valid email and password succeeds
-2. Registration fails if email is empty
-3. Registration fails if password is too short
-4. Registration fails if email is already taken
+行为列表：
+1. 使用有效邮箱和密码注册成功
+2. 邮箱为空时注册失败
+3. 密码过短时注册失败
+4. 邮箱已被占用时注册失败
 
-Cycle 1 - Behavior 1:
-  RED:   test_registration_with_valid_email_and_password_succeeds → FAIL (no register function)
-  GREEN: def register(email, password): return User(email=email) → PASS
-  REFACTOR: rename variable for clarity → PASS
+循环 1 - 行为 1：
+  RED:   test_registration_with_valid_email_and_password_succeeds → 失败（无 register 函数）
+  GREEN: def register(email, password): return User(email=email) → 通过
+  REFACTOR: 重命名变量以提高清晰度 → 通过
 
-Cycle 2 - Behavior 2:
-  RED:   test_registration_fails_if_email_is_empty → FAIL (no validation)
-  GREEN: add if not email: raise ValueError → PASS
-  REFACTOR: extract validation to separate method → PASS
+循环 2 - 行为 2：
+  RED:   test_registration_fails_if_email_is_empty → 失败（无验证逻辑）
+  GREEN: add if not email: raise ValueError → 通过
+  REFACTOR: 将验证逻辑提取到独立方法 → 通过
 
-...continue for each behavior...
+...对每个行为重复此过程...
 ```
 
 ---
 
-## Checklist: Starting a New Feature with TDD
+## 检查清单：使用 TDD 开启新功能
 
-1. [ ] Understand the requirement fully before writing any code
-2. [ ] Break the requirement into a list of specific behaviors
-3. [ ] Order behaviors from simplest to most complex
-4. [ ] Create a task for the first behavior
-5. [ ] Enter RED phase: write failing test for first behavior
-6. [ ] Enter GREEN phase: write minimal code to pass
-7. [ ] Enter REFACTOR phase: clean up
-8. [ ] Create task for next behavior, repeat from step 5
-9. [ ] After all behaviors are implemented, run full test suite
-10. [ ] Invoke `verification-before-completion` before claiming done
+1. [ ] 在编写任何代码前充分理解需求
+2. [ ] 将需求拆分为具体的行为列表
+3. [ ] 按从最简单到最复杂的顺序排列行为
+4. [ ] 为第一个行为创建任务
+5. [ ] 进入 RED 阶段：为第一个行为编写失败的测试
+6. [ ] 进入 GREEN 阶段：编写最少代码使其通过
+7. [ ] 进入 REFACTOR 阶段：清理代码
+8. [ ] 为下一个行为创建任务，从第 5 步重复
+9. [ ] 所有行为实现完毕后，运行完整测试套件
+10. [ ] 在声明完成前调用 `verification-before-completion`
 
 ---
 
-## Test Quality Standards
+## 测试质量标准
 
-Each test must be:
+每个测试必须满足：
 
-| Standard | Definition |
+| 标准 | 定义 |
 |----------|-----------|
-| **Fast** | Milliseconds, not seconds |
-| **Isolated** | No shared state between tests, no test ordering dependencies |
-| **Repeatable** | Same result every time, no flakiness |
-| **Self-validating** | Pass or fail, no manual interpretation needed |
-| **Timely** | Written before the production code (that is the whole point) |
+| **快速 (Fast)** | 耗时毫秒级，而非秒级 |
+| **隔离 (Isolated)** | 测试间无共享状态，无测试顺序依赖 |
+| **可重复 (Repeatable)** | 每次结果一致，无不稳定现象 |
+| **自验证 (Self-validating)** | 通过或失败，无需人工解读 |
+| **及时 (Timely)** | 在生产代码之前编写（这正是 TDD 的核心） |
 
-Each test should:
-- Test ONE behavior or scenario
-- Have a descriptive name that explains the scenario and expected outcome
-- Follow Arrange-Act-Assert (or Given-When-Then) structure
-- Use the minimum setup necessary
-- Assert outcomes, not implementation details
+每个测试应当：
+- 仅测试 **一个** 行为或场景
+- 具有描述性名称，说明场景和预期结果
+- 遵循 Arrange-Act-Assert（或 Given-When-Then）结构
+- 使用最少的必要准备代码
+- 断言结果，而非实现细节
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
+| 反模式 | 为什么错误 | 正确做法 |
 |-------------|----------------|-----------------|
-| Writing production code first | Defeats the purpose of TDD; tests shaped to pass | Write the test first, always |
-| Writing multiple tests before any code | Batch testing defeats incremental design | One test, one cycle |
-| Test passes on first run | Either test is wrong or behavior already exists | Investigate before proceeding |
-| Spending >5 minutes in GREEN | Writing too much code at once | Simplify; make test more specific |
-| Modifying tests to match code | Tests specify behavior; code must match tests | Fix the code, not the test |
-| Skipping REFACTOR phase | Technical debt accumulates rapidly | Refactor every cycle |
-| Not running tests after every change | Regressions go unnoticed | Run tests after every save |
+| 先写生产代码 | 违背 TDD 初衷；测试会被扭曲为仅为了让代码通过 | 始终先写测试 |
+| 在写任何代码前批量写多个测试 | 批量测试破坏了增量设计 | 一次一个测试，一个循环 |
+| 测试首次运行即通过 | 测试写错了，或行为已存在 | 在继续前查明原因 |
+| 在 GREEN 阶段耗时 >5 分钟 | 一次性写了太多代码 | 简化代码；让测试更具体 |
+| 修改测试以匹配代码 | 测试用于定义行为；代码必须匹配测试 | 修复代码，而非测试 |
+| 跳过 REFACTOR 阶段 | 技术债务会迅速累积 | 每个循环都必须重构 |
+| 每次更改后不运行测试 | 回归问题无法被察觉 | 每次保存后运行测试 |
 
 ---
 
-## Rationalization Prevention
+## 防止自我合理化（找借口）
 
-| Excuse | Reality |
+| 借口 | 现实 |
 |--------|---------|
-| "It's just a small change" | Small changes cause production outages. Test it. |
-| "I'll write the tests after" | You will not. And if you do, they will be weaker because they were shaped to pass, not to specify. |
-| "This is just a refactor" | Refactors change behavior more often than you think. The test suite proves they do not. |
-| "I know this works" | You do not. You think you do. The test proves it. |
-| "Tests would slow me down" | Debugging without tests slows you down 10x more. |
-| "This code is too simple to test" | If it is too simple to test, it is too simple to get wrong — so the test will be trivial to write. Write it. |
-| "I can't test this because of dependencies" | Then your design has a coupling problem. Fix the design. |
-| "The test would be harder to write than the code" | That means you do not understand the requirements well enough. The test forces you to clarify. |
-| "I'll just manually verify it" | Manual verification is not repeatable, not documented, and not trustworthy. |
-| "This is throwaway/prototype code" | Prototype code has a habit of becoming production code. Test it now or regret it later. |
-| "The framework makes it hard to test" | Use the framework's testing utilities, or isolate your logic from the framework. |
-| "I'm under time pressure" | TDD is faster over any timeline longer than 20 minutes. The pressure is exactly why you need it. |
+| “这只是个小改动” | 小改动会导致生产环境宕机。测试它。 |
+| “我之后再补测试” | 你不会补的。即使补了，测试也会更弱，因为它们是凑着代码写的，而非定义行为。 |
+| “这只是重构” | 重构比你想象的更容易改变行为。测试套件能证明它们没有改变。 |
+| “我知道这能工作” | 你不知道，你只是以为知道。测试才能证明它。 |
+| “测试会拖慢我的进度” | 没有测试的调试会慢 10 倍。 |
+| “这代码太简单了，没法测” | 如果简单到没法测，那它也太简单到不会出错 —— 所以测试写起来也极其简单。写吧。 |
+| “因为有依赖关系，我测不了” | 那说明你的设计存在耦合问题。修复设计。 |
+| “写测试比写代码还难” | 这意味着你还没充分理解需求。测试会迫使你理清思路。 |
+| “我手动验证一下就行” | 手动验证不可重复、无文档记录、且不可靠。 |
+| “这是临时/原型代码” | 原型代码往往会变成生产代码。现在就测试，否则以后后悔。 |
+| “框架让测试很难写” | 使用框架的测试工具，或将你的逻辑与框架解耦。 |
+| “我时间紧迫” | 在超过 20 分钟的时间跨度里，TDD 反而更快。时间紧迫正是你需要它的原因。 |
 
 ---
 
-## Red Flags
+## 危险信号
 
-If you observe any of these, STOP and reassess:
+如果你观察到以下任何情况，**停止**并重新评估：
 
-| Red Flag | What It Means | Action |
+| 危险信号 | 意味着什么 | 行动 |
 |----------|--------------|--------|
-| Writing production code with no failing test | Immediate violation | Stop. Write the test. |
-| Test passes immediately on first run | Test is wrong or behavior exists | Investigate before proceeding |
-| More than 5 minutes in GREEN phase | Writing too much code | Simplify. Make test more specific. |
-| Refactoring changes behavior | Test coverage has a gap | Add missing tests |
-| Tests modified to pass | Requirements inverted | Fix code to match tests |
-| Multiple tests before any production code | Batch testing defeats purpose | One test at a time |
-| Test suite not run after a change | Regressions invisible | Run tests. Always. Every time. |
+| 在没有失败测试的情况下编写生产代码 | 直接违规 | 停止。编写测试。 |
+| 测试首次运行即通过 | 测试错误或行为已存在 | 在继续前查明原因 |
+| GREEN 阶段耗时超过 5 分钟 | 一次性写了太多代码 | 简化。让测试更具体。 |
+| 重构改变了行为 | 测试覆盖存在漏洞 | 补充缺失的测试 |
+| 修改测试使其通过 | 需求逻辑被颠倒 | 修复代码以匹配测试 |
+| 在编写任何生产代码前写多个测试 | 批量测试违背初衷 | 一次一个测试 |
+| 更改后未运行测试套件 | 回归问题不可见 | 运行测试。始终如此。每次都是。 |
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关系 |
 |-------|-------------|
-| `verification-before-completion` | MUST be invoked before claiming any TDD work is complete |
-| `systematic-debugging` | When a test fails unexpectedly during REFACTOR, switch to debugging |
-| `code-review` | After completing a feature via TDD, review the test suite for completeness |
-| `acceptance-testing` | Acceptance criteria drive the behavior list for TDD cycles |
-| `planning` | Plan breaks features into behaviors suitable for TDD cycles |
-| `testing-strategy` | Strategy defines frameworks; TDD defines the cycle |
+| `verification-before-completion` | 在声明任何 TDD 工作完成前 **必须** 调用 |
+| `systematic-debugging` | 当 REFACTOR 期间测试意外失败时，切换至调试模式 |
+| `code-review` | 通过 TDD 完成功能后，审查测试套件的完整性 |
+| `acceptance-testing` | 验收标准驱动 TDD 循环的行为列表 |
+| `planning` | 规划时将功能拆分为适合 TDD 循环的行为 |
+| `testing-strategy` | 策略定义框架；TDD 定义循环流程 |
 
 ---
 
-## Test Types in TDD
+## TDD 中的测试类型
 
-| Type | Scope | Speed | When to Write |
+| 类型 | 范围 | 速度 | 何时编写 |
 |------|-------|-------|--------------|
-| **Unit (Primary)** | Individual functions, methods, classes | Milliseconds | RED phase for every behavior |
-| **Integration (Secondary)** | Component interactions | Seconds | After unit tests cover individual behaviors |
-| **E2E (Tertiary)** | Complete user workflows | Seconds-minutes | Critical paths after unit and integration are solid |
+| **单元测试（主要）** | 独立函数、方法、类 | 毫秒级 | 每个行为的 RED 阶段 |
+| **集成测试（次要）** | 组件交互 | 秒级 | 单元测试覆盖独立行为之后 |
+| **端到端测试（E2E，第三）** | 完整用户工作流 | 秒至分钟级 | 单元和集成测试稳固后，针对关键路径 |
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — The RED-GREEN-REFACTOR cycle is mandatory and cannot be reordered, skipped, or combined. Every phase has a HARD-GATE that must be satisfied before proceeding. No production code without a failing test first.
+**严格（RIGID）** —— RED-GREEN-REFACTOR 循环是强制性的，不得重新排序、跳过或合并。每个阶段都有必须满足后才能继续的 HARD-GATE（硬关卡）。在没有失败的测试之前，绝不编写生产代码。

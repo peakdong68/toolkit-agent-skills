@@ -1,229 +1,217 @@
 ---
 name: tech-docs-generator
-description: 'Use when generating or updating technical documentation from code — API references, architecture docs, README files, component documentation, getting started guides, or configuration references'
+description: "当需要根据代码生成或更新技术文档时使用——包括 API 参考、架构文档、README 文件、组件文档、入门指南或配置参考"
 ---
 
-# Technical Documentation Generator
+# 技术文档生成器
 
-## Overview
+## 概述
 
-Generate comprehensive technical documentation by analyzing the actual codebase. Produces API references, architecture overviews, getting started guides, and component documentation with real examples extracted from project code, not invented ones.
+通过分析实际代码库生成全面的技术文档。产出 API 参考、架构概览、入门指南和组件文档，并附带从项目代码中提取的真实示例，而非虚构内容。
 
-**Announce at start:** "I'm using the tech-docs-generator skill to create documentation."
+**开始时声明：** "我正在使用 tech-docs-generator 技能来创建文档。"
 
-## Phase 1: Codebase Analysis
+## 阶段 1：代码库分析
 
-Scan the codebase to identify what needs documenting. Deploy parallel subagents via the `Agent` tool (up to 5 , with `subagent_type="Explore"`) to analyze:
+扫描代码库以识别需要文档化的内容。通过 `Agent` 工具部署并行子代理（最多 5 个，设置 `subagent_type="Explore"`）来分析：
 
-| Analysis Target            | What to Capture                              |
-| -------------------------- | -------------------------------------------- |
-| Exported functions/classes | Public API surface, signatures, return types |
-| API routes/endpoints       | REST, GraphQL, tRPC definitions with methods |
-| Configuration              | Env vars, config files, feature flags        |
-| Database schemas           | Models, migrations, relationships            |
-| Component hierarchy        | UI components and their props/interfaces     |
-| Type definitions           | Interfaces, types, Zod schemas, enums        |
-| Entry points               | CLI commands, main files, server bootstrap   |
-| Dependencies               | External packages and their roles            |
+| 分析目标 | 需要捕获的内容 |
+|---------|---------------|
+| 导出的函数/类 | 公共 API 表面、签名、返回类型 |
+| API 路由/端点 | REST、GraphQL、tRPC 定义及对应方法 |
+| 配置 | 环境变量、配置文件、功能开关 |
+| 数据库模式 | 模型、迁移文件、关系 |
+| 组件层级 | UI 组件及其 props/接口 |
+| 类型定义 | 接口、类型、Zod schema、枚举 |
+| 入口点 | CLI 命令、主文件、服务器启动引导 |
+| 依赖项 | 外部包及其作用 |
 
-STOP after analysis — present a summary of what was found and ask which documentation types are needed.
+分析完成后停止——呈现所发现内容的摘要，并询问需要哪种类型的文档。
 
-## Phase 2: Documentation Type Selection
+## 阶段 2：文档类型选择
 
-| Type                      | When to Use                               | Output Path                      | Typical Size   |
-| ------------------------- | ----------------------------------------- | -------------------------------- | -------------- |
-| **API Reference**         | Documenting endpoints or public functions | `docs/api-reference.md`          | 200-1000 lines |
-| **Architecture Overview** | Explaining system design and data flow    | `docs/architecture.md`           | 100-300 lines  |
-| **Getting Started**       | Onboarding new developers                 | `docs/getting-started.md`        | 50-150 lines   |
-| **Component Docs**        | Documenting UI components                 | `docs/components/[name].md`      | 50-200 lines   |
-| **Contributing Guide**    | Explaining how to contribute              | `docs/contributing.md`           | 50-100 lines   |
-| **Configuration Guide**   | Documenting config options                | `docs/configuration.md`          | 50-200 lines   |
-| **Migration Guide**       | Documenting version upgrades              | `docs/migration/v[X]-to-v[Y].md` | 50-150 lines   |
+| 类型 | 适用场景 | 输出路径 | 典型篇幅 |
+|------|---------|---------|---------|
+| **API 参考** | 文档化端点或公共函数 | `docs/api-reference.md` | 200-1000 行 |
+| **架构概览** | 解释系统设计和数据流 | `docs/architecture.md` | 100-300 行 |
+| **入门指南** | 帮助新开发者上手 | `docs/getting-started.md` | 50-150 行 |
+| **组件文档** | 文档化 UI 组件 | `docs/components/[name].md` | 50-200 行 |
+| **贡献指南** | 说明如何参与贡献 | `docs/contributing.md` | 50-100 行 |
+| **配置指南** | 文档化配置选项 | `docs/configuration.md` | 50-200 行 |
+| **迁移指南** | 文档化版本升级 | `docs/migration/v[X]-to-v[Y].md` | 50-150 行 |
 
-Ask the user which type(s) they need if not specified. If multiple types are requested, dispatch parallel subagents via the `Agent` tool — one per doc type.
+如果用户未指定，询问他们需要哪种类型。如果请求多种类型，通过 `Agent` 工具分发并行子代理——每种文档类型一个代理。
 
-## Phase 3: Generate Documentation
+## 阶段 3：生成文档
 
-Dispatch `doc-generator` agent with:
+使用以下内容分发 `doc-generator` 代理：
+- 阶段 1 的文件分析结果
+- 阶段 2 选定的文档类型
+- 现有文档（用于更新，而非替换）
+- 来自记忆文件的项目上下文
 
-- File analysis results from Phase 1
-- Documentation type selected in Phase 2
-- Existing documentation (to update, not replace)
-- Project context from memory files
+生成完成后停止——在保存前呈现每个部分供审查。
 
-STOP after generation — present each section for review before saving.
+### 文档格式标准
 
-### Documentation Format Standards
+**API 参考格式：**
 
-**API Reference format:**
-
-````markdown
+```markdown
 ## `functionName(param1, param2)`
 
-Description of what this function does.
+描述此函数的功能。
 
-**Parameters:**
-| Name | Type | Required | Description |
+**参数：**
+| 名称 | 类型 | 是否必需 | 描述 |
 |------|------|----------|-------------|
-| param1 | `string` | Yes | What it does |
-| param2 | `Options` | No | Configuration options |
+| param1 | `string` | 是 | 功能说明 |
+| param2 | `Options` | 否 | 配置选项 |
 
-**Returns:** `Promise<Result>`
+**返回值：** `Promise<Result>`
 
-**Example:**
-
+**示例：**
 ```typescript
 const result = await functionName('value', { option: true });
 ```
-````
 
-**Throws:** `ValidationError` if param1 is empty
-
-````
-
-**Architecture Overview format:**
-
-```markdown
-## System Architecture
-
-### Overview
-[High-level description with ASCII diagram]
-
-### Components
-| Component | Responsibility | Key Files |
-|-----------|---------------|-----------|
-
-### Data Flow
-[How data moves through the system — request lifecycle]
-
-### Key Decisions
-| Decision | Rationale | Alternatives Considered |
-|----------|-----------|------------------------|
-````
-
-**Getting Started format:**
-
-```markdown
-## Prerequisites
-
-[Required tools, versions, accounts]
-
-## Installation
-
-[Step-by-step with copy-pasteable commands]
-
-## Configuration
-
-[Required env vars and config]
-
-## First Run
-
-[How to start the app and verify it works]
-
-## Next Steps
-
-[Links to deeper documentation]
+**抛出异常：** 如果 param1 为空则抛出 `ValidationError`
 ```
 
-## Phase 4: Review and Save
+**架构概览格式：**
 
-Present documentation section by section:
+```markdown
+## 系统架构
 
-1. Ask after each section: "Does this accurately describe the code?"
-2. Cross-reference with actual code to verify accuracy
-3. Include real examples from the codebase — never invented ones
-4. After approval, save to `docs/` directory
-5. Commit with message: `docs(<scope>): add/update <doc-type>`
+### 概述
+[高层描述，附带 ASCII 图示]
 
-### Accuracy Verification Checklist
+### 组件
+| 组件 | 职责 | 关键文件 |
+|-----------|---------------|-----------|
 
-| Check                             | How to Verify                     |
-| --------------------------------- | --------------------------------- |
-| Function signatures match code    | Read the source file              |
-| Examples actually work            | Trace the code path               |
-| Config options are current        | Check actual config files         |
-| Dependencies listed are installed | Check package.json / requirements |
-| File paths referenced exist       | Glob for the files                |
+### 数据流
+[数据如何在系统中流动——请求生命周期]
 
-## Anti-Patterns / Common Mistakes
+### 关键决策
+| 决策 | 理由 | 考虑过的替代方案 |
+|----------|-----------|------------------------|
+```
 
-| Mistake                                 | Why It Is Wrong                             | What To Do Instead                           |
-| --------------------------------------- | ------------------------------------------- | -------------------------------------------- |
-| Inventing code examples                 | Readers copy-paste and get errors           | Extract real examples from the codebase      |
-| Documenting internal/private APIs       | Creates coupling to implementation          | Only document public/exported surface        |
-| Writing docs that duplicate source code | Goes stale immediately                      | Reference behavior, not implementation       |
-| Giant monolithic doc file               | Hard to navigate and maintain               | Split by concern (API, architecture, config) |
-| Documenting aspirational behavior       | Misleads users about current capabilities   | Document what actually works today           |
-| Skipping the analysis phase             | Miss important APIs or get signatures wrong | Always analyze code first                    |
-| Not verifying examples compile/run      | Broken docs worse than no docs              | Test every code example                      |
+**入门指南格式：**
 
-## Anti-Rationalization Guards
+```markdown
+## 前置要求
+[所需工具、版本、账户]
 
-- **Do NOT** generate documentation without first analyzing the actual code
-- **Do NOT** invent examples — every code snippet must come from or be verified against the codebase
-- **Do NOT** document private/internal APIs unless explicitly requested
-- **Do NOT** skip the review phase — present each section for user verification
-- **Do NOT** duplicate information already covered in other docs — reference instead
+## 安装
+[分步说明，附带可复制粘贴的命令]
 
-## Integration Points
+## 配置
+[所需的环境变量和配置]
 
-| Skill                       | Relationship                                                                    |
-| --------------------------- | ------------------------------------------------------------------------------- |
-| `prd-generation`            | Upstream: PRD defines what needs documenting                                    |
-| `self-learning`             | Parallel: both analyze codebase; self-learning populates memory files used here |
-| `api-design`                | Upstream: API design specs inform API reference docs                            |
-| `spec-writing`              | Parallel: specs define behavior; docs explain usage                             |
-| `reverse-engineering-specs` | Upstream: reverse-engineered specs provide behavioral understanding             |
-| `code-review`               | Downstream: reviewer checks if docs were updated alongside code changes         |
+## 首次运行
+[如何启动应用并验证其正常工作]
 
-## Verification Gate
+## 下一步
+[链接到更深入的文档]
+```
 
-Before claiming documentation is complete:
+## 阶段 4：审查与保存
 
-1. VERIFY all public APIs are documented with correct signatures
-2. VERIFY code examples actually work (not invented)
-3. VERIFY cross-references link to existing content
-4. VERIFY documentation matches current code state
-5. VERIFY the user has approved each section
-6. RUN any documented commands to confirm they work
+逐部分呈现文档：
 
-## Concrete Example: API Reference Entry
+1. 每个部分完成后询问："此内容是否准确描述了代码？"
+2. 与实际代码交叉引用以验证准确性
+3. 包含来自代码库的真实示例——绝不虚构
+4. 获得批准后，保存到 `docs/` 目录
+5. 提交信息格式：`docs(<scope>): add/update <doc-type>`
 
-Given this source code:
+### 准确性验证清单
 
+| 检查项 | 验证方法 |
+|-------|---------|
+| 函数签名与代码匹配 | 阅读源文件 |
+| 示例实际可运行 | 追踪代码路径 |
+| 配置选项为最新 | 检查实际配置文件 |
+| 列出的依赖项已安装 | 检查 package.json / requirements |
+| 引用的文件路径存在 | 使用 glob 搜索文件 |
+
+## 反模式 / 常见错误
+
+| 错误 | 为何错误 | 正确做法 |
+|---------|----------------|-------------------|
+| 虚构代码示例 | 读者复制粘贴后会出错 | 从代码库中提取真实示例 |
+| 文档化内部/私有 API | 造成与实现细节的耦合 | 仅文档化公共/导出的接口 |
+| 编写与源代码重复的文档 | 会立即过时 | 引用行为，而非实现细节 |
+| 巨型单体文档文件 | 难以导航和维护 | 按关注点拆分（API、架构、配置） |
+| 文档化期望中的行为 | 误导用户关于当前能力 | 文档化当前实际可用的功能 |
+| 跳过分析阶段 | 可能遗漏重要 API 或签名错误 | 始终先分析代码 |
+| 不验证示例能否编译/运行 | 错误的文档比没有文档更糟 | 测试每个代码示例 |
+
+## 反合理化防护
+
+- **不要**在未分析实际代码的情况下生成文档
+- **不要**虚构示例——每个代码片段必须来自代码库或经代码库验证
+- **不要**文档化私有/内部 API，除非明确请求
+- **不要**跳过审查阶段——呈现每个部分供用户验证
+- **不要**重复其他文档已涵盖的信息——改为引用
+
+## 集成点
+
+| 技能 | 关系 |
+|-------|-------------|
+| `prd-generation` | 上游：PRD 定义需要文档化的内容 |
+| `self-learning` | 并行：两者都分析代码库；self-learning 填充此处使用的记忆文件 |
+| `api-design` | 上游：API 设计规范为 API 参考文档提供依据 |
+| `spec-writing` | 并行：规范定义行为；文档解释用法 |
+| `reverse-engineering-specs` | 上游：逆向工程得到的规范提供行为理解 |
+| `code-review` | 下游：审查者检查代码变更时文档是否同步更新 |
+
+## 验证关卡
+
+在声明文档完成之前：
+
+1. 验证所有公共 API 都已文档化且签名正确
+2. 验证代码示例实际可运行（非虚构）
+3. 验证交叉引用链接到现有内容
+4. 验证文档与当前代码状态匹配
+5. 验证用户已批准每个部分
+6. 运行任何文档化的命令以确认其有效
+
+## 具体示例：API 参考条目
+
+给定此源代码：
 ```typescript
 export async function createUser(data: CreateUserInput): Promise<User> {
-  // validates, hashes password, inserts into DB
+  // 验证、哈希密码、插入数据库
 }
 ```
 
-Generate this documentation:
-
+生成此文档：
 ```markdown
 ## `createUser(data)`
 
-Create a new user account with the provided details.
+使用提供的详细信息创建新用户账户。
 
-**Parameters:**
-| Name | Type | Required | Description |
+**参数：**
+| 名称 | 类型 | 是否必需 | 描述 |
 |------|------|----------|-------------|
-| data | `CreateUserInput` | Yes | User registration data |
+| data | `CreateUserInput` | 是 | 用户注册数据 |
 
-**`CreateUserInput` shape:**
-| Field | Type | Required | Constraints |
+**`CreateUserInput` 结构：**
+| 字段 | 类型 | 是否必需 | 约束条件 |
 |-------|------|----------|-------------|
-| email | `string` | Yes | Valid email format |
-| password | `string` | Yes | Minimum 8 characters |
-| name | `string` | Yes | 1-100 characters |
+| email | `string` | 是 | 有效的邮箱格式 |
+| password | `string` | 是 | 最少 8 个字符 |
+| name | `string` | 是 | 1-100 个字符 |
 
-**Returns:** `Promise<User>` — the created user object (password excluded)
+**返回值：** `Promise<User>` — 创建的用户对象（不含密码）
 
-**Throws:**
-
-- `ValidationError` — if input fails validation
-- `ConflictError` — if email already exists
+**抛出异常：**
+- `ValidationError` — 如果输入未通过验证
+- `ConflictError` — 如果邮箱已存在
 ```
 
-## Skill Type
+## 技能类型
 
-**Flexible** — Adapt documentation depth and format to project needs while preserving the analyze-first principle and accuracy verification.
+**灵活** — 在保持"先分析"原则和准确性验证的前提下，根据项目需求调整文档深度和格式。

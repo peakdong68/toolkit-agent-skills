@@ -1,318 +1,311 @@
 ---
 name: task-management
-description: 'Use when breaking work into discrete steps, tracking progress through multi-step implementations, or managing implementation task lists. Triggers when an approved plan needs to be converted into tracked tasks, when progress reporting is needed during execution, or when checkpoint reviews are required between task batches.'
+description: "适用于将工作拆分为独立步骤、跟踪多步实现的进度，或管理实现任务清单的场景。当需要将已批准的计划转换为可跟踪的任务、在执行过程中需要进度报告，或在任务批次之间需要进行检查点审查时触发。"
 ---
 
-# Task Management
+# 任务管理
 
-## Overview
+## 概述
 
-Task management converts approved plans into bite-sized, trackable tasks and orchestrates their execution with progress reporting and checkpoint reviews. Each task is a single action that takes 2-5 minutes. The skill provides structured progress tracking, regular checkpoints, and integration with code review to maintain quality throughout execution.
+任务管理将已批准的计划转化为易于消化、可跟踪的微小任务，并通过进度报告和检查点审查来协调其执行。每个任务均为单一动作，耗时 2-5 分钟。该技能提供结构化的进度跟踪、定期的检查点，并与代码审查集成，以在执行全过程中保持质量。
 
-**Announce at start:** "I'm using the task-management skill to break this plan into tracked tasks."
+**开始时声明：** “我正在使用 task-management 技能将此计划拆分为可跟踪的任务。”
 
-## Trigger Conditions
+## 触发条件
 
-- An approved plan document needs to be converted into executable tasks
-- Multi-step implementation needs structured progress tracking
-- Work needs checkpoint reviews at regular intervals
-- `/execute` command used with a plan that needs task breakdown
-- Transition from planning skill with an approved plan
+- 需要将已批准的计划文档转换为可执行任务
+- 多步实现需要结构化的进度跟踪
+- 工作需要定期的检查点审查
+- 使用 `/execute` 命令处理需要任务拆分的计划时
+- 从规划技能过渡且附带已批准的计划时
 
 ---
 
-## Phase 1: Plan Parsing
+## 第一阶段：计划解析
 
-**Goal:** Extract all tasks from the approved plan with correct ordering and dependencies.
+**目标：** 从已批准的计划中提取所有任务，并确保正确的顺序和依赖关系。
 
-1. Read the approved plan document from start to finish
-2. Extract every implementation step as a discrete task
-3. Identify dependencies between tasks (what must complete first)
-4. Order tasks by dependency — independent tasks first
-5. Confirm task list with the user before beginning execution
+1. 从头到尾阅读已批准的计划文档
+2. 将每个实现步骤提取为独立的任务
+3. 识别任务之间的依赖关系（哪些必须优先完成）
+4. 按依赖关系排序任务——独立任务优先
+5. 开始执行前与用户确认任务列表
 
-### Task Granularity Rules
+### 任务粒度规则
 
-| Granularity               | Example                                         | Verdict                              |
-| ------------------------- | ----------------------------------------------- | ------------------------------------ |
-| Single action, 2-5 min    | "Write the failing test for UserService.create" | Correct                              |
-| Single action, 2-5 min    | "Run the test to verify it fails"               | Correct                              |
-| Single action, 2-5 min    | "Implement the minimal code to pass the test"   | Correct                              |
-| Multiple actions, 30+ min | "Implement the authentication system"           | Too large — decompose                |
-| Trivial, < 1 min          | "Add a blank line"                              | Too small — merge with adjacent task |
+| 粒度 | 示例 | 判定 |
+|------------|---------|---------|
+| 单一动作，2-5 分钟 | “为 UserService.create 编写失败的测试” | 正确 |
+| 单一动作，2-5 分钟 | “运行测试以验证其失败” | 正确 |
+| 单一动作，2-5 分钟 | “实现使测试通过的最小化代码” | 正确 |
+| 多个动作，30+ 分钟 | “实现身份验证系统” | 过大——需拆分 |
+| 琐碎，< 1 分钟 | “添加一个空行” | 过小——与相邻任务合并 |
 
-### Task Specification Template
+### 任务规范模板
 
 ```
-Task N: [Clear, specific description]
-Files: [Exact paths to create/modify/test]
-Depends on: [Task numbers that must complete first, or "none"]
-Verification: [Exact command to confirm completion]
+任务 N：[清晰、具体的描述]
+文件：[需创建/修改/测试的准确路径]
+依赖：[必须先完成的任务编号，或“无”]
+验证：[确认完成的准确命令]
 ```
 
-**STOP — Do NOT proceed to Phase 2 until:**
-
-- [ ] Every plan step has been converted to 2-5 minute tasks
-- [ ] Dependencies are mapped (no circular dependencies)
-- [ ] Every task has a verification command
-- [ ] Task list is confirmed with user
+**停止——在满足以下条件前，请勿进入第二阶段：**
+- [ ] 每个计划步骤均已转换为 2-5 分钟的任务
+- [ ] 依赖关系已映射（无循环依赖）
+- [ ] 每个任务都有验证命令
+- [ ] 任务列表已与用户确认
 
 ---
 
-## Phase 2: Task Execution
+## 第二阶段：任务执行
 
-**Goal:** Execute tasks one at a time with verification after each.
+**目标：** 逐一执行任务，并在每个任务完成后进行验证。
 
-### Per-Task Workflow
+### 单任务工作流
 
-1. **Announce** — Report which task is starting: `[N/Total] Starting: <description>`
-2. **Set status** — Mark task as `in_progress`
-3. **Execute** — Perform the task (follow TDD if writing code)
-4. **Verify** — Run the verification command
-5. **Read output** — Confirm verification matches success criteria
-6. **Report** — Show completion: `[N/Total] Completed: <description>`
-7. **Set status** — Mark task as `completed`
+1. **声明** — 报告正在开始的任务：`[N/总数] 开始：<描述>`
+2. **设置状态** — 将任务标记为 `in_progress`
+3. **执行** — 执行任务（若编写代码则遵循 TDD）
+4. **验证** — 运行验证命令
+5. **读取输出** — 确认验证结果符合成功标准
+6. **报告** — 显示完成状态：`[N/总数] 完成：<描述>`
+7. **设置状态** — 将任务标记为 `completed`
 
-### Execution Rules
+### 执行规则
 
-| Rule                           | Rationale                                 |
-| ------------------------------ | ----------------------------------------- |
-| One task at a time             | Prevents context switching errors         |
-| Verify before marking complete | No false completions                      |
-| Read verification output fully | Do not assume success from partial output |
-| Follow TDD for code tasks      | RED-GREEN-REFACTOR cycle                  |
-| Do not skip ahead              | Dependencies may not be satisfied         |
+| 规则 | 理由 |
+|------|-----------|
+| 一次只执行一个任务 | 防止上下文切换错误 |
+| 标记完成前必须验证 | 杜绝虚假完成 |
+| 完整读取验证输出 | 切勿根据部分输出假设成功 |
+| 代码任务遵循 TDD | 遵循“红-绿-重构”循环 |
+| 禁止跳跃执行 | 依赖项可能尚未满足 |
 
-### Task Status Flow
+### 任务状态流转
 
 ```
 pending → in_progress → completed
-                     → blocked (needs user input)
-                     → failed (invoke resilient-execution)
+                     → blocked（需要用户输入）
+                     → failed（调用 resilient-execution）
 ```
 
-### Status Decision Table
+### 状态决策表
 
-| Outcome                           | New Status    | Action                             |
-| --------------------------------- | ------------- | ---------------------------------- |
-| Verification passes               | `completed`   | Proceed to next task               |
-| Verification fails, fixable       | `in_progress` | Fix and re-verify                  |
-| Verification fails, unclear cause | `failed`      | Invoke `resilient-execution` skill |
-| Needs user decision               | `blocked`     | Report blocker, pause task         |
-| Task depends on blocked task      | `pending`     | Skip to next non-blocked task      |
+| 结果 | 新状态 | 操作 |
+|---------|-----------|--------|
+| 验证通过 | `completed` | 继续下一个任务 |
+| 验证失败，可修复 | `in_progress` | 修复并重新验证 |
+| 验证失败，原因不明 | `failed` | 调用 `resilient-execution` 技能 |
+| 需要用户决策 | `blocked` | 报告阻塞项，暂停任务 |
+| 任务依赖于被阻塞的任务 | `pending` | 跳过并执行下一个非阻塞任务 |
 
-**Do NOT proceed to next task until current task verification passes.**
+**在当前任务验证通过前，切勿继续下一个任务。**
 
 ---
 
-## Phase 3: Checkpoint Review
+## 第三阶段：检查点审查
 
-**Goal:** Pause every 3 tasks to assess progress and quality.
+**目标：** 每完成 3 个任务暂停一次，以评估进度和质量。
 
-### Checkpoint Trigger Table
+### 检查点触发表
 
-| Condition                                    | Action                 |
-| -------------------------------------------- | ---------------------- |
-| 3 tasks completed since last checkpoint      | Mandatory checkpoint   |
-| Logical batch complete (e.g., one component) | Checkpoint recommended |
-| Test failure encountered                     | Immediate checkpoint   |
-| User requests status                         | Ad-hoc checkpoint      |
+| 条件 | 操作 |
+|-----------|--------|
+| 自上次检查点起已完成 3 个任务 | 强制检查点 |
+| 逻辑批次完成（例如一个组件） | 建议检查点 |
+| 遇到测试失败 | 立即检查点 |
+| 用户请求状态 | 临时检查点 |
 
-### Checkpoint Steps
+### 检查点步骤
 
-1. Show progress summary
-2. Run full test suite (not just new tests)
-3. Run lint, type-check, build as applicable
-4. Dispatch `code-review` skill if significant code was written
-5. Ask user if direction is still correct
+1. 显示进度摘要
+2. 运行完整测试套件（不仅是新测试）
+3. 运行代码规范检查、类型检查、构建（如适用）
+4. 若编写了重要代码，则分派 `code-review` 技能
+5. 询问用户方向是否仍然正确
 
-### Progress Report Format
+### 进度报告格式
 
-After each task:
-
+每个任务后：
 ```
-[3/15] Task completed: Write failing test for UserService.create
-       Files: tests/services/user.test.ts
-       Verification: npm test -- --grep "UserService.create" — PASS
-```
-
-After each checkpoint:
-
-```
-── Checkpoint [6/15] ──
-Completed: 6 | Remaining: 9 | Blocked: 0
-Tests: 12 passing, 0 failing
-Lint: clean | Build: passing
-Next batch: Tasks 7-9 (API endpoint implementation)
-Continue? [yes / adjust plan / stop here]
+[3/15] 任务完成：为 UserService.create 编写失败测试
+       文件：tests/services/user.test.ts
+       验证：npm test -- --grep "UserService.create" — 通过
 ```
 
-**STOP — Do NOT proceed to next batch until:**
+每次检查点后：
+```
+── 检查点 [6/15] ──
+已完成：6 | 剩余：9 | 阻塞：0
+测试：12 通过，0 失败
+代码规范：清洁 | 构建：通过
+下一批：任务 7-9（API 端点实现）
+是否继续？[是 / 调整计划 / 在此停止]
+```
 
-- [ ] Full test suite passes
-- [ ] Checkpoint report presented to user
-- [ ] User has confirmed to continue
+**停止——在满足以下条件前，请勿继续下一批：**
+- [ ] 完整测试套件通过
+- [ ] 已向用户展示检查点报告
+- [ ] 用户已确认继续
 
 ---
 
-## Phase 4: Batch Review
+## 第四阶段：批次审查
 
-**Goal:** After completing a logical group of tasks, perform quality review.
+**目标：** 在完成一组逻辑任务后，执行质量审查。
 
-1. Dispatch `code-reviewer` agent to review the batch
-2. Fix any Critical or Important issues before proceeding
-3. Commit the batch with a descriptive conventional commit message
-4. Update the plan document with completed status
+1. 分派 `code-reviewer` 智能体审查该批次
+2. 在继续之前修复任何“关键”或“重要”问题
+3. 使用描述性的约定式提交（conventional commit）信息提交该批次
+4. 更新计划文档，标记为已完成状态
 
-### Review Issue Handling
+### 审查问题处理
 
-| Severity   | Action                       | Continue?                  |
-| ---------- | ---------------------------- | -------------------------- |
-| Critical   | Must fix immediately         | No — fix first             |
-| Important  | Should fix before next batch | Conditional — user decides |
-| Suggestion | Note for future              | Yes — proceed              |
+| 严重等级 | 操作 | 是否继续？ |
+|----------|--------|-----------|
+| Critical（关键） | 必须立即修复 | 否——先修复 |
+| Important（重要） | 应在下一批次前修复 | 视情况而定——由用户决定 |
+| Suggestion（建议） | 记录供未来参考 | 是——继续 |
 
-**STOP — Do NOT start next batch until:**
-
-- [ ] Review issues at Critical severity are resolved
-- [ ] Batch is committed
-- [ ] Plan document is updated
+**停止——在满足以下条件前，请勿开始下一批：**
+- [ ] 关键严重等级的审查问题已解决
+- [ ] 批次已提交
+- [ ] 计划文档已更新
 
 ---
 
-## Phase 5: Completion
+## 第五阶段：完成
 
-**Goal:** Verify all tasks are done and report final status.
+**目标：** 验证所有任务已完成并报告最终状态。
 
-1. Confirm all tasks have `completed` status
-2. Run final full test suite
-3. Run all verification commands
-4. Present final summary to user
-5. Invoke `verification-before-completion` skill
+1. 确认所有任务状态均为 `completed`
+2. 运行最终完整测试套件
+3. 运行所有验证命令
+4. 向用户呈现最终摘要
+5. 调用 `verification-before-completion` 技能
 
-### Final Summary Format
+### 最终摘要格式
 
 ```
-── FINAL SUMMARY ──
-Total tasks: 15 | Completed: 15 | Failed: 0
-Tests: 42 passing, 0 failing
-Build: passing | Lint: clean
-Commits: 5 (conventional format)
+── 最终摘要 ──
+总任务数：15 | 已完成：15 | 失败：0
+测试：42 通过，0 失败
+构建：通过 | 代码规范：清洁
+提交：5 次（约定式格式）
 
-All tasks from plan docs/plans/2026-05-15_tool-search/plan.md are complete.
-Verification-before-completion: PASS
+计划 docs/plans/2026-05-15_01_tool-search/plan.md 中的所有任务均已完成。
+完成前验证：通过
 ```
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern                           | Why It Fails                        | Correct Approach                            |
-| -------------------------------------- | ----------------------------------- | ------------------------------------------- |
-| Marking complete without verification  | False progress, bugs accumulate     | Run verification command, read output       |
-| Tasks larger than 5 minutes            | Hard to track, prone to scope creep | Break into 2-5 minute tasks                 |
-| Skipping checkpoints                   | Quality degrades, direction drifts  | Checkpoint every 3 tasks                    |
-| Running only new tests                 | Regressions go undetected           | Full test suite at checkpoints              |
-| Parallelizing dependent tasks          | Race conditions, merge conflicts    | One task at a time unless truly independent |
-| Proceeding past blocked tasks silently | User unaware of skipped work        | Report all blockers explicitly              |
-| Not committing at batch boundaries     | Large, hard-to-review changesets    | Commit after each logical batch             |
-| "It works, I'll verify later"          | Later never comes                   | Verify NOW                                  |
+| 反模式 | 失败原因 | 正确做法 |
+|-------------|-------------|-----------------|
+| 未经验证即标记完成 | 虚假进度，缺陷累积 | 运行验证命令，读取输出 |
+| 任务超过 5 分钟 | 难以跟踪，易发生范围蔓延 | 拆分为 2-5 分钟的任务 |
+| 跳过检查点 | 质量下降，方向偏离 | 每 3 个任务进行一次检查点 |
+| 仅运行新测试 | 无法检测回归问题 | 在检查点运行完整测试套件 |
+| 并行执行有依赖的任务 | 竞态条件，合并冲突 | 一次只执行一个任务，除非真正独立 |
+| 默默越过被阻塞的任务 | 用户不知晓跳过的任务 | 明确报告所有阻塞项 |
+| 在批次边界不提交 | 变更集过大，难以审查 | 每个逻辑批次后提交 |
+| “它能跑，我稍后再验证” | 稍后永远不会到来 | 现在就验证 |
 
 ---
 
-## Anti-Rationalization Guards
+## 反自我辩解防护
 
 <HARD-GATE>
-NO TASK MARKED COMPLETE WITHOUT VERIFICATION. Run the verification command. Read the output. Confirm it matches expectations. Only then mark complete.
+未经验证，绝不允许标记任务为完成。运行验证命令。读取输出。确认其符合预期。仅在此之后标记完成。
 </HARD-GATE>
 
-If you catch yourself thinking:
-
-- "The code looks right, I don't need to run it..." — Run it. Always.
-- "I'll batch the verifications..." — No. Verify each task individually.
-- "This task is trivial, it obviously works..." — Prove it with verification.
-
----
-
-## Integration Points
-
-| Skill                            | Relationship                                             | When                                 |
-| -------------------------------- | -------------------------------------------------------- | ------------------------------------ |
-| `planning`                       | Upstream — provides approved plan                        | Task list source                     |
-| `executing-plans`                | Complementary — handles plan execution flow              | Can be used together                 |
-| `test-driven-development`        | Per-task — TDD cycle for code tasks                      | Every code task                      |
-| `verification-before-completion` | Per-task — verification gate                             | Before marking any task complete     |
-| `resilient-execution`            | On failure — retry with alternatives                     | When task verification fails         |
-| `code-review`                    | At checkpoints — batch quality review                    | Every 3 tasks or batch boundary      |
-| `subagent-driven-development`    | Alternative — parallel execution path (via `Agent` tool) | For independent task batches         |
-| `Agent` tool                     | Dispatch mechanism for all subagent work                 | When parallelizing independent tasks |
-| `circuit-breaker`                | Safety net — detects stagnation                          | When tasks repeatedly fail           |
+如果你发现自己有如下想法：
+- “代码看起来没问题，我不需要运行它……”——运行它。永远都要运行。
+- “我会把验证批量处理……”——不行。逐个任务进行验证。
+- “这个任务很简单，显然能跑通……”——用验证来证明它。
 
 ---
 
-## Concrete Examples
+## 集成点
 
-### Example: Task Extraction from Plan
+| 技能 | 关系 | 使用时机 |
+|-------|-------------|------|
+| `planning` | 上游——提供已批准的计划 | 任务列表来源 |
+| `executing-plans` | 互补——处理计划执行流程 | 可配合使用 |
+| `test-driven-development` | 单任务级别——代码任务的 TDD 循环 | 每个代码任务 |
+| `verification-before-completion` | 单任务级别——验证关口 | 标记任何任务完成前 |
+| `resilient-execution` | 失败时——使用替代方案重试 | 任务验证失败时 |
+| `code-review` | 检查点时——批次质量审查 | 每 3 个任务或批次边界 |
+| `subagent-driven-development` | 替代方案——并行执行路径（通过 `Agent` 工具） | 用于独立的任务批次 |
+| `Agent` 工具 | 所有子智能体工作的分派机制 | 并行化独立任务时 |
+| `circuit-breaker` | 安全网——检测停滞状态 | 任务反复失败时 |
 
-Plan step: "Add user registration endpoint with validation"
+---
 
-Extracted tasks:
+## 具体示例
+
+### 示例：从计划中提取任务
+
+计划步骤：“添加带验证的用户注册端点”
+
+提取的任务：
+```
+任务 1：为 POST /api/users 输入验证编写失败测试
+  文件：tests/api/users.test.ts
+  依赖：无
+  验证：npm test -- --grep "POST /api/users validation" → 失败（预期）
+
+任务 2：实现输入验证模式
+  文件：src/schemas/user.ts
+  依赖：任务 1
+  验证：npm test -- --grep "POST /api/users validation" → 通过
+
+任务 3：为 POST /api/users 成功用例编写失败测试
+  文件：tests/api/users.test.ts
+  依赖：任务 2
+  验证：npm test -- --grep "POST /api/users creates user" → 失败（预期）
+
+任务 4：实现注册端点处理程序
+  文件：src/routes/users.ts
+  依赖：任务 3
+  验证：npm test -- --grep "POST /api/users" → 全部通过
+
+任务 5：提交注册端点
+  文件：无（git 操作）
+  依赖：任务 4
+  验证：git log --oneline -1 → 显示约定式提交
+```
+
+### 示例：阻塞任务报告
 
 ```
-Task 1: Write failing test for POST /api/users input validation
-  Files: tests/api/users.test.ts
-  Depends on: none
-  Verification: npm test -- --grep "POST /api/users validation" → FAIL (expected)
+阻塞：任务 7 — 为支付 Webhook 编写集成测试
+原因：.env.test 中未配置 Stripe 测试 API 密钥
+影响：任务 7-9（支付流程）无法继续
+非阻塞任务：任务 10-12（个人资料页面）可继续
 
-Task 2: Implement input validation schema
-  Files: src/schemas/user.ts
-  Depends on: Task 1
-  Verification: npm test -- --grep "POST /api/users validation" → PASS
+选项：
+A. 用户提供 Stripe 测试密钥 → 解除任务 7-9 的阻塞
+B. 跳过支付任务，继续个人资料 → 稍后重新处理
+C. 完全 Mock Stripe → 降低测试保真度
 
-Task 3: Write failing test for POST /api/users success case
-  Files: tests/api/users.test.ts
-  Depends on: Task 2
-  Verification: npm test -- --grep "POST /api/users creates user" → FAIL (expected)
-
-Task 4: Implement registration endpoint handler
-  Files: src/routes/users.ts
-  Depends on: Task 3
-  Verification: npm test -- --grep "POST /api/users" → ALL PASS
-
-Task 5: Commit registration endpoint
-  Files: none (git operation)
-  Depends on: Task 4
-  Verification: git log --oneline -1 → shows conventional commit
-```
-
-### Example: Blocked Task Report
-
-```
-BLOCKED: Task 7 — Write integration test for payment webhook
-Reason: Stripe test API key not configured in .env.test
-Impact: Tasks 7-9 (payment flow) cannot proceed
-Non-blocked tasks: Tasks 10-12 (profile page) can continue
-
-Options:
-A. User provides Stripe test key → unblocks Tasks 7-9
-B. Skip payment tasks, continue with profile → revisit later
-C. Mock Stripe entirely → reduces test fidelity
-
-Awaiting direction.
+等待指示。
 ```
 
 ---
 
-## Key Principles
+## 核心原则
 
-- **One task at a time** — Do not parallelize unless tasks are truly independent
-- **Verify after each task** — Run the verification command before marking complete
-- **Checkpoint regularly** — Every 3 tasks, pause and assess
-- **Track everything** — No task without a status
-- **Small commits** — Commit after each logical batch
+- **一次一个任务**——除非任务真正独立，否则不要并行化
+- **每个任务后验证**——标记完成前运行验证命令
+- **定期检查点**——每 3 个任务暂停并评估
+- **跟踪一切**——不存在没有状态的任务
+- **小步提交**——每个逻辑批次后提交
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — Follow this process exactly. Every task gets verified. Every 3 tasks get a checkpoint. No exceptions.
+**严格（RIGID）**——严格遵循此流程。每个任务都必须验证。每 3 个任务必须设置检查点。绝无例外。

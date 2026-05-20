@@ -1,292 +1,309 @@
 ---
 name: content-research-writer
 description: >
-  Use when the user needs research methodology, long-form content creation, academic-style citations,
-  fact-checking, or evidence-based writing with proper source attribution.
-  Trigger conditions: whitepaper drafting, research article writing, source evaluation,
-  citation management, fact-checking protocol, case study creation, evidence-based argumentation.
+  当用户需要研究方法、长篇内容创作、学术风格引用、事实核查或带有恰当来源归属的循证写作时使用。
+  触发条件：白皮书起草、研究文章撰写、来源评估、引用管理、事实核查流程、案例研究创建、循证论证。
 ---
 
-# Content Research Writer
+# 内容研究撰稿人
 
-## Overview
+## 概述
 
-Produce well-researched, authoritative long-form content with proper source attribution, structured argumentation, and evidence-based claims. This skill covers research methodology, source evaluation, citation management, outline construction, drafting workflows, fact-checking protocols, and publishing-ready formatting for articles, whitepapers, reports, and educational content.
+产出经过充分研究、具有权威性且带有恰当来源归属的长篇内容，具备结构化论证和基于证据的主张。本技能涵盖研究方法、来源评估、引用管理、大纲构建、起草工作流程、事实核查流程，以及针对文章、白皮书、报告和教育内容的出版级格式规范。
 
-Apply this skill whenever content must be backed by evidence, cited properly, and structured for credibility with expert audiences.
+当内容需要以证据为支撑、正确引用并面向专业受众构建可信度时，请应用此技能。
 
-## Multi-Phase Process
+## 多阶段流程
 
-### Phase 1: Research Planning
+### 阶段一：研究规划
 
-1. Define the topic scope and target audience
-2. Identify key questions the content must answer
-3. Determine content type (article, whitepaper, case study, guide)
-4. Set word count target and depth level
-5. Establish credibility requirements (peer-reviewed, industry reports, primary data)
-6. Create a research timeline with milestones
+1. 定义主题范围和目标受众
+2. 确定内容必须回答的关键问题
+3. 确定内容类型（文章、白皮书、案例研究、指南）
+4. 设定字数目标和深度级别
+5. 建立可信度要求（同行评审、行业报告、一手数据）
+6. 创建带有里程碑的研究时间表
 
-> **STOP — Do NOT begin source discovery until the research plan is documented and scope is agreed upon.**
+> **暂停 — 在研究计划文档化且范围达成一致之前，切勿开始来源发现。**
 
-### Phase 2: Source Discovery and Evaluation
+### 阶段二：来源发现与评估
 
-1. Search academic databases (Google Scholar, PubMed, JSTOR, arXiv)
-2. Identify industry reports and authoritative publications
-3. Find primary sources (official documentation, datasets, specifications)
-4. Evaluate source credibility using the CRAAP test (see table below)
-5. Organize sources in a reference manager or structured format
-6. Extract key findings, statistics, and quotable passages
+1. 搜索学术数据库（Google Scholar、PubMed、JSTOR、arXiv）
+2. 识别行业报告和权威出版物
+3. 查找一手来源（官方文档、数据集、规范）
+4. 使用 CRAAP 测试评估来源可信度（见下表）
+5. 在文献管理工具或结构化格式中组织来源
+6. 提取关键发现、统计数据和可引用段落
 
-> **STOP — Do NOT begin outlining until you have sufficient Tier 1-2 sources for every core claim.**
+> **暂停 — 在每个核心主张都有足够的 Tier 1-2 来源支持之前，切勿开始构建大纲。**
 
-### Phase 3: Outline and Structure
+### 阶段三：大纲与结构
 
-1. Create a thesis statement or central argument
-2. Build hierarchical outline with main sections and subsections
-3. Map evidence to each section (which sources support which claims)
-4. Identify gaps requiring additional research
-5. Define transitions between sections for narrative flow
-6. Plan visual elements (tables, charts, diagrams, callouts)
+1. 创建论点陈述或核心主张
+2. 构建包含主章节和子章节的层级大纲
+3. 将证据映射到各章节（哪些来源支持哪些主张）
+4. 识别需要额外研究的缺口
+5. 定义章节间的过渡以确保叙事流畅
+6. 规划视觉元素（表格、图表、图示、重点标注）
 
-> **STOP — Do NOT begin drafting until the outline is reviewed and evidence gaps are filled.**
+> **暂停 — 在大纲经过审核且证据缺口已填补之前，切勿开始起草。**
 
-### Phase 4: Drafting
+### 阶段四：起草
 
-1. Write section by section following the outline
-2. Integrate citations as you write (never retrofit)
-3. Balance original analysis with supporting evidence
-4. Use topic sentences and clear paragraph structure
-5. Include concrete examples, data points, and case studies
-6. Write introduction last (after body is complete)
+1. 按照大纲逐节撰写
+2. 写作时同步整合引用（切勿事后补加）
+3. 平衡原创分析与支撑证据
+4. 使用主题句和清晰的段落结构
+5. 包含具体示例、数据点和案例研究
+6. 最后撰写引言（正文完成后）
 
-> **STOP — Do NOT move to review until all sections are drafted and all citations are in place.**
+> **暂停 — 在所有章节起草完成且所有引用就位之前，切勿进入审阅阶段。**
 
-### Phase 5: Review and Fact-Check
+### 阶段五：审阅与事实核查
 
-1. Verify every factual claim against its source
-2. Check all statistics for accuracy and context
-3. Ensure citations are complete and correctly formatted
-4. Review for logical consistency and argument strength
-5. Proofread for clarity, grammar, and style
-6. Have subject matter expert review if possible
+1. 对照来源验证每一项事实主张
+2. 检查所有统计数据的准确性和上下文
+3. 确保引用完整且格式正确
+4. 审查逻辑一致性和论证力度
+5. 校对清晰度、语法和风格
+6. 如可能，请领域专家审阅
 
-## Content Type Decision Table
+## 内容类型决策表
 
-| Content Type | Word Count | Research Depth | Audience | Citation Style |
-|---|---|---|---|---|
-| Blog article | 1,500-3,000 | Tier 2-3 sources | General | Inline links |
-| Long-form article | 3,000-5,000 | Tier 1-3 sources | Informed readers | Parenthetical (APA) |
-| Whitepaper | 3,000-8,000 | Tier 1-2 mandatory | Decision-makers | Footnotes or numbered |
-| Case study | 1,000-2,500 | Primary + Tier 2 | Buyers | Inline attribution |
-| Technical report | 5,000-15,000 | Tier 1 mandatory | Experts | IEEE or APA |
-| Educational guide | 2,000-6,000 | Tier 1-3 mixed | Learners | Parenthetical |
+| 内容类型 | 字数         | 研究深度      | 受众     | 引用风格     |
+| -------- | ------------ | ------------- | -------- | ------------ |
+| 博客文章 | 1,500-3,000  | Tier 2-3 来源 | 普通读者 | 内联链接     |
+| 长篇文章 | 3,000-5,000  | Tier 1-3 来源 | 知情读者 | 括号式 (APA) |
+| 白皮书   | 3,000-8,000  | Tier 1-2 必需 | 决策者   | 脚注或编号   |
+| 案例研究 | 1,000-2,500  | 一手 + Tier 2 | 购买者   | 内联归属     |
+| 技术报告 | 5,000-15,000 | Tier 1 必需   | 专家     | IEEE 或 APA  |
+| 教育指南 | 2,000-6,000  | Tier 1-3 混合 | 学习者   | 括号式       |
 
-## Source Evaluation Framework (CRAAP Test)
+## 来源评估框架（CRAAP 测试）
 
-| Criterion | Questions to Ask | Red Flags |
-|---|---|---|
-| **Currency** | When was it published? Updated? | > 5 years old for fast-moving topics |
-| **Relevance** | Does it directly address your topic? | Tangential connection, different context |
-| **Authority** | Who is the author? What are their credentials? | No author, no institutional affiliation |
-| **Accuracy** | Is it supported by evidence? Peer-reviewed? | No citations, unverifiable claims |
-| **Purpose** | Why does this exist? Inform, sell, persuade? | Strong commercial bias, advocacy without disclosure |
+| 标准                   | 需提出的问题                   | 警示信号                   |
+| ---------------------- | ------------------------------ | -------------------------- |
+| **时效性 (Currency)**  | 何时发布？是否更新？           | 快速变化主题超过 5 年      |
+| **相关性 (Relevance)** | 是否直接针对您的主题？         | 关联牵强、语境不同         |
+| **权威性 (Authority)** | 作者是谁？资质如何？           | 无作者、无机构隶属         |
+| **准确性 (Accuracy)**  | 是否有证据支持？是否同行评审？ | 无引用、主张无法验证       |
+| **目的 (Purpose)**     | 为何存在？告知、销售、说服？   | 强烈商业偏见、未披露的倡导 |
 
-### Source Tier System
+### 来源分级体系
 
-| Tier | Source Type | Credibility | Use For |
-|---|---|---|---|
-| Tier 1 | Peer-reviewed journals, official standards | Highest | Core claims, statistics |
-| Tier 2 | Industry reports (Gartner, McKinsey), textbooks | High | Market data, frameworks |
-| Tier 3 | Reputable news outlets, official documentation | Good | Context, current events |
-| Tier 4 | Expert blogs, conference talks, interviews | Moderate | Perspectives, opinions |
-| Tier 5 | Social media, forums, Wikipedia | Low | Discovery only, never cite directly |
+| 级别   | 来源类型                              | 可信度 | 适用场景                 |
+| ------ | ------------------------------------- | ------ | ------------------------ |
+| Tier 1 | 同行评审期刊、官方标准                | 最高   | 核心主张、统计数据       |
+| Tier 2 | 行业报告（Gartner、McKinsey）、教科书 | 高     | 市场数据、框架           |
+| Tier 3 | 权威新闻媒体、官方文档                | 良好   | 背景信息、时事           |
+| Tier 4 | 专家博客、会议演讲、访谈              | 中等   | 观点、见解               |
+| Tier 5 | 社交媒体、论坛、维基百科              | 低     | 仅用于发现，切勿直接引用 |
 
-## Citation Formats
+## 引用格式
 
-### Inline Citation Styles
+### 内联引用风格
+
 ```markdown
-# Parenthetical (APA-style)
-Research shows that 73% of enterprises have adopted cloud-native architectures
-(Smith & Johnson, 2025).
+# 括号式（APA 风格）
 
-# Narrative
-According to Smith and Johnson (2025), 73% of enterprises have adopted
-cloud-native architectures.
+研究表明，73% 的企业已采用云原生架构
+（Smith & Johnson, 2025）。
 
-# Footnote-style (Chicago)
-Research shows significant cloud adoption.[^1]
+# 叙述式
 
-[^1]: Smith, J., & Johnson, R. (2025). Cloud adoption trends.
-*Journal of Cloud Computing*, 12(3), 45-62.
+根据 Smith 和 Johnson（2025），73% 的企业已采用
+云原生架构。
 
-# Numbered (IEEE-style)
-Research shows significant cloud adoption [1].
+# 脚注式（Chicago）
 
-## References
-[1] J. Smith and R. Johnson, "Cloud adoption trends," *J. Cloud Computing*,
-    vol. 12, no. 3, pp. 45-62, 2025.
+研究显示云采用率显著提升。[^1]
+
+[^1]:
+    Smith, J., & Johnson, R. (2025). Cloud adoption trends.
+    _Journal of Cloud Computing_, 12(3), 45-62.
+
+# 编号式（IEEE 风格）
+
+研究显示云采用率显著提升 [1]。
+
+## 参考文献
+
+[1] J. Smith and R. Johnson, "Cloud adoption trends," _J. Cloud Computing_,
+vol. 12, no. 3, pp. 45-62, 2025.
 ```
 
-### Reference Format Templates
+### 参考文献格式模板
+
 ```markdown
-# Journal Article
-Author, A. B., & Author, C. D. (Year). Title of article. *Journal Name*,
+# 期刊文章
+
+Author, A. B., & Author, C. D. (Year). Title of article. _Journal Name_,
 Volume(Issue), Pages. https://doi.org/xxxxx
 
-# Book
-Author, A. B. (Year). *Title of book* (Edition). Publisher.
+# 书籍
 
-# Website
+Author, A. B. (Year). _Title of book_ (Edition). Publisher.
+
+# 网站
+
 Author or Organization. (Year, Month Day). Title of page. Site Name.
 https://www.example.com/page
 
-# Report
-Organization. (Year). *Title of report* (Report No. XXX).
+# 报告
+
+Organization. (Year). _Title of report_ (Report No. XXX).
 https://www.example.com/report.pdf
 ```
 
-## Content Structure Templates
+## 内容结构模板
 
-### Long-Form Article (2000-5000 words)
-```
-1. Hook / Opening Anecdote (100-200 words)
-2. Context and Problem Statement (200-300 words)
-3. Thesis / Key Insight (50-100 words)
-4. Section 1: Background (400-600 words)
-   - Historical context
-   - Current state
-   - Key definitions
-5. Section 2: Core Analysis (600-1000 words)
-   - Main argument with evidence
-   - Data and statistics
-   - Expert perspectives
-6. Section 3: Implications (400-600 words)
-   - Practical applications
-   - Case studies
-   - Future outlook
-7. Section 4: Counterarguments (200-400 words)
-   - Acknowledge limitations
-   - Address objections
-8. Conclusion (200-300 words)
-   - Synthesize key findings
-   - Call to action or forward-looking statement
-9. References
-```
+### 长篇文章（2000-5000 字）
 
-### Whitepaper (3000-8000 words)
 ```
-1. Executive Summary (300-500 words)
-2. Introduction and Problem Statement (500-800 words)
-3. Methodology (300-500 words)
-4. Findings / Analysis (1500-3000 words)
-   - Section with data visualization
-   - Comparative analysis
-   - Case studies
-5. Recommendations (500-1000 words)
-6. Conclusion (300-500 words)
-7. Appendices
-8. References
+1. 钩子 / 开篇轶事（100-200 字）
+2. 背景与问题陈述（200-300 字）
+3. 论点 / 核心洞见（50-100 字）
+4. 第 1 节：背景（400-600 字）
+   - 历史背景
+   - 当前状态
+   - 关键定义
+5. 第 2 节：核心分析（600-1000 字）
+   - 带证据的主要论证
+   - 数据和统计
+   - 专家观点
+6. 第 3 节：影响（400-600 字）
+   - 实际应用
+   - 案例研究
+   - 未来展望
+7. 第 4 节：反驳观点（200-400 字）
+   - 承认局限性
+   - 回应异议
+8. 结论（200-300 字）
+   - 综合关键发现
+   - 行动号召或前瞻性陈述
+9. 参考文献
 ```
 
-### Case Study (1000-2500 words)
+### 白皮书（3000-8000 字）
+
 ```
-1. Executive Summary (100-200 words)
-2. Challenge / Problem (200-400 words)
-3. Approach / Solution (300-600 words)
-4. Implementation (300-500 words)
-5. Results and Metrics (200-400 words)
-6. Lessons Learned (200-300 words)
-7. About [Company/Subject]
+1. 执行摘要（300-500 字）
+2. 引言与问题陈述（500-800 字）
+3. 方法论（300-500 字）
+4. 发现 / 分析（1500-3000 字）
+   - 带数据可视化的章节
+   - 对比分析
+   - 案例研究
+5. 建议（500-1000 字）
+6. 结论（300-500 字）
+7. 附录
+8. 参考文献
 ```
 
-## Writing Quality Checklist
+### 案例研究（1000-2500 字）
 
-### Paragraph Level
-- Each paragraph has a clear topic sentence
-- Paragraphs are 3-6 sentences (avoid walls of text)
-- Transitions connect paragraphs logically
-- Evidence follows claims immediately
+```
+1. 执行摘要（100-200 字）
+2. 挑战 / 问题（200-400 字）
+3. 方法 / 解决方案（300-600 字）
+4. 实施（300-500 字）
+5. 结果与指标（200-400 字）
+6. 经验教训（200-300 字）
+7. 关于 [公司/主体]
+```
 
-### Sentence Level
-- Vary sentence length (mix short and long)
-- Active voice preferred over passive
-- Avoid jargon without definition
-- Concrete language over abstract
+## 写作质量检查清单
 
-### Document Level
-- Introduction establishes the "so what" clearly
-- Each section advances the central argument
-- No unsupported claims
-- Conclusion adds value (doesn't just repeat)
-- Consistent tone and reading level throughout
+### 段落层面
 
-## Fact-Checking Protocol
+- 每个段落有清晰的主题句
+- 段落长度为 3-6 句（避免大段文字墙）
+- 过渡句逻辑连接段落
+- 证据紧接主张之后
 
-### Verification Steps
-1. **Primary source check**: Trace every claim back to its original source
-2. **Cross-reference**: Verify key facts with at least 2 independent sources
-3. **Statistical validation**: Check that numbers are current and in context
-4. **Quote accuracy**: Verify exact wording of all direct quotes
-5. **Date verification**: Confirm all dates and timelines
-6. **Name and title check**: Verify correct spelling and current titles
+### 句子层面
 
-### Common Fact-Checking Pitfalls
+- 变化句子长度（长短句结合）
+- 优先使用主动语态而非被动语态
+- 避免未定义的术语行话
+- 使用具体语言而非抽象表述
 
-| Pitfall | Example | Prevention |
-|---|---|---|
-| Outdated statistics | "50% of..." from a 2018 study | Always note publication year, seek recent data |
-| Misattributed quotes | Einstein didn't say most "Einstein quotes" | Trace to primary source document |
-| Survivorship bias | "All successful companies do X" | Look for counterexamples |
-| Correlation as causation | "Countries that eat chocolate win more Nobels" | Distinguish correlation from causation |
-| Out-of-context numbers | "Revenue grew 500%" (from $1 to $5) | Always provide absolute numbers and context |
+### 文档层面
 
-## Research Tools
+- 引言清晰阐明"所以呢"（核心价值）
+- 每个章节推进核心论证
+- 无无支持的主张
+- 结论增加价值（而非简单重复）
+- 全文保持一致的语调和阅读难度
 
-| Tool | Purpose | Best For |
-|---|---|---|
-| Google Scholar | Academic paper search | Peer-reviewed research |
-| Semantic Scholar | AI-powered paper discovery | Finding related work |
-| arXiv | Preprints | Cutting-edge CS/ML/Physics |
-| PubMed | Medical/bio research | Health and life sciences |
-| Statista | Statistics and market data | Industry data points |
-| Wayback Machine | Historical web pages | Verifying past claims |
-| Zotero / Mendeley | Reference management | Organizing sources |
-| Perplexity | AI-assisted research | Initial discovery |
+## 事实核查流程
 
-## Anti-Patterns / Common Mistakes
+### 验证步骤
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
-|---|---|---|
-| Claims without citations | Undermines credibility entirely | Cite every factual claim inline |
-| Single-source assertions | One source can be wrong or biased | Cross-reference with 2+ independent sources |
-| Citing secondary when primary exists | Telephone game distorts findings | Trace to and cite the original study |
-| Writing introduction first | Leads to misalignment with body | Write body first, introduction last |
-| Padding to reach word count | Readers detect filler immediately | Add depth or cut the target |
-| Weasel words without specifics | "Some experts say" means nothing | Name the expert, cite the source |
-| Retrofitting citations after drafting | Gaps in evidence go unnoticed | Integrate citations during writing |
-| Ignoring counterarguments | One-sided work lacks credibility | Address objections explicitly |
-| Paraphrasing too closely | Borderline plagiarism even with citation | Summarize in your own analytical voice |
-| No conflict-of-interest disclosure | Erodes trust when discovered | Disclose sponsorship or affiliations upfront |
+1. **一手来源核查**：将每项主张追溯至原始来源
+2. **交叉验证**：用至少 2 个独立来源验证关键事实
+3. **统计验证**：检查数字是否最新且语境恰当
+4. **引文准确性**：核实所有直接引用的确切措辞
+5. **日期验证**：确认所有日期和时间线
+6. **姓名与头衔核查**：验证拼写正确性和当前头衔
 
-## Anti-Rationalization Guards
+### 常见事实核查陷阱
 
-- Do NOT skip the CRAAP test because "the source looks reputable" -- evaluate it formally.
-- Do NOT use Tier 4-5 sources for core claims, regardless of convenience.
-- Do NOT begin drafting without a completed outline with evidence mapped to sections.
-- Do NOT publish without running the fact-checking protocol on every statistic and quote.
-- Do NOT retrofit citations after writing -- integrate them as you draft.
+| 陷阱           | 示例                                  | 预防措施                       |
+| -------------- | ------------------------------------- | ------------------------------ |
+| 过时统计数据   | "50% 的..." 来自 2018 年研究          | 始终注明发布年份，寻求最新数据 |
+| 引文归属错误   | 爱因斯坦并未说过大多数"爱因斯坦名言"  | 追溯至一手来源文档             |
+| 幸存者偏差     | "所有成功公司都做 X"                  | 寻找反例                       |
+| 相关即因果     | "吃巧克力多的国家诺贝尔奖更多"        | 区分相关性与因果关系           |
+| 脱离语境的数据 | "收入增长 500%"（从 1 美元到 5 美元） | 始终提供绝对数值和上下文       |
 
-## Integration Points
+## 研究工具
 
-| Skill | How It Connects |
-|---|---|
-| `seo-optimizer` | Research content needs SEO-optimized titles, meta descriptions, and structured data |
-| `content-creator` | Research findings feed into marketing copy and social media content |
-| `email-composer` | Research summaries inform stakeholder update emails and executive briefings |
-| `tech-docs-generator` | Technical research follows similar source evaluation and citation practices |
-| `llm-as-judge` | Evaluate research content quality against rubric dimensions |
-| `clean-code` | Writing quality checklist parallels clean code principles for prose |
+| 工具              | 用途              | 最佳适用                 |
+| ----------------- | ----------------- | ------------------------ |
+| Google Scholar    | 学术论文搜索      | 同行评审研究             |
+| Semantic Scholar  | AI 驱动的论文发现 | 查找相关工作             |
+| arXiv             | 预印本            | 前沿计算机/机器学习/物理 |
+| PubMed            | 医学/生物研究     | 健康与生命科学           |
+| Statista          | 统计与市场数据    | 行业数据点               |
+| Wayback Machine   | 历史网页存档      | 验证过往主张             |
+| Zotero / Mendeley | 文献管理          | 组织来源                 |
+| Perplexity        | AI 辅助研究       | 初步发现                 |
 
-## Skill Type
+## 反模式 / 常见错误
 
-**FLEXIBLE** — Adapt research depth, citation formality, and structure to the content type and audience. Academic whitepapers demand Tier 1 sources and formal citations; blog posts may use a lighter approach. The fact-checking protocol and source evaluation framework are always recommended.
+| 反模式                   | 为何失败                   | 正确做法               |
+| ------------------------ | -------------------------- | ---------------------- |
+| 无引用的主张             | 完全损害可信度             | 每项事实主张内联引用   |
+| 单一来源断言             | 单一来源可能错误或存在偏见 | 用 2+ 独立来源交叉验证 |
+| 有一手来源却引用二手来源 | 传话游戏扭曲发现           | 追溯并引用原始研究     |
+| 先写引言                 | 导致与正文不一致           | 先写正文，最后写引言   |
+| 凑字数                   | 读者立即察觉填充内容       | 增加深度或降低字数目标 |
+| 模糊措辞无具体指向       | "一些专家认为"毫无意义     | 指明专家姓名，引用来源 |
+| 起草后补加引用           | 证据缺口被忽视             | 写作时同步整合引用     |
+| 忽略反驳观点             | 单方面论述缺乏可信度       | 明确回应异议           |
+| 改写过于接近原文         | 即使有引用也接近抄袭       | 用自己的分析性语言总结 |
+| 未披露利益冲突           | 被发现时侵蚀信任           | 提前披露赞助或隶属关系 |
+
+## 反合理化防护
+
+- 切勿因"来源看起来可靠"而跳过 CRAAP 测试 — 请正式评估。
+- 切勿为追求便利而对核心主张使用 Tier 4-5 来源。
+- 切勿在未完成的、未将证据映射到章节的大纲基础上开始起草。
+- 切勿在未对每项统计数据和引文执行事实核查流程的情况下发布。
+- 切勿在写作后补加引用 — 起草时同步整合。
+
+## 集成点
+
+| 技能                  | 连接方式                                        |
+| --------------------- | ----------------------------------------------- |
+| `seo-optimizer`       | 研究内容需要 SEO 优化的标题、元描述和结构化数据 |
+| `content-creator`     | 研究发现可转化为营销文案和社交媒体内容          |
+| `email-composer`      | 研究摘要用于利益相关者更新邮件和高管简报        |
+| `tech-docs-generator` | 技术研究遵循类似的来源评估和引用实践            |
+| `llm-as-judge`        | 根据评分维度评估研究内容质量                    |
+| `clean-code`          | 写作质量检查清单与代码整洁原则在散文写作中并行  |
+
+## 技能类型
+
+**灵活 (FLEXIBLE)** — 根据内容类型和受众调整研究深度、引用正式程度和结构。学术白皮书要求 Tier 1 来源和正式引用；博客文章可采用更轻量方法。事实核查流程和来源评估框架始终推荐使用。

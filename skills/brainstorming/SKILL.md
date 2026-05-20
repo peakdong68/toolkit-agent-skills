@@ -1,321 +1,321 @@
 ---
 name: brainstorming
-description: 'Use before any creative work - creating features, building components, adding functionality, or modifying behavior. Triggers on /brainstorm command, when exploring ideas before planning, when user describes a vague goal or feature request, or when design decisions need collaborative exploration. Explores user intent, requirements and design before implementation.'
+description: '在任何创造性工作之前使用——创建功能、构建组件、添加功能或修改行为。当触发 /brainstorm 命令、在规划前探索想法、用户描述模糊的目标或功能需求，或设计决策需要协作探索时触发。在实施前探索用户意图、需求和设计。'
 ---
 
-# Brainstorming Ideas Into Designs
+# 将头脑风暴转化为设计方案
 
-## Overview
+## 概述
 
-Brainstorming transforms vague ideas into validated designs through structured collaborative dialogue. It bridges the gap between "I want X" and a concrete design that can be handed to the planning skill. This enhanced version integrates with the self-learning skill to build on known project context and avoid re-asking previously answered questions.
+头脑风暴通过结构化的协作对话，将模糊的想法转化为经过验证的设计。它填补了“我想要 X"与可交付给规划技能的具体设计之间的空白。此增强版本与自学习技能集成，能够基于已知的项目上下文进行构建，并避免重复询问已回答过的问题。
 
-**Announce at start:** "I'm using the brainstorming skill to explore this idea and create a design before implementation."
+**开始时声明：**“我正在使用头脑风暴技能来探索此想法，并在实施前创建设计方案。”
 
-## Trigger Conditions
+## 触发条件
 
-- User describes a new feature idea or goal
-- User asks "how should we build X?"
-- Creative work requires design exploration before planning
-- `/brainstorm` command invoked
-- Transition from a vague requirement to structured design is needed
-
----
-
-## Phase 1: Context Loading
-
-**Goal:** Load everything known about the project before asking the user anything.
-
-1. Check memory files (`project-context.md`, `learned-patterns.md`, `decisions-log.md`) for known patterns, stack, and conventions
-2. Read relevant existing code, docs, and recent commits
-3. Review existing designs in `docs/plans/` for related prior work
-4. Identify constraints from the existing architecture
-5. Note what you already know — do NOT re-ask the user for information you can discover
-
-### Context Sources Priority
-
-| Source         | What to Extract                    | Priority |
-| -------------- | ---------------------------------- | -------- |
-| Memory files   | Stack, conventions, past decisions | Highest  |
-| CLAUDE.md      | Project structure, hard gates      | High     |
-| Existing code  | Current patterns, architecture     | High     |
-| Recent commits | Direction of development           | Medium   |
-| docs/plans/    | Prior designs and decisions        | Medium   |
-
-**STOP — Do NOT proceed to Phase 2 until:**
-
-- [ ] Memory files have been checked
-- [ ] Relevant codebase areas have been explored
-- [ ] You can summarize what you already know about this domain
+- 用户描述新的功能想法或目标
+- 用户询问“我们应该如何构建 X？”
+- 创造性工作在规划前需要进行设计探索
+- 调用 `/brainstorm` 命令
+- 需要将模糊需求转化为结构化设计
 
 ---
 
-## Phase 2: Idea Exploration
+## 阶段 1：上下文加载
 
-**Goal:** Understand the user's intent through focused, one-at-a-time questions.
+**目标：**在向用户提问之前，加载关于项目的所有已知信息。
 
-1. Ask ONE question per message — never multiple questions
-2. Prefer multiple choice questions when possible
-3. Focus on understanding purpose, constraints, and success criteria
-4. Build on context loaded in Phase 1 — skip questions you can already answer
-5. Convert vague answers into specific, testable criteria
+1. 检查记忆文件（`project-context.md`、`learned-patterns.md`、`decisions-log.md`）以获取已知模式、技术栈和约定
+2. 阅读相关的现有代码、文档和最近的提交记录
+3. 审查 `docs/plans/` 中的现有设计，了解相关的先前工作
+4. 从现有架构中识别约束条件
+5. 记录你已知的信息——切勿重新询问你能够自行发现的信息
 
-### Question Flow Decision Table
+### 上下文来源优先级
 
-| What You Need to Know | Question Type      | Example                                                                             |
-| --------------------- | ------------------ | ----------------------------------------------------------------------------------- |
-| Core purpose          | Open-ended         | "What problem does this solve for the user?"                                        |
-| Scope boundaries      | Multiple choice    | "Should this handle: (A) only logged-in users, (B) all users, (C) depends on role?" |
-| Technical constraints | Yes/No + follow-up | "Does this need to work offline?"                                                   |
-| Priority trade-offs   | Forced ranking     | "Rank these: speed, correctness, simplicity"                                        |
-| Success criteria      | Measurable target  | "What does 'working' look like? Can you describe the happy path?"                   |
-| Non-goals             | Explicit exclusion | "What should we explicitly NOT build in this iteration?"                            |
+| 来源        | 提取内容               | 优先级 |
+| ----------- | ---------------------- | ------ |
+| 记忆文件    | 技术栈、约定、过往决策 | 最高   |
+| CLAUDE.md   | 项目结构、硬性限制     | 高     |
+| 现有代码    | 当前模式、架构         | 高     |
+| 最近提交    | 开发方向               | 中     |
+| docs/plans/ | 过往设计与决策         | 中     |
 
-### Question Rules
+**停止 — 在满足以下条件前，请勿进入阶段 2：**
 
-| Rule                      | Rationale                                    |
-| ------------------------- | -------------------------------------------- |
-| One question per message  | Prevents cognitive overload                  |
-| Multiple choice preferred | Faster to answer, reduces ambiguity          |
-| Research before asking    | Respect user's time                          |
-| Build on memory           | Do not re-ask known things                   |
-| Testable outcomes         | Vague success criteria lead to vague designs |
-
-**STOP — Do NOT proceed to Phase 3 until:**
-
-- [ ] You understand the core purpose and who it serves
-- [ ] You know the constraints (technical, timeline, scope)
-- [ ] You have identified success criteria and non-goals
-- [ ] No critical ambiguities remain about intent
+- [ ] 已检查记忆文件
+- [ ] 已探索相关代码库区域
+- [ ] 你能总结自己对该领域已有的了解
 
 ---
 
-## Phase 3: Approach Exploration
+## 阶段 2：想法探索
 
-**Goal:** Propose 2-3 distinct approaches with trade-offs and a clear recommendation.
+**目标：**通过专注的、一次一问的方式理解用户的意图。
 
-For each approach, present:
+1. 每条消息只问一个问题——绝不一次问多个
+2. 尽可能优先使用选择题
+3. 专注于理解目的、约束条件和成功标准
+4. 基于阶段 1 加载的上下文——跳过你已经能回答的问题
+5. 将模糊的回答转化为具体、可测试的标准
 
-| Section              | Content                           |
-| -------------------- | --------------------------------- |
-| Name                 | Short descriptive label           |
-| Architecture summary | 2-3 sentences                     |
-| Key trade-offs       | Pros and cons                     |
-| Complexity           | Low / Medium / High               |
-| Risk                 | What could go wrong               |
-| Your assessment      | Why you do or do not recommend it |
+### 提问流程决策表
 
-### Approach Comparison Template
+| 你需要了解什么 | 问题类型     | 示例                                                           |
+| -------------- | ------------ | -------------------------------------------------------------- |
+| 核心目的       | 开放式       | “这为用户解决了什么问题？”                                     |
+| 范围边界       | 选择题       | “这应该处理：(A) 仅限登录用户，(B) 所有用户，(C) 取决于角色？” |
+| 技术约束       | 是/否 + 追问 | “这需要在离线环境下工作吗？”                                   |
+| 优先级权衡     | 强制排序     | “对这些进行排序：速度、正确性、简洁性”                         |
+| 成功标准       | 可衡量目标   | “‘正常工作’是什么样子的？你能描述一下理想路径吗？”             |
+| 非目标         | 明确排除     | “在本轮迭代中，我们明确不应该构建什么？”                       |
+
+### 提问规则
+
+| 规则                 | 理由                           |
+| -------------------- | ------------------------------ |
+| 每条消息只问一个问题 | 防止认知超载                   |
+| 优先使用选择题       | 回答更快，减少歧义             |
+| 提问前先研究         | 尊重用户时间                   |
+| 基于记忆构建         | 不重复询问已知事项             |
+| 结果可测试           | 模糊的成功标准会导致模糊的设计 |
+
+**停止 — 在满足以下条件前，请勿进入阶段 3：**
+
+- [ ] 你理解了核心目的及其服务对象
+- [ ] 你清楚了约束条件（技术、时间线、范围）
+- [ ] 你已确定成功标准和非目标
+- [ ] 关于意图不存在关键性歧义
+
+---
+
+## 阶段 3：方案探索
+
+**目标：**提出 2-3 个具有权衡分析的不同方案，并给出明确的推荐。
+
+对于每个方案，请展示：
+
+| 部分     | 内容               |
+| -------- | ------------------ |
+| 名称     | 简短的描述性标签   |
+| 架构摘要 | 2-3 句话           |
+| 关键权衡 | 优缺点             |
+| 复杂度   | 低 / 中 / 高       |
+| 风险     | 可能出问题的地方   |
+| 你的评估 | 推荐或不推荐的原因 |
+
+### 方案对比模板
 
 ```
-## Approach A: [Name] (Recommended)
-**Summary:** [2-3 sentences]
-**Pros:** [list]
-**Cons:** [list]
-**Complexity:** [Low/Medium/High]
-**Risk:** [What could go wrong]
-**Why recommended:** [1-2 sentences]
+## 方案 A：[名称]（推荐）
+**摘要：**[2-3 句话]
+**优点：**[列表]
+**缺点：**[列表]
+**复杂度：**[低/中/高]
+**风险：**[可能出问题的地方]
+**推荐原因：**[1-2 句话]
 
-## Approach B: [Name]
+## 方案 B：[名称]
 ...
 
-## Approach C: [Name] (if needed)
+## 方案 C：[名称]（如需）
 ...
 ```
 
-**Lead with your recommended approach** and explain why it is the best fit given the constraints discussed in Phase 2.
+**优先展示你推荐的方案**，并解释为何根据阶段 2 讨论的约束条件，它是最佳选择。
 
-**STOP — Do NOT proceed to Phase 4 until:**
+**停止 — 在满足以下条件前，请勿进入阶段 4：**
 
-- [ ] You have proposed at least 2 approaches
-- [ ] Each approach has explicit trade-offs
-- [ ] You have made a clear recommendation
-- [ ] User has indicated which approach to pursue
-
----
-
-## Phase 4: Design Presentation
-
-**Goal:** Present the detailed design in sections, getting approval incrementally.
-
-1. Present the design in logical sections scaled to complexity
-2. Ask after each section whether it looks right so far
-3. Be ready to go back and revise any section based on feedback
-4. Cover all relevant design dimensions
-
-### Design Sections by Complexity
-
-| Complexity          | Required Sections                                                                            | Optional Sections |
-| ------------------- | -------------------------------------------------------------------------------------------- | ----------------- |
-| Simple (1-3 tasks)  | Architecture, Components                                                                     | —                 |
-| Medium (4-10 tasks) | Architecture, Components, Data Flow, Error Handling                                          | Testing Strategy  |
-| Complex (10+ tasks) | Architecture, Components, Data Flow, Error Handling, Testing Strategy, Performance, Security | Migration Plan    |
-
-### Section Presentation Order
-
-1. **Architecture** — High-level structure and key decisions
-2. **Components** — What pieces exist and how they relate
-3. **Data Flow** — How data moves through the system
-4. **Error Handling** — What can go wrong and how to handle it
-5. **Testing Strategy** — How to verify correctness
-6. **Performance** — Only if relevant constraints exist
-7. **Security** — Only if handling sensitive data or auth
-
-Present one section at a time. Wait for user confirmation before proceeding.
-
-**STOP — Do NOT proceed to Phase 5 until:**
-
-- [ ] All relevant design sections have been presented
-- [ ] User has approved each section (or revisions were made)
-- [ ] The complete design is coherent and addresses all requirements
+- [ ] 你已提出至少 2 个方案
+- [ ] 每个方案都有明确的权衡分析
+- [ ] 你已给出明确的推荐
+- [ ] 用户已表明要采用哪个方案
 
 ---
 
-## Phase 5: Documentation and Transition
+## 阶段 4：设计展示
 
-**Goal:** Persist the design and hand off to the planning skill.
+**目标：**分节展示详细设计，逐步获取批准。
 
-1. Write the validated design to `docs/plans/<date>_<topic>/design.md`
-2. Commit the design document
-3. Update self-learning memory:
-   - `memory/decisions-log.md` — any architectural decisions made
-   - `memory/learned-patterns.md` — any new conventions discussed
-4. Invoke the `planning` skill to create a detailed implementation plan
+1. 按复杂度将设计划分为逻辑小节进行展示
+2. 每展示一个小节后，询问目前为止是否合理
+3. 准备好根据反馈返回并修改任何小节
+4. 涵盖所有相关的设计维度
 
-### Design Document Template
+### 按复杂度划分的设计小节
+
+| 复杂度              | 必需小节                                           | 可选小节 |
+| ------------------- | -------------------------------------------------- | -------- |
+| 简单（1-3 个任务）  | 架构、组件                                         | —        |
+| 中等（4-10 个任务） | 架构、组件、数据流、错误处理                       | 测试策略 |
+| 复杂（10+ 个任务）  | 架构、组件、数据流、错误处理、测试策略、性能、安全 | 迁移计划 |
+
+### 小节展示顺序
+
+1. **架构** — 高层结构和关键决策
+2. **组件** — 存在哪些部分及其相互关系
+3. **数据流** — 数据如何在系统中流动
+4. **错误处理** — 可能出错的地方及处理方式
+5. **测试策略** — 如何验证正确性
+6. **性能** — 仅在存在相关约束时包含
+7. **安全** — 仅在处理敏感数据或身份验证时包含
+
+一次只展示一个小节。在继续之前等待用户确认。
+
+**停止 — 在满足以下条件前，请勿进入阶段 5：**
+
+- [ ] 所有相关设计小节均已展示
+- [ ] 用户已批准每个小节（或已进行修订）
+- [ ] 完整的设计连贯且满足所有需求
+
+---
+
+## 阶段 5：文档化与交接
+
+**目标：**持久化设计并交接给规划技能。
+
+1. 将已验证的设计写入 `docs/plans/<date>_<id>_<topic>/design.md`
+2. 提交设计文档
+3. 更新自学习记忆：
+   - `memory/decisions-log.md` — 做出的任何架构决策
+   - `memory/learned-patterns.md` — 讨论出的任何新约定
+4. 调用 `planning` 技能以创建详细的实施计划
+
+### 设计文档模板
 
 ```markdown
-# [Topic] Design Document
+# [主题] 设计文档
 
-**Date:** YYYY-MM-DD
-**Status:** Approved
-**Approach:** [Which approach was chosen]
+**日期：** YYYY-MM-DD
+**状态：** 已批准
+**方案：** [选择了哪个方案]
 
-## Problem Statement
+## 问题陈述
 
-[What problem this solves and for whom]
+[此设计解决了什么问题以及为谁解决]
 
-## Design
+## 设计
 
-### Architecture
+### 架构
 
-[High-level structure]
+[高层结构]
 
-### Components
+### 组件
 
-[Key pieces and their relationships]
+[关键部分及其相互关系]
 
-### Data Flow
+### 数据流
 
-[How data moves through the system]
+[数据如何在系统中流动]
 
-### Error Handling
+### 错误处理
 
-[What can go wrong and how it is handled]
+[可能出错的地方及其处理方式]
 
-## Decisions Made
+## 做出的决策
 
-- [Decision 1]: [Rationale]
-- [Decision 2]: [Rationale]
+- [决策 1]：[理由]
+- [决策 2]：[理由]
 
-## Non-Goals
+## 非目标
 
-- [What was explicitly excluded and why]
+- [明确排除了什么以及原因]
 
-## Next Steps
+## 后续步骤
 
-Invoke planning skill to create implementation plan.
+调用规划技能以创建实施计划。
 ```
 
-**STOP — Do NOT proceed until:**
+**停止 — 在满足以下条件前，请勿继续：**
 
-- [ ] Design document is saved to `docs/plans/`
-- [ ] Memory files are updated with new decisions/patterns
-- [ ] User has confirmed the design is complete
-
----
-
-## Anti-Patterns / Common Mistakes
-
-| Anti-Pattern                            | Why It Fails                                            | Correct Approach                                |
-| --------------------------------------- | ------------------------------------------------------- | ----------------------------------------------- |
-| "This is too simple to brainstorm"      | Every project needs a design, even simple ones          | Design can be brief, but must exist             |
-| "The user already knows what they want" | Users know WHAT, not HOW                                | Explore the HOW through approaches              |
-| "I can just start coding"               | Code without design is technical debt from line 1       | Design first, code second                       |
-| "We don't have time to brainstorm"      | We don't have time to rebuild from poor assumptions     | Brainstorming prevents costly rework            |
-| "The requirements are clear"            | Requirements are not design — you still need approaches | Explore trade-offs even with clear requirements |
-| Asking 5 questions at once              | Overwhelms the user, gets shallow answers               | One question per message                        |
-| Skipping context loading                | Re-asks things already known                            | Check memory files first                        |
-| Not proposing alternatives              | Anchors on first idea, misses better options            | Always propose 2-3 approaches                   |
-| Presenting entire design at once        | Too much to review, user skims                          | Section by section with approval                |
-| Not persisting decisions                | Same discussions repeat in future sessions              | Update memory files                             |
+- [ ] 设计文档已保存至 `docs/plans/`
+- [ ] 记忆文件已更新新的决策/模式
+- [ ] 用户已确认设计已完成
 
 ---
 
-## Anti-Rationalization Guards
+## 反模式 / 常见错误
+
+| 反模式                       | 为何失败                             | 正确做法                     |
+| ---------------------------- | ------------------------------------ | ---------------------------- |
+| “这太简单了，不需要头脑风暴” | 每个项目都需要设计，即使是简单的     | 设计可以简短，但必须存在     |
+| “用户已经知道他们想要什么”   | 用户知道“想要什么”，不知道“如何实现” | 通过方案探索“如何实现”       |
+| “我可以直接开始写代码”       | 没有设计的代码从第一行起就是技术债   | 先设计，后编码               |
+| “我们没有时间进行头脑风暴”   | 我们没有时间因错误的假设而返工       | 头脑风暴能避免代价高昂的返工 |
+| “需求已经很清楚了”           | 需求不等于设计——你仍然需要方案       | 即使需求明确也要探索权衡     |
+| 一次问 5 个问题              | 使用户不知所措，得到肤浅的答案       | 每条消息只问一个问题         |
+| 跳过上下文加载               | 重复询问已知事项                     | 先检查记忆文件               |
+| 不提出替代方案               | 锚定在第一个想法上，错失更好选项     | 始终提出 2-3 个方案          |
+| 一次性展示完整设计           | 内容太多无法审阅，用户只会略读       | 分节展示并逐步批准           |
+| 不持久化决策                 | 未来的会话中会重复相同的讨论         | 更新记忆文件                 |
+
+---
+
+## 反自我合理化防护
 
 <HARD-GATE>
-Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
+在展示设计并获得用户批准之前，切勿调用任何实施技能、编写任何代码、搭建任何项目或采取任何实施行动。此规则适用于每一个项目，无论其看起来多么简单。
 </HARD-GATE>
 
-If you catch yourself thinking:
+如果你发现自己有这样的想法：
 
-- "Let me just scaffold the project first..." — No. Design first.
-- "The design is obvious..." — Then it will be quick to document. Do it.
-- "The user seems impatient..." — Poor design wastes more time than brainstorming.
-
----
-
-## Integration Points
-
-| Skill                            | Relationship                                      | When                                  |
-| -------------------------------- | ------------------------------------------------- | ------------------------------------- |
-| `self-learning`                  | Upstream — provides project context from memory   | Phase 1: context loading              |
-| `planning`                       | Downstream — receives approved design             | Phase 5: transition to planning       |
-| `task-decomposition`             | Complementary — breaks design into work breakdown | When design reveals complex scope     |
-| `spec-writing`                   | Complementary — can formalize design into specs   | When formal specifications are needed |
-| `verification-before-completion` | Downstream — verifies design completeness         | Before claiming design is done        |
+- “让我先搭建一下项目框架……” —— 不行。先设计。
+- “设计很明显……” —— 那记录下来会很快。去做吧。
+- “用户似乎不耐烦了……” —— 糟糕的设计比头脑风暴浪费更多时间。
 
 ---
 
-## Concrete Examples
+## 集成点
 
-### Example: Simple Feature Brainstorm
+| 技能                             | 关系                            | 何时使用               |
+| -------------------------------- | ------------------------------- | ---------------------- |
+| `self-learning`                  | 上游 — 从记忆中提供项目上下文   | 阶段 1：上下文加载     |
+| `planning`                       | 下游 — 接收已批准的设计         | 阶段 5：交接至规划     |
+| `task-decomposition`             | 互补 — 将设计分解为工作分解结构 | 当设计揭示出复杂范围时 |
+| `spec-writing`                   | 互补 — 可将设计正式化为规格说明 | 当需要正式规格说明时   |
+| `verification-before-completion` | 下游 — 验证设计完整性           | 在声称设计完成之前     |
 
-```
-User: "I want to add dark mode to the app"
+---
 
-Phase 1: [Check memory — React app, Tailwind CSS, no current theme system]
-Phase 2: "Should dark mode (A) follow system preference automatically,
-          (B) be a manual toggle only, or (C) both with manual override?"
-Phase 3: Approach A: CSS variables + Tailwind dark: prefix
-         Approach B: Theme context provider with CSS-in-JS
-         Recommend A — aligns with existing Tailwind usage
-Phase 4: Section 1: Architecture — Tailwind dark mode with class strategy
-         Section 2: Components — ThemeToggle component, layout wrapper
-Phase 5: Save design doc, invoke planning skill
-```
+## 具体示例
 
-### Example: Transition to Planning
+### 示例：简单功能头脑风暴
 
 ```
-Design approved and saved to docs/plans/2026-05-15_dark-mode/design.md.
-Updated memory/decisions-log.md with theme system decision.
-Invoking planning skill to create implementation plan.
+用户：“我想给应用添加深色模式”
+
+阶段 1：[检查记忆 — React 应用，Tailwind CSS，当前无主题系统]
+阶段 2：“深色模式应该 (A) 自动跟随系统偏好，
+          (B) 仅为手动开关，还是 (C) 两者兼具但支持手动覆盖？”
+阶段 3：方案 A：CSS 变量 + Tailwind `dark:` 前缀
+         方案 B：使用 CSS-in-JS 的主题上下文提供者
+         推荐 A — 与现有 Tailwind 用法一致
+阶段 4：第 1 节：架构 — 使用类策略的 Tailwind 深色模式
+         第 2 节：组件 — ThemeToggle 组件、布局包装器
+阶段 5：保存设计文档，调用规划技能
+```
+
+### 示例：交接至规划
+
+```
+设计已获批准并保存至 docs/plans/2026-05-15_01_dark-mode/design.md。
+已使用主题系统决策更新 memory/decisions-log.md。
+正在调用规划技能以创建实施计划。
 ```
 
 ---
 
-## Key Principles
+## 核心原则
 
-- **One question at a time** — Do not overwhelm
-- **Multiple choice preferred** — Easier to answer
-- **YAGNI ruthlessly** — Remove unnecessary features
-- **Explore alternatives** — Always propose 2-3 approaches
-- **Incremental validation** — Present and approve in sections
-- **Build on context** — Use self-learning memory to avoid re-asking known things
+- **一次一问** — 不要造成压迫感
+- **优先选择题** — 更容易回答
+- **严格遵循 YAGNI** — 移除不必要的功能
+- **探索替代方案** — 始终提出 2-3 个方案
+- **增量验证** — 分节展示并批准
+- **基于上下文构建** — 使用自学习记忆避免重复询问已知事项
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — Follow this process exactly. Every idea goes through all five phases. The design can be brief for simple projects, but it must be documented and approved before any implementation begins.
+**严格（RIGID）** — 严格遵循此流程。每个想法都必须经过全部五个阶段。对于简单项目，设计可以简短，但在任何实施开始之前，必须进行文档化并获得批准。

@@ -1,249 +1,249 @@
 ---
 name: resilient-execution
-description: Use when a task fails, an approach does not work, when encountering errors during implementation, or when tempted to say "I cannot do this" - ensures retry with at least 3 genuinely different approaches before escalating
+description: 当任务失败、方法无效、实施过程中遇到错误，或想要说“我做不到”时使用——确保在升级问题前，至少使用3种真正不同的方法进行重试
 ---
 
-## Overview
+## 概述
 
-The resilient-execution skill prevents premature failure by enforcing a minimum of 3 genuinely different approaches before escalating to the user. It provides a structured error classification system, an approach cascade methodology, and transparent logging of each attempt. Without this skill, agents give up too early — with it, they systematically exhaust alternatives and only escalate with full evidence.
+`resilient-execution`（韧性执行）技能通过在向用户升级问题前强制要求至少尝试3种真正不同的方法，来防止过早放弃。它提供了一套结构化的错误分类系统、方法级联策略，以及每次尝试的透明日志记录。没有此技能时，智能体往往会过早放弃；有了它，智能体会系统性地穷尽替代方案，并仅在掌握充分证据后才进行升级。
 
-**Announce at start:** "I'm using the resilient-execution skill — I will try multiple approaches before escalating."
+**开始时声明：**“我正在使用 resilient-execution 技能——在升级问题前，我将尝试多种方法。”
 
 ---
 
-## Phase 1: Error Classification
+## 阶段 1：错误分类
 
-When an approach fails, immediately classify the error before retrying:
+当某种方法失败时，在重试前立即对错误进行分类：
 
-| Error Type | Definition | Indicators | Correct Response |
+| 错误类型 | 定义 | 指示信号 | 正确应对方式 |
 |-----------|-----------|------------|-----------------|
-| **Transient** | Temporary infrastructure failure | Network timeout, rate limit, 503 error, lock contention | Wait briefly, retry the same approach |
-| **Environmental** | Missing or misconfigured dependency | Module not found, wrong version, missing env var, permission denied | Fix the environment, then retry same approach |
-| **Logical** | Wrong approach or incorrect assumption | Wrong output, unexpected behavior, type mismatch, wrong API usage | Rethink the approach entirely |
-| **Fundamental** | Genuinely impossible with available tools | API does not exist, hardware limitation, missing capability | Escalate to user with evidence |
+| **瞬时性 (Transient)** | 临时基础设施故障 | 网络超时、速率限制、503 错误、锁竞争 | 稍作等待，重试相同方法 |
+| **环境性 (Environmental)** | 依赖项缺失或配置错误 | 模块未找到、版本错误、缺少环境变量、权限被拒 | 修复环境后，重试相同方法 |
+| **逻辑性 (Logical)** | 方法错误或假设不正确 | 输出错误、意外行为、类型不匹配、API 使用错误 | 彻底重新思考方法 |
+| **根本性 (Fundamental)** | 现有工具确实无法完成 | API 不存在、硬件限制、缺少必要能力 | 附带证据向用户升级问题 |
 
 <HARD-GATE>
-You MUST try at least 3 different approaches before telling the user something cannot be done. "I tried and it didn't work" is not acceptable without evidence of 3 genuine attempts with meaningfully different strategies.
+在告知用户某事无法完成之前，你**必须**尝试至少 3 种不同的方法。如果没有 3 次采用真正不同策略的尝试证据，“我试过了但没成功”是不可接受的。
 </HARD-GATE>
 
-> **STOP: Classify the error before choosing your next approach. Wrong classification leads to wasted retries.**
+> **停止：在选择下一步方法前必须先对错误分类。错误分类会导致无效重试。**
 
 ---
 
-## Phase 2: Approach Cascade
+## 阶段 2：方法级联
 
-Execute the cascade systematically. Each attempt must be a genuinely different strategy.
+系统化地执行级联流程。每次尝试都必须是真正不同的策略。
 
 ```
-Attempt 1: Primary approach (most direct solution)
-    | fails
+尝试 1：主要方法（最直接的解决方案）
+    | 失败
     v
-Classify error -> Can same approach work with a fix?
-    | YES -> Fix and retry (does NOT count as a new attempt)
-    | NO  -> Proceed to Attempt 2
+错误分类 -> 修复后相同方法是否可行？
+    | 是 -> 修复并重试（不计作新尝试）
+    | 否 -> 进入尝试 2
     v
-Attempt 2: Alternative approach 1 (different technique)
-    | fails
+尝试 2：替代方法 1（不同技术）
+    | 失败
     v
-Classify error -> Is this fundamentally blocked?
-    | YES -> Proceed directly to escalation
-    | NO  -> Proceed to Attempt 3
+错误分类 -> 是否存在根本性阻碍？
+    | 是 -> 直接升级问题
+    | 否 -> 进入尝试 3
     v
-Attempt 3: Alternative approach 2 (different path entirely)
-    | fails
+尝试 3：替代方法 2（完全不同的路径）
+    | 失败
     v
-Circuit breaker -> Present findings to user with full evidence
+熔断机制 -> 向用户提交完整证据及发现
 ```
 
-### For Each Attempt, Log:
+### 每次尝试需记录以下内容：
 
 ```markdown
-### Attempt N: [Approach Name]
-**Strategy:** [what makes this different from previous attempts]
-**What I tried:** [specific description with commands/code]
-**What happened:** [exact error or unexpected result]
-**Why it failed:** [root cause analysis]
-**Classification:** [Transient / Environmental / Logical / Fundamental]
-**What to try next:** [reasoning for next approach]
+### 尝试 N：[方法名称]
+**策略：** [与之前尝试的不同之处]
+**我尝试了什么：** [包含命令/代码的具体描述]
+**发生了什么：** [确切的错误或意外结果]
+**为何失败：** [根本原因分析]
+**分类：** [瞬时性 / 环境性 / 逻辑性 / 根本性]
+**下一步尝试：** [选择下一方法的推理]
 ```
 
-> **STOP: Log every attempt before moving to the next. Do NOT skip logging — it is evidence for the escalation report.**
+> **停止：在进入下一次尝试前必须记录每次尝试。切勿跳过记录——这是升级报告的证据。**
 
 ---
 
-## Phase 3: Alternative Approach Selection
+## 阶段 3：替代方法选择
 
-When the primary approach fails, select the next approach using this decision table:
+当主要方法失败时，使用此决策表选择下一步方法：
 
-| Failure Type | Strategy 1 | Strategy 2 | Strategy 3 |
+| 失败类型 | 策略 1 | 策略 2 | 策略 3 |
 |-------------|-----------|-----------|-----------|
-| Library/API does not work | Different library | Direct implementation (no library) | Shell command / external tool |
-| Algorithm produces wrong result | Different algorithm | Decompose into smaller steps | Simplify constraints, solve easier version |
-| Permission/access denied | Different access method | Escalate with manual steps | Work around via alternative path |
-| Tool limitation | Different tool | Combine multiple tools | Provide manual instructions |
-| Integration failure | Mock the dependency | Use alternative interface | Isolate and test components separately |
-| Performance issue | Different data structure | Batch/stream processing | Approximate solution |
+| 库/API 无法工作 | 使用不同的库 | 直接实现（不依赖库） | Shell 命令 / 外部工具 |
+| 算法产生错误结果 | 使用不同算法 | 分解为更小步骤 | 简化约束条件，先解决简化版问题 |
+| 权限/访问被拒 | 不同的访问方式 | 附带手动步骤升级问题 | 通过替代路径绕过限制 |
+| 工具限制 | 使用不同工具 | 组合多个工具 | 提供手动操作指南 |
+| 集成失败 | 模拟依赖项 | 使用替代接口 | 隔离并单独测试各组件 |
+| 性能问题 | 使用不同数据结构 | 批量/流式处理 | 采用近似解决方案 |
 
-### Alternative Strategy Hierarchy
+### 替代策略优先级
 
-Try these in order of preference:
+按以下优先顺序尝试：
 
-1. **Different tool** — use a different library, API, or command
-2. **Different algorithm** — solve the same problem a different way
-3. **Decompose** — break the problem into smaller, solvable parts
-4. **Simplify** — remove constraints and solve a simpler version first
-5. **Work around** — achieve the goal through a different path entirely
-6. **Manual steps** — provide clear instructions the user can follow themselves
+1. **不同工具** — 使用不同的库、API 或命令
+2. **不同算法** — 用不同方式解决同一问题
+3. **分解问题** — 将问题拆分为更小、可解决的子部分
+4. **简化问题** — 移除约束条件，先解决简化版本
+5. **绕过限制** — 通过完全不同的路径达成目标
+6. **手动步骤** — 提供用户可自行操作的清晰指南
 
 ---
 
-## Phase 4: Escalation Report
+## 阶段 4：升级报告
 
-After 3 genuine attempts with different approaches, produce this report:
+在完成 3 次采用不同方法的真实尝试后，生成此报告：
 
 ```markdown
-## Execution Report
+## 执行报告
 
-I tried 3 different approaches to [goal]:
+为了达成 [目标]，我尝试了 3 种不同的方法：
 
-### Attempt 1: [Approach Name]
-**Strategy:** [description]
-**Result:** Failed because [specific reason]
-**Error:** [exact error message or unexpected output]
+### 尝试 1：[方法名称]
+**策略：** [描述]
+**结果：** 失败，原因是 [具体原因]
+**错误：** [确切的错误信息或意外输出]
 
-### Attempt 2: [Approach Name]
-**Strategy:** [description]
-**Result:** Failed because [specific reason]
-**Error:** [exact error message or unexpected output]
+### 尝试 2：[方法名称]
+**策略：** [描述]
+**结果：** 失败，原因是 [具体原因]
+**错误：** [确切的错误信息或意外输出]
 
-### Attempt 3: [Approach Name]
-**Strategy:** [description]
-**Result:** Failed because [specific reason]
-**Error:** [exact error message or unexpected output]
+### 尝试 3：[方法名称]
+**策略：** [描述]
+**结果：** 失败，原因是 [具体原因]
+**错误：** [确切的错误信息或意外输出]
 
-### Root Cause Analysis
-[Why all three approaches failed — identify the common blocker]
+### 根本原因分析
+[为何三种方法均告失败——识别共同的阻碍点]
 
-### Recommended Next Steps
-- **Option A:** [what the user could try]
-- **Option B:** [alternative path]
-- **Option C:** [if applicable]
+### 建议的后续步骤
+- **选项 A：** [用户可尝试的操作]
+- **选项 B：** [替代路径]
+- **选项 C：** [如适用]
 
-### What I Need From You to Proceed
-[Specific ask — access, information, permission, or decision]
+### 我需要您提供什么以继续推进
+[具体请求——访问权限、信息、授权或决策]
 ```
 
-> **STOP: Do NOT escalate without this report. The user needs evidence that 3 genuine attempts were made.**
+> **停止：切勿在未生成此报告的情况下升级问题。用户需要看到已进行 3 次真实尝试的证据。**
 
 ---
 
-## Decision Table: When Retries Count as "Genuine"
+## 决策表：何时重试算作“真实尝试”
 
-| Counts as Genuine Attempt | Does NOT Count |
+| 算作真实尝试 | 不算作真实尝试 |
 |--------------------------|---------------|
-| Different library or tool | Same library with different import |
-| Different algorithm or data structure | Same algorithm with tweaked parameters |
-| Different architectural approach | Same approach with minor code changes |
-| Manual workaround vs automated | Same automation with retry loop |
-| Breaking problem into sub-problems | Same monolithic approach with logging added |
-| Using an entirely different API | Same API with different authentication method (unless auth was the error) |
+| 使用不同的库或工具 | 同一库但更改导入方式 |
+| 使用不同算法或数据结构 | 同一算法仅调整参数 |
+| 不同的架构方法 | 同一方法仅做少量代码修改 |
+| 手动绕过 vs 自动化 | 同一自动化脚本加入重试循环 |
+| 将问题拆分为子问题 | 同一单体方法仅添加日志记录 |
+| 使用完全不同的 API | 同一 API 仅更改认证方式（除非错误本身是认证问题） |
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| What NOT to Do | Why It Fails | What to Do Instead |
+| 切勿这样做 | 为何会失败 | 应该怎么做 |
 |----------------|-------------|-------------------|
-| Retry the same approach 3 times and call it "3 attempts" | Same approach = same failure. Not genuine alternatives. | Each attempt must use a meaningfully different strategy |
-| Give up after 1 failure | Misses 2+ viable approaches | Always try at least 3 genuinely different approaches |
-| Skip error classification | Without classification, you retry wrong things | Classify BEFORE choosing next approach |
-| Hide failed attempts from the user | User cannot help without context | Log and report every attempt transparently |
-| Escalate without trying manual workaround | Many things that fail in automation work manually | Always consider manual steps as Approach 3 |
-| Blame the platform without investigation | "Platform limitation" is often wrong | Search for workarounds before declaring impossible |
-| Fix environment issues and count as new attempt | Fixing env + retrying same approach is 1 attempt | Only count genuinely different strategies |
-| Skip logging intermediate attempts | Loses evidence trail, cannot produce escalation report | Log every attempt immediately |
+| 将同一方法重试 3 次并称之为“3 次尝试” | 同一方法 = 同一失败结果。并非真正的替代方案。 | 每次尝试必须采用具有实质差异的策略 |
+| 失败 1 次就放弃 | 会错过 2 个以上可行的方法 | 始终尝试至少 3 种真正不同的方法 |
+| 跳过错误分类 | 不分类就会错误地重试相同内容 | 在选择下一步方法**前**先进行分类 |
+| 向用户隐藏失败的尝试 | 缺乏上下文用户无法提供帮助 | 透明地记录并报告每次尝试 |
+| 未尝试手动绕过方案就直接升级 | 许多自动化失败的操作手动即可完成 | 始终将手动步骤作为第 3 种方法考虑 |
+| 未经调查就归咎于平台 | “平台限制”的说法往往是错误的 | 在宣布无法实现前，先搜索绕过方案 |
+| 修复环境问题并计为新尝试 | 修复环境 + 重试同一方法仅算 1 次尝试 | 仅将真正不同的策略计入尝试次数 |
+| 跳过记录中间尝试 | 丢失证据链，无法生成升级报告 | 立即记录每次尝试 |
 
 ---
 
-## Anti-Rationalization Guards
+## 防自我合理化防护
 
-| Thought | Reality |
+| 想法 | 现实 |
 |---------|---------|
-| "This genuinely cannot be done" | Have you tried 3 different approaches? Probably not. |
-| "The error is clear, I know what is wrong" | Clear errors can have hidden root causes. Investigate. |
-| "I have already tried everything" | List what you tried. There are always more options. |
-| "The user should fix this themselves" | Provide a manual path, but try 3 approaches first. |
-| "This is a platform limitation" | Limitations often have workarounds. Search for them. |
-| "The same error keeps happening" | Same error with different approaches = different root cause. Classify. |
-| "This is taking too long" | Giving up takes longer when the user has to start over. |
-| "A simpler version would not be useful" | A working simple version beats a broken complex one. |
+| “这确实做不到” | 你试过 3 种不同方法了吗？大概率没有。 |
+| “错误信息很明确，我知道问题出在哪” | 明确的错误背后可能隐藏着根本原因。请深入调查。 |
+| “我已经把所有方法都试过了” | 列出你试过的内容。永远还有更多选项。 |
+| “用户应该自己解决这个问题” | 可以提供手动操作路径，但请先尝试 3 种方法。 |
+| “这是平台限制” | 限制通常都有绕过方案。去搜索它们。 |
+| “同样的错误一直在发生” | 不同方法遇到相同错误 = 不同的根本原因。请分类。 |
+| “这花的时间太长了” | 放弃后让用户从头开始会花费更多时间。 |
+| “简化版没什么用” | 一个能运行的简化版本胜过一个无法使用的复杂版本。 |
 
-> **Do NOT escalate without 3 genuine attempts. Period.**
+> **未进行 3 次真实尝试前，切勿升级问题。绝对不行。**
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关联关系 |
 |-------|-------------|
-| `circuit-breaker` | Activated after resilient-execution exhausts retries at the loop level |
-| `task-management` | Invokes resilient-execution when a task step fails |
-| `self-learning` | Records failure patterns to avoid repeating them in future sessions |
-| `planning` | Uses failure history to choose more robust approaches |
-| `auto-improvement` | Tracks retry success rates and approach effectiveness |
-| `verification-before-completion` | Invokes resilient-execution if verification fails |
+| `circuit-breaker` | 在 `resilient-execution` 耗尽循环级别的重试次数后激活 |
+| `task-management` | 当任务步骤失败时调用 `resilient-execution` |
+| `self-learning` | 记录失败模式，以避免在未来会话中重复犯错 |
+| `planning` | 利用失败历史选择更稳健的方法 |
+| `auto-improvement` | 跟踪重试成功率和方法有效性 |
+| `verification-before-completion` | 当验证失败时调用 `resilient-execution` |
 
 ---
 
-## Concrete Examples
+## 具体示例
 
-### Example: File Parsing Failure
+### 示例：文件解析失败
 ```
-Attempt 1: JSON.parse() on the file
-  Result: SyntaxError — file contains comments (JSONC format)
-  Classification: Logical — wrong parser for this format
+尝试 1：对文件使用 JSON.parse()
+  结果：SyntaxError — 文件包含注释（JSONC 格式）
+  分类：逻辑性 — 针对此格式使用了错误的解析器
 
-Attempt 2: Strip comments with regex, then JSON.parse()
-  Result: Failed — nested block comments not handled
-  Classification: Logical — regex too simple for comment stripping
+尝试 2：使用正则表达式去除注释，然后使用 JSON.parse()
+  结果：失败 — 未处理嵌套块注释
+  分类：逻辑性 — 正则表达式对于去除注释而言过于简单
 
-Attempt 3: Use `jsonc-parser` library (handles JSONC natively)
-  Result: Success — file parsed correctly
+尝试 3：使用 `jsonc-parser` 库（原生支持 JSONC）
+  结果：成功 — 文件正确解析
 ```
 
-### Example: API Integration Failure
+### 示例：API 集成失败
 ```
-Attempt 1: Direct HTTP request to API endpoint
-  Result: 403 Forbidden — authentication required
-  Classification: Environmental — missing auth config
+尝试 1：直接向 API 端点发送 HTTP 请求
+  结果：403 Forbidden — 需要身份验证
+  分类：环境性 — 缺少身份验证配置
 
-  Fix: Add API key from .env
-  Result: 429 Too Many Requests — rate limited
-  Classification: Transient — wait and retry
-  Result: 200 OK but response format changed from docs
-  Classification: Logical — API version mismatch
+  修复：从 .env 添加 API 密钥
+  结果：429 Too Many Requests — 触发速率限制
+  分类：瞬时性 — 等待并重试
+  结果：200 OK 但响应格式与文档不符
+  分类：逻辑性 — API 版本不匹配
 
-Attempt 2: Use official SDK instead of raw HTTP
-  Result: SDK throws "unsupported region" error
-  Classification: Environmental — region config needed
+尝试 2：使用官方 SDK 替代原始 HTTP 请求
+  结果：SDK 抛出“不支持的区域”错误
+  分类：环境性 — 需要配置区域信息
 
-Attempt 3: Use GraphQL endpoint instead of REST
-  Result: Success — GraphQL endpoint supports all regions
+尝试 3：使用 GraphQL 端点替代 REST
+  结果：成功 — GraphQL 端点支持所有区域
 ```
 
 ---
 
-## Key Principles
+## 核心原则
 
-- **Never give up silently** — always show what was tried
-- **Genuine alternatives** — each attempt must be a meaningfully different approach, not the same thing with minor tweaks
-- **Root cause analysis** — understand WHY before trying the next approach
-- **Learn from failure** — update memory with what did not work and why
-- **Transparent** — show the user your reasoning at each step
-- **Classify first** — error type determines whether to retry same approach or try a new one
+- **绝不明知故犯地放弃** — 始终展示尝试过的内容
+- **真正的替代方案** — 每次尝试必须是具有实质差异的方法，而非仅做微调的相同操作
+- **根本原因分析** — 在尝试下一方法前，必须理解“为何失败”
+- **从失败中学习** — 将无效操作及其原因更新至记忆库
+- **保持透明** — 向用户展示每一步的推理过程
+- **先分类** — 错误类型决定了是重试相同方法还是尝试新方法
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — The 3-attempt minimum is a HARD-GATE. Error classification is mandatory before each retry. The escalation report format must be followed exactly. Do not relax these requirements regardless of perceived simplicity.
+**刚性 (RIGID)** — 3 次尝试最低要求是硬性门槛（HARD-GATE）。每次重试前必须进行错误分类。必须严格遵循升级报告格式。无论任务看起来多么简单，都不得放宽这些要求。

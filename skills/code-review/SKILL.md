@@ -1,226 +1,236 @@
 ---
 name: code-review
-description: "Use when completing a task, implementing a feature, or before committing to verify work meets requirements and coding standards. Triggers: task completion, pre-commit check, pre-merge validation, plan alignment verification, post-refactor quality gate."
+description: '在完成任务、实现功能或提交代码前使用，以验证工作是否符合需求和编码规范。触发条件：任务完成、提交前检查、合并前验证、计划对齐验证、重构后质量门禁。'
 ---
 
-# Code Review
+# 代码审查
 
-## Overview
+## 概述
 
-Comprehensive code review against the original plan, coding standards, and learned project patterns. This skill dispatches a dedicated code-reviewer agent for thorough analysis, ensuring every change is evidence-based, plan-aligned, and convention-aware before it reaches the main branch.
+对照原始计划、编码规范以及已学习的项目模式进行全面的代码审查。本技能会调度专用的代码审查智能体进行深度分析，确保每次变更在合并至主分支前都有据可依、与计划对齐且符合规范。
 
-**Announce at start:** "I'm using the code-review skill to review the implementation."
+**开始声明：**“我正在使用代码审查（code-review）技能来审查实现代码。”
 
 ---
 
-## Phase 1: Gather Context
+## 第一阶段：收集上下文
 
-**Goal:** Identify what changed, what the plan required, and what conventions apply.
+**目标：** 识别变更内容、计划要求以及适用的规范。
 
-### Actions
+### 操作
 
-1. Retrieve the changes to review:
+1. 获取待审查的变更：
+
 ```bash
-git diff HEAD~N..HEAD          # or specific commit range
-git log --oneline HEAD~N..HEAD # what was done
+git diff HEAD~N..HEAD          # 或特定提交范围
+git log --oneline HEAD~N..HEAD # 完成了什么
 ```
 
-2. Locate the plan document:
+2. 定位计划文档：
+
 ```bash
 ls docs/plans/*.md | tail -1
 ```
 
-3. Load project conventions from `memory/learned-patterns.md`
+3. 从 `memory/learned-patterns.md` 加载项目规范
 
-4. Identify:
-   - What files were changed
-   - What the plan/spec required
-   - What conventions apply
+4. 明确：
+   - 哪些文件发生了变更
+   - 计划/规格说明的要求是什么
+   - 适用哪些规范
 
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] All changed files are identified
-- [ ] The plan or spec requirements are loaded
-- [ ] Relevant conventions from memory are loaded
-- [ ] You can state what was supposed to be built
+### 暂停 — 在完成以下条件前，切勿进入第二阶段：
+
+- [ ] 已识别所有变更文件
+- [ ] 已加载计划或规格说明的要求
+- [ ] 已从 memory 中加载相关规范
+- [ ] 你能清晰说明原本应该构建什么
 
 ---
 
-## Phase 2: Dispatch Code Reviewer
+## 第二阶段：调度代码审查智能体
 
-**Goal:** Send structured review request to the `code-reviewer` agent.
+**目标：** 向 `code-reviewer` 智能体发送结构化的审查请求。
 
-### Review Prompt Template
+### 审查提示词模板
 
 ```
-Review the following changes against:
-1. Plan: [plan document or requirements]
-2. Conventions: [learned patterns from memory]
-3. Standards: [CLAUDE.md rules]
+请对照以下内容审查以下变更：
+1. 计划：[计划文档或需求]
+2. 规范：[来自 memory 的已学习模式]
+3. 标准：[CLAUDE.md 规则]
 
-Changes:
-[git diff output or file list]
+变更内容：
+[git diff 输出或文件列表]
 
-Check for:
-- Plan alignment (did we build what was specified?)
-- Code quality (DRY, YAGNI, naming, structure)
-- Error handling (edge cases, failure modes)
-- Security (injection, XSS, auth issues)
-- Test coverage (are changes tested?)
-- Performance (obvious bottlenecks)
-- Documentation (are public APIs documented?)
+检查项：
+- 计划对齐（是否按指定要求构建？）
+- 代码质量（DRY、YAGNI、命名、结构）
+- 错误处理（边界情况、故障模式）
+- 安全性（注入、XSS、认证问题）
+- 测试覆盖率（变更是否已测试？）
+- 性能（明显的瓶颈）
+- 文档（公共 API 是否有文档？）
 ```
 
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] Review request has been dispatched
-- [ ] Reviewer agent has returned findings
+### 暂停 — 在完成以下条件前，切勿进入第三阶段：
+
+- [ ] 已发出审查请求
+- [ ] 审查智能体已返回审查结果
 
 ---
 
-## Phase 3: Categorize and Resolve Issues
+## 第三阶段：分类与解决问题
 
-**Goal:** Classify findings and fix all Critical issues.
+**目标：** 对发现的问题进行分类，并修复所有严重（Critical）问题。
 
-### Issue Categorization Table
+### 问题分类表
 
-| Category | Definition | Action Required |
-|----------|-----------|-----------------|
-| **Critical** | Bugs, security issues, data loss risk, plan violations | Must fix before merge |
-| **Important** | Code quality, missing tests, convention violations | Should fix before merge |
-| **Suggestions** | Style, naming, minor improvements | Nice to have, fix if time allows |
+| 类别                   | 定义                                   | 所需操作             |
+| ---------------------- | -------------------------------------- | -------------------- |
+| **严重 (Critical)**    | 缺陷、安全问题、数据丢失风险、违反计划 | 合并前必须修复       |
+| **重要 (Important)**   | 代码质量、缺少测试、违反规范           | 合并前应当修复       |
+| **建议 (Suggestions)** | 风格、命名、微小改进                   | 有时间则修复，非强制 |
 
-### Fix Loop
+### 修复循环
 
-For Critical and Important issues:
-1. Fix the issue
-2. Run tests to verify the fix
-3. Re-dispatch code-reviewer agent for the specific fix
-4. Repeat until no Critical issues remain
+针对严重和重要问题：
 
-### STOP — Do NOT proceed to Phase 4 until:
-- [ ] All Critical issues are resolved
-- [ ] All Important issues are resolved or explicitly deferred with justification
-- [ ] Test suite passes after all fixes
+1. 修复问题
+2. 运行测试以验证修复
+3. 针对该修复重新调度 `code-reviewer` 智能体
+4. 重复执行，直至不再存在严重问题
 
----
+### 暂停 — 在完成以下条件前，切勿进入第四阶段：
 
-## Phase 4: Self-Learning Integration
-
-**Goal:** Persist patterns discovered during review for future sessions.
-
-### Actions
-
-1. If new patterns were identified, update `memory/learned-patterns.md`
-2. If a common mistake was found, note it for future reference
-3. If the plan needed adjustment, update `memory/decisions-log.md`
+- [ ] 所有严重问题均已解决
+- [ ] 所有重要问题均已解决或已明确说明理由并延期处理
+- [ ] 所有修复后测试套件全部通过
 
 ---
 
-## Review Output Format
+## 第四阶段：自学习整合
+
+**目标：** 持久化审查过程中发现的模式，以供后续会话使用。
+
+### 操作
+
+1. 若识别出新模式，更新 `memory/learned-patterns.md`
+2. 若发现常见错误，记录下来以备将来参考
+3. 若计划需要调整，更新 `memory/decisions-log.md`
+
+---
+
+## 审查输出格式
 
 ```markdown
-## Code Review Summary
+## 代码审查摘要
 
-**Scope:** [files/components reviewed]
-**Plan alignment:** [aligned / minor deviations / major deviations]
+**审查范围：** [审查的文件/组件]
+**计划对齐情况：** [对齐 / 轻微偏离 / 重大偏离]
 
-### Critical Issues (N)
-1. **[Issue title]** — `file:line`
-   Problem: [description]
-   Fix: [specific recommendation]
+### 严重问题 (N)
 
-### Important Issues (N)
-1. **[Issue title]** — `file:line`
-   Problem: [description]
-   Fix: [specific recommendation]
+1. **[问题标题]** — `file:line`
+   问题：[描述]
+   修复：[具体建议]
 
-### Suggestions (N)
-1. **[Suggestion]** — `file:line`
+### 重要问题 (N)
 
-### What Was Done Well
-- [Positive observations]
+1. **[问题标题]** — `file:line`
+   问题：[描述]
+   修复：[具体建议]
+
+### 建议 (N)
+
+1. **[建议]** — `file:line`
+
+### 做得好的地方
+
+- [正面观察/评价]
 ```
 
 ---
 
-## Decision Table: Review Depth
+## 决策表：审查深度
 
-| Change Type | Review Depth | Reviewer |
-|-------------|-------------|----------|
-| New feature (>100 lines) | Full review: plan alignment + quality + security + tests | code-reviewer agent |
-| Bug fix (<50 lines) | Focused review: regression test + root cause + fix correctness | code-reviewer agent |
-| Refactor (no behavior change) | Behavior preservation: all tests pass + no regressions | code-reviewer agent |
-| Config/infra change | Security + correctness: no secrets exposed, valid syntax | code-reviewer agent |
-| Documentation only | Accuracy + completeness: matches current code behavior | Inline review |
-
----
-
-## Anti-Patterns / Common Mistakes
-
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
-|-------------|----------------|-----------------|
-| Skipping review for "small fixes" | Small changes cause production outages | Review everything |
-| Reviewing without the plan | Cannot verify correctness without requirements | Always load the plan first |
-| Fixing issues without re-running tests | Fixes can introduce new bugs | Run full test suite after every fix |
-| Generic feedback ("looks good") | Not actionable, misses real issues | Cite specific code lines with fix recommendations |
-| Reviewing your own code alone | Author blindness misses defects | Always dispatch code-reviewer agent |
-| Deferring Critical issues | Critical issues become production incidents | Must fix before merge, no exceptions |
+| 变更类型           | 审查深度                                   | 审查者               |
+| ------------------ | ------------------------------------------ | -------------------- |
+| 新功能（>100 行）  | 全面审查：计划对齐 + 质量 + 安全 + 测试    | code-reviewer 智能体 |
+| 缺陷修复（<50 行） | 聚焦审查：回归测试 + 根本原因 + 修复正确性 | code-reviewer 智能体 |
+| 重构（无行为变更） | 行为保持：所有测试通过 + 无回归            | code-reviewer 智能体 |
+| 配置/基础设施变更  | 安全 + 正确性：未暴露密钥，语法有效        | code-reviewer 智能体 |
+| 仅文档变更         | 准确性 + 完整性：与当前代码行为一致        | 内联审查             |
 
 ---
 
-## Rationalizations — STOP If You Think These
+## 反模式 / 常见错误
 
-| Excuse | Reality |
-|--------|---------|
-| "It's just a typo fix" | Typo fixes can break APIs. Review it. |
-| "I'm confident in this code" | Confidence does not equal correctness. Review it. |
-| "The tests pass" | Tests can miss bugs. Review it. |
-| "It's just styling/formatting" | Style changes can introduce bugs. Review it. |
-| "Nobody will notice" | That is exactly when bugs ship. Review it. |
-| "I'll review it later" | Later never comes. Review it now. |
-| "The deadline is tight" | Shipping bugs costs more than reviewing. Review it. |
-
----
-
-## Subagent Dispatch Opportunities
-
-| Task Pattern | Dispatch To | When |
-|---|---|---|
-| Reviewing multiple independent files/modules | `Agent` tool with `subagent_type="Explore"` | When review scope spans multiple unrelated modules |
-| Security-focused review pass | `Agent` tool invoking `security-review` skill | When changes touch auth, input handling, or external APIs |
-| Performance impact assessment | `Agent` tool invoking `performance-optimization` skill | When changes affect hot paths or data-heavy operations |
-
-Follow the `dispatching-parallel-agents` skill protocol when dispatching.
+| 反模式                         | 错误原因                     | 正确做法                      |
+| ------------------------------ | ---------------------------- | ----------------------------- |
+| 跳过“小修复”的审查             | 微小变更可能导致生产环境故障 | 审查所有变更                  |
+| 脱离计划进行审查               | 缺乏需求则无法验证正确性     | 始终先加载计划                |
+| 修复问题后不重新运行测试       | 修复可能引入新缺陷           | 每次修复后运行完整测试套件    |
+| 给出泛泛的反馈（“看起来不错”） | 缺乏可操作性，会遗漏真实问题 | 引用具体代码行并提供修复建议  |
+| 独自审查自己的代码             | 作者盲区会导致遗漏缺陷       | 始终调度 code-reviewer 智能体 |
+| 延期处理严重问题               | 严重问题将演变为生产事故     | 合并前必须修复，绝无例外      |
 
 ---
 
-## Integration Points
+## 自我合理化借口 — 若出现以下想法请立即停止
 
-| Skill | Relationship |
-|-------|-------------|
-| `planning` | Review checks implementation against the approved plan |
-| `test-driven-development` | Review verifies test coverage and TDD compliance |
-| `verification-before-completion` | Review is a prerequisite for verification |
-| `self-learning` | Review findings feed into learned patterns |
-| `acceptance-testing` | Review checks that acceptance tests exist for all criteria |
-| `systematic-debugging` | If review reveals a bug, switch to debugging skill |
-| `security-review` | Security findings during review trigger deeper security analysis |
+| 借口                   | 现实                                     |
+| ---------------------- | ---------------------------------------- |
+| “只是改个错别字”       | 错别字修复可能破坏 API。去审查它。       |
+| “我对这段代码很有信心” | 信心不等于正确性。去审查它。             |
+| “测试都通过了”         | 测试可能会漏掉缺陷。去审查它。           |
+| “只是调整样式/格式”    | 样式变更也可能引入缺陷。去审查它。       |
+| “没人会注意到”         | 恰恰是这种时候缺陷会流入生产。去审查它。 |
+| “我稍后再审查”         | 稍后永远不会到来。现在就审查。           |
+| “工期很紧”             | 修复缺陷的成本远高于审查。去审查它。     |
 
 ---
 
-## Iron Law
+## 子智能体调度机会
+
+| 任务模式                | 调度至                                              | 触发时机                              |
+| ----------------------- | --------------------------------------------------- | ------------------------------------- |
+| 审查多个独立的文件/模块 | `Agent` 工具配合 `subagent_type="Explore"`          | 当审查范围跨越多个不相关的模块时      |
+| 聚焦安全的审查          | 调用 `security-review` 技能的 `Agent` 工具          | 当变更涉及认证、输入处理或外部 API 时 |
+| 性能影响评估            | 调用 `performance-optimization` 技能的 `Agent` 工具 | 当变更影响热路径或数据密集型操作时    |
+
+调度时请遵循 `dispatching-parallel-agents` 技能协议。
+
+---
+
+## 集成点
+
+| 技能                             | 关系                                         |
+| -------------------------------- | -------------------------------------------- |
+| `planning`                       | 审查会对照已批准的计划验证实现情况           |
+| `test-driven-development`        | 审查会验证测试覆盖率及 TDD 合规性            |
+| `verification-before-completion` | 审查是完成验证的前提条件                     |
+| `self-learning`                  | 审查结果将反馈至已学习模式库                 |
+| `acceptance-testing`             | 审查会检查是否所有验收标准都有对应的验收测试 |
+| `systematic-debugging`           | 若审查发现缺陷，则切换至调试技能             |
+| `security-review`                | 审查期间发现的安全问题将触发更深入的安全分析 |
+
+---
+
+## 铁律
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  HARD-GATE: NO MERGE WITHOUT REVIEW                            │
+│  硬性门禁：未经审查，禁止合并                                    │
 │                                                                 │
-│  Every change gets reviewed. No exceptions for "small fixes"   │
-│  or "obvious changes." If you are about to merge without       │
-│  review, STOP immediately.                                     │
+│  每次变更都必须经过审查。“小修复”或“明显变更”                 │
+│  绝不例外。若你准备在未经审查的情况下合并，                     │
+│  请立即停止。                                                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — The four-phase process is mandatory. Every change must be reviewed by the code-reviewer agent. No merge without review. No exceptions.
+**严格（RIGID）** — 四阶段流程为强制要求。每次变更都必须由 `code-reviewer` 智能体审查。未经审查禁止合并。绝无例外。

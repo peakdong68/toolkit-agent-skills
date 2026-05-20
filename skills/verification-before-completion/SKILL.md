@@ -1,232 +1,232 @@
 ---
 name: verification-before-completion
-description: Use before claiming any task is complete, any feature works, or any bug is fixed - enforces fresh verification evidence through a 5-step HARD-GATE protocol that prevents false completion claims
+description: 在声称任何任务完成、任何功能可用或任何缺陷修复之前使用 - 通过 5 步 HARD-GATE 协议强制执行新验证证据，防止错误的完成声明
 ---
 
-## Overview
+## 概述
 
-The verification-before-completion skill is the terminal checkpoint for every task in the toolkit. It enforces a strict 5-step protocol that requires running fresh verification commands, reading their full output, and confirming results match the completion claim. Without this skill, agents make unverified claims that lead to broken code in production — with it, every completion claim is backed by evidence.
-
----
-
-## Iron Law
-
-**NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE.**
-
-You cannot say "it works," "it's done," "the bug is fixed," or "the feature is complete" without running verification commands and reading their output in this session. Cached results, previous runs, and assumptions do not count.
+verification-before-completion 技能是工具包中每个任务的终端检查点。它强制执行一个严格的 5 步协议，要求运行全新的验证命令、读取完整输出，并确认结果与完成声明匹配。没有此技能，代理会做出未经核实的声明，导致生产环境中出现损坏的代码；有了它，每个完成声明都有证据支持。
 
 ---
 
-## Phase 1: Identify Verification Commands
+## 铁律
 
-Before running anything, explicitly list what needs to pass for this specific task:
+**没有新鲜验证证据，不得做出完成声明。**
 
-| Verification Type | Example Commands | When Required |
-|------------------|-----------------|---------------|
-| Unit tests | `npm test`, `pytest`, `go test ./...`, `cargo test`, `php artisan test` | Always |
-| Integration tests | `npm run test:integration`, `pytest tests/integration/` | When applicable |
-| Type checking | `tsc --noEmit`, `mypy .`, `pyright`, `phpstan analyse` | When project uses type checking |
-| Linting | `eslint .`, `ruff check .`, `golint ./...`, `php-cs-fixer fix --dry-run` | Always |
-| Build | `npm run build`, `cargo build`, `go build ./...` | Always |
-| Format check | `prettier --check .`, `black --check .`, `gofmt -l .`, `pint --test` | When project uses formatters |
-
-**Action:** List which of these apply to the current project. Not all projects have all types. Be explicit about what you will run and why.
-
-> **STOP: Do NOT proceed to running commands until you have identified ALL applicable verification types.**
+你不能说“它能工作”、“完成了”、“缺陷已修复”或“功能已完成”，除非在当前会话中运行了验证命令并读取了其输出。缓存的结果、之前的运行记录和假设都不算数。
 
 ---
 
-## Phase 2: Run Commands Fresh
+## 阶段 1：识别验证命令
 
-Execute every verification command identified in Phase 1.
+在运行任何命令之前，明确列出针对此特定任务需要通过的检查项：
 
-| Rule | Rationale |
-|------|-----------|
-| Run AFTER the latest code change | Pre-change results are stale |
-| Run the FULL suite, not a subset | Subset runs miss regressions |
-| Do NOT rely on cached results | Code changed since last run |
-| Do NOT skip commands because "they passed earlier" | Earlier is not now |
-| If a command takes >5 minutes, note it | Explain what was run instead |
+| 验证类型 | 示例命令 | 何时必需 |
+|---------|----------|----------|
+| 单元测试 | `npm test`、`pytest`、`go test ./...`、`cargo test`、`php artisan test` | 总是需要 |
+| 集成测试 | `npm run test:integration`、`pytest tests/integration/` | 适用时需要 |
+| 类型检查 | `tsc --noEmit`、`mypy .`、`pyright`、`phpstan analyse` | 项目使用类型检查时需要 |
+| Linting | `eslint .`、`ruff check .`、`golint ./...`、`php-cs-fixer fix --dry-run` | 总是需要 |
+| 构建 | `npm run build`、`cargo build`、`go build ./...` | 总是需要 |
+| 格式检查 | `prettier --check .`、`black --check .`、`gofmt -l .`、`pint --test` | 项目使用格式化工具时需要 |
 
-> **STOP: All commands must complete before proceeding to Phase 3.**
+**操作：** 列出当前项目中哪些类型适用。不是所有项目都有所有类型。明确说明你将运行什么以及为什么。
 
----
-
-## Phase 3: Read Full Output
-
-Read the entire output of each verification command. Pay attention to:
-
-| Output Element | What to Look For | Why It Matters |
-|---------------|-----------------|----------------|
-| Exit code | Non-zero = failure | Even if output looks ok, non-zero means something failed |
-| Test count | Expected number of tests ran? Any skipped? | Skipped tests = untested code |
-| Warning messages | New warnings not present before | Warnings become errors; they indicate degradation |
-| Deprecation notices | Deprecated API usage | Future breakage risk |
-| Performance indicators | Unusually slow tests | May indicate performance regression |
-| Error messages | Any error, even if tests "pass" | Some frameworks report errors alongside passing tests |
-
-> **STOP: Do NOT proceed if you have not read the full output of every command.**
+> **停止：在识别完所有适用的验证类型之前，不要继续运行命令。**
 
 ---
 
-## Phase 4: Verify Output Matches Claim
+## 阶段 2：全新运行命令
 
-Ask yourself these questions. ALL must be "yes" to proceed:
+执行阶段 1 中识别的每一条验证命令。
 
-| Question | If "No" or "Unsure" |
-|----------|---------------------|
-| Do ALL tests pass (not just the ones I wrote)? | Fix failing tests before claiming done |
-| Does the build succeed without errors? | Fix build errors |
-| Does the type checker find no errors? | Fix type errors |
-| Does the linter pass? | Fix lint errors |
-| Are there any NEW warnings that were not there before? | Investigate and fix or explicitly justify |
-| Did the full suite run (not just a subset)? | Run the full suite |
-| Is the test count what I expected? | Investigate skipped or missing tests |
+| 规则 | 理由 |
+|------|------|
+| 在最新代码更改之后运行 | 更改前的结果是过时的 |
+| 运行完整测试套件，而不是子集 | 子集会遗漏回归问题 |
+| 不要依赖缓存结果 | 自上次运行后代码已更改 |
+| 不要因为“之前通过了”而跳过命令 | 之前不是现在 |
+| 如果命令运行超过 5 分钟，请注明 | 解释实际运行了什么替代方案 |
 
-> **STOP: If ANY answer is "no" or "unsure", go back to fix and restart from Phase 1. Do NOT proceed to Phase 5.**
+> **停止：所有命令必须完成才能进入阶段 3。**
 
 ---
 
-## Phase 5: Claim Completion with Evidence
+## 阶段 3：读取完整输出
 
-Only now may you say the task is complete. Include this evidence:
+读取每条验证命令的完整输出。注意以下内容：
+
+| 输出元素 | 要查找什么 | 为什么重要 |
+|---------|-----------|-----------|
+| 退出码 | 非零 = 失败 | 即使输出看起来正常，非零意味着有失败 |
+| 测试计数 | 预期数量的测试都运行了吗？有跳过的吗？ | 跳过的测试 = 未测试的代码 |
+| 警告消息 | 之前不存在的新警告 | 警告会变成错误；它们表示质量下降 |
+| 弃用通知 | 使用了已弃用的 API | 未来中断的风险 |
+| 性能指标 | 异常慢的测试 | 可能表示性能回归 |
+| 错误消息 | 任何错误，即使测试“通过” | 某些框架会在测试通过的同时报告错误 |
+
+> **停止：如果没有读取每条命令的完整输出，不要继续。**
+
+---
+
+## 阶段 4：验证输出与声明匹配
+
+问自己以下问题。所有问题的答案都必须为“是”才能继续：
+
+| 问题 | 如果“否”或“不确定” |
+|------|---------------------|
+| 所有测试都通过了吗（不仅仅是我写的那些）？ | 修复失败的测试，然后再声称完成 |
+| 构建是否成功且无错误？ | 修复构建错误 |
+| 类型检查是否没有发现错误？ | 修复类型错误 |
+| linter 通过了吗？ | 修复 lint 错误 |
+| 是否有之前不存在的新警告？ | 调查并修复，或明确说明理由 |
+| 完整套件运行了吗（不仅仅是子集）？ | 运行完整套件 |
+| 测试计数是否符合预期？ | 调查跳过或缺失的测试 |
+
+> **停止：如果任何一个答案是“否”或“不确定”，返回修复并从阶段 1 重新开始。不要进入阶段 5。**
+
+---
+
+## 阶段 5：附带证据声明完成
+
+只有现在你才能说任务完成了。必须包含以下证据：
 
 ```
-VERIFICATION EVIDENCE
+验证证据
 =====================
-Task: [what was being done]
-Date: [timestamp]
+任务：[正在做什么]
+日期：[时间戳]
 
-Commands Run:
-  [x] Tests:      [command] -> [result: X passed, Y failed, Z skipped]
-  [x] Build:      [command] -> [result: success/failure]
-  [x] Lint:       [command] -> [result: X errors, Y warnings]
-  [x] Type-check: [command] -> [result: X errors]
-  [x] Format:     [command] -> [result: clean/X files to format]
+运行的命令：
+  [x] 测试：      [命令] -> [结果：X 通过，Y 失败，Z 跳过]
+  [x] 构建：      [命令] -> [结果：成功/失败]
+  [x] Lint：      [命令] -> [结果：X 错误，Y 警告]
+  [x] 类型检查：  [命令] -> [结果：X 错误]
+  [x] 格式：      [命令] -> [结果：干净/X 个文件需格式化]
 
-All Green?  [x] YES  [ ] NO
-New warnings introduced?  [ ] YES  [x] NO
+全部通过？  [x] 是  [ ] 否
+引入新警告？  [ ] 是  [x] 否
 
-Completion claim: [specific claim, e.g., "Feature X is implemented and all tests pass"]
+完成声明：[具体声明，例如“功能 X 已实现且所有测试通过”]
 ```
 
-> **STOP: This is the end of the verification protocol. Only claims with this evidence are valid.**
+> **停止：这是验证协议的终点。只有附带此证据的声明才有效。**
 
 ---
 
-## Decision Table: What Counts as "Fresh" Evidence
+## 决策表：什么算“新鲜”证据
 
-| Counts as Fresh | Does NOT Count as Fresh |
-|----------------|------------------------|
-| Ran command after the latest code change | Ran before the latest code change |
-| Full test suite executed | Subset of tests executed |
-| Output read and analyzed | Output skimmed or ignored |
-| All verification types run | Only tests run (no lint, no build) |
-| Command run in current session | Recalled from memory of a previous session |
-| Actual command output available | "I remember it passed" |
-
----
-
-## Decision Table: Edge Cases
-
-| Situation | Protocol |
-|-----------|----------|
-| Full suite takes >5 minutes | Run related tests + smoke suite. Note that full suite was not run. Recommend CI run before merge. |
-| No automated tests exist | Note as significant risk. Perform manual verification with documented steps. Recommend adding tests as follow-up. At minimum, verify code compiles/runs. |
-| Tests are flaky | Re-run failing test in isolation. If it passes alone, note flakiness. Verify your changes did not introduce it. Do NOT use flakiness as excuse to skip. |
-| Only config change | Config changes are #1 cause of outages. Full verification required. |
-| Single line change | One-line changes cause production outages. Full verification required. |
-| Refactoring only | Existing tests must still pass. Run full suite. |
+| 算作新鲜 | 不算作新鲜 |
+|---------|-----------|
+| 在最新代码更改后运行命令 | 在最新代码更改前运行 |
+| 执行了完整测试套件 | 只执行了测试子集 |
+| 读取并分析了输出 | 浏览或忽略了输出 |
+| 运行了所有验证类型 | 只运行了测试（没有 lint，没有构建） |
+| 在当前会话中运行命令 | 从之前会话的记忆中回想 |
+| 有实际命令输出可用 | “我记得它通过了” |
 
 ---
 
-## Common Failure Patterns
+## 决策表：边缘情况
 
-| Pattern | What Happens | Why It Is Dangerous |
-|---------|-------------|-------------------|
-| Tests pass but lint fails | Code works but has quality issues | Lint failures often indicate real problems (unused vars, unreachable code) |
-| Tests pass but build fails | Test environment differs from build | Production deployments will fail |
-| Tests pass but type-check fails | Runtime works but types are wrong | Bugs hiding behind `any` types, wrong interfaces |
-| Tests pass in isolation but fail together | Shared state between tests | Flaky CI, unreliable test suite |
-| Manual testing passes but automated fails | Manual test missed edge cases | The automated test is right |
-| Tests pass but new warnings appeared | Something degraded | Warnings become errors over time |
-| Subset of tests pass | Only ran related tests | Regression in unrelated area possible |
-| Tests pass but coverage decreased | New code is not tested | Untested code is unverified code |
-| Old test run used as evidence | Results are stale | Code changed since that run |
-| "It compiled, so it works" | Compilation is necessary but not sufficient | Compiled code can still be wrong |
+| 情况 | 协议 |
+|------|------|
+| 完整套件运行超过 5 分钟 | 运行相关测试 + 冒烟测试套件。注明未运行完整套件。建议在合并前运行 CI。 |
+| 没有自动化测试 | 注明为重大风险。执行带有记录步骤的手动验证。建议后续添加测试。至少验证代码能够编译/运行。 |
+| 测试不稳定 | 单独重新运行失败的测试。如果单独运行通过，注明不稳定性。验证你的更改没有引入不稳定性。不要以不稳定为借口跳过。 |
+| 仅配置更改 | 配置更改是故障的头号原因。需要完整验证。 |
+| 单行更改 | 单行更改会导致生产故障。需要完整验证。 |
+| 仅重构 | 现有测试必须仍然通过。运行完整套件。 |
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 常见失败模式
 
-| What NOT to Do | Why It Fails | What to Do Instead |
-|----------------|-------------|-------------------|
-| Claim done without running tests | Unverified code breaks in production | Run all verification commands fresh |
-| Use "it passed earlier" as evidence | Code changed since then | Run fresh after every change |
-| Skip lint because "it is just warnings" | Warnings indicate real problems | Fix warnings or explicitly justify each one |
-| Run only the tests you wrote | Misses regressions in other areas | Run the full suite |
-| Read test output partially | Missed failures hidden in output | Read every line of output |
-| Use manual testing as sole evidence | Manual testing is incomplete and unrepeatable | Run automated verification |
-| Verify once, then make "small" additional changes | Those changes are unverified | Re-verify after every change |
-| Suppress warnings without comment | Hides real issues | If truly false positive, add suppression comment explaining why |
-
----
-
-## Anti-Rationalization Guards
-
-| Excuse | Reality |
-|--------|---------|
-| "I only changed one line" | One-line changes cause production outages. Verify. |
-| "The tests passed 5 minutes ago" | You made changes since then. Run them again. |
-| "I have tested this pattern before" | This is a different instance. Verify this specific one. |
-| "The change is obviously correct" | Obvious changes fail more often because they are not verified. |
-| "Running tests takes too long" | Not running tests takes longer when the bug reaches production. |
-| "I will verify after I submit" | You will not. And if verification fails, you will undo and redo. |
-| "It is just a config change" | Config changes are the #1 cause of outages. Verify. |
-| "The linter warnings are false positives" | Review each one. Suppress with comment if truly false. |
-| "The type errors are in unrelated code" | They might interact. Run the full check. |
-| "I tested it manually" | Manual testing is incomplete and unrepeatable. Run automated verification. |
-
-> **Do NOT claim completion without Phase 5 evidence. There are zero exceptions.**
+| 模式 | 发生了什么 | 为什么危险 |
+|------|-----------|-----------|
+| 测试通过但 lint 失败 | 代码能工作但存在质量问题 | lint 失败通常表示真正的问题（未使用的变量、不可达代码） |
+| 测试通过但构建失败 | 测试环境与构建环境不同 | 生产部署将失败 |
+| 测试通过但类型检查失败 | 运行时工作但类型错误 | 隐藏在 `any` 类型背后的 bug、错误的接口 |
+| 单独运行测试通过但一起运行失败 | 测试间存在共享状态 | CI 不稳定、测试套件不可靠 |
+| 手动测试通过但自动化测试失败 | 手动测试遗漏了边缘情况 | 自动化测试是正确的 |
+| 测试通过但出现新警告 | 某些东西降级了 | 警告随时间会变成错误 |
+| 子集测试通过 | 只运行了相关测试 | 不相关区域可能出现回归 |
+| 测试通过但覆盖率下降 | 新代码未测试 | 未测试的代码就是未验证的代码 |
+| 使用旧的测试运行作为证据 | 结果过时 | 自那次运行后代码已更改 |
+| “它编译了，所以能工作” | 编译是必要但不充分的 | 编译后的代码仍然可能是错的 |
 
 ---
 
-## Integration Points
+## 反模式 / 常见错误
 
-| Skill | When Verification Is Required |
-|-------|------------------------------|
-| `test-driven-development` | After completing RED-GREEN-REFACTOR cycle for a feature |
-| `systematic-debugging` | After applying a bug fix |
-| `executing-plans` | After each task and after each batch |
-| `subagent-driven-development` | After implementer delivers (via `Agent` tool), after reviewers approve |
-| `code-review` | Before approving any code review |
-| `resilient-execution` | Before marking any task as complete |
-| `autonomous-loop` | Before setting EXIT_SIGNAL to true |
-| `finishing-a-development-branch` | Before merge or PR creation |
+| 不要这样做 | 为什么会失败 | 应该怎么做 |
+|-----------|-------------|-----------|
+| 不运行测试就声称完成 | 未验证的代码会在生产环境中出问题 | 全新运行所有验证命令 |
+| 使用“之前通过了”作为证据 | 从那以后代码已更改 | 每次更改后重新运行 |
+| 跳过 lint 因为“只是警告” | 警告表示真正的问题 | 修复警告或明确说明每个警告的理由 |
+| 只运行你写的测试 | 遗漏其他区域的回归 | 运行完整套件 |
+| 部分阅读测试输出 | 遗漏隐藏在输出中的失败 | 阅读输出的每一行 |
+| 仅使用手动测试作为证据 | 手动测试不完整且不可重复 | 运行自动化验证 |
+| 验证一次，然后做“小的”额外更改 | 那些更改未经验证 | 每次更改后重新验证 |
+| 不加注释地抑制警告 | 隐藏真正的问题 | 如果确实是误报，添加抑制注释并解释原因 |
 
-### Integration Flow
+---
+
+## 防合理化防护
+
+| 借口 | 现实 |
+|------|------|
+| “我只改了一行” | 单行更改会导致生产故障。需要验证。 |
+| “5 分钟前测试通过了” | 从那以后你又做了更改。重新运行。 |
+| “我之前测试过这个模式” | 这是不同的实例。验证这个具体的。 |
+| “这个更改明显是正确的” | 明显的更改失败频率更高，因为它们没有被验证。 |
+| “运行测试太久了” | 不运行测试在 bug 进入生产环境后会花费更长时间。 |
+| “我提交后再验证” | 你不会的。而且如果验证失败，你会撤销并重做。 |
+| “这只是配置更改” | 配置更改是故障的头号原因。需要验证。 |
+| “linter 警告是误报” | 逐一检查。如果真是误报，添加注释抑制。 |
+| “类型错误在不相关的代码中” | 它们可能会交互。运行完整检查。 |
+| “我手动测试过了” | 手动测试不完整且不可重复。运行自动化验证。 |
+
+> **没有阶段 5 的证据，不要声称完成。零例外。**
+
+---
+
+## 集成点
+
+| 技能                               | 何时需要验证                                       |
+| -------------------------------- | -------------------------------------------- |
+| `test-driven-development`        | 完成某个功能的 RED-GREEN-REFACTOR 周期后               |
+| `systematic-debugging`           | 应用缺陷修复后                                      |
+| `executing-plans`                | 每个任务之后和每个批次之后                                |
+| `subagent-driven-development`    | implementer 交付后（通过 `Agent` 工具）、reviewers 批准后 |
+| `code-review`                    | 批准任何代码审查之前                                   |
+| `resilient-execution`            | 将任何任务标记为完成之前                                 |
+| `autonomous-loop`                | 将 EXIT_SIGNAL 设为 true 之前                     |
+| `finishing-a-development-branch` | 合并或创建 PR 之前                                  |
+
+### 集成流程
 ```
-[Do the work using other skills]
+[使用其他技能完成工作]
     |
     v
-[Think you are done?]
+[认为完成了？]
     |
     v
-[Invoke verification-before-completion]
+[调用 verification-before-completion]
     |
-    +-- All checks pass -> Claim completion with Phase 5 evidence
+    +-- 所有检查通过 -> 使用阶段 5 证据声明完成
     |
-    +-- Any check fails -> Fix and re-verify (do NOT claim completion)
+    +-- 任何检查失败 -> 修复并重新验证（不要声称完成）
 ```
 
 ---
 
-## Enforcement by Other Skills
+## 其他技能的强制执行
 
-This skill is invoked by ALL other skills at completion time. It is not optional. It is a terminal checkpoint — called at the end of work, never at the beginning.
+此技能在所有其他技能完成时被调用。它不是可选的。它是一个终端检查点 — 在工作结束时调用，而不是在开始时。
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — The 5-step protocol is a HARD-GATE. Every step must be executed in order. No step may be skipped. No completion claim is valid without Phase 5 evidence. Do not relax these requirements for any reason.
+**刚性** — 5 步协议是一个硬性关卡。每一步都必须按顺序执行。不能跳过任何步骤。没有阶段 5 的证据，任何完成声明都无效。不要以任何理由放宽这些要求。

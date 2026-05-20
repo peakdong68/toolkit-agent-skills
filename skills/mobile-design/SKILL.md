@@ -1,94 +1,93 @@
 ---
-name: mobile-design
-description: >
-  Use when the user needs mobile app design and development patterns for React Native, Flutter, or
-  SwiftUI — including platform HIG compliance, gestures, and offline-first architecture. Triggers:
-  user says "mobile", "iOS", "Android", "React Native", "Flutter", "SwiftUI", "app design",
-  "mobile navigation", "touch targets", "offline-first".
+名称: mobile-design
+描述: >
+  当用户需要 React Native、Flutter 或 SwiftUI 的移动应用设计与开发模式时使用本技能 — 包括平台 HIG 合规性、手势操作和 offline-first 架构。
+  触发条件: 用户提到 "mobile"、"iOS"、"Android"、"React Native"、"Flutter"、"SwiftUI"、"app design"、
+  "mobile navigation"、"touch targets"、"offline-first"。
 ---
 
-# Mobile Design
+# 移动端设计
 
-## Overview
+## 概述
 
-Design and build mobile applications that feel native on each platform. This skill covers React Native, Flutter, and SwiftUI with deep knowledge of platform-specific Human Interface Guidelines (Apple HIG) and Material Design, gesture handling, responsive layouts, offline-first patterns, and app store submission requirements.
+设计并构建在每个平台上都具有原生体验的移动应用。本技能涵盖 React Native、Flutter 和 SwiftUI，并深度掌握平台特定的 Human Interface Guidelines（Apple HIG）和 Material Design、手势处理、响应式布局、offline-first 模式以及应用商店上架要求。
 
-## Phase 1: Platform Analysis
+## 第一阶段：平台分析
 
-1. Identify target platforms (iOS, Android, both)
-2. Choose framework (React Native, Flutter, SwiftUI, or cross-platform)
-3. Review platform-specific design guidelines
-4. Define navigation architecture
-5. Map offline requirements
+1. 确定目标平台（iOS、Android 或两者）
+2. 选择框架（React Native、Flutter、SwiftUI 或跨平台方案）
+3. 审查平台特定的设计规范
+4. 定义导航架构
+5. 梳理离线需求
 
-**STOP — Present platform and framework recommendation with rationale before design.**
+**停止 — 在设计前给出平台和框架的推荐及理由。**
 
-### Framework Selection Decision Table
+### 框架选择决策表
 
-| Requirement | React Native | Flutter | SwiftUI | Kotlin/Compose |
+| 需求 | React Native | Flutter | SwiftUI | Kotlin/Compose |
 |---|---|---|---|---|
-| iOS only | Possible | Possible | Best | No |
-| Android only | Possible | Possible | No | Best |
-| Cross-platform | Good | Best | No | No |
-| Native performance critical | OK | Good | Best | Best |
-| Existing React web team | Best | Learning curve | Learning curve | Learning curve |
-| Complex animations | Good | Best | Good | Good |
-| Rapid prototyping | Good | Good | Best (iOS) | OK |
-| Large existing codebase (JS) | Best | Rewrite | Rewrite | Rewrite |
+| 仅 iOS | 可行 | 可行 | 最佳 | 不可行 |
+| 仅 Android | 可行 | 可行 | 不可行 | 最佳 |
+| 跨平台 | 良好 | 最佳 | 不可行 | 不可行 |
+| 原生性能关键 | 尚可 | 良好 | 最佳 | 最佳 |
+| 现有 React Web 团队 | 最佳 | 学习曲线 | 学习曲线 | 学习曲线 |
+| 复杂动画 | 良好 | 最佳 | 良好 | 良好 |
+| 快速原型 | 良好 | 良好 | 最佳（iOS） | 尚可 |
+| 大型现有代码库（JS） | 最佳 | 重写 | 重写 | 重写 |
 
-## Phase 2: Design Implementation
+## 第二阶段：设计实现
 
-1. Build component library with platform variants
-2. Implement navigation (tab bar, stack, drawer)
-3. Handle safe areas and notches
-4. Add gesture recognizers
-5. Implement responsive layouts for phone/tablet
+1. 构建包含平台变体的组件库
+2. 实现导航（tab bar、stack、drawer）
+3. 处理安全区域和刘海屏
+4. 添加手势识别器
+5. 实现手机/平板响应式布局
 
-**STOP — Present navigation architecture and component inventory for review.**
+**停止 — 提交导航架构和组件清单以供审查。**
 
-### Platform-Specific HIG Compliance
+### 平台特定的 HIG 合规性
 
 #### Apple Human Interface Guidelines
 
-| Area | Guideline |
+| 领域 | 规范 |
 |---|---|
-| Navigation | UINavigationController (push/pop), tab bars at bottom (max 5) |
-| Typography | SF Pro / SF Pro Rounded, support Dynamic Type (all 11 sizes) |
-| Safe Areas | Respect `safeAreaInsets` — never under notch/home indicator |
-| Gestures | Swipe-back for navigation, long press for context menus |
-| Haptics | UIFeedbackGenerator (impact, selection, notification) |
-| Colors | Semantic system colors (`label`, `secondaryLabel`, `systemBackground`) |
-| Modals | Sheets (`.sheet`, `.fullScreenCover`) with drag-to-dismiss |
-| Lists | Grouped inset for settings, plain for content feeds |
-| Icons | SF Symbols library (5000+ icons, variable weight/size) |
+| 导航 | UINavigationController（push/pop），底部 tab bar（最多 5 个） |
+| 字体 | SF Pro / SF Pro Rounded，支持 Dynamic Type（全部 11 种尺寸） |
+| 安全区域 | 遵循 `safeAreaInsets` — 切勿延伸到刘海/Home Indicator 下方 |
+| 手势 | 边缘右滑返回，长按显示上下文菜单 |
+| 触感反馈 | UIFeedbackGenerator（impact、selection、notification） |
+| 颜色 | 语义系统颜色（`label`、`secondaryLabel`、`systemBackground`） |
+| 模态框 | Sheets（`.sheet`、`.fullScreenCover`），支持下拉关闭 |
+| 列表 | 设置使用 Grouped inset，内容 feed 使用 Plain |
+| 图标 | SF Symbols 库（5000+ 图标，支持可变粗细和尺寸） |
 
-#### Material Design (Android)
+#### Material Design（Android）
 
-| Area | Guideline |
+| 领域 | 规范 |
 |---|---|
-| Navigation | Bottom navigation bar, navigation drawer, top app bar |
-| Typography | Roboto / product font, Material type scale |
-| Edge-to-edge | Draw behind system bars, handle window insets |
-| Gestures | Predictive back gesture (Android 14+), swipe-to-dismiss |
-| Haptics | HapticFeedbackConstants (click, long press, keyboard) |
-| Colors | Material You dynamic color from wallpaper, tonal palettes |
-| Components | FAB, snackbar, bottom sheet, chips |
-| Motion | Shared element transitions, container transform |
+| 导航 | 底部导航栏、导航抽屉、顶部应用栏 |
+| 字体 | Roboto / 产品字体，Material 字体刻度 |
+| 全屏沉浸 | 绘制到系统栏后方，处理 window insets |
+| 手势 | 预测性返回手势（Android 14+），滑动关闭 |
+| 触感反馈 | HapticFeedbackConstants（点击、长按、键盘） |
+| 颜色 | Material You 动态颜色（从壁纸提取），色调调色板 |
+| 组件 | FAB、snackbar、bottom sheet、chips |
+| 动效 | 共享元素转场、容器变换 |
 
-### Cross-Platform Pattern Decision Table
+### 跨平台模式决策表
 
-| Feature | iOS Pattern | Android Pattern |
+| 功能 | iOS 模式 | Android 模式 |
 |---|---|---|
-| Back navigation | Swipe from left edge | System back button |
-| Primary action | Right nav bar button | FAB |
-| Alerts | UIAlertController | MaterialAlertDialog |
-| Loading | UIActivityIndicator | CircularProgressIndicator |
-| Segmented | UISegmentedControl | Tabs / Chips |
-| Date picker | Wheel picker | Calendar picker |
-| Pull to refresh | Native support | SwipeRefreshLayout |
-| Context menu | Long press + haptic | Long press + popup |
+| 返回导航 | 从左边缘滑动 | 系统返回按钮 |
+| 主要操作 | 右侧导航栏按钮 | FAB |
+| 警告框 | UIAlertController | MaterialAlertDialog |
+| 加载中 | UIActivityIndicator | CircularProgressIndicator |
+| 分段选择 | UISegmentedControl | Tabs / Chips |
+| 日期选择器 | 滚轮选择器 | 日历选择器 |
+| 下拉刷新 | 原生支持 | SwipeRefreshLayout |
+| 上下文菜单 | 长按 + 触感反馈 | 长按 + 弹出窗 |
 
-### Safe Area Handling
+### 安全区域处理
 
 #### React Native
 
@@ -128,47 +127,47 @@ var body: some View {
 }
 ```
 
-### Gesture Navigation Patterns
+### 手势导航模式
 
-| Gesture | Usage | Min Target |
+| 手势 | 用途 | 最小目标区域 |
 |---|---|---|
-| Tap | Primary action | 44x44pt |
-| Long press | Context menu / secondary action | 44x44pt |
-| Swipe horizontal | Navigation, dismiss, reveal actions | Full row |
-| Swipe vertical | Scroll, pull-to-refresh, dismiss sheet | Full area |
-| Pinch | Zoom images/maps | Content area |
-| Pan/Drag | Reorder, move elements | Drag handle |
+| 点按 | 主要操作 | 44x44pt |
+| 长按 | 上下文菜单 / 次要操作 | 44x44pt |
+| 横向滑动 | 导航、关闭、显示操作 | 整行 |
+| 纵向滑动 | 滚动、下拉刷新、关闭 sheet | 整个区域 |
+| 捏合 | 缩放图片/地图 | 内容区域 |
+| 拖拽/平移 | 重新排序、移动元素 | 拖拽手柄 |
 
-### Touch Target Rules
+### 触摸目标规则
 
-| Rule | Value |
+| 规则 | 值 |
 |---|---|
-| Minimum size (iOS) | 44x44pt |
-| Minimum size (Android) | 48x48dp |
-| Minimum spacing | 8pt between targets |
-| Visual vs touch | Visual can be smaller; use padding for touch area |
-| Primary actions | Bottom 1/3 of screen (thumb zone) |
+| 最小尺寸（iOS） | 44x44pt |
+| 最小尺寸（Android） | 48x48dp |
+| 最小间距 | 目标之间 8pt |
+| 视觉 vs 触摸 | 视觉可以更小；使用 padding 扩展触摸区域 |
+| 主要操作 | 屏幕底部 1/3 区域（拇指热区） |
 
-## Phase 3: Platform Polish
+## 第三阶段：平台精细化
 
-1. Platform-specific animations and transitions
-2. Haptic feedback integration
-3. App icon and launch screen
-4. Dark mode and Dynamic Type support
-5. App store metadata and screenshots
+1. 平台特定的动画和转场
+2. 集成触感反馈
+3. 应用图标和启动屏幕
+4. 暗黑模式和 Dynamic Type 支持
+5. 应用商店元数据和截图
 
-**STOP — Test on physical devices before declaring complete.**
+**停止 — 在宣布完成前在真机上测试。**
 
-### Responsive Layout Decision Table
+### 响应式布局决策表
 
-| Form Factor | Layout | Navigation |
+| 设备形态 | 布局 | 导航 |
 |---|---|---|
-| Phone Portrait | Single column | Bottom tabs |
-| Phone Landscape | Single column or split | Side tabs |
-| Tablet Portrait | Two columns | Sidebar |
-| Tablet Landscape | Three columns | Persistent sidebar |
+| 手机竖屏 | 单列 | 底部 tabs |
+| 手机横屏 | 单列或分屏 | 侧边 tabs |
+| 平板竖屏 | 双列 | 侧边栏 |
+| 平板横屏 | 三列 | 持久侧边栏 |
 
-#### React Native Responsive
+#### React Native 响应式
 
 ```javascript
 import { useWindowDimensions } from 'react-native';
@@ -184,7 +183,7 @@ function useResponsive() {
 }
 ```
 
-#### Flutter Responsive
+#### Flutter 响应式
 
 ```dart
 class ResponsiveLayout extends StatelessWidget {
@@ -200,82 +199,82 @@ class ResponsiveLayout extends StatelessWidget {
 }
 ```
 
-### Offline-First Architecture
+### Offline-First 架构
 
-| Layer | Pattern | Implementation |
+| 层级 | 模式 | 实现 |
 |---|---|---|
-| Data | Local-first | SQLite/Realm as primary store, server as sync target |
-| Updates | Optimistic | Apply locally, sync in background |
-| Conflicts | Resolution strategy | Last-write-wins or field-level merge |
-| Queue | Persistent ops | Store pending operations, retry on connectivity |
-| Cache | Stale-while-revalidate | Serve cached, refresh in background |
+| 数据 | 本地优先 | SQLite/Realm 作为主存储，服务器作为同步目标 |
+| 更新 | 乐观更新 | 本地立即应用，后台同步 |
+| 冲突 | 解决策略 | 后写胜出或字段级合并 |
+| 队列 | 持久化操作 | 存储待处理操作，连接恢复后重试 |
+| 缓存 | stale-while-revalidate | 先返回缓存，后台刷新 |
 
-#### Implementation Checklist
+#### 实现检查清单
 
-- [ ] Network status detection and UI indicator
-- [ ] Local database for all critical data
-- [ ] Operation queue for pending writes
-- [ ] Retry logic with exponential backoff
-- [ ] Conflict detection and resolution strategy
-- [ ] Cache invalidation policy
-- [ ] Sync status indicator in UI
-- [ ] Graceful degradation for network-only features
+- [ ] 网络状态检测和 UI 指示器
+- [ ] 所有关键数据的本地数据库
+- [ ] 待写入操作的操作队列
+- [ ] 指数退避重试逻辑
+- [ ] 冲突检测和解决策略
+- [ ] 缓存失效策略
+- [ ] UI 中的同步状态指示器
+- [ ] 仅网络功能的优雅降级
 
-### App Store Guidelines Summary
+### 应用商店指南摘要
 
-| Requirement | Apple App Store | Google Play Store |
+| 要求 | Apple App Store | Google Play Store |
 |---|---|---|
-| Screenshots | 6.7" and 5.5" required, 12.9" iPad | Min 2, max 8 per device |
-| App icon | 1024x1024px, no alpha, no corners | 512x512px, adaptive recommended |
-| Privacy | Nutrition labels required | Data safety section required |
-| Review time | 24-48 hours typical | Hours to days |
-| Common rejections | Crashes, placeholder content | Policy violations, crashes |
+| 截图 | 必须提供 6.7" 和 5.5"，12.9" iPad | 每设备最少 2 张，最多 8 张 |
+| 应用图标 | 1024x1024px，无透明度，无圆角 | 512x512px，推荐自适应图标 |
+| 隐私 | 必需提供隐私标签 | 必需提供数据安全部分 |
+| 审核时间 | 通常 24-48 小时 | 数小时到数天 |
+| 常见拒绝原因 | 崩溃、占位内容 | 政策违规、崩溃 |
 
-### Performance Targets
+### 性能目标
 
-| Metric | Target |
+| 指标 | 目标 |
 |---|---|
-| Cold start | < 2 seconds |
-| Screen transition | < 300ms |
-| Touch response | < 100ms |
-| Scroll FPS | 60fps (no drops) |
-| Memory usage | < 200MB baseline |
-| App size | < 50MB download |
+| 冷启动 | < 2 秒 |
+| 屏幕转场 | < 300ms |
+| 触摸响应 | < 100ms |
+| 滚动帧率 | 60fps（无掉帧） |
+| 内存占用 | < 200MB 基准 |
+| 应用大小 | < 50MB 下载大小 |
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | What to Do Instead |
+| 反模式 | 错误原因 | 正确做法 |
 |---|---|---|
-| Web patterns in mobile (hover states) | No hover on touch devices | Use press/tap states |
-| Tiny touch targets (< 44pt) | Frustrating, accessibility fail | Minimum 44x44pt touch area |
-| iOS-styled buttons on Android | Feels foreign, confuses users | Use platform-native components |
-| Fixed layouts for one screen size | Breaks on tablets and foldables | Responsive layouts with breakpoints |
-| Blocking main thread with I/O | UI freezes, ANR dialogs | Async I/O, background threads |
-| Not handling keyboard appearance | Content hidden behind keyboard | Adjust layout on keyboard show |
-| Assuming constant connectivity | App crashes or hangs offline | Offline-first architecture |
-| Pixel values instead of dp/pt | Different sizes on different screens | Use density-independent units |
-| Skipping haptic feedback | App feels cheap and unresponsive | Add haptics for key interactions |
+| 在移动端使用 Web 模式（悬停状态） | 触摸设备没有悬停 | 使用按下/点按状态 |
+| 触摸目标过小（< 44pt） | 令人沮丧，无障碍失败 | 最小 44x44pt 触摸区域 |
+| 在 Android 上使用 iOS 风格按钮 | 感觉陌生，让用户困惑 | 使用平台原生组件 |
+| 为单一屏幕尺寸做固定布局 | 在平板和折叠屏上损坏 | 使用断点的响应式布局 |
+| 在主线程执行 I/O 操作 | UI 卡顿，ANR 对话框 | 异步 I/O，后台线程 |
+| 不处理键盘出现 | 内容被键盘遮挡 | 键盘显示时调整布局 |
+| 假设始终有网络连接 | 离线时应用崩溃或卡死 | Offline-first 架构 |
+| 使用像素值而非 dp/pt | 不同屏幕上尺寸不同 | 使用密度无关单位 |
+| 跳过触感反馈 | 应用感觉廉价且无响应 | 为关键交互添加 haptics |
 
-## Documentation Lookup (Context7)
+## 文档查询（Context7）
 
-Use `mcp__context7__resolve-library-id` then `mcp__context7__query-docs` for up-to-date docs. Returned docs override memorized knowledge.
-- `react-native` — for component API, navigation, or platform-specific modules
-- `flutter` — for widget catalog, state management, or platform channels
+使用 `mcp__context7__resolve-library-id` 然后 `mcp__context7__query-docs` 获取最新文档。返回的文档将覆盖记忆中的知识。
+- `react-native` — 查询组件 API、导航或平台特定模块
+- `flutter` — 查询 widget 目录、状态管理或平台通道
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Integration |
+| 技能 | 集成方式 |
 |---|---|
-| `ui-ux-pro-max` | Color palettes, typography, UX guidelines |
-| `ui-design-system` | Design tokens adapted for mobile |
-| `canvas-design` | Mobile data visualization and charts |
-| `ux-researcher-designer` | Mobile usability testing |
-| `senior-frontend` | React Native component implementation |
-| `deployment` | App store submission pipeline |
-| `performance-optimization` | Mobile performance profiling |
+| `ui-ux-pro-max` | 调色板、字体、UX 指南 |
+| `ui-design-system` | 适配移动端的设计令牌 |
+| `canvas-design` | 移动端数据可视化和图表 |
+| `ux-researcher-designer` | 移动端可用性测试 |
+| `senior-frontend` | React Native 组件实现 |
+| `deployment` | 应用商店上架流水线 |
+| `performance-optimization` | 移动端性能分析 |
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt patterns to the chosen framework and target platforms. Platform-specific guidelines should be followed when targeting a single platform; cross-platform apps may blend conventions thoughtfully.
+**灵活** — 根据所选框架和目标平台调整模式。针对单一平台时应遵循平台特定指南；跨平台应用可以有思考地融合各方惯例。

@@ -1,69 +1,69 @@
-# Performance Budgets
+# 性能预算
 
-Reference document defining size and time budgets for web applications.
+定义 Web 应用程序大小和时间预算的参考文档。
 
-## Size Budgets
+## 大小预算
 
 ### JavaScript
 
-| Metric | Budget | Notes |
+| 指标 | 预算 | 说明 |
 |--------|--------|-------|
-| Total JS (compressed) | < 300 KB | All bundles combined, gzipped |
-| Main bundle | < 150 KB | Entry point, loaded on every page |
-| Per-route chunk | < 50 KB | Lazy-loaded per route |
-| Third-party JS | < 100 KB | Analytics, widgets, SDKs |
+| 总 JS（压缩后） | < 300 KB | 所有打包文件合计，经 gzip 压缩 |
+| 主打包文件 | < 150 KB | 入口文件，每个页面都会加载 |
+| 每路由代码块 | < 50 KB | 按路由懒加载 |
+| 第三方 JS | < 100 KB | 分析工具、小部件、SDK |
 
 ### CSS
 
-| Metric | Budget |
+| 指标 | 预算 |
 |--------|--------|
-| Total CSS (compressed) | < 100 KB |
-| Critical CSS (inlined) | < 14 KB |
-| Per-component CSS | < 5 KB |
+| 总 CSS（压缩后） | < 100 KB |
+| 关键 CSS（内联） | < 14 KB |
+| 每组件 CSS | < 5 KB |
 
-### Images
+### 图片
 
-| Metric | Budget |
+| 指标 | 预算 |
 |--------|--------|
-| Total images per page | < 1 MB |
-| Hero/LCP image | < 200 KB |
-| Thumbnail images | < 30 KB each |
-| Icons (SVG) | < 5 KB each |
+| 每页图片总量 | < 1 MB |
+| 首屏/LCP 图片 | < 200 KB |
+| 缩略图 | 每张 < 30 KB |
+| 图标（SVG） | 每张 < 5 KB |
 
-### Fonts
+### 字体
 
-| Metric | Budget |
+| 指标 | 预算 |
 |--------|--------|
-| Total fonts | < 100 KB |
-| Per font file (WOFF2) | < 50 KB |
-| Number of font files | <= 4 |
+| 字体文件总量 | < 100 KB |
+| 单个字体文件（WOFF2） | < 50 KB |
+| 字体文件数量 | <= 4 |
 
-Use `font-display: swap` or `optional` to prevent render blocking.
-Subset fonts to include only characters needed for the target language.
+使用 `font-display: swap` 或 `optional` 防止渲染阻塞。
+对字体进行子集化处理，仅包含目标语言所需的字符。
 
-## Time Budgets
+## 时间预算
 
-| Metric | Budget | Measurement |
+| 指标 | 预算 | 测量方式 |
 |--------|--------|-------------|
-| Time to Interactive (TTI) | < 3s | Lighthouse (mobile 4G) |
-| Largest Contentful Paint (LCP) | < 2.5s | Web Vitals |
-| First Contentful Paint (FCP) | < 1.8s | Lighthouse |
-| Total Blocking Time (TBT) | < 200ms | Lighthouse |
-| Cumulative Layout Shift (CLS) | < 0.1 | Web Vitals |
-| Interaction to Next Paint (INP) | < 200ms | Web Vitals |
-| Server response (TTFB) | < 600ms | Web Vitals |
+| 可交互时间（TTI） | < 3s | Lighthouse（移动网络 4G） |
+| 最大内容绘制（LCP） | < 2.5s | Web Vitals |
+| 首次内容绘制（FCP） | < 1.8s | Lighthouse |
+| 总阻塞时间（TBT） | < 200ms | Lighthouse |
+| 累积布局偏移（CLS） | < 0.1 | Web Vitals |
+| 下次绘制交互时间（INP） | < 200ms | Web Vitals |
+| 服务器响应时间（TTFB） | < 600ms | Web Vitals |
 
-### API Response Times
+### API 响应时间
 
-| Endpoint Type | Budget |
+| 端点类型 | 预算 |
 |---------------|--------|
-| Simple read (by ID) | < 50ms |
-| List / search | < 200ms |
-| Write (create/update) | < 500ms |
-| Complex aggregation | < 1s |
-| Report generation | < 5s (or async) |
+| 简单读取（按 ID） | < 50ms |
+| 列表/搜索 | < 200ms |
+| 写入（创建/更新） | < 500ms |
+| 复杂聚合查询 | < 1s |
+| 报表生成 | < 5s（或异步处理） |
 
-## Enforcing Budgets in CI
+## 在 CI 中执行预算检查
 
 ### Lighthouse CI
 
@@ -106,7 +106,7 @@ module.exports = {
 ```
 
 ```yaml
-# CI step
+# CI 步骤
 - name: Check bundle size
   run: npx bundlesize
 ```
@@ -124,43 +124,43 @@ module.exports = {
 ```
 
 ```yaml
-# CI step
+# CI 步骤
 - name: Check size limit
   run: npx size-limit
 ```
 
-### Webpack Performance Hints
+### Webpack 性能提示
 
 ```javascript
 // webpack.config.js
 module.exports = {
   performance: {
-    maxAssetSize: 250000,      // 250 KB per asset
-    maxEntrypointSize: 300000,  // 300 KB per entry point
-    hints: 'error',            // fail the build if exceeded
+    maxAssetSize: 250000,      // 每个资源文件 250 KB
+    maxEntrypointSize: 300000,  // 每个入口文件 300 KB
+    hints: 'error',            // 超出限制则构建失败
   },
 };
 ```
 
-## Tools Summary
+## 工具汇总
 
-| Tool | What It Measures | Integration |
+| 工具 | 测量内容 | 集成方式 |
 |------|-----------------|-------------|
-| **Lighthouse CI** | Performance score, Web Vitals, size | GitHub Actions, GitLab CI |
-| **bundlesize** | Individual bundle sizes | GitHub status check |
-| **size-limit** | Total package size, time to execute | GitHub Actions, PR comments |
-| **Webpack performance** | Asset and entry point sizes | Build step (fails build) |
-| **Import Cost** (VS Code) | Per-import size | Editor feedback |
-| **Bundle Analyzer** | Visual treemap of bundle | Manual analysis |
+| **Lighthouse CI** | 性能评分、Web Vitals、资源大小 | GitHub Actions、GitLab CI |
+| **bundlesize** | 单个打包文件大小 | GitHub 状态检查 |
+| **size-limit** | 总包大小、执行时间 | GitHub Actions、PR 评论 |
+| **Webpack performance** | 资源和入口文件大小 | 构建步骤（超出则构建失败） |
+| **Import Cost**（VS Code） | 单个导入语句的大小 | 编辑器实时反馈 |
+| **Bundle Analyzer** | 打包文件可视化树状图 | 手动分析 |
 
-## Monitoring in Production
+## 生产环境监控
 
-CI budgets catch regressions before deploy. Production monitoring catches real-user issues.
+CI 预算检查可在部署前捕捉回归问题，而生产环境监控则用于发现真实用户遇到的问题。
 
-### Real User Monitoring (RUM)
+### 真实用户监控（RUM）
 
 ```javascript
-// Report Web Vitals to analytics
+// 将 Web Vitals 上报至分析系统
 import { onLCP, onINP, onCLS } from 'web-vitals';
 
 onLCP(sendToAnalytics);
@@ -168,16 +168,16 @@ onINP(sendToAnalytics);
 onCLS(sendToAnalytics);
 ```
 
-### Alerting Thresholds
+### 告警阈值
 
-Set alerts when p75 metrics exceed budgets:
+当 p75 指标超出预算时设置告警：
 
-| Metric | Alert Threshold |
+| 指标 | 告警阈值 |
 |--------|----------------|
 | LCP p75 | > 3s |
 | INP p75 | > 300ms |
 | CLS p75 | > 0.15 |
-| Error rate | > 1% |
-| API p95 response time | > 2x budget |
+| 错误率 | > 1% |
+| API p95 响应时间 | > 预算值的 2 倍 |
 
-Track trends over time. A slow drift upward is harder to catch than a sudden spike but equally damaging.
+持续跟踪指标趋势。缓慢的指标劣化比突然的峰值更难察觉，但造成的损害同样严重。

@@ -1,67 +1,66 @@
 ---
 name: canvas-design
 description: >
-  Use when the user needs HTML Canvas, SVG graphics, data visualization, generative art, or interactive
-  visual elements with D3.js or similar libraries. Triggers: user says "canvas", "SVG", "chart",
-  "data visualization", "D3", "generative art", "animation", "interactive graphics", drawing on screen.
+  当用户需要 HTML Canvas、SVG 图形、数据可视化、生成艺术或使用 D3.js 及类似库的交互式视觉元素时使用。触发条件：用户提到"canvas"、"SVG"、"chart"、
+  "data visualization"、"D3"、"generative art"、"animation"、"interactive graphics"、屏幕绘图等。
 ---
 
-# Canvas Design
+# 画布设计
 
-## Overview
+## 概述
 
-Create performant, accessible, and visually compelling graphics using HTML Canvas 2D, SVG, and data visualization libraries. This skill covers everything from low-level pixel manipulation to high-level chart composition with D3.js, including generative art, interactive graphics, and animation.
+使用 HTML Canvas 2D、SVG 和数据可视化库创建高性能、可访问且视觉吸引力强的图形。本技能涵盖从底层像素操作到使用 D3.js 进行高级图表组合的全部内容，包括生成艺术、交互式图形和动画。
 
-## Phase 1: Requirements Analysis
+## 第一阶段：需求分析
 
-1. Determine output type (static, animated, interactive, data-driven)
-2. Choose rendering technology (Canvas 2D, SVG, WebGL, hybrid)
-3. Identify data sources and update frequency
-4. Define accessibility requirements for the visualization
-5. Set performance budget (frame rate, element count)
+1. 确定输出类型（静态、动画、交互式、数据驱动）
+2. 选择渲染技术（Canvas 2D、SVG、WebGL、混合方案）
+3. 识别数据源和更新频率
+4. 定义可视化的可访问性要求
+5. 设定性能预算（帧率、元素数量）
 
-**STOP — Present technology recommendation with rationale before implementation.**
+**停止 — 在实现之前，先展示技术推荐方案及理由。**
 
-### Technology Selection Decision Table
+### 技术选择决策表
 
-| Requirement | Canvas 2D | SVG | WebGL |
-|---|---|---|---|
-| < 1000 elements | Maybe | Yes | No |
-| > 10,000 elements | Yes | No | Yes |
-| DOM event handling needed | No | Yes | No |
-| Pixel manipulation | Yes | No | Yes |
-| Text-heavy visualization | No | Yes | No |
-| 3D rendering | No | No | Yes |
-| Print quality | No | Yes | No |
-| Animation-heavy | Yes | Maybe | Yes |
-| Accessibility critical | No | Yes | No |
-| SEO-relevant content | No | Yes | No |
+| 需求              | Canvas 2D | SVG  | WebGL |
+| ----------------- | --------- | ---- | ----- |
+| < 1000 个元素     | 可能      | 是   | 否    |
+| > 10,000 个元素   | 是        | 否   | 是    |
+| 需要 DOM 事件处理 | 否        | 是   | 否    |
+| 像素操作          | 是        | 否   | 是    |
+| 文本密集型可视化  | 否        | 是   | 否    |
+| 3D 渲染           | 否        | 否   | 是    |
+| 打印质量          | 否        | 是   | 否    |
+| 动画密集型        | 是        | 可能 | 是    |
+| 可访问性关键      | 否        | 是   | 否    |
+| SEO 相关内容      | 否        | 是   | 否    |
 
-### When to Use Each Technology
+### 何时使用每种技术
 
-| Use Case | Recommended | Why |
-|---|---|---|
-| Dashboard charts (< 500 data points) | SVG + D3.js | DOM events, accessibility, print |
-| Real-time data stream (1000+ points) | Canvas 2D | Performance at scale |
-| Interactive map with tooltips | SVG | Hover events, accessible |
-| Particle system / generative art | Canvas 2D | Pixel-level control, performance |
-| 3D data visualization | WebGL (Three.js) | GPU acceleration |
-| Infographic for blog post | SVG | Scalable, accessible, printable |
-| Game or simulation | Canvas 2D or WebGL | Frame rate, pixel control |
+| 使用场景                     | 推荐方案           | 原因                         |
+| ---------------------------- | ------------------ | ---------------------------- |
+| 仪表板图表（< 500 个数据点） | SVG + D3.js        | DOM 事件、可访问性、打印支持 |
+| 实时数据流（1000+ 数据点）   | Canvas 2D          | 大规模性能表现               |
+| 带工具提示的交互式地图       | SVG                | 悬停事件、可访问             |
+| 粒子系统 / 生成艺术          | Canvas 2D          | 像素级控制、高性能           |
+| 3D 数据可视化                | WebGL (Three.js)   | GPU 加速                     |
+| 博客文章信息图               | SVG                | 可缩放、可访问、可打印       |
+| 游戏或模拟                   | Canvas 2D 或 WebGL | 帧率、像素控制               |
 
-## Phase 2: Implementation
+## 第二阶段：实现
 
-1. Set up responsive canvas/SVG container
-2. Implement rendering pipeline (clear, update, draw)
-3. Add interaction handlers (hover, click, drag, zoom)
-4. Optimize render loop (requestAnimationFrame, dirty rectangles)
-5. Add accessibility layer (ARIA, screen reader descriptions)
+1. 设置响应式 canvas/SVG 容器
+2. 实现渲染管线（清除、更新、绘制）
+3. 添加交互处理器（悬停、点击、拖拽、缩放）
+4. 优化渲染循环（requestAnimationFrame、脏矩形）
+5. 添加可访问性层（ARIA、屏幕阅读器描述）
 
-**STOP — Verify rendering works correctly at target frame rate before adding polish.**
+**停止 — 在添加美化效果之前，先验证渲染在目标帧率下能正常工作。**
 
-### Canvas 2D API Patterns
+### Canvas 2D API 模式
 
-#### Responsive Canvas Setup
+#### 响应式 Canvas 设置
 
 ```javascript
 function createResponsiveCanvas(container) {
@@ -87,7 +86,7 @@ function createResponsiveCanvas(container) {
 }
 ```
 
-#### Animation Loop Pattern
+#### 动画循环模式
 
 ```javascript
 function createAnimationLoop(drawFn) {
@@ -102,14 +101,19 @@ function createAnimationLoop(drawFn) {
   }
 
   return {
-    start: () => { rafId = requestAnimationFrame(loop); },
-    stop: () => { cancelAnimationFrame(rafId); rafId = null; },
+    start: () => {
+      rafId = requestAnimationFrame(loop);
+    },
+    stop: () => {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    },
     isRunning: () => rafId !== null,
   };
 }
 ```
 
-#### Dirty Rectangle Optimization
+#### 脏矩形优化
 
 ```javascript
 class DirtyRectRenderer {
@@ -137,9 +141,9 @@ class DirtyRectRenderer {
 }
 ```
 
-### SVG Patterns
+### SVG 模式
 
-#### Programmatic SVG Creation
+#### 程序化创建 SVG
 
 ```javascript
 function createSVG(width, height, viewBox) {
@@ -152,68 +156,68 @@ function createSVG(width, height, viewBox) {
 }
 ```
 
-#### SVG Accessibility
+#### SVG 可访问性
 
 ```xml
 <svg role="img" aria-labelledby="chart-title chart-desc">
-  <title id="chart-title">Monthly Revenue Chart</title>
-  <desc id="chart-desc">Bar chart showing revenue from Jan to Dec 2025</desc>
-  <!-- chart content -->
+  <title id="chart-title">月度收入图表</title>
+  <desc id="chart-desc">显示 2025 年 1 月至 12 月收入的柱状图</desc>
+  <!-- 图表内容 -->
 </svg>
 ```
 
-### D3.js Integration Patterns
+### D3.js 集成模式
 
-#### Data Join Pattern (D3 v7)
+#### 数据连接模式（D3 v7）
 
 ```javascript
 function updateBars(svg, data) {
-  const bars = svg.selectAll('.bar')
-    .data(data, d => d.id);
+  const bars = svg.selectAll('.bar').data(data, (d) => d.id);
 
-  bars.exit()
-    .transition().duration(300)
-    .attr('opacity', 0)
-    .remove();
+  bars.exit().transition().duration(300).attr('opacity', 0).remove();
 
-  bars.enter()
+  bars
+    .enter()
     .append('rect')
     .attr('class', 'bar')
     .attr('opacity', 0)
     .merge(bars)
-    .transition().duration(500)
-    .attr('x', d => xScale(d.label))
-    .attr('y', d => yScale(d.value))
+    .transition()
+    .duration(500)
+    .attr('x', (d) => xScale(d.label))
+    .attr('y', (d) => yScale(d.value))
     .attr('width', xScale.bandwidth())
-    .attr('height', d => height - yScale(d.value))
+    .attr('height', (d) => height - yScale(d.value))
     .attr('opacity', 1);
 }
 ```
 
-#### Scales and Axes
+#### 比例尺与坐标轴
 
 ```javascript
-// Linear scale for continuous data
-const yScale = d3.scaleLinear()
-  .domain([0, d3.max(data, d => d.value)])
+// 用于连续数据的线性比例尺
+const yScale = d3
+  .scaleLinear()
+  .domain([0, d3.max(data, (d) => d.value)])
   .range([height, 0])
   .nice();
 
-// Band scale for categorical data
-const xScale = d3.scaleBand()
-  .domain(data.map(d => d.label))
+// 用于分类数据的带状比例尺
+const xScale = d3
+  .scaleBand()
+  .domain(data.map((d) => d.label))
   .range([0, width])
   .padding(0.2);
 
-// Color scale
+// 颜色比例尺
 const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
 ```
 
-#### Responsive D3 Chart
+#### 响应式 D3 图表
 
 ```javascript
 function responsiveChart(container, renderFn) {
-  const observer = new ResizeObserver(entries => {
+  const observer = new ResizeObserver((entries) => {
     const { width, height } = entries[0].contentRect;
     const margin = { top: 20, right: 20, bottom: 40, left: 50 };
     renderFn(container, {
@@ -227,74 +231,74 @@ function responsiveChart(container, renderFn) {
 }
 ```
 
-## Phase 3: Polish
+## 第三阶段：美化
 
-1. Add transitions and easing
-2. Implement responsive resizing
-3. Test across devices and browsers
-4. Add fallback content for unsupported environments
+1. 添加过渡和缓动效果
+2. 实现响应式缩放
+3. 跨设备和浏览器测试
+4. 为不支持的环境添加降级内容
 
-**STOP — Verify accessibility and performance targets are met.**
+**停止 — 验证可访问性和性能目标是否达成。**
 
-### Generative Art Techniques
+### 生成艺术技术
 
-| Technique | Category | Use Case |
-|---|---|---|
-| Perlin/Simplex noise | Noise-based | Organic shapes, terrain |
-| Fractal Brownian Motion | Noise-based | Terrain-like textures |
-| Domain warping | Noise-based | Fluid-like effects |
-| Particle systems | Simulation | Fire, water, swarms |
-| L-systems | Algorithmic | Plant-like structures |
-| Voronoi diagrams | Algorithmic | Cell-like partitions |
-| Delaunay triangulation | Algorithmic | Mesh generation |
-| Flow fields | Algorithmic | Directional patterns |
+| 技术                | 类别     | 使用场景         |
+| ------------------- | -------- | ---------------- |
+| Perlin/Simplex 噪声 | 基于噪声 | 有机形状、地形   |
+| 分形布朗运动        | 基于噪声 | 类地形纹理       |
+| 域扭曲              | 基于噪声 | 流体效果         |
+| 粒子系统            | 模拟     | 火焰、水流、群体 |
+| L-系统              | 算法     | 植物状结构       |
+| 沃罗诺伊图          | 算法     | 类细胞分区       |
+| 德劳内三角剖分      | 算法     | 网格生成         |
+| 流场                | 算法     | 方向性图案       |
 
-### Accessibility for Visualizations
+### 可视化的可访问性
 
-| Requirement | Implementation |
-|---|---|
-| Text alternatives | `<title>` and `<desc>` in SVG, ARIA labels on Canvas |
-| Data table fallback | Hidden table with same data for screen readers |
-| Keyboard interaction | Tab to elements, arrow keys for navigation |
-| Color-blind safe | Use shape/pattern in addition to color |
-| High contrast mode | Detect and adjust colors |
-| Reduced motion | Simplify or disable animations with `prefers-reduced-motion` |
+| 要求           | 实现方式                                              |
+| -------------- | ----------------------------------------------------- |
+| 文本替代方案   | SVG 中的 `<title>` 和 `<desc>`，Canvas 上的 ARIA 标签 |
+| 数据表降级方案 | 为屏幕阅读器提供包含相同数据的隐藏表格                |
+| 键盘交互       | 可聚焦元素，方向键导航                                |
+| 色盲友好       | 除颜色外使用形状/图案区分                             |
+| 高对比度模式   | 检测并调整颜色                                        |
+| 减少动画       | 使用 `prefers-reduced-motion` 简化或禁用动画          |
 
-### Performance Guidelines
+### 性能指南
 
-| Technology | Optimization |
-|---|---|
-| Canvas | Batch draw calls, minimize state changes (fill/stroke/font) |
-| SVG | Limit to < 1000 DOM nodes, use `<use>` for repeated elements |
-| Worker | OffscreenCanvas for web worker rendering |
-| Events | Throttle mousemove handlers to 16ms (60fps) |
-| CSS | Use `will-change: transform` for CSS-animated SVG elements |
-| Cleanup | Dispose of observers, animation frames on unmount |
+| 技术   | 优化方案                                            |
+| ------ | --------------------------------------------------- |
+| Canvas | 批量绘制调用，最小化状态变更（fill/stroke/font）    |
+| SVG    | 限制 < 1000 个 DOM 节点，对重复元素使用 `<use>`     |
+| Worker | 使用 OffscreenCanvas 在 Web Worker 中渲染           |
+| 事件   | 将 mousemove 处理器节流至 16ms（60fps）             |
+| CSS    | 对 CSS 动画的 SVG 元素使用 `will-change: transform` |
+| 清理   | 卸载时销毁观察者、动画帧                            |
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | What to Do Instead |
-|---|---|---|
-| Canvas for text-heavy content | Poor text rendering, no accessibility | Use SVG for text-heavy visualizations |
-| Full canvas redraw every frame | Wastes CPU when nothing changed | Use dirty rectangle optimization |
-| Creating new SVG elements instead of updating | Memory leaks, poor performance | Use D3 data join pattern |
-| Forgetting devicePixelRatio | Blurry on Retina/HiDPI displays | Scale canvas by `window.devicePixelRatio` |
-| No fallback content for Canvas | Screen readers get nothing | Add `aria-label` and hidden data table |
-| Inline event handlers on 1000+ SVG elements | Memory and performance overhead | Use event delegation on parent |
-| Not cleaning up animation frames | Memory leaks on unmount | `cancelAnimationFrame` in cleanup |
-| Using D3 for simple static charts | Over-engineering | Use SVG directly or Chart.js |
+| 反模式                           | 错误原因               | 正确做法                                 |
+| -------------------------------- | ---------------------- | ---------------------------------------- |
+| 用 Canvas 处理文本密集型内容     | 文本渲染差、无可访问性 | 文本密集型可视化使用 SVG                 |
+| 每帧重绘整个 Canvas              | 无变化时浪费 CPU       | 使用脏矩形优化                           |
+| 创建新 SVG 元素而非更新          | 内存泄漏、性能差       | 使用 D3 数据连接模式                     |
+| 忽略 devicePixelRatio            | Retina/HiDPI 屏幕模糊  | 按 `window.devicePixelRatio` 缩放 Canvas |
+| Canvas 无降级内容                | 屏幕阅读器无法获取内容 | 添加 `aria-label` 和隐藏数据表           |
+| 1000+ SVG 元素使用内联事件处理器 | 内存和性能开销大       | 在父元素上使用事件委托                   |
+| 不清理动画帧                     | 卸载时内存泄漏         | 清理函数中使用 `cancelAnimationFrame`    |
+| 用 D3 处理简单静态图表           | 过度设计               | 直接使用 SVG 或 Chart.js                 |
 
-## Integration Points
+## 集成点
 
-| Skill | Integration |
-|---|---|
-| `ui-ux-pro-max` | Chart type selection and color palettes |
-| `ui-design-system` | Design tokens for chart theming |
-| `artifacts-builder` | Self-contained visualization artifacts |
-| `senior-frontend` | Component integration in React/Vue/Svelte |
-| `performance-optimization` | Frame rate and rendering optimization |
-| `mobile-design` | Touch interaction for mobile charts |
+| 技能                       | 集成方式                      |
+| -------------------------- | ----------------------------- |
+| `ui-ux-pro-max`            | 图表类型选择和配色方案        |
+| `ui-design-system`         | 图表主题的设计令牌            |
+| `artifacts-builder`        | 自包含的可视化构件            |
+| `senior-frontend`          | React/Vue/Svelte 中的组件集成 |
+| `performance-optimization` | 帧率和渲染优化                |
+| `mobile-design`            | 移动端图表的触摸交互          |
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Choose the rendering technology and library that best fits the use case. SVG for accessibility-critical and interactive charts, Canvas for performance-critical and animation-heavy visuals, WebGL for 3D and massive datasets.
+**灵活** — 选择最适合使用场景的渲染技术和库。可访问性关键和交互式图表使用 SVG，性能关键和动画密集型视觉效果使用 Canvas，3D 和超大规模数据集使用 WebGL。

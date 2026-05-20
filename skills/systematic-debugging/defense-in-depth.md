@@ -1,96 +1,96 @@
-# Defense in Depth
+# 纵深防御
 
-Reference document for the systematic-debugging skill. Describes layered validation patterns that prevent bugs from reaching production and limit blast radius when they do.
+系统化调试技能的参考文档。描述了分层验证模式，以防止缺陷进入生产环境，并在缺陷发生时限制其爆炸半径。
 
 ---
 
-## The 4-Layer Validation Pattern
+## 四层验证模式
 
-Every data flow through your system should pass through four layers of validation. Each layer is independent and assumes the previous layers might have failed. No layer trusts input from any source, including other layers.
+系统中的每个数据流都应经过四层验证。每一层都是独立的，并假设前一层可能已经失效。没有任何一层会信任来自任何来源的输入，包括其他层。
 
 ```
 ┌─────────────────────────────────────────┐
-│  Layer 1: INPUT VALIDATION (Boundary)   │
-│  Reject malformed data at the gate      │
+│  第 1 层：输入验证（边界）              │
+│  在入口处拒绝格式错误的数据             │
 ├─────────────────────────────────────────┤
-│  Layer 2: BUSINESS LOGIC (Domain)       │
-│  Enforce domain rules and invariants    │
+│  第 2 层：业务逻辑（领域）              │
+│  强制执行领域规则和不变量               │
 ├─────────────────────────────────────────┤
-│  Layer 3: DATA ACCESS (Persistence)     │
-│  Protect data integrity at storage      │
+│  第 3 层：数据访问（持久化）            │
+│  在存储层保护数据完整性                 │
 ├─────────────────────────────────────────┤
-│  Layer 4: OUTPUT VALIDATION (Response)  │
-│  Verify outgoing data is correct/safe   │
+│  第 4 层：输出验证（响应）              │
+│  验证发出的数据是否正确/安全            │
 └─────────────────────────────────────────┘
 ```
 
 ---
 
-### Layer 1: Input Validation (Boundary)
+### 第 1 层：输入验证（边界）
 
-**Purpose:** Reject obviously invalid data before it enters the system. This is the first line of defense.
+**目的：** 在数据进入系统之前，拒绝明显无效的数据。这是第一道防线。
 
-**Where:** API endpoints, form handlers, CLI argument parsers, message consumers, file parsers.
+**位置：** API 端点、表单处理器、CLI 参数解析器、消息消费者、文件解析器。
 
-**What to validate:**
-- **Type:** Is the data the right type? (string, number, array, object)
-- **Presence:** Are required fields present?
-- **Format:** Does the data match the expected format? (email, UUID, date, URL)
-- **Range:** Are numbers within acceptable bounds?
-- **Length:** Are strings and arrays within size limits?
-- **Character set:** Does text contain only allowed characters?
-- **Structure:** Does the object have the expected shape?
+**验证内容：**
+- **类型：** 数据是否为正确的类型？（字符串、数字、数组、对象）
+- **存在性：** 必填字段是否存在？
+- **格式：** 数据是否符合预期格式？（电子邮件、UUID、日期、URL）
+- **范围：** 数字是否在可接受的范围内？
+- **长度：** 字符串和数组是否在大小限制内？
+- **字符集：** 文本是否仅包含允许的字符？
+- **结构：** 对象是否具有预期的结构？
 
-**Principles:**
-- Validate BEFORE any processing occurs
-- Return clear, actionable error messages
-- Log invalid input for monitoring (but redact sensitive data)
-- Use allowlists over denylists (accept known-good, not reject known-bad)
-- Parse, don't validate: convert raw input into typed domain objects
+**原则：**
+- 在任何处理发生**之前**进行验证
+- 返回清晰、可操作的错误信息
+- 记录无效输入以供监控（但需脱敏敏感数据）
+- 优先使用白名单而非黑名单（接受已知的合法数据，而非拒绝已知的非法数据）
+- 解析，而非单纯验证：将原始输入转换为带类型的领域对象
 
-**Example pattern:**
-```
+**示例模式：**
+```python
 def handle_request(raw_input):
-    # Layer 1: Validate and parse
-    validated = validate_and_parse(raw_input)  # Throws on invalid
+    # 第 1 层：验证并解析
+    validated = validate_and_parse(raw_input)  # 输入无效时抛出异常
 
-    # Now 'validated' is a typed domain object, not raw data
+    # 现在 'validated' 是一个带类型的领域对象，而非原始数据
     result = process(validated)
     return result
 ```
 
 ---
 
-### Layer 2: Business Logic Validation (Domain)
+### 第 2 层：业务逻辑验证（领域）
 
-**Purpose:** Enforce domain rules, business constraints, and invariants that go beyond format validation.
+**目的：** 强制执行超越格式验证的领域规则、业务约束和不变量。
 
-**Where:** Domain models, service layer, use case handlers.
+**位置：** 领域模型、服务层、用例处理器。
 
-**What to validate:**
-- **Business rules:** Can this user perform this action? Is this transition allowed?
-- **Invariants:** Are domain object invariants maintained? (e.g., order total matches line items)
-- **State transitions:** Is this state change valid? (e.g., can't ship an unpaid order)
-- **Cross-field validation:** Do fields have consistent values? (e.g., end date after start date)
-- **Authorization:** Does the user have permission for this specific resource?
-- **Idempotency:** Has this operation already been performed?
+**验证内容：**
+- **业务规则：** 该用户能否执行此操作？是否允许此状态转换？
+- **不变量：** 领域对象的不变量是否得到维持？（例如：订单总额与明细项匹配）
+- **状态转换：** 此状态变更是否有效？（例如：不能发货未付款的订单）
+- **跨字段验证：** 字段值是否一致？（例如：结束日期晚于开始日期）
+- **授权：** 用户是否拥有对此特定资源的权限？
+- **幂等性：** 此操作是否已执行过？
 
-**Principles:**
-- Domain validation belongs in domain objects, not controllers or utilities
-- Enforce invariants in constructors and mutation methods
-- Make illegal states unrepresentable through types where possible
-- Use the type system to prevent invalid combinations
+**原则：**
+- 领域验证应位于领域对象中，而非控制器或工具类中
+- 在构造函数和状态变更方法中强制执行不变量
+- 在可能的情况下，通过类型系统使非法状态无法表示
+- 利用类型系统防止无效的组合
 
-**Example pattern:**
-```
+**示例模式：**
+```python
 class Order:
     def ship(self):
         if self.status != "paid":
-            raise DomainError("Cannot ship unpaid order")
+            raise DomainError("无法发货未付款的订单")
         if not self.items:
-            raise DomainError("Cannot ship empty order")
+            raise DomainError("无法发货空订单")
         if not self.shipping_address:
-            raise DomainError("Cannot ship without address")
+            raise DomainError("没有收货地址无法发货")
 
         self.status = "shipped"
         self.shipped_at = now()
@@ -98,28 +98,28 @@ class Order:
 
 ---
 
-### Layer 3: Data Access Validation (Persistence)
+### 第 3 层：数据访问验证（持久化）
 
-**Purpose:** Protect data integrity at the storage layer. This is the last line of defense before data is persisted.
+**目的：** 在存储层保护数据完整性。这是数据持久化前的最后一道防线。
 
-**Where:** Database schemas, ORM models, repository implementations.
+**位置：** 数据库模式、ORM 模型、仓储实现。
 
-**What to validate:**
-- **Constraints:** NOT NULL, UNIQUE, FOREIGN KEY, CHECK constraints
-- **Types:** Column types match expected data types
-- **Referential integrity:** Foreign keys point to existing records
-- **Uniqueness:** Business-unique fields are enforced at DB level
-- **Concurrency:** Optimistic locking, version columns, serializable transactions
-- **Data size:** Column length limits, row size limits
+**验证内容：**
+- **约束：** NOT NULL、UNIQUE、FOREIGN KEY、CHECK 约束
+- **类型：** 列类型与预期数据类型匹配
+- **参照完整性：** 外键指向存在的记录
+- **唯一性：** 业务唯一字段在数据库层面强制执行
+- **并发控制：** 乐观锁、版本列、可串行化事务
+- **数据大小：** 列长度限制、行大小限制
 
-**Principles:**
-- Database constraints are the safety net, not the primary validation
-- Always use foreign keys - they catch bugs that application code misses
-- Use database transactions for operations that must be atomic
-- Implement optimistic locking for concurrent updates
-- Schema migrations should be backward compatible
+**原则：**
+- 数据库约束是安全网，而非主要验证手段
+- 始终使用外键——它们能捕获应用代码遗漏的缺陷
+- 对必须原子化的操作使用数据库事务
+- 对并发更新实现乐观锁
+- 模式迁移应保持向后兼容
 
-**Example pattern:**
+**示例模式：**
 ```sql
 CREATE TABLE orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -138,28 +138,28 @@ CREATE TABLE orders (
 
 ---
 
-### Layer 4: Output Validation (Response)
+### 第 4 层：输出验证（响应）
 
-**Purpose:** Verify that outgoing data is correct, complete, and safe before sending it to the client or downstream system.
+**目的：** 在将数据发送给客户端或下游系统之前，验证发出的数据是否正确、完整且安全。
 
-**Where:** Response serializers, API response builders, template renderers, event publishers.
+**位置：** 响应序列化器、API 响应构建器、模板渲染器、事件发布者。
 
-**What to validate:**
-- **Completeness:** Are all required response fields present?
-- **Sanitization:** Is user-generated content escaped/sanitized?
-- **Sensitive data removal:** Are internal fields, passwords, tokens stripped?
-- **Contract compliance:** Does the response match the API schema?
-- **Encoding:** Is the response properly encoded (UTF-8, JSON)?
-- **Size:** Is the response within acceptable size limits?
+**验证内容：**
+- **完整性：** 是否包含所有必需的响应字段？
+- **净化处理：** 用户生成的内容是否已转义/净化？
+- **敏感数据移除：** 内部字段、密码、令牌是否已被剥离？
+- **契约合规性：** 响应是否符合 API 模式定义？
+- **编码：** 响应是否已正确编码（UTF-8、JSON）？
+- **大小：** 响应是否在可接受的大小限制内？
 
-**Principles:**
-- Never expose internal error details to external clients
-- Strip sensitive fields from responses (use allowlist serialization)
-- Validate against API schema before sending
-- Log the response (redacted) for debugging
+**原则：**
+- 切勿向外部客户端暴露内部错误详情
+- 从响应中剥离敏感字段（使用白名单序列化）
+- 发送前对照 API 模式进行验证
+- 记录响应日志（脱敏）以供调试
 
-**Example pattern:**
-```
+**示例模式：**
+```python
 class UserSerializer:
     ALLOWED_FIELDS = ["id", "name", "email", "created_at"]
 
@@ -169,174 +169,174 @@ class UserSerializer:
             value = getattr(user, field)
             result[field] = self.sanitize(field, value)
 
-        # Verify completeness
+        # 验证完整性
         assert all(f in result for f in self.ALLOWED_FIELDS)
         return result
 ```
 
 ---
 
-## Fail-Safe Defaults
+## 故障安全默认值
 
-When in doubt, the system should fail into a secure, safe state. Never fail into an open or permissive state.
+当存在不确定性时，系统应进入安全、受保护的状态。切勿进入开放或宽松的状态。
 
-### Principles
+### 原则
 
-| Situation | Fail-Safe Default | Dangerous Default |
+| 场景 | 故障安全默认值 | 危险默认值 |
 |-----------|-------------------|-------------------|
-| Authorization check fails | Deny access | Grant access |
-| Config value missing | Use restrictive default | Use permissive default |
-| Feature flag unknown | Feature disabled | Feature enabled |
-| Rate limit check errors | Reject request | Allow request |
-| Input validation uncertain | Reject input | Accept input |
-| SSL certificate invalid | Refuse connection | Connect anyway |
-| Session lookup fails | Treat as unauthenticated | Treat as authenticated |
-| Timeout exceeded | Abort and return error | Continue and hope |
+| 授权检查失败 | 拒绝访问 | 授予访问权限 |
+| 配置值缺失 | 使用限制性默认值 | 使用宽松型默认值 |
+| 功能开关未知 | 功能禁用 | 功能启用 |
+| 速率限制检查报错 | 拒绝请求 | 允许请求 |
+| 输入验证存疑 | 拒绝输入 | 接受输入 |
+| SSL 证书无效 | 拒绝连接 | 继续连接 |
+| 会话查找失败 | 视为未认证 | 视为已认证 |
+| 超出超时时间 | 中止并返回错误 | 继续执行并祈祷成功 |
 
-### Implementation Pattern
+### 实现模式
 
-```
-# BAD: Fail-open
+```python
+# 错误做法：故障开放 (Fail-open)
 def is_authorized(user, resource):
     try:
         return check_permissions(user, resource)
     except PermissionServiceError:
-        return True  # "Let them through, service is down"
+        return True  # "放行吧，服务挂了"
 
-# GOOD: Fail-closed
+# 正确做法：故障关闭 (Fail-closed)
 def is_authorized(user, resource):
     try:
         return check_permissions(user, resource)
     except PermissionServiceError:
-        log.error("Permission service unavailable, denying access")
+        log.error("权限服务不可用，拒绝访问")
         return False
 ```
 
 ---
 
-## Principle of Least Privilege
+## 最小权限原则
 
-Every component should have exactly the permissions it needs and no more. This limits the blast radius when something goes wrong.
+每个组件应仅具备其所需的精确权限，不多不少。这能在出现问题时限制其爆炸半径。
 
-### Application
+### 应用场景
 
-| Component | Least Privilege | Over-Privileged |
+| 组件 | 最小权限 | 权限过度 |
 |-----------|----------------|-----------------|
-| Database user | SELECT/INSERT on specific tables | Full admin on all databases |
-| API key | Scoped to specific endpoints | Full API access |
-| Service account | Access to its own resources | Access to all services |
-| File permissions | Read-only where possible | Read-write-execute |
-| Environment variables | Only what the service needs | All secrets from vault |
-| Network access | Specific ports and hosts | All outbound traffic |
+| 数据库用户 | 仅特定表的 SELECT/INSERT 权限 | 所有数据库的完全管理员权限 |
+| API 密钥 | 限定于特定端点 | 完全 API 访问权限 |
+| 服务账号 | 仅访问其自身资源 | 访问所有服务 |
+| 文件权限 | 尽可能只读 | 读写执行权限 |
+| 环境变量 | 仅服务所需变量 | 密钥库中的所有机密 |
+| 网络访问 | 特定端口和主机 | 所有出站流量 |
 
-### Implementation Checklist
+### 实施检查清单
 
-- [ ] Database connections use least-privilege credentials
-- [ ] API keys are scoped to minimum required permissions
-- [ ] File system access is limited to required directories
-- [ ] Network access is restricted to known endpoints
-- [ ] Secrets are accessible only to services that need them
-- [ ] Admin interfaces require separate authentication
-- [ ] Temporary elevated permissions expire automatically
+- [ ] 数据库连接使用最小权限凭证
+- [ ] API 密钥限定于最低所需权限
+- [ ] 文件系统访问限制在所需目录内
+- [ ] 网络访问限制在已知端点
+- [ ] 机密信息仅对需要的服务可见
+- [ ] 管理界面需要独立的身份验证
+- [ ] 临时提升的权限会自动过期
 
 ---
 
-## Defense Against Cascading Failures
+## 防御级联故障
 
-When one component fails, prevent the failure from propagating through the system.
+当某个组件发生故障时，防止该故障在整个系统中蔓延。
 
-### Patterns
+### 模式
 
-#### 1. Circuit Breaker
+#### 1. 断路器模式
 
-Monitor calls to an external dependency. When failures exceed a threshold, stop calling and fail fast instead of waiting for timeouts.
-
-```
-States:
-  CLOSED  → Normal operation, calls pass through
-  OPEN    → Dependency is down, fail immediately (don't even try)
-  HALF-OPEN → After cooldown, allow one test call to check recovery
-
-Transitions:
-  CLOSED → OPEN:     When failure count exceeds threshold (e.g., 5 failures in 60 seconds)
-  OPEN → HALF-OPEN:  After cooldown period (e.g., 30 seconds)
-  HALF-OPEN → CLOSED: If test call succeeds
-  HALF-OPEN → OPEN:   If test call fails
-```
-
-#### 2. Bulkhead
-
-Isolate components so that a failure in one doesn't exhaust resources for others.
-
-- Separate thread pools for different dependencies
-- Separate connection pools for different databases
-- Separate rate limits for different API consumers
-- Separate deployment units for different services
-
-#### 3. Timeout + Retry with Backoff
-
-Never wait indefinitely. Always set timeouts. Retry with exponential backoff.
+监控对外部依赖的调用。当失败次数超过阈值时，停止调用并快速失败，而不是等待超时。
 
 ```
-Attempt 1: immediate
-Attempt 2: wait 1 second
-Attempt 3: wait 2 seconds
-Attempt 4: wait 4 seconds
-Attempt 5: give up, return error
+状态：
+  CLOSED  → 正常运行，调用正常通过
+  OPEN    → 依赖项宕机，立即失败（根本不尝试）
+  HALF-OPEN → 冷却期后，允许一次测试调用以检查恢复情况
 
-Add jitter: multiply wait by random(0.5, 1.5) to prevent thundering herd
+状态转换：
+  CLOSED → OPEN:     当失败次数超过阈值时（例如 60 秒内失败 5 次）
+  OPEN → HALF-OPEN:  经过冷却期后（例如 30 秒）
+  HALF-OPEN → CLOSED: 若测试调用成功
+  HALF-OPEN → OPEN:   若测试调用失败
 ```
 
-#### 4. Graceful Degradation
+#### 2. 舱壁模式
 
-When a non-critical dependency fails, continue with reduced functionality rather than total failure.
+隔离各个组件，使一个组件的故障不会耗尽其他组件的资源。
 
-| Failing Component | Graceful Degradation |
+- 为不同的依赖项使用独立的线程池
+- 为不同的数据库使用独立的连接池
+- 为不同的 API 消费者设置独立的速率限制
+- 为不同的服务使用独立的部署单元
+
+#### 3. 超时 + 退避重试
+
+绝不无限期等待。始终设置超时时间。使用指数退避进行重试。
+
+```
+第 1 次尝试：立即执行
+第 2 次尝试：等待 1 秒
+第 3 次尝试：等待 2 秒
+第 4 次尝试：等待 4 秒
+第 5 次尝试：放弃，返回错误
+
+添加随机抖动：将等待时间乘以 random(0.5, 1.5) 以防止惊群效应
+```
+
+#### 4. 优雅降级
+
+当非关键依赖项发生故障时，以功能缩减的方式继续运行，而非完全瘫痪。
+
+| 故障组件 | 优雅降级策略 |
 |-------------------|---------------------|
-| Recommendation engine | Show popular items instead |
-| Search service | Show browse/category navigation |
-| Analytics service | Skip tracking, serve the page |
-| Cache | Fall back to database (slower but works) |
-| Email service | Queue for later delivery |
-| Image CDN | Show placeholder images |
+| 推荐引擎 | 改为展示热门商品 |
+| 搜索服务 | 展示浏览/分类导航 |
+| 分析服务 | 跳过追踪，正常渲染页面 |
+| 缓存 | 降级至数据库（较慢但可用） |
+| 邮件服务 | 进入队列稍后发送 |
+| 图片 CDN | 展示占位图片 |
 
-#### 5. Health Checks and Readiness Probes
+#### 5. 健康检查与就绪探针
 
-Components should report their health status so that the system can route around failures.
+组件应报告其健康状态，以便系统能够绕过故障进行路由。
 
-- **Liveness:** "Am I running?" (restart if no)
-- **Readiness:** "Can I serve traffic?" (remove from load balancer if no)
-- **Dependency health:** "Are my dependencies available?" (degrade if no)
+- **存活探针：** “我还在运行吗？”（若无则重启）
+- **就绪探针：** “我能处理流量吗？”（若无则从负载均衡器中移除）
+- **依赖健康度：** “我的依赖项可用吗？”（若无则降级）
 
 ---
 
-## Putting It All Together
+## 综合应用
 
-Defense in depth is not about any single technique. It's about layering multiple defenses so that when one fails (and it will), the next layer catches the problem.
+纵深防御并非依赖单一技术。而是通过叠加多层防御，确保当某一层失效时（这迟早会发生），下一层能够拦截问题。
 
 ```
-Request arrives
+请求到达
     │
     ▼
-[Layer 1: Input Validation] → Reject malformed data
+[第 1 层：输入验证] → 拒绝格式错误的数据
     │
     ▼
-[Layer 2: Business Rules] → Enforce domain constraints
+[第 2 层：业务规则] → 强制执行领域约束
     │
     ▼
-[Layer 3: Data Integrity] → Database constraints catch remaining issues
+[第 3 层：数据完整性] → 数据库约束捕获剩余问题
     │
     ▼
-[Layer 4: Output Validation] → Strip sensitive data, verify response
+[第 4 层：输出验证] → 剥离敏感数据，验证响应
     │
     ▼
-[Circuit Breaker] → Protect against dependency failures
+[断路器] → 防御依赖项故障
     │
     ▼
-[Fail-Safe Defaults] → When uncertain, fail safely
+[故障安全默认值] → 存在不确定性时安全失败
     │
     ▼
-Response sent
+发送响应
 ```
 
-Each layer assumes the previous layers might have failed. Each layer validates independently. No layer trusts its input, regardless of source.
+每一层都假设前一层可能已经失效。每一层都独立进行验证。无论来源为何，没有任何一层会信任其输入。

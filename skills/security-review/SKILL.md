@@ -1,143 +1,143 @@
 ---
 name: security-review
-description: "Use when reviewing code for security vulnerabilities, implementing authentication or authorization, handling user input, managing secrets, or auditing dependencies for known CVEs. Triggers: auth implementation, input handling, secrets management, dependency audit, pre-deployment security check, OWASP compliance review."
+description: "在审查代码安全漏洞、实现身份验证或授权、处理用户输入、管理密钥，或审计依赖项是否存在已知 CVE 时使用。触发条件：身份验证实现、输入处理、密钥管理、依赖项审计、部署前安全检查、OWASP 合规性审查。"
 ---
 
-# Security Review
+# 安全审查
 
-## Overview
+## 概述
 
-Systematically review code for security vulnerabilities, apply secure coding patterns, and ensure applications follow defense-in-depth principles. This skill covers the OWASP Top 10, authentication pattern selection, input validation, secrets management, dependency auditing, security headers, and threat modeling.
+系统性地审查代码中的安全漏洞，应用安全编码模式，并确保应用程序遵循纵深防御原则。本技能涵盖 OWASP Top 10、身份验证模式选择、输入验证、密钥管理、依赖项审计、安全标头以及威胁建模。
 
-**Announce at start:** "I'm using the security-review skill to assess security posture."
-
----
-
-## Phase 1: Scope and Threat Assessment
-
-**Goal:** Identify the attack surface and prioritize review areas.
-
-### Actions
-
-1. Identify all user-facing endpoints and input surfaces
-2. Map authentication and authorization boundaries
-3. List external dependencies and their trust levels
-4. Identify sensitive data flows (PII, credentials, payment)
-5. Determine compliance requirements (SOC 2, GDPR, HIPAA)
-
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] Attack surface is mapped
-- [ ] Sensitive data flows are identified
-- [ ] Compliance requirements are known
+**开始时声明：**“我正在使用 security-review 技能来评估安全态势。”
 
 ---
 
-## Phase 2: OWASP Top 10 Audit
+## 阶段 1：范围与威胁评估
 
-**Goal:** Systematically check against each OWASP category.
+**目标：** 识别攻击面并确定审查区域的优先级。
 
-### OWASP Top 10 Checklist (2021)
+### 操作
 
-| # | Category | Key Check | Pass/Fail |
+1. 识别所有面向用户的端点和输入面
+2. 绘制身份验证与授权边界
+3. 列出外部依赖项及其信任级别
+4. 识别敏感数据流（个人身份信息 PII、凭据、支付信息）
+5. 确定合规性要求（SOC 2、GDPR、HIPAA）
+
+### 停止 — 在完成以下事项前，请勿进入阶段 2：
+- [ ] 已绘制攻击面
+- [ ] 已识别敏感数据流
+- [ ] 已明确合规性要求
+
+---
+
+## 阶段 2：OWASP Top 10 审计
+
+**目标：** 针对每个 OWASP 类别进行系统性检查。
+
+### OWASP Top 10 检查清单（2021 版）
+
+| # | 类别 | 关键检查项 | 通过/失败 |
 |---|----------|-----------|-----------|
-| 1 | **Broken Access Control** | Authorization verified on every endpoint, deny by default | |
-| 2 | **Cryptographic Failures** | No plaintext secrets, strong algorithms (AES-256, bcrypt) | |
-| 3 | **Injection** | Parameterized queries, no string concatenation for SQL/commands | |
-| 4 | **Insecure Design** | Threat model exists, rate limiting, abuse cases considered | |
-| 5 | **Security Misconfiguration** | No defaults in production, minimal permissions, error messages leak nothing | |
-| 6 | **Vulnerable Components** | Dependencies audited, no known CVEs, update policy in place | |
-| 7 | **Auth Failures** | MFA available, passwords hashed, session management secure | |
-| 8 | **Data Integrity Failures** | Verify signatures, validate CI/CD pipeline integrity | |
-| 9 | **Logging Failures** | Log auth events, access control failures, input validation failures | |
-| 10 | **SSRF** | Validate/allowlist URLs, no internal network access from user input | |
+| 1 | **失效的访问控制** | 每个端点均验证授权，默认拒绝 | |
+| 2 | **加密机制失效** | 无明文密钥，使用强算法（AES-256、bcrypt） | |
+| 3 | **注入** | 使用参数化查询，SQL/命令禁止字符串拼接 | |
+| 4 | **不安全的设计** | 存在威胁模型，具备速率限制，已考虑滥用场景 | |
+| 5 | **安全配置错误** | 生产环境无默认配置，权限最小化，错误信息不泄露任何内容 | |
+| 6 | **组件中存在已知漏洞** | 已审计依赖项，无已知 CVE，已制定更新策略 | |
+| 7 | **身份验证失效** | 支持多因素认证（MFA），密码已哈希处理，会话管理安全 | |
+| 8 | **软件和数据完整性故障** | 验证签名，确保 CI/CD 管道完整性 | |
+| 9 | **安全日志记录与监控失效** | 记录身份验证事件、访问控制失败、输入验证失败 | |
+| 10 | **服务端请求伪造（SSRF）** | 验证/白名单化 URL，禁止用户输入访问内部网络 | |
 
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] All 10 categories are checked
-- [ ] Findings are documented with severity
+### 停止 — 在完成以下事项前，请勿进入阶段 3：
+- [ ] 已检查全部 10 个类别
+- [ ] 已记录发现项并标注严重程度
 
 ---
 
-## Phase 3: Deep Review by Category
+## 阶段 3：按类别深度审查
 
-**Goal:** Apply detailed security patterns to identified issues.
+**目标：** 将详细的安全模式应用于已识别的问题。
 
-### Auth Pattern Selection Table
+### 身份验证模式选择表
 
-| Pattern | Use When | Key Requirements |
+| 模式 | 适用场景 | 关键要求 |
 |---------|----------|-----------------|
-| **JWT** | Stateless APIs, microservices, mobile backends | RS256 for multi-service; access token 15min max; HttpOnly cookies |
-| **Session-based** | Traditional web apps, server-rendered pages | Server-side storage; HttpOnly + Secure + SameSite cookies; CSRF tokens |
-| **OAuth2/OIDC** | Third-party login, SSO, delegated auth | Authorization Code + PKCE; validate ID token claims; server-side token storage |
-| **Passkeys/WebAuthn** | Passwordless, high-security apps | Phishing-resistant; store public keys only; support multiple per account |
+| **JWT** | 无状态 API、微服务、移动端后端 | 多服务使用 RS256；访问令牌最长 15 分钟；HttpOnly Cookie |
+| **基于会话（Session-based）** | 传统 Web 应用、服务端渲染页面 | 服务端存储；HttpOnly + Secure + SameSite Cookie；CSRF 令牌 |
+| **OAuth2/OIDC** | 第三方登录、单点登录（SSO）、委托认证 | 授权码模式 + PKCE；验证 ID 令牌声明；服务端令牌存储 |
+| **Passkeys/WebAuthn** | 无密码、高安全应用 | 防钓鱼；仅存储公钥；支持单账户多密钥 |
 
-### JWT Security Checklist
+### JWT 安全检查清单
 
-| Aspect | Guidance |
+| 方面 | 指南 |
 |--------|----------|
-| Signing | RS256 (asymmetric) for multi-service, HS256 for single service |
-| Expiry | Access token: 15 minutes max. Refresh token: 7 days max |
-| Storage | HttpOnly cookie (web) or secure storage (mobile). Never localStorage |
-| Refresh | Rotate refresh tokens on use, invalidate on logout |
-| Payload | Minimal claims (sub, exp, iat, roles). No sensitive data |
+| 签名 | 多服务使用 RS256（非对称），单服务使用 HS256 |
+| 过期时间 | 访问令牌：最长 15 分钟。刷新令牌：最长 7 天 |
+| 存储 | HttpOnly Cookie（Web）或安全存储（移动端）。绝不使用 localStorage |
+| 刷新 | 使用时轮换刷新令牌，登出时使其失效 |
+| 载荷（Payload） | 仅包含最小声明（sub, exp, iat, roles）。不包含敏感数据 |
 
-### Input Validation Patterns
+### 输入验证模式
 
-**Allow-List Validation** (always prefer over block-list):
+**白名单验证**（始终优先于黑名单）：
 ```python
-# Good: allow-list
+# 良好做法：白名单
 ALLOWED_SORT_FIELDS = {'name', 'created_at', 'price'}
 if sort_field not in ALLOWED_SORT_FIELDS:
-    raise ValidationError("Invalid sort field")
+    raise ValidationError("无效的排序字段")
 
-# Bad: block-list (always incomplete)
+# 错误做法：黑名单（永远不完整）
 BLOCKED_CHARS = ['<', '>', '"']
 ```
 
-**Parameterized Queries** (never concatenate user input):
+**参数化查询**（绝不拼接用户输入）：
 ```python
-# Good: parameterized
+# 良好做法：参数化
 cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
 
-# Bad: SQL injection vulnerability
+# 错误做法：SQL 注入漏洞
 cursor.execute(f"SELECT * FROM users WHERE id = {user_id}")
 ```
 
-### File Upload Validation
+### 文件上传验证
 
-- Validate MIME type server-side (not just extension)
-- Enforce file size limits
-- Generate random filenames (never use user-supplied names)
-- Store uploads outside the web root
-- Scan for malware if accepting from untrusted users
+- 在服务端验证 MIME 类型（不仅依赖扩展名）
+- 强制执行文件大小限制
+- 生成随机文件名（绝不使用用户提供的名称）
+- 将上传文件存储在 Web 根目录之外
+- 若接受不受信任用户上传的文件，需进行恶意软件扫描
 
-### STOP — Do NOT proceed to Phase 4 until:
-- [ ] All identified issues have remediation recommendations
-- [ ] Auth patterns are correctly applied
-- [ ] Input validation is comprehensive
+### 停止 — 在完成以下事项前，请勿进入阶段 4：
+- [ ] 所有已识别问题均有修复建议
+- [ ] 身份验证模式已正确应用
+- [ ] 输入验证全面无遗漏
 
 ---
 
-## Phase 4: Infrastructure and Dependency Hardening
+## 阶段 4：基础设施与依赖项加固
 
-**Goal:** Secure the deployment environment and supply chain.
+**目标：** 保护部署环境与供应链安全。
 
-### Secrets Management Rules
+### 密钥管理规则
 
-| Environment | Method |
+| 环境 | 方法 |
 |-------------|--------|
-| Development | `.env` files (git-ignored) |
-| CI/CD | Pipeline secrets (GitHub Secrets, GitLab CI vars) |
-| Production | Secrets manager (AWS Secrets Manager, Vault, GCP Secret Manager) |
+| 开发环境 | `.env` 文件（已加入 gitignore） |
+| CI/CD | 流水线密钥（GitHub Secrets、GitLab CI 变量） |
+| 生产环境 | 密钥管理服务（AWS Secrets Manager、Vault、GCP Secret Manager） |
 
-### Secrets Never List
+### 密钥管理“绝对禁止”清单
 
-- Never hard-code secrets in source code
-- Never commit `.env` files to git
-- Never log secrets (even at debug level)
-- Never pass secrets as command-line arguments
-- Never use the same secrets across environments
+- 绝不将密钥硬编码在源代码中
+- 绝不让 `.env` 文件提交到 git
+- 绝不在日志中记录密钥（即使是在调试级别）
+- 绝不通过命令行参数传递密钥
+- 绝不在不同环境中使用相同的密钥
 
-### Dependency Auditing Commands
+### 依赖项审计命令
 
 ```bash
 # Node.js
@@ -155,111 +155,111 @@ govulncheck ./...
 cargo audit
 ```
 
-### Security Headers
+### 安全标头
 
-| Header | Value | Purpose |
+| 标头 | 值 | 用途 |
 |--------|-------|---------|
-| `Content-Security-Policy` | `default-src 'self'` (customize per app) | Prevents XSS, data injection |
-| `Strict-Transport-Security` | `max-age=63072000; includeSubDomains` | Forces HTTPS |
-| `X-Content-Type-Options` | `nosniff` | Prevents MIME sniffing |
-| `X-Frame-Options` | `DENY` or `SAMEORIGIN` | Prevents clickjacking |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` | Controls referer leakage |
-| `Permissions-Policy` | Disable unused APIs | Limits browser feature access |
+| `Content-Security-Policy` | `default-src 'self'`（根据应用自定义） | 防止 XSS 和数据注入 |
+| `Strict-Transport-Security` | `max-age=63072000; includeSubDomains` | 强制使用 HTTPS |
+| `X-Content-Type-Options` | `nosniff` | 防止 MIME 类型嗅探 |
+| `X-Frame-Options` | `DENY` 或 `SAMEORIGIN` | 防止点击劫持 |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | 控制 Referer 泄露 |
+| `Permissions-Policy` | 禁用未使用的 API | 限制浏览器功能访问 |
 
-### CORS Rules
+### CORS 规则
 
-- Never use `Access-Control-Allow-Origin: *` with credentials
-- Allowlist specific origins
-- Restrict allowed methods and headers to what is needed
+- 携带凭证时绝不使用 `Access-Control-Allow-Origin: *`
+- 白名单化特定来源（Origin）
+- 仅允许必要的 HTTP 方法和标头
 
 ---
 
-## Phase 5: Threat Modeling (STRIDE)
+## 阶段 5：威胁建模（STRIDE）
 
-**Goal:** For new features or significant changes, walk through each threat category.
+**目标：** 针对新功能或重大变更，逐一排查每个威胁类别。
 
-| Threat | Question | Mitigation |
+| 威胁 | 问题 | 缓解措施 |
 |--------|----------|-----------|
-| **Spoofing** | Can an attacker pretend to be someone else? | Strong authentication, MFA |
-| **Tampering** | Can data be modified without detection? | Integrity checks, signatures |
-| **Repudiation** | Can a user deny performing an action? | Audit logging |
-| **Information Disclosure** | Can sensitive data leak through errors, logs, or side channels? | Error sanitization, encryption |
-| **Denial of Service** | Can the system be overwhelmed? | Rate limits, resource quotas |
-| **Elevation of Privilege** | Can a user gain permissions they should not have? | Least privilege, RBAC |
+| **欺骗（Spoofing）** | 攻击者能否冒充他人？ | 强身份验证、多因素认证（MFA） |
+| **篡改（Tampering）** | 数据能否在未被察觉的情况下被修改？ | 完整性检查、数字签名 |
+| **抵赖（Repudiation）** | 用户能否否认其执行的操作？ | 审计日志 |
+| **信息泄露（Information Disclosure）** | 敏感数据是否会通过错误、日志或侧信道泄露？ | 错误信息清理、加密 |
+| **拒绝服务（Denial of Service）** | 系统是否可能被压垮？ | 速率限制、资源配额 |
+| **权限提升（Elevation of Privilege）** | 用户能否获取其不应拥有的权限？ | 最小权限原则、基于角色的访问控制（RBAC） |
 
-For each identified threat:
-1. Document the threat and attack vector
-2. Assess likelihood and impact
-3. Define mitigations
-4. Verify mitigations are implemented and tested
+针对每个已识别的威胁：
+1. 记录威胁与攻击向量
+2. 评估发生概率与影响程度
+3. 定义缓解措施
+4. 验证缓解措施已实施并经过测试
 
 ---
 
-## Decision Table: Security Review Depth
+## 决策表：安全审查深度
 
-| Change Type | Review Depth | Focus Areas |
+| 变更类型 | 审查深度 | 重点关注领域 |
 |-------------|-------------|-------------|
-| Auth/session changes | Full STRIDE + OWASP | All categories |
-| User input handling | Injection + validation focus | OWASP 1, 3, 10 |
-| Dependency update | CVE scan + changelog review | OWASP 6 |
-| API endpoint addition | Access control + input validation | OWASP 1, 3, 5 |
-| Config/infrastructure | Secrets + headers + misconfig | OWASP 2, 5 |
-| File upload feature | Injection + SSRF + malware | OWASP 3, 10 |
+| 身份验证/会话变更 | 完整 STRIDE + OWASP | 所有类别 |
+| 用户输入处理 | 注入 + 验证重点 | OWASP 1, 3, 10 |
+| 依赖项更新 | CVE 扫描 + 更新日志审查 | OWASP 6 |
+| API 端点新增 | 访问控制 + 输入验证 | OWASP 1, 3, 5 |
+| 配置/基础设施 | 密钥 + 标头 + 错误配置 | OWASP 2, 5 |
+| 文件上传功能 | 注入 + SSRF + 恶意软件 | OWASP 3, 10 |
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
+| 反模式 | 为何错误 | 正确做法 |
 |-------------|----------------|-----------------|
-| Client-side only validation | Easily bypassed | Always validate server-side |
-| Storing tokens in localStorage | XSS can steal them | Use HttpOnly cookies |
-| Block-list input validation | Always incomplete | Use allow-list validation |
-| Generic error messages in production | May leak internal details | Sanitize errors, log details server-side |
-| Same secrets across environments | Breach of one compromises all | Unique secrets per environment |
-| Ignoring dependency CVEs | Known vulnerabilities are actively exploited | Audit and update regularly |
-| CORS wildcard with credentials | Defeats CORS protection entirely | Allowlist specific origins |
-| Logging sensitive data | Log exposure creates data breach | Never log secrets, PII, or tokens |
+| 仅客户端验证 | 极易被绕过 | 始终在服务端进行验证 |
+| 将令牌存储在 localStorage | XSS 可窃取令牌 | 使用 HttpOnly Cookie |
+| 黑名单输入验证 | 永远无法穷尽 | 使用白名单验证 |
+| 生产环境使用通用错误信息 | 可能泄露内部细节 | 清理错误信息，在服务端记录详细日志 |
+| 各环境使用相同密钥 | 一处泄露，全盘失守 | 每个环境使用独立密钥 |
+| 忽略依赖项 CVE | 已知漏洞会被积极利用 | 定期审计并更新 |
+| 携带凭证时使用 CORS 通配符 | 完全破坏 CORS 保护机制 | 白名单化特定来源 |
+| 记录敏感数据 | 日志暴露会导致数据泄露 | 绝不记录密钥、PII 或令牌 |
 
 ---
 
-## Secrets Rotation Schedule
+## 密钥轮换计划
 
-| Secret Type | Rotation Frequency | After Suspected Compromise |
+| 密钥类型 | 轮换频率 | 疑似泄露后 |
 |------------|-------------------|--------------------------|
-| API keys | Every 90 days | Immediately |
-| Database passwords | Every 90 days | Immediately |
-| Encryption keys | Annually (support key versioning) | Immediately |
-| JWT signing keys | Every 6 months | Immediately |
-| OAuth client secrets | Every 90 days | Immediately |
+| API 密钥 | 每 90 天 | 立即 |
+| 数据库密码 | 每 90 天 | 立即 |
+| 加密密钥 | 每年（支持密钥版本管理） | 立即 |
+| JWT 签名密钥 | 每 6 个月 | 立即 |
+| OAuth 客户端密钥 | 每 90 天 | 立即 |
 
 ---
 
-## Subagent Dispatch Opportunities
+## 子代理调度机会
 
-| Task Pattern | Dispatch To | When |
+| 任务模式 | 调度至 | 时机 |
 |---|---|---|
-| Scanning different OWASP categories in parallel | `Agent` tool with `subagent_type="Explore"` (one per category) | When reviewing a large codebase across multiple vulnerability types |
-| Authentication flow analysis | `Agent` tool with `subagent_type="general-purpose"` | When auth implementation spans multiple files/services |
-| Dependency vulnerability scanning | `Bash` tool with `run_in_background=true` | When running `npm audit` or similar tools concurrently |
+| 并行扫描不同 OWASP 类别 | 带有 `subagent_type="Explore"` 的 `Agent` 工具（每个类别一个） | 在跨多种漏洞类型审查大型代码库时 |
+| 身份验证流程分析 | 带有 `subagent_type="general-purpose"` 的 `Agent` 工具 | 当身份验证实现跨越多个文件/服务时 |
+| 依赖项漏洞扫描 | 带有 `run_in_background=true` 的 `Bash` 工具 | 在并发运行 `npm audit` 或类似工具时 |
 
-Follow the `dispatching-parallel-agents` skill protocol when dispatching.
+调度时请遵循 `dispatching-parallel-agents` 技能协议。
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关联关系 |
 |-------|-------------|
-| `code-review` | Security findings are Critical category issues |
-| `senior-backend` | Backend hardening follows security review findings |
-| `senior-fullstack` | Auth implementation follows security patterns |
-| `acceptance-testing` | Security requirements become acceptance criteria |
-| `performance-optimization` | Rate limiting serves both security and performance |
-| `systematic-debugging` | Security incidents trigger debugging workflow |
+| `code-review` | 安全发现项属于 Critical（关键）类别问题 |
+| `senior-backend` | 后端加固遵循安全审查发现项 |
+| `senior-fullstack` | 身份验证实现遵循安全模式 |
+| `acceptance-testing` | 安全要求转化为验收标准 |
+| `performance-optimization` | 速率限制同时服务于安全与性能 |
+| `systematic-debugging` | 安全事件触发调试工作流 |
 
 ---
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt the depth of review to the change type using the decision table. The OWASP checklist and STRIDE analysis are strongly recommended for any auth or input-handling changes. Secrets management rules are non-negotiable.
+**灵活（FLEXIBLE）** — 使用决策表根据变更类型调整审查深度。对于任何涉及身份验证或输入处理的变更，强烈建议使用 OWASP 检查清单和 STRIDE 分析。密钥管理规则不可妥协（必须严格遵守）。

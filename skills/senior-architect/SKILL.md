@@ -1,285 +1,285 @@
 ---
 name: senior-architect
-description: "Use when the user needs system design, architecture decision records, scalability analysis, trade-off evaluation, or non-functional requirements planning. Triggers: new system design, technology selection, scaling strategy, ADR creation, infrastructure topology, service boundary definition."
+description: "当用户需要系统设计、架构决策记录、可扩展性分析、权衡评估或非功能性需求规划时使用。触发条件：新系统设计、技术选型、扩容策略、创建 ADR、基础设施拓扑、服务边界定义。"
 ---
 
-# Senior Architect
+# 高级架构师
 
-## Overview
+## 概述
 
-Provide architecture-level guidance for system design decisions. This skill produces Architecture Decision Records (ADRs), trade-off analyses, scalability blueprints, and non-functional requirements specifications. Every recommendation includes explicit trade-offs and is grounded in proven patterns.
+为系统设计决策提供架构级指导。此技能产出架构决策记录（ADR）、权衡分析、可扩展性蓝图和非功能性需求规范。每项建议都包含明确的权衡说明，并基于经过验证的模式。
 
-**Announce at start:** "I'm using the senior-architect skill for system design and architecture decisions."
-
----
-
-## Phase 1: Requirements Analysis
-
-**Goal:** Capture all functional and non-functional requirements before designing.
-
-### Actions
-
-1. Identify functional requirements (capabilities)
-2. Define non-functional requirements (quality attributes)
-3. Identify constraints (budget, team, timeline, compliance)
-4. Map integration points with existing systems
-5. Establish success criteria and SLOs
-
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] Functional requirements are listed
-- [ ] Non-functional requirements are quantified (not vague)
-- [ ] Constraints are explicit
-- [ ] Success criteria are measurable
+**开始声明：**“我正在使用 senior-architect 技能进行系统设计和架构决策。”
 
 ---
 
-## Phase 2: Architecture Design
+## 第一阶段：需求分析
 
-**Goal:** Evaluate options and select the approach with the best trade-off profile.
+**目标：** 在设计之前捕获所有功能性和非功能性需求。
 
-### Actions
+### 操作
 
-1. Evaluate architectural styles (monolith, microservices, event-driven)
-2. Design component boundaries and interfaces
-3. Define data architecture (storage, flow, consistency)
-4. Plan infrastructure and deployment topology
-5. Address cross-cutting concerns (auth, logging, monitoring)
+1. 识别功能性需求（能力）
+2. 定义非功能性需求（质量属性）
+3. 识别约束条件（预算、团队、时间线、合规性）
+4. 映射与现有系统的集成点
+5. 建立成功标准和 SLO（服务等级目标）
 
-### Architecture Style Decision Table
+### 停止 — 在满足以下条件前，请勿进入第二阶段：
+- [ ] 已列出功能性需求
+- [ ] 非功能性需求已量化（而非模糊描述）
+- [ ] 约束条件已明确
+- [ ] 成功标准可衡量
 
-| Factor | Monolith | Modular Monolith | Microservices | Serverless |
+---
+
+## 第二阶段：架构设计
+
+**目标：** 评估选项并选择权衡特征最佳的方案。
+
+### 操作
+
+1. 评估架构风格（单体、微服务、事件驱动）
+2. 设计组件边界和接口
+3. 定义数据架构（存储、流转、一致性）
+4. 规划基础设施和部署拓扑
+5. 处理横切关注点（认证、日志、监控）
+
+### 架构风格决策表
+
+| 因素 | 单体架构 | 模块化单体 | 微服务 | Serverless |
 |--------|----------|-----------------|---------------|------------|
-| Team size < 10 | Preferred | Strong fit | Overkill | Good for bursty |
-| Team size > 30 | Challenging | Good | Preferred | Depends |
-| Domain well-understood | Good fit | Good fit | Not needed yet | Good fit |
-| Domain evolving rapidly | Fine to start | Good fit | Too early | Good fit |
-| Need independent deployment | Not possible | Limited | Key benefit | Built-in |
-| Operational maturity low | Good fit | Good fit | High risk | Managed risk |
-| Variable/bursty load | Over-provisioned | Over-provisioned | Possible | Strong fit |
+| 团队规模 < 10 | 首选 | 高度契合 | 过度设计 | 适合突发流量 |
+| 团队规模 > 30 | 具有挑战性 | 良好 | 首选 | 视情况而定 |
+| 领域理解清晰 | 良好契合 | 良好契合 | 暂不需要 | 良好契合 |
+| 领域快速演变 | 可起步 | 良好契合 | 为时过早 | 良好契合 |
+| 需要独立部署 | 无法实现 | 受限 | 核心优势 | 内置支持 |
+| 运维成熟度低 | 良好契合 | 良好契合 | 高风险 | 风险受控 |
+| 负载波动/突发 | 资源过度配置 | 资源过度配置 | 可能适用 | 高度契合 |
 
-### Default Recommendation
+### 默认推荐
 
-Start with **Modular Monolith**: clear module boundaries, single deployment. Extract to microservices only when you have proven need for independent scaling, deployment, or team autonomy.
+从 **模块化单体** 开始：清晰的模块边界，单一部署。仅在确实需要独立扩展、独立部署或团队自治时，才将其拆分为微服务。
 
-### Trade-Off Analysis: Common Pairs
+### 权衡分析：常见组合
 
-| Improving | May Degrade |
+| 提升项 | 可能降级项 |
 |-----------|-------------|
-| Consistency | Availability, Latency |
-| Performance | Maintainability, Cost |
-| Security | Usability, Performance |
-| Scalability | Simplicity, Cost |
-| Flexibility | Performance, Complexity |
-| Time to Market | Quality, Scalability |
+| 一致性 | 可用性、延迟 |
+| 性能 | 可维护性、成本 |
+| 安全性 | 易用性、性能 |
+| 可扩展性 | 简洁性、成本 |
+| 灵活性 | 性能、复杂度 |
+| 上市时间 | 质量、可扩展性 |
 
-### Decision Matrix Template
+### 决策矩阵模板
 
 ```
-Weight each quality attribute (1-5), score each option (1-5), multiply and sum.
+为每个质量属性分配权重（1-5），为每个选项打分（1-5），相乘后求和。
 
-| Quality Attribute  | Weight | Option A | Option B | Option C |
+| 质量属性          | 权重 | 选项 A | 选项 B | 选项 C |
 |--------------------|--------|----------|----------|----------|
-| Performance        |   4    |  4 (16)  |  3 (12)  |  5 (20)  |
-| Maintainability    |   5    |  5 (25)  |  4 (20)  |  2 (10)  |
-| Scalability        |   3    |  3 (9)   |  5 (15)  |  4 (12)  |
-| Cost               |   4    |  4 (16)  |  2 (8)   |  3 (12)  |
-| Total              |        |    66    |    55    |    54    |
+| 性能               |   4    |  4 (16)  |  3 (12)  |  5 (20)  |
+| 可维护性           |   5    |  5 (25)  |  4 (20)  |  2 (10)  |
+| 可扩展性           |   3    |  3 (9)   |  5 (15)  |  4 (12)  |
+| 成本               |   4    |  4 (16)  |  2 (8)   |  3 (12)  |
+| 总计               |        |    66    |    55    |    54    |
 ```
 
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] At least 2 architectural options have been evaluated
-- [ ] Trade-offs are explicitly documented
-- [ ] Decision matrix scores support the recommendation
-- [ ] Data architecture is defined
+### 停止 — 在满足以下条件前，请勿进入第三阶段：
+- [ ] 已评估至少 2 种架构选项
+- [ ] 已明确记录权衡点
+- [ ] 决策矩阵得分支持该推荐方案
+- [ ] 已定义数据架构
 
 ---
 
-## Phase 3: Documentation and Validation
+## 第三阶段：文档记录与验证
 
-**Goal:** Record decisions and validate against requirements.
+**目标：** 记录决策并对照需求进行验证。
 
-### Actions
+### 操作
 
-1. Write Architecture Decision Records for key decisions
-2. Create system context and container diagrams (C4 model)
-3. Validate against non-functional requirements
-4. Identify risks and mitigation strategies
-5. Define evolutionary architecture guardrails
+1. 为关键决策编写架构决策记录（ADR）
+2. 创建系统上下文和容器图（C4 模型）
+3. 对照非功能性需求进行验证
+4. 识别风险及缓解策略
+5. 定义演进式架构护栏
 
-### ADR Format
+### ADR 格式
 
 ```markdown
-# ADR-{number}: {Title}
+# ADR-{编号}: {标题}
 
-## Status
-Proposed | Accepted | Deprecated | Superseded by ADR-{number}
+## 状态
+提议中 | 已采纳 | 已弃用 | 被 ADR-{编号} 取代
 
-## Context
-What is the issue motivating this decision?
+## 背景
+是什么问题促使了这项决策？
 
-## Decision
-What change are we proposing?
+## 决策
+我们提议做出什么改变？
 
-## Consequences
+## 后果
 
-### Positive
-- [Benefit 1]
-- [Benefit 2]
+### 积极影响
+- [收益 1]
+- [收益 2]
 
-### Negative
-- [Trade-off 1]
-- [Trade-off 2]
+### 消极影响
+- [权衡 1]
+- [权衡 2]
 
-### Risks
-- [Risk and mitigation]
+### 风险
+- [风险及缓解措施]
 
-## Alternatives Considered
-| Option | Pros | Cons | Verdict |
+## 考虑过的替代方案
+| 选项 | 优点 | 缺点 | 结论 |
 |--------|------|------|---------|
-| Option A | ... | ... | Chosen |
-| Option B | ... | ... | Rejected because... |
+| 选项 A | ... | ... | 已选择 |
+| 选项 B | ... | ... | 因...被拒绝 |
 ```
 
-### C4 Model Levels
+### C4 模型层级
 
-| Level | Shows | When to Use |
+| 层级 | 展示内容 | 适用场景 |
 |-------|-------|-------------|
-| Level 1: System Context | Users and external systems | Always |
-| Level 2: Container | Major technical building blocks | Always |
-| Level 3: Component | Components within containers | Complex services |
-| Level 4: Code | Class-level detail | Critical/complex areas only |
+| 第 1 层：系统上下文 | 用户与外部系统 | 始终需要 |
+| 第 2 层：容器 | 主要技术构建块 | 始终需要 |
+| 第 3 层：组件 | 容器内的组件 | 复杂服务 |
+| 第 4 层：代码 | 类级细节 | 仅限关键/复杂区域 |
 
-### STOP — Documentation complete when:
-- [ ] ADRs written for all key decisions
-- [ ] System context diagram created
-- [ ] NFRs validated against design
-- [ ] Risks documented with mitigations
+### 停止 — 满足以下条件即视为文档记录完成：
+- [ ] 已为所有关键决策编写 ADR
+- [ ] 已创建系统上下文图
+- [ ] 已针对设计验证 NFR
+- [ ] 已记录风险及缓解措施
 
 ---
 
-## Scalability Patterns
+## 可扩展性模式
 
-### Horizontal Scaling Decision Table
+### 水平扩展决策表
 
-| Pattern | Use When | Implementation |
+| 模式 | 适用场景 | 实现方式 |
 |---------|----------|---------------|
-| Load Balancing | Multiple instances of same service | Round-robin, least connections, IP hash |
-| Stateless Services | Need to add/remove instances freely | JWT/external session store |
-| Auto-scaling | Variable load patterns | CPU/memory/request-rate triggers |
-| Read Replicas | Read-heavy workloads | Route reads to replicas, writes to primary |
+| 负载均衡 | 同一服务的多个实例 | 轮询、最少连接数、IP 哈希 |
+| 无状态服务 | 需要自由增减实例 | JWT/外部会话存储 |
+| 自动扩缩容 | 负载波动模式 | 基于 CPU/内存/请求率触发 |
+| 只读副本 | 读多写少的工作负载 | 读请求路由至副本，写请求路由至主库 |
 
-### Sharding Strategy Decision Table
+### 分片策略决策表
 
-| Strategy | How | Good For |
+| 策略 | 方法 | 适用场景 |
 |----------|-----|----------|
-| Hash-based | Consistent hash of key | Even distribution |
-| Range-based | Date range, ID range | Time-series data |
-| Geographic | By region/country | Data locality |
-| Tenant-based | Per customer | Multi-tenant SaaS |
+| 基于哈希 | 键的一致性哈希 | 均匀分布 |
+| 基于范围 | 日期范围、ID 范围 | 时序数据 |
+| 基于地理 | 按区域/国家 | 数据本地化 |
+| 基于租户 | 按客户划分 | 多租户 SaaS |
 
-### Caching Layers
+### 缓存层级
 
 ```
-Client Cache (browser) -> CDN Cache -> API Gateway Cache ->
-Application Cache (Redis) -> Database Query Cache -> Database
+客户端缓存（浏览器） -> CDN 缓存 -> API 网关缓存 ->
+应用缓存（Redis） -> 数据库查询缓存 -> 数据库
 ```
 
 ---
 
-## Non-Functional Requirements Template
+## 非功能性需求模板
 
 ```markdown
-## Performance
-- Response time: p95 < 200ms, p99 < 500ms for API calls
-- Throughput: 1000 RPS sustained, 5000 RPS peak
-- Batch processing: 1M records/hour
+## 性能
+- 响应时间：API 调用 p95 < 200ms，p99 < 500ms
+- 吞吐量：持续 1000 RPS，峰值 5000 RPS
+- 批处理：100 万条记录/小时
 
-## Availability
-- Target: 99.9% (8.76h downtime/year)
-- RTO (Recovery Time Objective): < 15 minutes
-- RPO (Recovery Point Objective): < 5 minutes
+## 可用性
+- 目标：99.9%（每年停机时间 8.76 小时）
+- RTO（恢复时间目标）：< 15 分钟
+- RPO（恢复点目标）：< 5 分钟
 
-## Scalability
-- Current: 10K DAU
-- 12-month target: 100K DAU
-- Scale dimension: users, data volume, request rate
+## 可扩展性
+- 当前：1 万 DAU（日活跃用户）
+- 12 个月目标：10 万 DAU
+- 扩展维度：用户数、数据量、请求率
 
-## Security
-- Authentication: OAuth 2.0 / OIDC
-- Authorization: RBAC with resource-level permissions
-- Data encryption: at rest (AES-256) and in transit (TLS 1.3)
+## 安全性
+- 认证：OAuth 2.0 / OIDC
+- 授权：带资源级权限的 RBAC（基于角色的访问控制）
+- 数据加密：静态加密（AES-256）与传输中加密（TLS 1.3）
 
-## Observability
-- Logging: structured JSON, 30-day retention
-- Metrics: RED method, custom business metrics
-- Tracing: distributed tracing across all services
-- Alerting: PagerDuty integration, tiered severity
+## 可观测性
+- 日志：结构化 JSON，保留 30 天
+- 指标：RED 方法、自定义业务指标
+- 链路追踪：跨所有服务的分布式追踪
+- 告警：集成 PagerDuty，分级严重度
 ```
 
-### SLO/SLA/SLI Framework
+### SLO/SLA/SLI 框架
 
-| Term | Definition | Example |
+| 术语 | 定义 | 示例 |
 |------|-----------|---------|
-| **SLI** | Measurable metric | Request latency, error rate |
-| **SLO** | Target value | 99.9% availability |
-| **SLA** | Contractual commitment | 99.5% with penalty clause |
-| **Error Budget** | 1 - SLO | 0.1% = 8.76h/year |
+| **SLI** | 可测量的指标 | 请求延迟、错误率 |
+| **SLO** | 目标值 | 99.9% 可用性 |
+| **SLA** | 合同承诺 | 99.5% 并附带违约条款 |
+| **错误预算** | 1 - SLO | 0.1% = 每年 8.76 小时 |
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
+| 反模式 | 错误原因 | 正确做法 |
 |-------------|----------------|-----------------|
-| Resume-driven architecture | Complexity without benefit | Choose simplest solution that works |
-| Distributed monolith | All downsides of both | Either true monolith or true microservices |
-| Premature optimization | Scaling for 1M users with 100 | Design for current + 10x, not 1000x |
-| Golden hammer | One technology for everything | Right tool for each problem |
-| Architecture without validation | Untested assumptions | Load test, failure test, validate |
-| Big upfront design without iteration | Requirements change | Evolutionary architecture with guardrails |
-| Vague NFRs ("fast", "scalable") | Cannot be validated | Quantified targets with measurement |
+| 简历驱动型架构 | 只有复杂度，没有实际收益 | 选择能解决问题的最简单方案 |
+| 分布式单体 | 兼具两者的所有缺点 | 要么是真单体，要么是真微服务 |
+| 过早优化 | 仅有 100 用户却按 100 万设计 | 按当前规模 +10 倍设计，而非 1000 倍 |
+| 金锤子（技术滥用） | 用单一技术解决所有问题 | 针对每个问题选择合适的工具 |
+| 未经验证的架构 | 假设未经测试 | 进行负载测试、故障测试并验证 |
+| 无迭代的重型前期设计 | 需求会发生变化 | 采用带护栏的演进式架构 |
+| 模糊的 NFR（“快”、“可扩展”） | 无法验证 | 设定带测量方法的量化目标 |
 
 ---
 
-## Subagent Dispatch Opportunities
+## 子代理分发机会
 
-| Task Pattern | Dispatch To | When |
+| 任务模式 | 分发至 | 触发时机 |
 |---|---|---|
-| Analyzing different architecture layers | `Agent` tool with `subagent_type="Explore"` (one per layer) | When reviewing frontend, backend, and infra independently |
-| Security assessment of architecture | `Agent` tool invoking `security-review` skill | When architecture involves auth, data flow, or external APIs |
-| Performance implications analysis | `Agent` tool invoking `performance-optimization` skill | When architecture decisions affect latency or throughput |
-| Code quality review of existing patterns | `Agent` tool dispatching `code-reviewer` agent | When evaluating current codebase for refactoring |
+| 分析不同架构层 | 使用 `subagent_type="Explore"` 的 `Agent` 工具（每层一个） | 独立审查前端、后端和基础设施时 |
+| 架构安全评估 | 调用 `security-review` 技能的 `Agent` 工具 | 架构涉及认证、数据流或外部 API 时 |
+| 性能影响分析 | 调用 `performance-optimization` 技能的 `Agent` 工具 | 架构决策影响延迟或吞吐量时 |
+| 现有模式代码质量审查 | 分发 `code-reviewer` 代理的 `Agent` 工具 | 评估当前代码库以进行重构时 |
 
-Follow the `dispatching-parallel-agents` skill protocol when dispatching.
+分发时请遵循 `dispatching-parallel-agents` 技能协议。
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关系 |
 |-------|-------------|
-| `senior-backend` | Backend implementation follows architecture decisions |
-| `senior-fullstack` | Full-stack architecture follows service boundaries |
-| `security-review` | Security is a cross-cutting architectural concern |
-| `performance-optimization` | Performance NFRs drive optimization targets |
-| `planning` | Architecture decisions inform implementation planning |
-| `code-review` | Review validates architectural consistency |
-| `acceptance-testing` | NFRs become acceptance criteria |
+| `senior-backend` | 后端实现遵循架构决策 |
+| `senior-fullstack` | 全栈架构遵循服务边界 |
+| `security-review` | 安全是跨架构的横切关注点 |
+| `performance-optimization` | 性能 NFR 驱动优化目标 |
+| `planning` | 架构决策指导实施计划 |
+| `code-review` | 审查用于验证架构一致性 |
+| `acceptance-testing` | NFR 转化为验收标准 |
 
 ---
 
-## Key Principles
+## 核心原则
 
-- Start with the simplest architecture that could work
-- Make decisions reversible when possible
-- Design for failure (everything will fail eventually)
-- Optimize for team cognitive load, not technical elegance
-- Document decisions, not just outcomes
-- Prefer boring technology for critical paths
-- Every architectural decision has a cost — make it explicit
+- 从能够运行的最简单架构开始
+- 尽可能使决策可逆
+- 为失败而设计（一切最终都会故障）
+- 优化团队认知负载，而非技术优雅度
+- 记录决策过程，而不仅仅是结果
+- 关键路径优先使用成熟稳妥的技术
+- 每个架构决策都有成本——务必明确列出
 
 ---
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt architecture recommendations to the specific context. ADRs are strongly recommended for all significant decisions. Trade-off analysis is mandatory. NFRs must be quantified, not described vaguely.
+**FLEXIBLE（灵活）** — 根据具体上下文调整架构建议。强烈建议为所有重大决策编写 ADR。权衡分析是强制性的。NFR 必须量化，不能模糊描述。

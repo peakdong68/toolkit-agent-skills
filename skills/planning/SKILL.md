@@ -1,310 +1,299 @@
 ---
 name: planning
-description: 'Use when starting any implementation task, feature request, bug fix, or refactoring work. Triggers on /plan command, before any code is written, when requirements need structured analysis, or when transitioning from brainstorming to implementation. Forces question-asking, approach comparison, and explicit approval before any code.'
+description: "在任何实现任务、功能请求、错误修复或重构工作开始时使用。在编写任何代码之前、当需求需要结构化分析时，或从头脑风暴过渡到实现阶段时触发。/plan 命令也会触发。强制要求在编写任何代码之前提出问题、比较方法并获得明确批准。"
 ---
 
-# Structured Planning
+# 结构化规划
 
-## Overview
+## 概述
 
-Structured planning converts vague requirements into approved, documented implementation plans before any code is written. It forces clarifying questions, approach comparison with trade-offs, and explicit user approval — preventing the most common cause of wasted effort: building the wrong thing. Every task, regardless of perceived simplicity, goes through this process.
+结构化规划要求在编写任何代码之前，将模糊的需求转化为已批准、已记录的实现计划。它强制要求提出澄清性问题、权衡比较不同方案，并获取用户的明确批准——从而避免最常见的工作浪费原因：构建了错误的东西。无论任务看起来多么简单，都必须经过此流程。
 
-**Announce at start:** "I'm using the planning skill to create a structured implementation plan."
+**开始时宣布：** “我正在使用规划技能来创建结构化的实现计划。”
 
-## Trigger Conditions
+## 触发条件
 
-- User requests a new feature, enhancement, or change
-- A bug fix requires more than a one-line change
-- Refactoring work spanning multiple files
-- Any task where the approach is not already documented and approved
-- Transition from brainstorming skill with an approved design
-- `/plan` command invoked
-
----
-
-## Phase 1: Context Gathering
-
-**Goal:** Understand the codebase and existing patterns before asking questions.
-
-1. Read relevant files, docs, recent commits, and CLAUDE.md
-2. Check memory files for known project context, stack, and conventions
-3. Review existing plans in `docs/plans/` for related work
-4. Identify existing patterns the new work should follow
-5. Note technical constraints discovered during exploration
-
-**STOP — Do NOT proceed to Phase 2 until:**
-
-- [ ] You have explored the relevant parts of the codebase
-- [ ] You understand the existing architecture and patterns
-- [ ] You have checked memory files for prior decisions
+- 用户请求新功能、增强或更改
+- 错误修复需要超过一行的代码更改
+- 涉及多个文件的重构工作
+- 任何尚未记录并批准实现方案的任务
+- 从头脑风暴技能过渡，且设计已获批准
+- 调用 `/plan` 命令
 
 ---
 
-## Phase 2: Clarifying Questions
+## 阶段一：上下文收集
 
-**Goal:** Eliminate ambiguity by asking targeted questions one at a time.
+**目标：** 在提问之前了解代码库和现有模式。
 
-1. Ask ONE question per message — never overwhelm with multiple questions
-2. Prefer multiple choice questions when possible
-3. Study the codebase before asking — do not ask what you can discover
-4. Convert vague requirements into specific, testable criteria
+1. 阅读相关文件、文档、近期提交记录以及 `CLAUDE.md`
+2. 检查记忆文件以获取已知的项目上下文、技术栈和约定
+3. 查看 `docs/plans/` 中现有的相关工作计划
+4. 识别新工作应遵循的现有模式
+5. 记录探索过程中发现的技术约束
 
-### Question Category Priority
-
-| Priority | Category          | Example Question                                                       |
-| -------- | ----------------- | ---------------------------------------------------------------------- |
-| 1        | Purpose           | "What problem does this solve? Who is it for?"                         |
-| 2        | Success criteria  | "How will we know it works? What does 'done' look like?"               |
-| 3        | Constraints       | "Are there performance, compatibility, or timeline constraints?"       |
-| 4        | Non-goals         | "What should we explicitly NOT build?"                                 |
-| 5        | Existing patterns | "Should we follow the pattern used in X, or is a new approach needed?" |
-| 6        | Edge cases        | "What should happen when [boundary condition]?"                        |
-
-### Question Rules
-
-| Rule                      | Rationale                                   |
-| ------------------------- | ------------------------------------------- |
-| One question per message  | Prevents cognitive overload                 |
-| Multiple choice preferred | Faster to answer, reduces ambiguity         |
-| Research before asking    | Respect user's time — discover what you can |
-| Testable criteria         | Vague answers lead to vague implementations |
-
-**STOP — Do NOT proceed to Phase 3 until:**
-
-- [ ] You understand the purpose and success criteria
-- [ ] You have identified constraints and non-goals
-- [ ] No critical ambiguities remain
+**暂停 — 在完成以下事项前，切勿进入阶段二：**
+- [ ] 你已探索代码库的相关部分
+- [ ] 你已理解现有架构和模式
+- [ ] 你已检查记忆文件以了解先前的决策
 
 ---
 
-## Phase 3: Approach Design
+## 阶段二：澄清性问题
 
-**Goal:** Propose 2-3 concrete approaches with trade-offs and a clear recommendation.
+**目标：** 通过一次一个针对性问题来消除歧义。
 
-For each approach, include:
+1. 每条消息只问一个问题——切勿用多个问题轰炸用户
+2. 尽可能使用多项选择题
+3. 提问前先研究代码库——不要问你自己能查到的问题
+4. 将模糊需求转化为具体、可验证的标准
 
-| Section              | Content                               |
-| -------------------- | ------------------------------------- |
-| Architecture summary | 2-3 sentences describing the approach |
-| Key files            | Exact paths to create/modify          |
-| Dependencies         | External deps or breaking changes     |
-| Trade-offs           | Explicit pros and cons                |
-| Effort estimate      | Number of tasks (not hours)           |
-| Risk level           | Low / Medium / High with explanation  |
+### 问题类别优先级
 
-### Approach Selection Decision Table
+| 优先级 | 类别 | 示例问题 |
+|----------|----------|-----------------|
+| 1 | 目的 | “这解决了什么问题？面向谁？” |
+| 2 | 成功标准 | “我们如何知道它生效了？‘完成’看起来是什么样的？” |
+| 3 | 约束条件 | “是否有性能、兼容性或时间线方面的约束？” |
+| 4 | 非目标 | “我们明确不应该构建什么？” |
+| 5 | 现有模式 | “我们应该遵循 X 中使用的模式，还是需要一种新方法？” |
+| 6 | 边界情况 | “当 [边界条件] 发生时应该怎么做？” |
 
-| Factor                           | Weight | How to Evaluate                                |
-| -------------------------------- | ------ | ---------------------------------------------- |
-| Alignment with existing patterns | High   | Does it match current codebase conventions?    |
-| Simplicity                       | High   | Fewest moving parts that meet requirements     |
-| Testability                      | Medium | Can each component be independently tested?    |
-| Future extensibility             | Low    | Only consider if user mentioned future plans   |
-| Performance                      | Varies | Only if user specified performance constraints |
+### 提问规则
 
-**Lead with your recommended approach.** Explain why it is the best choice given the constraints. Present alternatives to show you considered the trade-off space.
+| 规则 | 理由 |
+|------|-----------|
+| 每条消息只问一个问题 | 防止认知过载 |
+| 优先使用多项选择 | 回答更快，减少歧义 |
+| 提问前先做研究 | 尊重用户时间——能查到的自己查 |
+| 标准需可验证 | 模糊的答案会导致模糊的实现 |
 
-**STOP — Do NOT proceed to Phase 4 until:**
-
-- [ ] You have proposed at least 2 approaches
-- [ ] Each approach has trade-offs documented
-- [ ] You have made a clear recommendation with reasoning
+**暂停 — 在完成以下事项前，切勿进入阶段三：**
+- [ ] 你已理解目的和成功标准
+- [ ] 你已识别约束条件和非目标
+- [ ] 不存在关键歧义
 
 ---
 
-## Phase 4: Plan Documentation
+## 阶段三：方案设计
 
-**Goal:** Write a detailed, executable plan document and get explicit approval.
+**目标：** 提出 2-3 个具体方案，包含权衡分析并给出明确推荐。
 
-### Plan Document Format
+对于每个方案，需包含：
+
+| 章节 | 内容 |
+|---------|---------|
+| 架构摘要 | 用 2-3 句话描述该方案 |
+| 关键文件 | 需要创建/修改的精确路径 |
+| 依赖项 | 外部依赖或破坏性变更 |
+| 权衡分析 | 明确的优缺点 |
+| 工作量估算 | 任务数量（非小时数） |
+| 风险等级 | 低 / 中 / 高，附说明 |
+
+### 方案选择决策表
+
+| 因素 | 权重 | 评估方式 |
+|--------|--------|----------------|
+| 与现有模式的一致性 | 高 | 是否符合当前代码库约定？ |
+| 简洁性 | 高 | 满足需求的前提下，变动部件最少 |
+| 可测试性 | 中 | 每个组件能否独立测试？ |
+| 未来可扩展性 | 低 | 仅当用户提及未来计划时考虑 |
+| 性能 | 视情况而定 | 仅当用户指定性能约束时考虑 |
+
+**首先给出你推荐的方案。** 结合约束条件解释为何它是最佳选择。提供备选方案以表明你已全面考虑了权衡空间。
+
+**暂停 — 在完成以下事项前，切勿进入阶段四：**
+- [ ] 你已提出至少 2 个方案
+- [ ] 每个方案都记录了权衡分析
+- [ ] 你已给出带有明确理由的推荐方案
+
+---
+
+## 阶段四：计划文档化
+
+**目标：** 编写详细的可执行计划文档并获取明确批准。
+
+### 计划文档格式
 
 ```markdown
-# [Feature Name] Implementation Plan
+# [功能名称] 实现计划
 
-**Goal:** [One sentence]
-**Architecture:** [2-3 sentences]
-**Approach:** [Which approach was chosen and why]
+**目标：** [一句话描述]
+**架构：** [2-3 句话]
+**方案：** [选择哪个方案及原因]
 
 ---
 
-### Task N: [Component Name]
+### 任务 N：[组件名称]
 
-**Files:**
+**文件：**
+- 创建：`精确/路径/到/文件.ext`
+- 修改：`精确/路径/到/现有文件.ext`
+- 测试：`tests/精确/路径/到/测试文件.ext`
 
-- Create: `exact/path/to/file.ext`
-- Modify: `exact/path/to/existing.ext`
-- Test: `tests/exact/path/to/test.ext`
+**步骤：**
+1. 编写失败的测试
+2. 运行测试以确认其失败
+3. 编写最小化实现代码
+4. 运行测试以确认其通过
+5. 提交代码
 
-**Steps:**
-
-1. Write the failing test
-2. Run test to verify it fails
-3. Write minimal implementation
-4. Run test to verify it passes
-5. Commit
-
-**Verification:** [Exact command to verify this task]
+**验证：** [验证此任务的精确命令]
 ```
 
-### Plan Quality Checklist
+### 计划质量检查清单
 
-| Criterion                             | Check                           |
-| ------------------------------------- | ------------------------------- |
-| Every task has exact file paths       | No "somewhere in src/"          |
-| Every task has a verification command | No "eyeball it"                 |
-| Tasks are ordered by dependency       | No forward references           |
-| Tasks are 2-5 minutes each            | No "implement the whole module" |
-| TDD steps are explicit                | RED-GREEN-REFACTOR per task     |
+| 标准 | 检查项 |
+|-----------|-------|
+| 每个任务都有精确文件路径 | 无“在 src/ 的某处”这类模糊表述 |
+| 每个任务都有验证命令 | 无“肉眼检查一下”这类表述 |
+| 任务按依赖关系排序 | 无向前引用 |
+| 每个任务耗时 2-5 分钟 | 无“实现整个模块”这类庞大任务 |
+| TDD 步骤明确 | 每个任务遵循 RED-GREEN-REFACTOR 流程 |
 
-Save the plan to `docs/plans/<date>_<topic>/plan.md`.
+将计划保存至 `docs/plans/<date>_<id>_<topic>/plan.md`。
 
-**STOP — Do NOT proceed to Phase 5 until:**
-
-- [ ] Plan document is written and saved
-- [ ] Every task has file paths, steps, and verification
-- [ ] User has explicitly approved the plan (said "yes", "approved", "go ahead", etc.)
-
----
-
-## Phase 5: Transition to Execution
-
-**Goal:** Hand off the approved plan to the appropriate execution skill.
-
-### Transition Decision Table
-
-| Situation                                    | Next Skill                    | Rationale                            |
-| -------------------------------------------- | ----------------------------- | ------------------------------------ |
-| Standard implementation (< 10 tasks)         | `task-management`             | Sequential tracked execution         |
-| Large implementation (10+ independent tasks) | `subagent-driven-development` | Parallel execution with review gates |
-| Autonomous development session               | `autonomous-loop`             | Ralph-style iterative execution      |
-| Single focused task                          | `executing-plans`             | Direct plan execution                |
-
-Invoke the chosen skill and pass the plan document path.
+**暂停 — 在完成以下事项前，切勿进入阶段五：**
+- [ ] 计划文档已编写并保存
+- [ ] 每个任务都包含文件路径、步骤和验证方式
+- [ ] 用户已明确批准计划（回复“是”、“批准”、“继续”等）
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 阶段五：过渡到执行阶段
 
-| Anti-Pattern                  | Why It Fails                                     | Correct Approach                    |
-| ----------------------------- | ------------------------------------------------ | ----------------------------------- |
-| "This is too simple to plan"  | Simple tasks have unexamined assumptions         | Plan anyway — the plan can be short |
-| "I already know the approach" | Your approach may conflict with project patterns | Document it and get approval        |
-| "The user wants it fast"      | Bad code is slower than planned code             | Planning prevents rework            |
-| "It's just a bug fix"         | Bug fixes need root cause analysis               | Plan the fix, not just the patch    |
-| "I'll plan as I go"           | That is improvising, not planning                | Plan first, execute second          |
-| Asking 5 questions at once    | Overwhelms the user, gets vague answers          | One question per message            |
-| Proposing only 1 approach     | No trade-off analysis, may miss better options   | Always propose 2-3 approaches       |
-| Vague file references         | "Update the tests" — which tests?                | Exact file paths always             |
-| Tasks that take 30+ minutes   | Too large to track and verify                    | Break into 2-5 minute tasks         |
-| Starting code before approval | Wastes effort if direction changes               | Wait for explicit "yes"             |
+**目标：** 将已批准的计划交接给相应的执行技能。
+
+### 过渡决策表
+
+| 情况 | 下一技能 | 理由 |
+|-----------|-----------|-----------|
+| 标准实现（少于 10 个任务） | `task-management` | 顺序跟踪执行 |
+| 大型实现（10+ 个独立任务） | `subagent-driven-development` | 并行执行并带审查关卡 |
+| 自主开发会话 | `autonomous-loop` | Ralph 风格迭代执行 |
+| 单一聚焦任务 | `executing-plans` | 直接执行计划 |
+
+调用所选技能并传入计划文档路径。
 
 ---
 
-## Anti-Rationalization Guards
+## 反模式 / 常见错误
+
+| 反模式 | 失败原因 | 正确做法 |
+|-------------|-------------|-----------------|
+| “这太简单了，不需要规划” | 简单任务也有未经验证的假设 | 依然要规划——计划可以很短 |
+| “我已经知道方案了” | 你的方案可能与项目模式冲突 | 记录下来并获取批准 |
+| “用户想要快点” | 烂代码比计划好的代码更耗时 | 规划能防止返工 |
+| “这只是个错误修复” | 错误修复需要根本原因分析 | 规划修复过程，而非仅打补丁 |
+| “我边做边规划” | 那是即兴发挥，不是规划 | 先规划，后执行 |
+| 一次性问 5 个问题 | 使用户不知所措，得到模糊答案 | 每条消息只问一个问题 |
+| 只提出 1 个方案 | 缺乏权衡分析，可能遗漏更好选项 | 始终提出 2-3 个方案 |
+| 模糊的文件引用 | “更新测试”——哪些测试？ | 始终使用精确文件路径 |
+| 耗时 30 分钟以上的任务 | 太大，难以跟踪和验证 | 拆分为 2-5 分钟的任务 |
+| 在批准前开始写代码 | 方向变更会导致工作白费 | 等待明确的“同意”指令 |
+
+---
+
+## 反合理化防护机制
 
 <HARD-GATE>
-Do NOT write any code, create any files, or take any implementation action until:
-1. You have asked clarifying questions and understood the requirements
-2. You have proposed approaches with trade-offs
-3. The user has explicitly approved the plan
+在满足以下条件之前，**绝不**编写任何代码、创建任何文件或采取任何实现行动：
+1. 你已提出澄清性问题并理解了需求
+2. 你已提出包含权衡分析的方案
+3. 用户已明确批准该计划
 
-This applies to EVERY task regardless of perceived simplicity.
+此规则适用于**每个任务**，无论其看起来多么简单。
 </HARD-GATE>
 
-**Iron Law: NO CODE WITHOUT AN APPROVED PLAN.** No exceptions. No "just this small thing." No "it's obvious."
+**铁律：未经批准的计划，绝不编写代码。** 没有例外。没有“就做这一小件事”。没有“这很明显”。
 
-If you catch yourself thinking any of the following, STOP immediately:
-
-- "Let me just quickly..." — No. Plan first.
-- "This doesn't need a full plan..." — Yes it does. The plan can be brief.
-- "I'll document it after..." — No. Document before.
-
----
-
-## Subagent Dispatch Opportunities
-
-| Task Pattern                                          | Dispatch To                                                               | When                                                |
-| ----------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------- |
-| Independent research tasks during planning            | `Agent` tool with `subagent_type="Explore"`                               | When gathering context from multiple codebase areas |
-| Plan validation across architecture layers            | `Agent` tool dispatching `planner` agent                                  | When plan covers multiple system boundaries         |
-| After plan approval, independent implementation tasks | `Agent` tool (multiple parallel, per `dispatching-parallel-agents` skill) | When plan steps have no dependencies between them   |
-
-Follow the `dispatching-parallel-agents` skill protocol when dispatching.
+如果你发现自己有以下想法，立即**停止**：
+- “让我快速……”——不行。先规划。
+- “这不需要完整的计划……”——需要。计划可以简短。
+- “我稍后再记录……”——不行。先记录。
 
 ---
 
-## Integration Points
+## 子智能体分发机会
 
-| Skill                            | Relationship                                     | When                                   |
-| -------------------------------- | ------------------------------------------------ | -------------------------------------- |
-| `brainstorming`                  | Upstream — provides design context               | Planning follows brainstorming         |
-| `task-management`                | Downstream — receives approved plan              | Standard execution path                |
-| `executing-plans`                | Downstream — executes plan directly              | Single-task execution                  |
-| `subagent-driven-development`    | Downstream — parallel execution                  | Large independent task sets            |
-| `autonomous-loop`                | Downstream — iterative execution                 | Ralph-style sessions                   |
-| `self-learning`                  | Bidirectional — informs and learns from planning | Context loading and pattern storage    |
-| `verification-before-completion` | Downstream — verifies plan completeness          | Before claiming plan is done           |
-| `task-decomposition`             | Complementary — provides WBS for complex plans   | When plan needs hierarchical breakdown |
+| 任务模式 | 分发至 | 时机 |
+|---|---|---|
+| 规划期间的独立研究任务 | `Agent` 工具，`subagent_type="Explore"` | 当需要从代码库多个区域收集上下文时 |
+| 跨架构层的计划验证 | `Agent` 工具分发 `planner` 智能体 | 当计划涉及多个系统边界时 |
+| 计划批准后，独立的实现任务 | `Agent` 工具（多个并行，遵循 `dispatching-parallel-agents` 技能） | 当计划步骤之间无依赖关系时 |
+
+分发时请遵循 `dispatching-parallel-agents` 技能协议。
 
 ---
 
-## Concrete Examples
+## 集成点
 
-### Example: Small Bug Fix Plan
+| 技能 | 关系 | 时机 |
+|-------|-------------|------|
+| `brainstorming` | 上游——提供设计上下文 | 规划在头脑风暴之后 |
+| `task-management` | 下游——接收已批准的计划 | 标准执行路径 |
+| `executing-plans` | 下游——直接执行计划 | 单任务执行 |
+| `subagent-driven-development` | 下游——并行执行 | 大型独立任务集 |
+| `autonomous-loop` | 下游——迭代执行 | Ralph 风格会话 |
+| `self-learning` | 双向——为规划提供信息并从中学习 | 上下文加载与模式存储 |
+| `verification-before-completion` | 下游——验证计划完整性 | 在声明计划完成之前 |
+| `task-decomposition` | 互补——为复杂计划提供 WBS（工作分解结构） | 当计划需要层级拆解时 |
+
+---
+
+## 具体示例
+
+### 示例：小型错误修复计划
 
 ```markdown
-# Fix: Login button disabled state not clearing
+# 修复：登录按钮禁用状态未清除
 
-**Goal:** Fix login button remaining disabled after failed login attempt
-**Architecture:** State management bug in LoginForm component
-**Approach:** Reset `isSubmitting` state in the catch block of handleSubmit
+**目标：** 修复登录失败尝试后登录按钮保持禁用的问题
+**架构：** LoginForm 组件中的状态管理错误
+**方案：** 在 handleSubmit 的 catch 块中重置 `isSubmitting` 状态
 
-### Task 1: Write failing test
+### 任务 1：编写失败的测试
+**文件：** 测试：`tests/components/LoginForm.test.tsx`
+**步骤：** 编写测试，提交无效凭据并验证按钮重新启用
+**验证：** `npm test -- --grep "re-enables button after failed login"`
 
-**Files:** Test: `tests/components/LoginForm.test.tsx`
-**Steps:** Write test that submits invalid credentials and verifies button re-enables
-**Verification:** `npm test -- --grep "re-enables button after failed login"`
-
-### Task 2: Fix the bug
-
-**Files:** Modify: `src/components/LoginForm.tsx`
-**Steps:** Add `setIsSubmitting(false)` to catch block in handleSubmit
-**Verification:** `npm test -- --grep "LoginForm"` — all pass
+### 任务 2：修复错误
+**文件：** 修改：`src/components/LoginForm.tsx`
+**步骤：** 在 handleSubmit 的 catch 块中添加 `setIsSubmitting(false)`
+**验证：** `npm test -- --grep "LoginForm"` —— 全部通过
 ```
 
-### Example: Transition Command
+### 示例：过渡命令
 
-After plan approval:
-
+计划获批后：
 ```
-Plan approved and saved to docs/plans/2026-03-15_login-fix/plan.md.
-Invoking task-management skill to begin tracked execution.
+计划已获批并保存至 docs/plans/2026-03-15_01_login-fix/plan.md。
+正在调用 task-management 技能以开始跟踪执行。
 ```
 
 ---
 
-## Verification Gate
+## 验证关卡
 
-Before claiming the plan is complete, verify:
-
-1. IDENTIFY: Plan document exists at `docs/plans/`
-2. RUN: Review plan for completeness against quality checklist
-3. READ: Verify all sections are filled with specific details
-4. VERIFY: User has explicitly approved
-5. CLAIM: Only then transition to implementation
-
----
-
-## Key Principles
-
-- **DRY** — Do not repeat yourself
-- **YAGNI** — Do not build what is not needed yet
-- **TDD** — Write tests first when applicable
-- **Frequent commits** — Small, atomic commits after each task
-- **Exact paths** — Always specify exact file paths in the plan
+在声明计划完成之前，请验证：
+1. **确认**：计划文档存在于 `docs/plans/`
+2. **检查**：对照质量清单审查计划的完整性
+3. **阅读**：验证所有章节均已填写具体细节
+4. **验证**：用户已明确批准
+5. **声明**：仅在此之后才过渡到实现阶段
 
 ---
 
-## Skill Type
+## 核心原则
 
-**RIGID** — Follow this process exactly for every implementation task. The phases are sequential and non-negotiable. No code without an approved plan.
+- **DRY** —— 不要重复自己
+- **YAGNI** —— 不要构建当前不需要的东西
+- **TDD** —— 适用时先写测试
+- **频繁提交** —— 每个任务后进行小型原子提交
+- **精确路径** —— 计划中始终指定精确文件路径
+
+---
+
+## 技能类型
+
+**严格模式 (RIGID)** —— 对每个实现任务严格遵循此流程。各阶段顺序执行，不可协商。未经批准的计划，绝不编写代码。

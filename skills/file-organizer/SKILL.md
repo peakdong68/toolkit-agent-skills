@@ -1,76 +1,74 @@
 ---
 name: file-organizer
 description: >
-  Use when the user needs project structure organization — monorepo patterns, feature-based
-  architecture, naming conventions, barrel exports, or configuration placement.
-  Trigger conditions: restructure project directories, set up monorepo, define naming
-  conventions, create barrel exports, organize configuration files, plan migration
-  from flat to feature-based structure, establish import ordering rules.
+  当用户需要项目结构组织时使用——单体仓库模式、基于功能的架构、命名规范、桶式导出（barrel exports）或配置文件放置。
+  触发条件：重构项目目录、设置单体仓库、定义命名规范、创建桶式导出、组织配置文件、规划从扁平结构到基于功能结构的迁移、建立导入排序规则。
 ---
 
-# File Organizer
+# 文件组织器
 
-## Overview
+## 概述
 
-Design and maintain well-organized project structures that scale with team and codebase growth. This skill covers monorepo patterns, feature-based vs layer-based architecture, naming conventions, index/barrel files, configuration file placement, and documentation structure.
+设计并维护能够随团队和代码库增长而扩展的良好项目结构。本技能涵盖单体仓库模式、基于功能与基于层的架构、命名规范、索引/桶式文件、配置文件放置以及文档结构。
 
-Apply this skill whenever a project's file organization needs to be established, audited, or restructured for clarity and scalability.
+每当需要建立、审查或重构项目的文件组织以提升清晰度和可扩展性时，请应用此技能。
 
-## Multi-Phase Process
+## 多阶段流程
 
-### Phase 1: Assessment
+### 第一阶段：评估
 
-1. Audit current project structure and identify pain points
-2. Measure project size (file count, team size, feature count)
-3. Identify existing naming conventions and import patterns
-4. Catalog configuration file locations
-5. Check for circular dependencies or deep nesting
+1. 审查当前项目结构并识别痛点
+2. 衡量项目规模（文件数量、团队规模、功能数量）
+3. 识别现有的命名规范和导入模式
+4. 归类配置文件位置
+5. 检查循环依赖或深层嵌套
 
-> **STOP — Do NOT propose a new structure without understanding the current state and its pain points.**
+> **停止 — 在不理解当前状态及其痛点的情况下，切勿提出新结构。**
 
-### Phase 2: Strategy Selection
+### 第二阶段：策略选择
 
-1. Choose organization strategy using decision table below
-2. Define naming conventions and file placement rules
-3. Plan barrel export boundaries
-4. Establish configuration file placement rules
-5. Document import ordering convention
+1. 使用下方决策表选择组织策略
+2. 定义命名规范和文件放置规则
+3. 规划桶式导出边界
+4. 建立配置文件放置规则
+5. 文档化导入排序约定
 
-> **STOP — Do NOT begin migration without documenting the target structure and getting team alignment.**
+> **停止 — 在未文档化目标结构并获得团队共识之前，切勿开始迁移。**
 
-### Phase 3: Migration Planning
+### 第三阶段：迁移规划
 
-1. Plan migration path for existing projects (incremental, not big-bang)
-2. Identify files that move and their new locations
-3. Map import changes required
-4. Create automated codemods where possible
-5. Define rollback plan if migration causes issues
+1. 为现有项目规划迁移路径（增量式，而非一次性大爆炸）
+2. 识别需要移动的文件及其新位置
+3. 映射所需的导入变更
+4. 尽可能创建自动化代码转换脚本（codemods）
+5. 定义迁移出现问题时的回滚计划
 
-> **STOP — Do NOT execute migration without verifying tests pass at each incremental step.**
+> **停止 — 在未验证每个增量步骤测试通过之前，切勿执行迁移。**
 
-### Phase 4: Execution and Validation
+### 第四阶段：执行与验证
 
-1. Move one feature or module at a time
-2. Update imports using automated tools
-3. Verify tests pass after each move
-4. Remove old structure after complete migration
-5. Document conventions for team reference
+1. 一次移动一个功能或模块
+2. 使用自动化工具更新导入
+3. 每次移动后验证测试通过
+4. 完整迁移后移除旧结构
+5. 为团队参考文档化规范
 
-## Architecture Strategy Decision Table
+## 架构策略决策表
 
-| Project Size | Team Size | Recommendation | Why |
-|---|---|---|---|
-| < 20 files | 1-2 devs | Layer-based | Simple, low overhead |
-| 20-100 files | 2-5 devs | Hybrid | Balance of simplicity and scalability |
-| 100+ files | 5+ devs | Feature-based | Self-contained modules reduce conflicts |
-| Multiple apps sharing code | Any | Monorepo | Shared packages with clear boundaries |
-| Rapid prototype / MVP | 1-3 devs | Layer-based | Speed over structure, refactor later |
-| Enterprise, multiple teams | 10+ devs | Feature-based + Monorepo | Team ownership per feature module |
+| 项目规模         | 团队规模     | 推荐方案            | 原因                     |
+| ---------------- | ------------ | ------------------- | ------------------------ |
+| < 20 个文件      | 1-2 名开发者 | 基于层              | 简单，低开销             |
+| 20-100 个文件    | 2-5 名开发者 | 混合模式            | 简单性与可扩展性的平衡   |
+| 100+ 个文件      | 5+ 名开发者  | 基于功能            | 自包含模块减少冲突       |
+| 多个应用共享代码 | 任意         | 单体仓库            | 具有清晰边界的共享包     |
+| 快速原型 / MVP   | 1-3 名开发者 | 基于层              | 速度优先于结构，后期重构 |
+| 企业级，多团队   | 10+ 名开发者 | 基于功能 + 单体仓库 | 每个功能模块的团队所有权 |
 
-## Architecture Patterns
+## 架构模式
 
-### Feature-Based (Domain-Driven)
-Organize by business domain. Each feature is self-contained.
+### 基于功能（领域驱动）
+
+按业务领域组织。每个功能自包含。
 
 ```
 src/
@@ -89,7 +87,7 @@ src/
         auth.utils.ts
       __tests__/
         auth.test.ts
-      index.ts          # Public API (barrel export)
+      index.ts          # 公共 API（桶式导出）
     dashboard/
       components/
       hooks/
@@ -98,7 +96,7 @@ src/
       index.ts
     billing/
       ...
-  shared/               # Cross-feature shared code
+  shared/               # 跨功能共享代码
     components/
       Button.tsx
       Modal.tsx
@@ -110,10 +108,11 @@ src/
       common.types.ts
 ```
 
-**Best for**: Teams > 5 developers, medium-large applications, clear domain boundaries.
+**最适合**：5 人以上团队、中大型应用、清晰的领域边界。
 
-### Layer-Based (Technical)
-Organize by technical concern.
+### 基于层（技术导向）
+
+按技术关注点组织。
 
 ```
 src/
@@ -139,67 +138,71 @@ src/
     Dashboard.tsx
 ```
 
-**Best for**: Small teams (1-3), simple applications, rapid prototyping.
+**最适合**：小型团队（1-3 人）、简单应用、快速原型开发。
 
-### Hybrid (Recommended Default)
-Combine both: shared layer + feature modules.
+### 混合模式（推荐默认）
+
+结合两者：共享层 + 功能模块。
 
 ```
 src/
-  app/                  # App-level concerns
+  app/                  # 应用级关注点
     layout.tsx
     providers.tsx
     routes.tsx
-  features/             # Feature modules
+  features/             # 功能模块
     auth/
     dashboard/
     billing/
-  components/           # Shared UI components
-    ui/                 # Design system atoms
-    layout/             # Layout components
-  hooks/                # Shared hooks
-  lib/                  # Shared utilities
-  types/                # Shared types
-  config/               # App configuration
-  styles/               # Global styles
+  components/           # 共享 UI 组件
+    ui/                 # 设计系统原子组件
+    layout/             # 布局组件
+  hooks/                # 共享 Hooks
+  lib/                  # 共享工具函数
+  types/                # 共享类型
+  config/               # 应用配置
+  styles/               # 全局样式
 ```
 
-## Monorepo Patterns
+## 单体仓库模式
 
 ### Turborepo / pnpm Workspaces
+
 ```
 root/
   apps/
-    web/                # Next.js web app
+    web/                # Next.js Web 应用
       package.json
-    api/                # API server
+    api/                # API 服务器
       package.json
-    mobile/             # React Native app
+    mobile/             # React Native 应用
       package.json
   packages/
-    ui/                 # Shared component library
+    ui/                 # 共享组件库
       package.json
-    config/             # Shared configs (ESLint, TypeScript)
+    config/             # 共享配置（ESLint、TypeScript）
       eslint/
       typescript/
       package.json
-    utils/              # Shared utilities
+    utils/              # 共享工具函数
       package.json
-    types/              # Shared type definitions
+    types/              # 共享类型定义
       package.json
-  package.json          # Root workspace config
-  turbo.json            # Turborepo pipeline config
+  package.json          # 根工作区配置
+  turbo.json            # Turborepo 流水线配置
   pnpm-workspace.yaml
 ```
 
-### Package Boundaries
-- Apps depend on packages, never on other apps
-- Packages can depend on other packages
-- No circular dependencies
-- Each package has a clear, single responsibility
-- Shared packages export via `index.ts` barrel
+### 包边界
 
-### Configuration Sharing
+- 应用依赖包，永不依赖其他应用
+- 包可以依赖其他包
+- 无循环依赖
+- 每个包具有清晰、单一的职责
+- 共享包通过 `index.ts` 桶式导出
+
+### 配置共享
+
 ```json
 // packages/config/typescript/base.json
 {
@@ -217,173 +220,181 @@ root/
 }
 ```
 
-## Naming Conventions
+## 命名规范
 
-### Files and Directories
+### 文件与目录
 
-| Type | Convention | Example |
-|---|---|---|
-| Components | PascalCase | `UserProfile.tsx` |
-| Hooks | camelCase with `use` prefix | `useAuth.ts` |
-| Utilities | camelCase | `formatDate.ts` |
-| Types | camelCase with `.types` suffix | `auth.types.ts` |
-| Tests | same name with `.test` suffix | `UserProfile.test.tsx` |
-| Styles | same name with `.module.css` suffix | `UserProfile.module.css` |
-| Constants | camelCase or UPPER_SNAKE in file | `config.ts` |
-| API/Services | camelCase with `.api` or `.service` | `auth.api.ts` |
-| Directories | kebab-case | `user-profile/` |
+| 类型     | 规范                               | 示例                     |
+| -------- | ---------------------------------- | ------------------------ |
+| 组件     | PascalCase                         | `UserProfile.tsx`        |
+| Hooks    | camelCase 带 `use` 前缀            | `useAuth.ts`             |
+| 工具函数 | camelCase                          | `formatDate.ts`          |
+| 类型     | camelCase 带 `.types` 后缀         | `auth.types.ts`          |
+| 测试     | 同名带 `.test` 后缀                | `UserProfile.test.tsx`   |
+| 样式     | 同名带 `.module.css` 后缀          | `UserProfile.module.css` |
+| 常量     | camelCase 或文件内使用 UPPER_SNAKE | `config.ts`              |
+| API/服务 | camelCase 带 `.api` 或 `.service`  | `auth.api.ts`            |
+| 目录     | kebab-case                         | `user-profile/`          |
 
-### Component File Naming
+### 组件文件命名
+
 ```
-# Single-file component
+# 单文件组件
 Button.tsx
 
-# Component with co-located files
+# 组件与共置文件
 Button/
   Button.tsx
   Button.test.tsx
   Button.stories.tsx
   Button.module.css
-  index.ts            # Re-exports Button
+  index.ts            # 重新导出 Button
 ```
 
-### Import Ordering Convention
+### 导入排序约定
+
 ```typescript
-// 1. External packages
+// 1. 外部包
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-// 2. Internal packages (monorepo)
+// 2. 内部包（单体仓库）
 import { Button } from '@repo/ui';
 
-// 3. Feature-level imports
+// 3. 功能级导入
 import { useAuth } from '@/features/auth';
 
-// 4. Relative imports (same feature)
+// 4. 相对导入（同一功能内）
 import { LoginForm } from './LoginForm';
 import { authSchema } from './auth.types';
 
-// 5. Styles
+// 5. 样式
 import styles from './Auth.module.css';
 ```
 
-## Index Files and Barrel Exports
+## 索引文件与桶式导出
 
-### Barrel Export Pattern
+### 桶式导出模式
+
 ```typescript
-// features/auth/index.ts — Public API
+// features/auth/index.ts — 公共 API
 export { LoginForm } from './components/LoginForm';
 export { useAuth } from './hooks/useAuth';
 export type { User, AuthState } from './types/auth.types';
 
-// Do NOT export internal implementation details
-// Do NOT export utility functions used only within the feature
+// 切勿导出内部实现细节
+// 切勿导出仅在功能内部使用的工具函数
 ```
 
-### Barrel Export Decision Table
+### 桶式导出决策表
 
-| Context | Use Barrel? | Why |
-|---|---|---|
-| Feature module public API | Yes, always | Clean boundary, controlled surface area |
-| Shared component library | Yes, always | Single import point for consumers |
-| Utility libraries | Yes, always | Discoverability for shared functions |
-| Inside a feature (internal) | No | Import directly, avoid indirection |
-| Would cause circular dependencies | No | Break the cycle, import directly |
-| Hurts tree-shaking (verified) | No | Use direct imports for bundle size |
+| 上下文                   | 使用桶式导出？ | 原因                     |
+| ------------------------ | -------------- | ------------------------ |
+| 功能模块公共 API         | 是，始终使用   | 清晰边界，可控的表面面积 |
+| 共享组件库               | 是，始终使用   | 为消费者提供单一导入点   |
+| 工具函数库               | 是，始终使用   | 提升共享函数的可发现性   |
+| 功能内部（内部使用）     | 否             | 直接导入，避免间接层     |
+| 会导致循环依赖           | 否             | 打破循环，直接导入       |
+| 会损害树摇优化（已验证） | 否             | 为打包体积使用直接导入   |
 
-## Configuration File Placement
+## 配置文件放置
 
-### Root-Level Configuration
+### 根级配置
+
 ```
 root/
-  .editorconfig         # Editor settings
-  .eslintrc.js          # ESLint config (or eslint.config.js)
-  .gitignore            # Git ignore rules
-  .prettierrc           # Prettier config
-  .env.example          # Environment variable template
-  docker-compose.yml    # Docker composition
-  Dockerfile            # Container build
-  package.json          # Dependencies and scripts
-  tsconfig.json         # TypeScript config
-  next.config.js        # Framework config
-  tailwind.config.ts    # Tailwind config
-  vitest.config.ts      # Test config
+  .editorconfig         # 编辑器设置
+  .eslintrc.js          # ESLint 配置（或 eslint.config.js）
+  .gitignore            # Git 忽略规则
+  .prettierrc           # Prettier 配置
+  .env.example          # 环境变量模板
+  docker-compose.yml    # Docker 组合配置
+  Dockerfile            # 容器构建文件
+  package.json          # 依赖和脚本
+  tsconfig.json         # TypeScript 配置
+  next.config.js        # 框架配置
+  tailwind.config.ts    # Tailwind 配置
+  vitest.config.ts      # 测试配置
 ```
 
-### Environment Files
+### 环境文件
+
 ```
-.env                    # Local defaults (gitignored)
-.env.example            # Template with dummy values (committed)
-.env.local              # Local overrides (gitignored)
-.env.development        # Development-specific (committed or not)
-.env.production         # Production-specific (committed or not)
-.env.test               # Test-specific (committed or not)
+.env                    # 本地默认值（已 git 忽略）
+.env.example            # 带占位值的模板（已提交）
+.env.local              # 本地覆盖（已 git 忽略）
+.env.development        # 开发环境特定（可提交或不提交）
+.env.production         # 生产环境特定（可提交或不提交）
+.env.test               # 测试环境特定（可提交或不提交）
 ```
 
-### Documentation Structure
+### 文档结构
+
 ```
 docs/
   architecture/
-    adr/                # Architecture Decision Records
+    adr/                # 架构决策记录
       001-framework.md
       002-database.md
     diagrams/
-  api/                  # API documentation
+  api/                  # API 文档
   guides/
     getting-started.md
     deployment.md
   contributing.md
 ```
 
-## Migration Strategy
+## 迁移策略
 
-### Incremental Migration (Recommended)
-1. Create the target structure alongside existing code
-2. Move one feature/module at a time
-3. Update imports using automated codemods
-4. Verify with tests after each move
-5. Remove old structure after complete migration
+### 增量迁移（推荐）
 
-### Automated Tools
-- `ts-morph`: programmatic TypeScript refactoring
-- `jscodeshift`: JavaScript codemods
-- IDE refactoring: rename/move with automatic import updates
-- ESLint `import/order`: enforce import ordering
+1. 在现有代码旁创建目标结构
+2. 一次移动一个功能/模块
+3. 使用自动化代码转换脚本更新导入
+4. 每次移动后通过测试验证
+5. 完整迁移后移除旧结构
 
-## Anti-Patterns / Common Mistakes
+### 自动化工具
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
-|---|---|---|
-| Deeply nested folders (> 4 levels) | Hard to navigate, long import paths | Flatten structure, use path aliases |
-| `utils/` as a dumping ground | Becomes unmaintainable junk drawer | Organize utils by domain or purpose |
-| Circular dependencies between features | Build failures, unclear ownership | Features import only from shared or own modules |
-| Barrel exports re-exporting everything | Kills tree-shaking, bloats bundles | Export only the public API |
-| Inconsistent naming (mixed conventions) | Cognitive load, merge conflicts | Pick one convention, enforce with linter |
-| Config scattered across multiple locations | Hard to find and maintain | All config at project root |
-| Tests in separate directory tree | Hard to find tests for a file | Co-locate tests with source code |
-| 100+ files in one flat folder | Impossible to navigate | Group into sub-modules or features |
-| Index files containing logic | Unexpected side effects on import | Index files only re-export |
-| Big-bang migration (move everything at once) | High risk, hard to rollback | Incremental moves with tests after each |
+- `ts-morph`：程序化 TypeScript 重构
+- `jscodeshift`：JavaScript 代码转换脚本
+- IDE 重构：重命名/移动时自动更新导入
+- ESLint `import/order`：强制导入排序
 
-## Anti-Rationalization Guards
+## 反模式 / 常见错误
 
-- Do NOT restructure without understanding current pain points -- assess first.
-- Do NOT skip the team alignment step -- structure changes affect everyone.
-- Do NOT migrate everything at once -- move one module at a time with test verification.
-- Do NOT create deeply nested structures "for future scalability" -- flatten until complexity demands it.
-- Do NOT ignore barrel export impact on bundle size -- verify with bundle analyzer.
+| 反模式                             | 失败原因                   | 替代方案                         |
+| ---------------------------------- | -------------------------- | -------------------------------- |
+| 深层嵌套文件夹（> 4 级）           | 难以导航，导入路径过长     | 扁平化结构，使用路径别名         |
+| `utils/` 作为 dumping ground       | 变成难以维护的杂物抽屉     | 按领域或用途组织工具函数         |
+| 功能间的循环依赖                   | 构建失败，所有权不清晰     | 功能仅从共享模块或自身模块导入   |
+| 桶式导出重新导出所有内容           | 破坏树摇优化，打包体积膨胀 | 仅导出公共 API                   |
+| 命名不一致（混合规范）             | 认知负担，合并冲突         | 选择一种规范，用 linter 强制执行 |
+| 配置分散在多个位置                 | 难以查找和维护             | 所有配置放在项目根目录           |
+| 测试放在独立的目录树中             | 难以找到文件的测试         | 测试与源代码共置                 |
+| 一个扁平文件夹中有 100+ 文件       | 无法导航                   | 分组为子模块或功能               |
+| 索引文件包含逻辑                   | 导入时产生意外副作用       | 索引文件仅重新导出               |
+| 大爆炸式迁移（一次性移动所有内容） | 高风险，难以回滚           | 增量移动，每次移动后测试验证     |
 
-## Integration Points
+## 反合理化防护
 
-| Skill | How It Connects |
-|---|---|
-| `senior-frontend` | Frontend project structure follows feature-based or hybrid patterns |
-| `senior-architect` | Architecture decisions inform module boundaries and package structure |
-| `senior-fullstack` | Full-stack projects need coordinated frontend/backend organization |
-| `clean-code` | Naming conventions and module boundaries support clean code principles |
-| `deployment` | Monorepo structure affects CI/CD pipeline configuration |
-| `laravel-specialist` | Laravel projects follow framework-specific directory conventions |
+- 切勿在不理解当前痛点的情况下重构 — 先评估。
+- 切勿跳过团队共识步骤 — 结构变更影响所有人。
+- 切勿一次性迁移所有内容 — 一次移动一个模块并验证测试。
+- 切勿"为未来可扩展性"创建深层嵌套结构 — 扁平化直到复杂度需要为止。
+- 切勿忽略桶式导出对打包体积的影响 — 用打包分析器验证。
 
-## Skill Type
+## 集成点
 
-**FLEXIBLE** — Choose the organization strategy that fits the project's size, team structure, and complexity. The naming conventions and barrel export patterns are recommendations that should be adapted to existing project conventions.
+| 技能                 | 如何关联                           |
+| -------------------- | ---------------------------------- |
+| `senior-frontend`    | 前端项目结构遵循基于功能或混合模式 |
+| `senior-architect`   | 架构决策影响模块边界和包结构       |
+| `senior-fullstack`   | 全栈项目需要协调的前端/后端组织    |
+| `clean-code`         | 命名规范和模块边界支持整洁代码原则 |
+| `deployment`         | 单体仓库结构影响 CI/CD 流水线配置  |
+| `laravel-specialist` | Laravel 项目遵循框架特定的目录约定 |
+
+## 技能类型
+
+**灵活（FLEXIBLE）** — 选择适合项目规模、团队结构和复杂度的组织策略。命名规范和桶式导出模式是建议，应根据现有项目约定进行调整。

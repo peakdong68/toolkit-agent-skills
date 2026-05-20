@@ -1,287 +1,287 @@
 ---
 name: senior-prompt-engineer
-description: "Use when the user needs prompt design, optimization, few-shot examples, chain-of-thought patterns, structured output, evaluation metrics, or prompt versioning. Triggers: new prompt creation, prompt optimization, few-shot example design, structured output specification, A/B testing prompts, evaluation framework setup."
+description: "当用户需要提示词设计、优化、少样本示例、思维链模式、结构化输出、评估指标或提示词版本管理时使用。触发条件：创建新提示词、优化提示词、设计少样本示例、规范结构化输出、A/B 测试提示词、搭建评估框架。"
 ---
 
-# Senior Prompt Engineer
+# 资深提示词工程师
 
-## Overview
+## 概述
 
-Design, test, and optimize prompts for large language models. This skill covers systematic prompt engineering including few-shot example design, chain-of-thought reasoning, system prompt architecture, structured output specification, parameter tuning, evaluation methodology, A/B testing, and prompt version management.
+为大型语言模型设计、测试和优化提示词。本技能涵盖系统化的提示词工程，包括少样本示例设计、思维链推理、系统提示词架构、结构化输出规范、参数调优、评估方法论、A/B 测试以及提示词版本管理。
 
-**Announce at start:** "I'm using the senior-prompt-engineer skill for prompt design and optimization."
-
----
-
-## Phase 1: Requirements
-
-**Goal:** Define the task objective, quality criteria, and constraints before writing any prompt.
-
-### Actions
-
-1. Define the task objective clearly
-2. Identify input/output format requirements
-3. Determine quality criteria (accuracy, tone, format)
-4. Assess edge cases and failure modes
-5. Choose model and parameter constraints
-
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] Task objective is stated in one sentence
-- [ ] Input format and output format are defined
-- [ ] Quality criteria are measurable
-- [ ] Edge cases are listed
-- [ ] Model selection is justified
+**开始时声明：**“我正在使用 senior-prompt-engineer 技能进行提示词设计与优化。”
 
 ---
 
-## Phase 2: Prompt Design
+## 阶段 1：需求分析
 
-**Goal:** Draft the prompt with proper architecture, examples, and constraints.
+**目标：** 在编写任何提示词之前，明确任务目标、质量标准和约束条件。
 
-### Actions
+### 操作
 
-1. Draft system prompt with role, constraints, and format
-2. Design few-shot examples (3-5 representative cases)
-3. Add chain-of-thought scaffolding if reasoning is needed
-4. Specify output structure (JSON, markdown, etc.)
-5. Add error handling instructions
+1. 明确定义任务目标
+2. 确定输入/输出格式要求
+3. 确定质量标准（准确性、语气、格式）
+4. 评估边缘情况和失败模式
+5. 选择模型和参数约束
 
-### Prompt Architecture Layers
+### 停止 — 在满足以下条件前，请勿进入阶段 2：
+- [ ] 任务目标已用一句话表述
+- [ ] 已定义输入格式和输出格式
+- [ ] 质量标准可量化/可衡量
+- [ ] 已列出边缘情况
+- [ ] 模型选择有合理依据
 
-| Layer | Purpose | Example |
+---
+
+## 阶段 2：提示词设计
+
+**目标：** 起草包含合理架构、示例和约束的提示词。
+
+### 操作
+
+1. 起草包含角色、约束和格式的系统提示词
+2. 设计少样本示例（3-5 个代表性案例）
+3. 若需要推理，添加思维链引导
+4. 指定输出结构（JSON、Markdown 等）
+5. 添加错误处理指令
+
+### 提示词架构层级
+
+| 层级 | 目的 | 示例 |
 |-------|---------|---------|
-| 1. Identity | Who the model is | "You are a sentiment classifier..." |
-| 2. Context | What it knows/has access to | "You have access to product reviews..." |
-| 3. Task | What to do | "Classify each review as positive/negative/neutral" |
-| 4. Constraints | What NOT to do | "Never include PII in output" |
-| 5. Format | How to structure output | "Respond in JSON: {classification, confidence}" |
-| 6. Examples | Demonstrations | 3-5 representative input/output pairs |
-| 7. Metacognition | Handling uncertainty | "If uncertain, classify as neutral and explain" |
+| 1. 身份 (Identity) | 模型扮演什么角色 | “你是一个情感分类器……” |
+| 2. 上下文 (Context) | 模型知道/可访问什么 | “你可以访问产品评论……” |
+| 3. 任务 (Task) | 需要做什么 | “将每条评论分类为正面/负面/中性” |
+| 4. 约束 (Constraints) | 禁止做什么 | “输出中绝不可包含个人身份信息 (PII)” |
+| 5. 格式 (Format) | 如何组织输出 | “以 JSON 格式回复：{classification, confidence}” |
+| 6. 示例 (Examples) | 演示案例 | 3-5 组代表性输入/输出对 |
+| 7. 元认知 (Metacognition) | 处理不确定性 | “若不确定，分类为中性并说明原因” |
 
-### System Prompt Template
+### 系统提示词模板
 
 ```
-[Role] You are a [specific role] that [specific capability].
+[角色] 你是一个具备[特定能力]的[具体角色]。
 
-[Context] You have access to [tools/knowledge]. The user will provide [input type].
+[上下文] 你可以访问[工具/知识]。用户将提供[输入类型]。
 
-[Instructions]
-1. First, [step 1]
-2. Then, [step 2]
-3. Finally, [step 3]
+[指令]
+1. 首先，[步骤 1]
+2. 然后，[步骤 2]
+3. 最后，[步骤 3]
 
-[Constraints]
-- Always [requirement]
-- Never [prohibition]
-- If uncertain, [fallback behavior]
+[约束]
+- 始终[要求]
+- 绝不[禁止]
+- 若不确定，[回退行为]
 
-[Output Format]
-Respond in the following format:
-[format specification]
+[输出格式]
+请按以下格式回复：
+[格式规范]
 
-[Examples]
+[示例]
 <example>
-Input: [sample input]
-Output: [sample output]
+输入：[示例输入]
+输出：[示例输出]
 </example>
 ```
 
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] All 7 layers are addressed (or intentionally omitted with rationale)
-- [ ] Examples are representative and diverse
-- [ ] Output format is unambiguous
-- [ ] Constraints are specific (not vague)
+### 停止 — 在满足以下条件前，请勿进入阶段 3：
+- [ ] 已处理全部 7 个层级（或有意识地省略并给出理由）
+- [ ] 示例具有代表性且多样化
+- [ ] 输出格式明确无歧义
+- [ ] 约束条件具体（不模糊）
 
 ---
 
-## Phase 3: Evaluation and Iteration
+## 阶段 3：评估与迭代
 
-**Goal:** Measure prompt quality and iterate toward targets.
+**目标：** 衡量提示词质量并迭代至目标标准。
 
-### Actions
+### 操作
 
-1. Create evaluation dataset (50+ examples minimum)
-2. Define scoring rubric (automated + human metrics)
-3. Run baseline evaluation
-4. Iterate on prompt with targeted improvements
-5. A/B test promising variants
-6. Version and document the final prompt
+1. 创建评估数据集（至少 50 个示例）
+2. 定义评分标准（自动化指标 + 人工指标）
+3. 运行基线评估
+4. 针对问题进行提示词迭代优化
+5. 对有潜力的变体进行 A/B 测试
+6. 对最终提示词进行版本控制和文档记录
 
-### STOP — Evaluation complete when:
-- [ ] Evaluation dataset covers all input categories
-- [ ] Metrics meet defined quality thresholds
-- [ ] A/B test shows statistical significance (p < 0.05)
-- [ ] Final prompt is versioned with metrics
+### 停止 — 满足以下条件即视为评估完成：
+- [ ] 评估数据集覆盖所有输入类别
+- [ ] 指标达到预设的质量阈值
+- [ ] A/B 测试显示统计显著性 (p < 0.05)
+- [ ] 最终提示词已附带指标进行版本记录
 
 ---
 
-## Few-Shot Example Design
+## 少样本示例设计
 
-### Selection Criteria Decision Table
+### 选择标准决策表
 
-| Criterion | Explanation | Example |
+| 标准 | 解释 | 示例 |
 |-----------|------------|---------|
-| Representative | Cover most common input types | Include typical emails, not just edge cases |
-| Diverse | Include edge cases and boundaries | Short + long, positive + negative |
-| Ordered | Simple to complex progression | Obvious case first, ambiguous last |
-| Balanced | Equal representation of categories | Not 4 positive and 1 negative |
+| 代表性 | 覆盖最常见的输入类型 | 包含典型邮件，而非仅边缘情况 |
+| 多样性 | 包含边缘情况和边界值 | 短文本 + 长文本，正面 + 负面 |
+| 有序性 | 从简单到复杂的递进 | 先明显案例，后模糊案例 |
+| 平衡性 | 各类别比例均衡 | 不要 4 个正面和 1 个负面 |
 
-### Example Count Guidelines
+### 示例数量指南
 
-| Task Complexity | Examples Needed |
+| 任务复杂度 | 所需示例数 |
 |----------------|----------------|
-| Simple classification | 2-3 |
-| Moderate generation | 3-5 |
-| Complex reasoning | 5-8 |
-| Format-sensitive | 3-5 (focus on format consistency) |
+| 简单分类 | 2-3 |
+| 中等生成 | 3-5 |
+| 复杂推理 | 5-8 |
+| 格式敏感型 | 3-5（重点关注格式一致性） |
 
-### Example Format
+### 示例格式
 
 ```
 <example>
 <input>
-[Representative input]
+[代表性输入]
 </input>
 <reasoning>
-[Optional: show the thinking process]
+[可选：展示思考过程]
 </reasoning>
 <output>
-[Expected output in exact target format]
+[完全符合目标格式的期望输出]
 </output>
 </example>
 ```
 
 ---
 
-## Chain-of-Thought Patterns
+## 思维链 (CoT) 模式
 
-### CoT Pattern Decision Table
+### CoT 模式决策表
 
-| Pattern | Use When | Example |
+| 模式 | 适用场景 | 示例 |
 |---------|----------|---------|
-| Standard CoT | Multi-step reasoning | "Think step by step: 1. Identify... 2. Analyze..." |
-| Structured CoT | Need parseable reasoning | XML tags: `<analysis>...</analysis>` then `<answer>...</answer>` |
-| Self-Consistency | High-stakes decisions | Generate 3 solutions, pick most common |
-| No CoT | Simple factual lookups, format conversion | Skip reasoning overhead |
+| 标准 CoT | 多步推理 | “请逐步思考：1. 识别... 2. 分析...” |
+| 结构化 CoT | 需要可解析的推理过程 | XML 标签：`<analysis>...</analysis>` 然后 `<answer>...</answer>` |
+| 自一致性 (Self-Consistency) | 高风险决策 | 生成 3 个解决方案，选择出现频率最高的 |
+| 无 CoT | 简单事实查询、格式转换 | 跳过推理开销 |
 
-### When to Use CoT
+### 何时使用 CoT
 
-| Task Type | Use CoT? | Rationale |
+| 任务类型 | 是否使用 CoT？ | 理由 |
 |-----------|----------|-----------|
-| Mathematical reasoning | Yes | Step-by-step prevents errors |
-| Multi-step logic | Yes | Makes reasoning transparent |
-| Classification with justification | Yes | Improves accuracy and explainability |
-| Simple factual lookup | No | Adds latency without accuracy gain |
-| Direct format conversion | No | No reasoning needed |
-| Very short responses | No | CoT overhead exceeds benefit |
+| 数学推理 | 是 | 逐步推导可防止错误 |
+| 多步逻辑 | 是 | 使推理过程透明 |
+| 需理由的分类 | 是 | 提高准确性和可解释性 |
+| 简单事实查询 | 否 | 增加延迟但无准确性提升 |
+| 直接格式转换 | 否 | 无需推理 |
+| 极短回复 | 否 | CoT 开销大于收益 |
 
 ---
 
-## Structured Output
+## 结构化输出
 
-### Output Format Decision Table
+### 输出格式决策表
 
-| Format | Use When | Parsing |
+| 格式 | 适用场景 | 解析方式 |
 |--------|----------|---------|
-| JSON | Machine-consumed output | `JSON.parse()` |
-| Markdown | Human-readable structured text | Regex or markdown parser |
-| XML tags | Sections need clear boundaries | XML parser or regex |
-| YAML | Configuration-like output | YAML parser |
-| Plain text | Simple, unstructured response | No parsing needed |
+| JSON | 机器消费型输出 | `JSON.parse()` |
+| Markdown | 人类可读的结构化文本 | 正则表达式或 Markdown 解析器 |
+| XML 标签 | 需要明确边界的部分 | XML 解析器或正则表达式 |
+| YAML | 类配置型输出 | YAML 解析器 |
+| 纯文本 | 简单、非结构化回复 | 无需解析 |
 
-### JSON Output Example
+### JSON 输出示例
 
 ```
-Respond with a JSON object matching this schema:
+请回复一个符合此 Schema 的 JSON 对象：
 {
   "classification": "positive" | "negative" | "neutral",
-  "confidence": number between 0 and 1,
-  "reasoning": "brief explanation",
-  "key_phrases": ["array", "of", "phrases"]
+  "confidence": 0 到 1 之间的数字,
+  "reasoning": "简要解释",
+  "key_phrases": ["短语", "数组"]
 }
 
-Do not include any text outside the JSON object.
+JSON 对象外不要包含任何文本。
 ```
 
 ---
 
-## Temperature and Top-P Tuning
+## 温度 (Temperature) 与 Top-P 调优
 
-| Use Case | Temperature | Top-P | Rationale |
+| 使用场景 | Temperature | Top-P | 理由 |
 |----------|------------|-------|-----------|
-| Code generation | 0.0-0.2 | 0.9 | Deterministic, correct |
-| Classification | 0.0 | 1.0 | Consistent results |
-| Creative writing | 0.7-1.0 | 0.95 | Diverse, interesting |
-| Summarization | 0.2-0.4 | 0.9 | Faithful but fluent |
-| Brainstorming | 0.8-1.2 | 0.95 | Maximum diversity |
-| Data extraction | 0.0 | 0.9 | Precise, reliable |
+| 代码生成 | 0.0-0.2 | 0.9 | 确定性高、准确 |
+| 分类任务 | 0.0 | 1.0 | 结果一致 |
+| 创意写作 | 0.7-1.0 | 0.95 | 多样、有趣 |
+| 摘要生成 | 0.2-0.4 | 0.9 | 忠实原文且流畅 |
+| 头脑风暴 | 0.8-1.2 | 0.95 | 最大化多样性 |
+| 数据抽取 | 0.0 | 0.9 | 精确、可靠 |
 
-### Rules
+### 规则
 
-- Temperature 0 for tasks requiring consistency and correctness
-- Higher temperature for creative tasks
-- Top-P rarely needs tuning (keep at 0.9-1.0)
-- Do not use both high temperature AND low top-p (contradictory)
+- 需要一致性和准确性的任务，Temperature 设为 0
+- 创意类任务使用较高的 Temperature
+- Top-P 通常无需频繁调整（保持在 0.9-1.0）
+- 不要同时使用高 Temperature 和低 Top-P（相互矛盾）
 
 ---
 
-## Evaluation Metrics
+## 评估指标
 
-### Automated Metrics
+### 自动化指标
 
-| Metric | Measures | Use For |
+| 指标 | 衡量内容 | 适用场景 |
 |--------|---------|---------|
-| Exact Match | Output equals expected | Classification, extraction |
-| F1 Score | Precision + recall balance | Multi-label tasks |
-| BLEU/ROUGE | N-gram overlap | Summarization, translation |
-| JSON validity | Parseable structured output | Structured generation |
-| Regex match | Output matches pattern | Format compliance |
+| 精确匹配 (Exact Match) | 输出与期望完全一致 | 分类、信息抽取 |
+| F1 分数 | 精确率与召回率的平衡 | 多标签任务 |
+| BLEU/ROUGE | N-gram 重叠度 | 摘要、翻译 |
+| JSON 有效性 | 结构化输出可解析 | 结构化生成 |
+| 正则匹配 | 输出符合特定模式 | 格式合规性 |
 
-### Human Evaluation Dimensions
+### 人工评估维度
 
-| Dimension | Scale | Description |
+| 维度 | 量表 | 描述 |
 |-----------|-------|------------|
-| Accuracy | 1-5 | Factual correctness |
-| Relevance | 1-5 | Addresses the actual question |
-| Coherence | 1-5 | Logical flow and structure |
-| Completeness | 1-5 | Covers all required aspects |
-| Tone | 1-5 | Matches desired voice |
-| Conciseness | 1-5 | No unnecessary content |
+| 准确性 | 1-5 | 事实正确性 |
+| 相关性 | 1-5 | 是否切中实际问题 |
+| 连贯性 | 1-5 | 逻辑流畅度与结构 |
+| 完整性 | 1-5 | 是否覆盖所有要求方面 |
+| 语气 | 1-5 | 是否符合期望的语调 |
+| 简洁性 | 1-5 | 无冗余内容 |
 
-### Evaluation Dataset Requirements
+### 评估数据集要求
 
-- Minimum 50 examples for statistical significance
-- Cover all input categories proportionally
-- Include edge cases (10-20% of dataset)
-- Gold labels reviewed by 2+ evaluators
-- Version-controlled alongside prompts
+- 至少 50 个示例以确保统计显著性
+- 按比例覆盖所有输入类别
+- 包含边缘情况（占数据集的 10-20%）
+- 黄金标准标签需经 2 名以上评估者审核
+- 与提示词一起进行版本控制
 
 ---
 
-## A/B Testing Process
+## A/B 测试流程
 
-1. Define hypothesis: "Prompt B will improve [metric] by [amount]"
-2. Hold all variables constant except the prompt change
-3. Run both variants on the same evaluation set
-4. Calculate metric differences with confidence intervals
-5. Require statistical significance (p < 0.05) before adopting
+1. 定义假设：“提示词 B 将在 [指标] 上提升 [幅度]”
+2. 除提示词变更外，保持所有变量恒定
+3. 在同一评估集上运行两个变体
+4. 计算指标差异及置信区间
+5. 仅在达到统计显著性 (p < 0.05) 后采纳新提示词
 
-### What to A/B Test
+### A/B 测试内容
 
-| Variable | Expected Impact |
+| 变量 | 预期影响 |
 |----------|----------------|
-| Instruction phrasing (imperative vs descriptive) | Moderate |
-| Number of few-shot examples | Moderate |
-| Example ordering | Low-moderate |
-| CoT presence/absence | High for reasoning tasks |
-| Output format specification | High for structured output |
-| Constraint placement (beginning vs end) | Low |
+| 指令措辞（祈使句 vs 描述性） | 中等 |
+| 少样本示例数量 | 中等 |
+| 示例排序 | 低到中等 |
+| CoT 的有无 | 对推理任务影响高 |
+| 输出格式规范 | 对结构化输出影响高 |
+| 约束条件位置（开头 vs 结尾） | 低 |
 
 ---
 
-## Prompt Versioning
+## 提示词版本管理
 
-### Version File Format
+### 版本文件格式
 
 ```yaml
 id: classify-sentiment
@@ -302,44 +302,44 @@ examples:
     output: "..."
 ```
 
-### Versioning Rules
+### 版本管理规则
 
-- Semantic versioning: major.minor (major = behavior change, minor = refinement)
-- Every version includes evaluation metrics
-- Link to evaluation dataset version
-- Document what changed and why
-- Keep previous versions for rollback
+- 语义化版本控制：主版本.次版本（主版本 = 行为变更，次版本 = 优化调整）
+- 每个版本均包含评估指标
+- 关联到评估数据集的版本
+- 记录变更内容及原因
+- 保留历史版本以便回滚
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
+| 反模式 | 错误原因 | 正确做法 |
 |-------------|----------------|-----------------|
-| Vague instructions ("be helpful") | Unreliable, inconsistent output | Specific instructions with examples |
-| Contradictory constraints | Model cannot satisfy both | Review for consistency |
-| Examples that do not match task | Confuses the model | Examples must reflect real use |
-| Over-engineering simple tasks | Wasted tokens, slower | Match prompt complexity to task complexity |
-| No evaluation framework | Guessing at quality | Define metrics before iterating |
-| Optimizing for single example | Overfitting to one case | Optimize for the distribution |
-| Assuming cross-model portability | Different models need different prompts | Test on target model |
-| Skipping version control | Cannot rollback or compare | Version every prompt with metrics |
+| 模糊的指令（如“请帮忙”） | 输出不可靠、不一致 | 提供具体指令并附带示例 |
+| 相互矛盾的约束 | 模型无法同时满足 | 检查并消除矛盾 |
+| 示例与实际任务不符 | 导致模型困惑 | 示例必须反映真实使用场景 |
+| 对简单任务过度设计 | 浪费 Token，速度变慢 | 提示词复杂度应与任务复杂度匹配 |
+| 缺乏评估框架 | 质量全靠猜 | 迭代前先定义指标 |
+| 仅针对单个示例优化 | 过度拟合特定案例 | 针对整体数据分布进行优化 |
+| 假设提示词可跨模型通用 | 不同模型需要不同的提示词 | 务必在目标模型上进行测试 |
+| 跳过版本控制 | 无法回滚或对比 | 每次更新提示词都需附带指标进行版本记录 |
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关系 |
 |-------|-------------|
-| `llm-as-judge` | LLM-as-judge evaluates prompt output quality |
-| `acceptance-testing` | Prompt evaluation datasets serve as acceptance tests |
-| `testing-strategy` | Prompt testing follows the evaluation methodology |
-| `senior-data-scientist` | Statistical testing validates A/B results |
-| `code-review` | Prompt changes reviewed like code changes |
-| `clean-code` | Prompt readability follows clean code naming principles |
+| `llm-as-judge` | LLM 作为裁判评估提示词输出质量 |
+| `acceptance-testing` | 提示词评估数据集可作为验收测试 |
+| `testing-strategy` | 提示词测试遵循本评估方法论 |
+| `senior-data-scientist` | 统计测试验证 A/B 测试结果 |
+| `code-review` | 提示词变更应像代码变更一样进行审查 |
+| `clean-code` | 提示词的可读性遵循整洁代码命名原则 |
 
 ---
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt prompting techniques to the specific model, task, and quality requirements. The evaluation and versioning practices are strongly recommended but can be scaled to project size. Always version production prompts.
+**灵活型 (FLEXIBLE)** — 根据特定模型、任务和质量要求调整提示词技术。评估和版本管理实践强烈建议采用，但可根据项目规模进行缩放。生产环境提示词务必进行版本控制。

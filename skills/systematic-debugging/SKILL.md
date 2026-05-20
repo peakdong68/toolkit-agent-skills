@@ -1,282 +1,281 @@
 ---
 name: systematic-debugging
-description: "Use when encountering bugs, unexpected behavior, test failures, or errors during development. Enforces a rigorous 4-phase investigation process that prevents shotgun debugging. Triggers: test failure, runtime error, unexpected behavior, production incident, performance regression."
+description: "在开发过程中遇到缺陷、意外行为、测试失败或错误时使用。强制执行严谨的四阶段调查流程，以防止散弹枪式调试。触发条件：测试失败、运行时错误、意外行为、生产事故、性能退化。"
 ---
 
-# Systematic Debugging
+# 系统性调试
 
-## Overview
+## 概述
 
-Debugging is investigation, not experimentation. This skill enforces a rigorous 4-phase process — root cause investigation, pattern analysis, hypothesis testing, and architecture questioning — that prevents shotgun debugging and ensures every fix is understood before it is applied.
+调试是调查取证，而非盲目实验。本技能强制执行严谨的四阶段流程——根本原因调查、模式分析、假设验证与架构质疑——以此防止散弹枪式调试，并确保每个修复方案在应用前都已被彻底理解。
 
-**Announce at start:** "I'm using the systematic-debugging skill to investigate this issue."
+**开始时宣告：**“我正在使用 systematic-debugging 技能来调查此问题。”
 
 ---
 
-## Core Principle
+## 核心原则
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  HARD-GATE: NEVER GUESS. NEVER SHOTGUN DEBUG.                  │
-│  NEVER CHANGE CODE WITHOUT UNDERSTANDING WHY IT IS BROKEN.     │
+│  硬性关卡：绝不猜测。绝不使用散弹枪式调试。                      │
+│  在未弄清为何出错前，绝不修改代码。                              │
 │                                                                 │
-│  You are a detective gathering evidence, not a gambler trying   │
-│  random fixes. If you are changing code without understanding   │
-│  the root cause, STOP immediately.                             │
+│  你是收集证据的侦探，而非尝试随机修复的赌徒。如果在未弄清根本原  │
+│  因的情况下修改代码，请立即停止。                                │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Phase 1: Root Cause Investigation
+## 阶段 1：根本原因调查
 
-**Goal:** Understand exactly WHAT is happening, not what you think is happening.
+**目标：** 准确理解实际发生了什么，而非你认为发生了什么。
 
-### Actions
+### 操作
 
-1. **Read the error message carefully.** The entire message. Every line. Including the stack trace.
-2. **Reproduce the bug.** If you cannot reproduce it, you cannot fix it. Find the exact steps.
-3. **Gather evidence.** Collect:
-   - Full error message and stack trace
-   - Input that triggers the bug
-   - Expected behavior vs actual behavior
-   - Environment details (versions, config, OS)
-4. **Check recent changes.** What changed since this last worked?
-   - Recent commits (`git log`, `git diff`)
-   - Dependency updates
-   - Configuration changes
-   - Environment changes
+1. **仔细阅读错误信息。** 完整阅读。每一行。包括堆栈跟踪。
+2. **复现缺陷。** 如果无法复现，就无法修复。找到确切的复现步骤。
+3. **收集证据。** 收集：
+   - 完整的错误信息与堆栈跟踪
+   - 触发缺陷的输入数据
+   - 预期行为与实际行为
+   - 环境详情（版本、配置、操作系统）
+4. **检查近期变更。** 自上次正常运行以来发生了什么变化？
+   - 近期提交（`git log`, `git diff`）
+   - 依赖项更新
+   - 配置变更
+   - 环境变更
 
-### Evidence Gathering Checklist
+### 证据收集清单
 
-- [ ] Full error message captured (not truncated)
-- [ ] Stack trace read from bottom to top
-- [ ] Bug reproduced reliably with specific steps
-- [ ] Expected vs actual behavior documented
-- [ ] Recent changes reviewed (`git log --oneline -20`)
-- [ ] Relevant logs examined
+- [ ] 已捕获完整错误信息（未截断）
+- [ ] 已从下至上阅读堆栈跟踪
+- [ ] 已通过特定步骤稳定复现缺陷
+- [ ] 已记录预期行为与实际行为
+- [ ] 已审查近期变更（`git log --oneline -20`）
+- [ ] 已检查相关日志
 
-### STOP — HARD-GATE: Do NOT proceed to Phase 2 until:
-- [ ] You can reproduce the bug consistently
-- [ ] You have the full error message and stack trace
-- [ ] You know what changed recently
-- [ ] You can describe the bug precisely (not vaguely)
+### 停止 — 硬性关卡：在满足以下条件前，不得进入阶段 2：
+- [ ] 你能稳定复现该缺陷
+- [ ] 你拥有完整的错误信息和堆栈跟踪
+- [ ] 你知道近期发生了什么变更
+- [ ] 你能精确描述该缺陷（而非模糊表述）
 
 ---
 
-## Phase 2: Pattern Analysis
+## 阶段 2：模式分析
 
-**Goal:** Narrow down WHERE the problem lives and WHEN it occurs.
+**目标：** 缩小问题所在的范围（WHERE）及其发生时机（WHEN）。
 
-### Actions
+### 操作
 
-1. **Find working examples.** Does this feature work in other contexts? With other inputs? In other environments?
-2. **Compare working vs broken.** What is different between the case that works and the case that does not?
-3. **Check dependencies.** Are all required services/libraries/configs present and correct?
-4. **Isolate the scope.** Can you reproduce with a minimal example? Strip away everything non-essential.
+1. **寻找正常案例。** 该功能在其他上下文中是否正常工作？使用其他输入时？在其他环境中？
+2. **对比正常与异常。** 正常案例与异常案例之间有何不同？
+3. **检查依赖项。** 所有必需的服务/库/配置是否均已就位且正确？
+4. **隔离范围。** 能否用最小化示例复现？剥离所有非必要部分。
 
-### Comparison Matrix
+### 对比矩阵
 
-Fill this out to identify the pattern:
+填写此表以识别模式：
 
-| Factor | Working Case | Broken Case | Different? |
+| 因素 | 正常案例 | 异常案例 | 是否存在差异？ |
 |--------|-------------|-------------|------------|
-| Input data | | | |
-| Environment | | | |
-| Configuration | | | |
-| Dependencies | | | |
-| Timing/order | | | |
-| User/permissions | | | |
-| State/context | | | |
+| 输入数据 | | | |
+| 运行环境 | | | |
+| 配置 | | | |
+| 依赖项 | | | |
+| 时序/顺序 | | | |
+| 用户/权限 | | | |
+| 状态/上下文 | | | |
 
-### STOP — HARD-GATE: Do NOT proceed to Phase 3 until:
-- [ ] You have identified at least one working case for comparison
-- [ ] You have compared working vs broken and identified differences
-- [ ] You have isolated the scope to the smallest reproducible case
-- [ ] Dependencies have been verified (versions, availability, config)
+### 停止 — 硬性关卡：在满足以下条件前，不得进入阶段 3：
+- [ ] 你已找到至少一个用于对比的正常案例
+- [ ] 你已对比正常与异常情况并识别出差异
+- [ ] 你已将范围隔离至最小可复现案例
+- [ ] 依赖项已验证（版本、可用性、配置）
 
 ---
 
-## Phase 3: Hypothesis and Testing
+## 阶段 3：假设与验证
 
-**Goal:** Form ONE specific, testable hypothesis and verify it with the smallest possible change.
+**目标：** 提出一个具体且可验证的假设，并通过尽可能小的改动进行验证。
 
-### Actions
+### 操作
 
-1. **Form ONE hypothesis.** Based on evidence from Phases 1-2, what is the single most likely cause?
-   - State it explicitly: "The bug occurs because [specific cause]"
-   - If you cannot state it specifically, go back to Phase 1 or 2
-2. **Design a minimal test.** What is the smallest change to confirm or deny this hypothesis?
-   - Prefer adding a test case over modifying production code
-   - Prefer logging/assertions over code changes
-   - Prefer reverting a change over writing new code
-3. **Apply the change and test.**
-   - Make ONLY the change needed to test the hypothesis
-   - Run the test suite
-   - Observe the result
-4. **Evaluate.**
-   - If CONFIRMED: proceed with the fix, write a regression test
-   - If DENIED: record what you learned, form a new hypothesis, return to step 1
+1. **提出一个假设。** 基于阶段 1-2 的证据，最可能的单一原因是什么？
+   - 明确表述：“该缺陷的发生是因为[具体原因]”
+   - 如果无法具体表述，请返回阶段 1 或 2
+2. **设计最小化测试。** 确认或推翻此假设所需的最小改动是什么？
+   - 优先添加测试用例，而非修改生产代码
+   - 优先使用日志/断言，而非代码变更
+   - 优先回滚变更，而非编写新代码
+3. **应用变更并测试。**
+   - 仅进行验证假设所需的变更
+   - 运行测试套件
+   - 观察结果
+4. **评估。**
+   - 若**证实**：继续执行修复，编写回归测试
+   - 若**推翻**：记录所学内容，提出新假设，返回步骤 1
 
-### Hypothesis Log Template
+### 假设记录模板
 
 ```
-Hypothesis #1: [description]
-Test: [what you did]
-Result: CONFIRMED / DENIED
-Learning: [what this taught you]
+假设 #1：[描述]
+测试：[你执行的操作]
+结果：证实 / 推翻
+所学：[这教会了你什么]
 
-Hypothesis #2: ...
+假设 #2：...
 ```
 
-### Decision Table: Hypothesis Testing Approach
+### 决策表：假设验证方法
 
-| Hypothesis Type | Testing Method | Example |
+| 假设类型 | 验证方法 | 示例 |
 |----------------|---------------|---------|
-| Recent code change caused it | `git bisect` or revert commit | "The bug was introduced in commit abc123" |
-| Data shape mismatch | Add logging/assertion | "The API returns null instead of array" |
-| Race condition | Add timing logs or serialize | "Request B completes before request A" |
-| Configuration error | Compare configs across environments | "Production uses different DB host" |
-| Dependency version issue | Lock to known-good version | "Library 2.0 changed the API surface" |
+| 近期代码变更导致 | `git bisect` 或回滚提交 | “该缺陷是在提交 abc123 中引入的” |
+| 数据结构不匹配 | 添加日志/断言 | “API 返回了 null 而非数组” |
+| 竞态条件 | 添加时序日志或串行化 | “请求 B 在请求 A 之前完成” |
+| 配置错误 | 跨环境对比配置 | “生产环境使用了不同的数据库主机” |
+| 依赖版本问题 | 锁定至已知正常版本 | “库 2.0 更改了 API 接口” |
 
-### STOP — HARD-GATE: Do NOT proceed to Phase 4 unless:
-- [ ] You have tested at least 3 hypotheses and ALL were denied
-- [ ] Each hypothesis was specific and testable
-- [ ] Each test was minimal (one change at a time)
-- [ ] You recorded learnings from each failed hypothesis
-
----
-
-## Phase 4: Architecture Questioning
-
-**Goal:** If 3+ hypotheses have failed, the problem may be structural. Step back and question assumptions.
-
-This phase is triggered ONLY after Phase 3 has been attempted at least 3 times without success.
-
-### Actions
-
-1. **Question your assumptions.** What have you been assuming is true that might not be?
-   - Is the data shaped the way you think it is?
-   - Is the control flow what you expect?
-   - Are the types what you think they are?
-   - Is the API contract what you assumed?
-2. **Question the design.** Is the current approach fundamentally flawed?
-   - Is there a race condition in the design?
-   - Is there a state management problem?
-   - Is there an incorrect abstraction?
-   - Are responsibilities misplaced?
-3. **Consider redesign.** Sometimes the fix is not a patch but a restructuring.
-   - Can you simplify the design to eliminate the bug class entirely?
-   - Is there a pattern that handles this case better?
-   - Should you replace rather than fix?
-4. **Seek external input.** If you are stuck:
-   - Explain the problem to someone else (rubber duck debugging)
-   - Search for known issues in dependencies
-   - Check if others have encountered similar problems
-
-### STOP — HARD-GATE: Do NOT continue without:
-- [ ] Written list of assumptions that were questioned
-- [ ] Explicit decision: patch the current design OR redesign
-- [ ] If redesigning: a plan before implementing
-- [ ] If patching: a new hypothesis informed by the assumption review
+### 停止 — 硬性关卡：除非满足以下条件，否则不得进入阶段 4：
+- [ ] 你已测试至少 3 个假设，且**全部**被推翻
+- [ ] 每个假设都是具体且可验证的
+- [ ] 每次测试都是最小化的（一次仅一项变更）
+- [ ] 你已记录每个失败假设的所学内容
 
 ---
 
-## Debugging Decision Flowchart
+## 阶段 4：架构质疑
+
+**目标：** 若 3 个以上假设均失败，问题可能源于结构性缺陷。退后一步，质疑既有假设。
+
+仅当阶段 3 尝试至少 3 次未成功后，才触发此阶段。
+
+### 操作
+
+1. **质疑你的假设。** 有哪些你一直认为理所当然的前提可能并不成立？
+   - 数据的结构是否如你所想？
+   - 控制流是否符合你的预期？
+   - 类型是否如你设想？
+   - API 契约是否与你假设的一致？
+2. **质疑设计。** 当前方案是否存在根本性缺陷？
+   - 设计中是否存在竞态条件？
+   - 是否存在状态管理问题？
+   - 是否存在不恰当的抽象？
+   - 职责划分是否错位？
+3. **考虑重构设计。** 有时修复方案不是打补丁，而是结构调整。
+   - 能否通过简化设计彻底消除此类缺陷？
+   - 是否有更好的模式来处理此情况？
+   - 是否应该替换而非修复？
+4. **寻求外部输入。** 若陷入僵局：
+   - 向他人解释问题（小黄鸭调试法）
+   - 搜索依赖项中的已知问题
+   - 检查他人是否遇到过类似问题
+
+### 停止 — 硬性关卡：未完成以下事项前，不得继续：
+- [ ] 已列出被质疑的假设清单
+- [ ] 已做出明确决策：修补当前设计 或 重新设计
+- [ ] 若重新设计：实施前需有明确计划
+- [ ] 若修补：提出基于假设审查的新假设
+
+---
+
+## 调试决策流程图
 
 ```
-Error encountered
+遇到错误
     |
     v
-Can you reproduce it?
+能否复现？
     |
-    +-- NO --> Gather more information (logs, user reports, monitoring)
-    |          Try different inputs, environments, timing
-    |          Do NOT proceed until reproducible
+    +-- 否 --> 收集更多信息（日志、用户报告、监控数据）
+    |          尝试不同输入、环境、时序
+    |          在可复现前不得继续
     |
-    +-- YES -> Read the FULL error message and stack trace
+    +-- 是 -> 阅读完整错误信息与堆栈跟踪
                |
                v
-         Is the cause obvious from the error?
+         错误信息是否直接指明了原因？
                |
-               +-- YES -> Form hypothesis, test it (Phase 3)
-               |          Still write a regression test
+               +-- 是 -> 提出假设并验证（阶段 3）
+               |          仍需编写回归测试
                |
-               +-- NO --> Complete Phase 1 evidence gathering
+               +-- 否 --> 完成阶段 1 的证据收集
                           |
                           v
-                    Find working case for comparison (Phase 2)
+                    寻找正常案例进行对比（阶段 2）
                           |
                           v
-                    Identify differences
+                    识别差异
                           |
                           v
-                    Form and test hypotheses (Phase 3)
+                    提出并验证假设（阶段 3）
                           |
-                          +-- Fixed --> Write regression test, verify
+                          +-- 已修复 --> 编写回归测试，进行验证
                           |
-                          +-- 3+ failed hypotheses --> Phase 4
+                          +-- 3 个以上假设失败 --> 进入阶段 4
 ```
 
 ---
 
-## Red Flags Table
+## 危险信号表
 
-| Red Flag | What It Means | Action |
+| 危险信号 | 含义 | 应对措施 |
 |----------|--------------|--------|
-| Changing code without understanding the bug | Shotgun debugging | Go back to Phase 1 |
-| Fix works but you do not know why | Accidental fix, likely to regress | Investigate until you understand |
-| Same bug keeps coming back | Root cause not addressed | Go to Phase 4, question design |
-| Fix causes new bugs elsewhere | Unexpected coupling | Map dependencies before proceeding |
-| "It works on my machine" | Environment difference | Go to Phase 2, comparison matrix |
-| Fix requires more than 20 lines | Might be a design issue | Go to Phase 4 |
-| Debugging for 30+ minutes | Tunnel vision | Take a break, re-read evidence from Phase 1 |
-| Reading the same code repeatedly | Missing something fundamental | Get a fresh perspective, explain aloud |
-| Multiple causes seem equally likely | Insufficient investigation | Go back to Phase 1, gather more evidence |
+| 在不理解缺陷的情况下修改代码 | 散弹枪式调试 | 返回阶段 1 |
+| 修复生效但不知原因 | 偶然修复，极易再次退化 | 调查直至完全理解 |
+| 同一缺陷反复出现 | 未解决根本原因 | 进入阶段 4，质疑设计 |
+| 修复导致其他位置出现新缺陷 | 意外耦合 | 继续前梳理依赖关系 |
+| “在我机器上是好的” | 环境差异 | 进入阶段 2，使用对比矩阵 |
+| 修复需要超过 20 行代码 | 可能是设计问题 | 进入阶段 4 |
+| 调试超过 30 分钟 | 隧道视野（钻牛角尖） | 休息片刻，重读阶段 1 证据 |
+| 反复阅读同一段代码 | 遗漏了根本性要素 | 转换视角，大声解释 |
+| 多个原因看起来同样可能 | 调查不充分 | 返回阶段 1，收集更多证据 |
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
+| 反模式 | 为何错误 | 正确做法 |
 |-------------|----------------|-----------------|
-| Changing random things to see if bug goes away | Wastes time, introduces new bugs | Form a hypothesis first |
-| Adding try/catch to suppress the error | Hides the real problem | Fix the root cause |
-| Rewriting the feature from scratch | Nuclear option is rarely needed | Isolate and fix the specific issue |
-| Blaming the framework/library without evidence | Usually your code is wrong | Prove the framework bug with minimal repro |
-| Skipping the regression test after fixing | Bug will return | Write the test, always |
-| Fixing symptoms instead of root causes | Patches accumulate, system degrades | Trace to the actual cause |
-| Debugging for 45+ minutes without stepping back | Tunnel vision reduces effectiveness | Take a break, re-read Phase 1 evidence |
-| Ignoring error messages or stack traces | The answer is often in the error | Read every line of the error |
+| 随意修改内容看缺陷是否消失 | 浪费时间，引入新缺陷 | 先提出假设 |
+| 添加 try/catch 掩盖错误 | 隐藏真实问题 | 修复根本原因 |
+| 从头重写功能 | 极端手段通常没必要 | 隔离并修复具体问题 |
+| 无证据就指责框架/库 | 通常是你自己的代码有问题 | 用最小可复现案例证明是框架缺陷 |
+| 修复后跳过回归测试 | 缺陷必将复发 | 务必编写测试 |
+| 修复表象而非根本原因 | 补丁堆积，系统退化 | 追溯至实际原因 |
+| 调试 45 分钟以上不抽身 | 隧道视野降低效率 | 休息片刻，重读阶段 1 证据 |
+| 忽略错误信息或堆栈跟踪 | 答案往往就在错误信息中 | 逐行阅读错误信息 |
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关系 |
 |-------|-------------|
-| `test-driven-development` | Every bug fix MUST include a regression test (RED-GREEN cycle) |
-| `verification-before-completion` | After fixing a bug, verify with fresh evidence |
-| `resilient-execution` | When debugging during task execution, pause task, complete debugging, resume |
-| `code-review` | Review the fix for completeness and side effects |
-| `self-learning` | Record new debugging patterns in learned-patterns.md |
-| `acceptance-testing` | Verify fix does not break acceptance criteria |
+| `test-driven-development` | 每个缺陷修复**必须**包含回归测试（RED-GREEN 循环） |
+| `verification-before-completion` | 修复缺陷后，使用新证据进行验证 |
+| `resilient-execution` | 在任务执行期间调试时，暂停任务，完成调试后恢复 |
+| `code-review` | 审查修复方案的完整性与副作用 |
+| `self-learning` | 将新的调试模式记录在 `learned-patterns.md` 中 |
+| `acceptance-testing` | 验证修复未破坏验收标准 |
 
 ---
 
-## Quick Reference: What NOT To Do
+## 快速参考：绝对不要做的事
 
-1. **Do NOT** change random things and see if the bug goes away
-2. **Do NOT** add try/catch to suppress the error
-3. **Do NOT** rewrite the feature from scratch as a first resort
-4. **Do NOT** blame the framework/library without evidence
-5. **Do NOT** skip writing a regression test after fixing
-6. **Do NOT** fix symptoms instead of root causes
-7. **Do NOT** debug for more than 45 minutes without stepping back
-8. **Do NOT** ignore error messages or stack traces
+1. **不要** 随意修改东西看缺陷是否消失
+2. **不要** 添加 try/catch 来掩盖错误
+3. **不要** 将重写功能作为首选方案
+4. **不要** 在无证据的情况下指责框架/库
+5. **不要** 修复后跳过编写回归测试
+6. **不要** 修复表象而非根本原因
+7. **不要** 连续调试超过 45 分钟不抽身反思
+8. **不要** 忽略错误信息或堆栈跟踪
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — The 4-phase process is mandatory and must be followed in order. Each phase has a HARD-GATE that must be satisfied before proceeding. Never change code without understanding why it is broken.
+**严格（RIGID）** — 四阶段流程为强制要求，必须按顺序执行。每个阶段都设有必须满足才能继续的**硬性关卡**。在未弄清为何出错前，绝不修改代码。

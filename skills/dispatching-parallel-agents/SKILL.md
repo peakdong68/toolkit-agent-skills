@@ -1,332 +1,337 @@
 ---
 name: dispatching-parallel-agents
-description: "Use when a task has multiple independent subtasks that can be executed concurrently by separate agents. Triggers when decomposed work has 2+ subtasks with no data dependencies, when subtasks operate on different files or codebase sections, when serial execution time would be significantly longer than parallel, or when independent analyses or deliverables need concurrent generation."
+description: '当任务包含多个可由独立代理并发执行的子任务时使用。当分解后的工作包含 2 个及以上无数据依赖的子任务、子任务操作不同文件或代码库的不同部分、串行执行时间显著长于并行执行、或需要并发生成独立分析结果或交付物时触发。'
 ---
 
-# Dispatching Parallel Agents
+# 并行代理调度
 
-## Overview
+## 概述
 
-This skill coordinates multiple agents working concurrently on independent subtasks to reduce total execution time while maintaining correctness. It provides strict rules for identifying safe parallelization opportunities, writing focused agent prompts, and integrating results without conflicts. The key constraint is that no two agents may modify the same file.
+本技能协调多个代理并发处理独立子任务，在保持正确性的同时减少总执行时间。它提供了严格的规则，用于识别安全的并行化机会、编写聚焦的代理提示词，以及无冲突地整合结果。关键约束是：任何两个代理不得修改同一文件。
 
-**Announce at start:** "I'm using the dispatching-parallel-agents skill to run [N] independent tasks concurrently."
+**开始时声明：** "我正在使用 dispatching-parallel-agents 技能并发运行 [N] 个独立任务。"
 
-## Agent Tool Reference
+## 代理工具参考
 
-All dispatch uses the `Agent` tool. Parameters:
-- `prompt` (required) — task description with full context
-- `description` (required) — short label (3-5 words)
-- `subagent_type` — `"Explore"` (codebase search), `"Plan"` (architecture), `"general-purpose"` (default)
-- `run_in_background` — `true` for async (you'll be notified on completion)
-- `model` — optional override: `"sonnet"`, `"opus"`, `"haiku"`
+所有调度均使用 `Agent` 工具。参数：
 
-**Parallel:** Multiple `Agent` calls in one message run concurrently.
-**Background:** `run_in_background=true` for non-blocking work.
-**Named agents:** Use `subagent_type` to reference installed agent templates (e.g., `"superpowers:code-reviewer"`).
+- `prompt`（必需）— 包含完整上下文的任务描述
+- `description`（必需）— 简短标签（3-5 个词）
+- `subagent_type` — `"Explore"`（代码库搜索）、`"Plan"`（架构设计）、`"general-purpose"`（默认）
+- `run_in_background` — 设为 `true` 以异步执行（完成后将收到通知）
+- `model` — 可选覆盖：`"sonnet"`、`"opus"`、`"haiku"`
 
-## Trigger Conditions
+**并行执行：** 单条消息中的多个 `Agent` 调用将并发运行。
+**后台执行：** `run_in_background=true` 用于非阻塞工作。
+**命名代理：** 使用 `subagent_type` 引用已安装的代理模板（例如 `"superpowers:code-reviewer"`）。
 
-- A task decomposes into 2+ subtasks with no data dependencies between them
-- Each subtask operates on different files or different sections of the codebase
-- The combined result can be assembled after all agents complete
-- Total serial time would be significantly longer than parallel time
-- `/decompose` output reveals independent task clusters
+## 触发条件
 
----
-
-## Phase 1: Independence Verification
-
-**Goal:** Confirm subtasks are truly independent and safe to parallelize.
-
-Every subtask must satisfy ALL four independence criteria:
-
-| Criterion | Question | If NO |
-|-----------|---------|-------|
-| No shared files | Do any two agents write to the same file? | Serialize those tasks |
-| No shared mutable state | Does any agent depend on a side effect of another? | Serialize dependent tasks |
-| Self-contained context | Can each agent work with only its own inputs? | Provide more context or serialize |
-| Independent verification | Can each agent's output be validated alone? | Combine into single task |
-
-### Parallelization Decision Table
-
-| Scenario | Parallelize? | Reason |
-|----------|-------------|--------|
-| Different files, different concerns | Yes | No conflict possible |
-| Same module, different files | Yes (careful) | Verify no shared imports change |
-| Same file, different sections | No | Merge conflicts inevitable |
-| Task B uses Task A's output | No | Sequential dependency |
-| Both read same files, write different | Yes | Reads are safe to parallelize |
-| Both modify shared config file | No | Config conflicts |
-| Independent test files | Yes | Tests are independent |
-| One agent adds dep, another uses it | No | Package-level dependency |
-
-### When NOT to Parallelize
-
-- Subtasks share mutable state or modify the same files
-- Task B depends on the output of Task A
-- The overhead of coordination exceeds the time saved
-- A single agent can complete the work in under 30 seconds
-- The task requires iterative refinement where each step informs the next
-
-**STOP — Do NOT dispatch agents (via the `Agent` tool) until:**
-- [ ] All four independence criteria verified for every subtask pair
-- [ ] No two agents write to the same file
-- [ ] Each agent's context is self-contained
+- 任务可分解为 2 个及以上彼此无数据依赖的子任务
+- 每个子任务操作不同的文件或代码库的不同部分
+- 所有代理完成后可组装出最终结果
+- 串行总执行时间显著长于并行时间
+- `/decompose` 输出揭示了独立的任务簇
 
 ---
 
-## Phase 2: Prompt Construction
+## 阶段 1：独立性验证
 
-**Goal:** Write focused, unambiguous prompts that prevent scope creep and conflicts.
+**目标：** 确认子任务真正独立且可安全并行化。
 
-Each agent prompt MUST contain exactly four sections:
+每个子任务必须满足全部四项独立性标准：
 
-### Section 1: Scope (What to Do)
+| 标准           | 问题                               | 若否                   |
+| -------------- | ---------------------------------- | ---------------------- |
+| 无共享文件     | 是否有任意两个代理写入同一文件？   | 将这些任务串行化       |
+| 无共享可变状态 | 是否有代理依赖另一个代理的副作用？ | 将依赖任务串行化       |
+| 上下文自包含   | 每个代理是否仅凭自身输入即可工作？ | 提供更多上下文或串行化 |
+| 可独立验证     | 每个代理的输出能否单独验证？       | 合并为单个任务         |
 
-Be specific about the exact task, files, and expected changes.
+### 并行化决策表
+
+| 场景                               | 可并行化？   | 原因               |
+| ---------------------------------- | ------------ | ------------------ |
+| 不同文件，不同关注点               | 是           | 不可能产生冲突     |
+| 同一模块，不同文件                 | 是（需谨慎） | 验证无共享导入变更 |
+| 同一文件，不同部分                 | 否           | 合并冲突不可避免   |
+| 任务 B 使用任务 A 的输出           | 否           | 存在顺序依赖       |
+| 两者读取相同文件，写入不同文件     | 是           | 读取操作可安全并行 |
+| 两者修改共享配置文件               | 否           | 配置冲突           |
+| 独立测试文件                       | 是           | 测试相互独立       |
+| 一个代理添加依赖，另一个使用该依赖 | 否           | 包级别依赖         |
+
+### 何时不应并行化
+
+- 子任务共享可变状态或修改同一文件
+- 任务 B 依赖任务 A 的输出
+- 协调开销超过节省的时间
+- 单个代理可在 30 秒内完成工作
+- 任务需要迭代优化，且每一步依赖上一步结果
+
+**停止 — 在满足以下条件前，切勿（通过 `Agent` 工具）调度代理：**
+
+- [ ] 每对子任务均已验证全部四项独立性标准
+- [ ] 没有两个代理写入同一文件
+- [ ] 每个代理的上下文均为自包含
+
+---
+
+## 阶段 2：提示词构建
+
+**目标：** 编写聚焦、无歧义的提示词，防止范围蔓延和冲突。
+
+每个代理提示词必须恰好包含以下四个部分：
+
+### 第一部分：范围（要做什么）
+
+明确指定具体任务、文件和预期变更。
 
 ```
-SCOPE: Add structured JSON logging to all API route handlers in src/api/.
-Replace console.log calls with the logger from src/utils/logger.ts.
-Files to modify: src/api/users.ts, src/api/orders.ts, src/api/products.ts.
+范围：为 src/api/ 中所有 API 路由处理程序添加结构化 JSON 日志记录。
+将 console.log 调用替换为 src/utils/logger.ts 中的 logger。
+需修改的文件：src/api/users.ts, src/api/orders.ts, src/api/products.ts。
 ```
 
-### Section 2: Context (Everything Needed)
+### 第二部分：上下文（所需全部信息）
 
-Provide all information the agent needs without requiring it to explore.
+提供代理完成任务所需的全部信息，无需其额外探索。
 
 ```
-CONTEXT:
+上下文：
 - Logger API: logger.info(message, metadata), logger.error(message, error)
-- Import: import { logger } from '../utils/logger'
-- Current pattern in files: console.log('action', data)
-- Target pattern: logger.info('action', { data, requestId: req.id })
+- 导入语句：import { logger } from '../utils/logger'
+- 文件当前模式：console.log('action', data)
+- 目标模式：logger.info('action', { data, requestId: req.id })
 ```
 
-### Section 3: Output Format (What to Return)
+### 第三部分：输出格式（返回什么）
 
-Define exactly what the agent should produce.
-
-```
-OUTPUT: For each modified file, return:
-1. The file path
-2. A summary of changes made
-3. Number of console.log calls replaced
-```
-
-### Section 4: Constraints (What NOT to Do)
-
-Prevent scope creep and conflicts explicitly.
+明确定义代理应生成的内容。
 
 ```
-CONSTRAINTS:
-- Do NOT modify any files outside src/api/
-- Do NOT change the logger utility itself
-- Do NOT add new dependencies
-- Do NOT refactor function signatures
-- Do NOT modify test files
-- If you encounter an issue outside your scope, report it but do not fix it
+输出：对于每个修改的文件，返回：
+1. 文件路径
+2. 变更摘要
+3. 被替换的 console.log 调用数量
 ```
 
-### Agent Prompt Template
+### 第四部分：约束（不要做什么）
+
+明确防止范围蔓延和冲突。
 
 ```
-You are a focused agent with a single task.
-
-## Scope
-[Specific task description with exact files]
-
-## Context
-[All information needed to complete the task]
-[Relevant code patterns, APIs, conventions]
-
-## Output Format
-[Exact structure of what to return]
-
-## Constraints
-- Do NOT modify files outside: [list]
-- Do NOT change: [list things to leave alone]
-- Do NOT add dependencies
-- If you encounter an issue outside your scope, report it but do not fix it
+约束：
+- 不得修改 src/api/ 之外的任何文件
+- 不得更改 logger 工具本身
+- 不得添加新依赖
+- 不得重构函数签名
+- 不得修改测试文件
+- 如遇范围外问题，请报告但勿修复
 ```
 
-### Prompt Quality Checklist
+### 代理提示词模板
 
-| Check | Question |
-|-------|---------|
-| Scope is specific | Can the agent complete the task without guessing? |
-| Context is complete | Does the agent need to explore the codebase? (should be no) |
-| Output is defined | Will the agent return what you need to integrate? |
-| Constraints are explicit | Are file boundaries and "do NOT" items clear? |
+```
+你是一个聚焦单一任务的代理。
 
-**STOP — Do NOT dispatch (via the `Agent` tool) until:**
-- [ ] Every prompt has all 4 sections
-- [ ] No prompt requires the agent to explore beyond provided context
-- [ ] File boundaries are explicit in every constraint section
+## 范围
+[具体任务描述，含确切文件]
+
+## 上下文
+[完成任务所需的全部信息]
+[相关代码模式、API、约定]
+
+## 输出格式
+[需返回内容的确切结构]
+
+## 约束
+- 不得修改以下范围外的文件：[列表]
+- 不得更改：[需保留原样的事项列表]
+- 不得添加依赖
+- 如遇范围外问题，请报告但勿修复
+```
+
+### 提示词质量检查清单
+
+| 检查项     | 问题                               |
+| ---------- | ---------------------------------- |
+| 范围具体   | 代理能否无需猜测即可完成任务？     |
+| 上下文完整 | 代理是否需要探索代码库？（应为否） |
+| 输出已定义 | 代理是否会返回你整合所需的内容？   |
+| 约束明确   | 文件边界和"禁止"事项是否清晰？     |
+
+**停止 — 在满足以下条件前，切勿（通过 `Agent` 工具）调度：**
+
+- [ ] 每个提示词均包含全部 4 个部分
+- [ ] 没有提示词要求代理探索所提供上下文之外的内容
+- [ ] 每个约束部分均明确指定文件边界
 
 ---
 
-## Phase 3: Dispatch and Monitor
+## 阶段 3：调度与监控
 
-**Goal:** Launch all agents (via the `Agent` tool) concurrently and track completion.
+**目标：** 并发启动所有代理（通过 `Agent` 工具）并跟踪完成情况。
 
-1. Launch all agents concurrently by invoking multiple `Agent` tool calls in a single message
-2. Each agent works in isolation on its designated files
-3. Monitor for completion — wait for ALL agents to finish
-4. Collect outputs from every agent
+1. 通过在单条消息中调用多个 `Agent` 工具，并发启动所有代理
+2. 每个代理在其指定文件上隔离工作
+3. 监控完成情况 — 等待所有代理完成
+4. 收集每个代理的输出
 
-### Dispatch Tracking Table
+### 调度跟踪表
 
 ```
-| Agent | Task | Status | Files | Result |
+| 代理 | 任务 | 状态 | 文件 | 结果 |
 |-------|------|--------|-------|--------|
-| Agent 1 | Add logging to API | in_progress | src/api/*.ts | — |
-| Agent 2 | Update unit tests | in_progress | tests/unit/*.ts | — |
-| Agent 3 | Fix CSS layout | in_progress | src/styles/*.css | — |
+| 代理 1 | 为 API 添加日志 | 进行中 | src/api/*.ts | — |
+| 代理 2 | 更新单元测试 | 进行中 | tests/unit/*.ts | — |
+| 代理 3 | 修复 CSS 布局 | 进行中 | src/styles/*.css | — |
 ```
 
-### Failure Handling During Dispatch
+### 调度期间的故障处理
 
-| Scenario | Action |
-|----------|--------|
-| One agent fails, others succeed | Retry failed agent independently (via the `Agent` tool) |
-| Multiple agents fail independently | Retry each independently (via the `Agent` tool) |
-| Agent reports out-of-scope issue | Note for post-integration review |
-| Agent exceeds scope (modifies wrong files) | Reject output, re-dispatch (via the `Agent` tool) with stricter constraints |
-
----
-
-## Phase 4: Integration and Verification
-
-**Goal:** Combine all agent outputs and verify the integrated result.
-
-1. **Collect outputs** — Gather results from every agent
-2. **Check for conflicts** — Verify no file was modified by multiple agents
-3. **Apply changes** — Integrate all outputs into the codebase
-4. **Run integration checks** — Execute the full test suite
-5. **Resolve issues** — If integration fails, identify which agent's changes caused it
-6. **Commit atomically** — All changes go in together or not at all
-
-### Integration Verification Checklist
-
-| Check | Command | Must Pass |
-|-------|---------|-----------|
-| No file conflicts | Diff outputs for shared files | Yes |
-| Tests pass | Full test suite | Yes |
-| Build passes | Build command | Yes |
-| Lint passes | Lint command | Yes |
-| No regressions | Compare test count before/after | Yes |
-
-### Integration Failure Decision Table
-
-| Failure Type | Diagnosis | Action |
-|-------------|-----------|--------|
-| Test failure in Agent 1's files | Agent 1's changes have a bug | Re-dispatch Agent 1 (via the `Agent` tool) with test failure context |
-| Test failure in unrelated files | Cross-cutting regression | Identify root cause, fix manually or re-dispatch (via the `Agent` tool) |
-| Build failure | Import/type issue | Check which agent's changes caused it, fix |
-| Merge conflict | Agents touched same file (should not happen) | Rollback, serialize those tasks |
-
-**STOP — Do NOT commit until:**
-- [ ] All agent outputs collected
-- [ ] No file conflicts detected
-- [ ] Full test suite passes
-- [ ] Build and lint pass
+| 场景                         | 操作                                                |
+| ---------------------------- | --------------------------------------------------- |
+| 一个代理失败，其他成功       | 独立重试失败的代理（通过 `Agent` 工具）             |
+| 多个代理独立失败             | 分别独立重试每个代理（通过 `Agent` 工具）           |
+| 代理报告范围外问题           | 记录供整合后审查                                    |
+| 代理超出范围（修改错误文件） | 拒绝输出，以更严格约束重新调度（通过 `Agent` 工具） |
 
 ---
 
-## Common Parallel Patterns
+## 阶段 4：整合与验证
 
-### Pattern Decision Table
+**目标：** 合并所有代理输出并验证整合结果。
 
-| Pattern | When to Use | Example |
-|---------|-----------|---------|
-| By Module | Independent modules or packages | One `Agent` call per microservice |
-| By Layer | Layers touch different files | API agent, service agent, data agent |
-| By Feature Area | Independent vertical slices | Auth agent, profile agent, billing agent |
-| By Task Type | Code, tests, docs touch different files | Code agent, test agent, docs agent |
+1. **收集输出** — 汇总每个代理的结果
+2. **检查冲突** — 验证无文件被多个代理修改
+3. **应用变更** — 将所有输出整合到代码库中
+4. **运行整合检查** — 执行完整测试套件
+5. **解决问题** — 若整合失败，识别是哪个代理的变更导致
+6. **原子提交** — 所有变更一并提交或全部回滚
 
-### Example: Full Dispatch
+### 整合验证检查清单
+
+| 检查项       | 命令                   | 必须通过 |
+| ------------ | ---------------------- | -------- |
+| 无文件冲突   | 对比共享文件的输出差异 | 是       |
+| 测试通过     | 完整测试套件           | 是       |
+| 构建通过     | 构建命令               | 是       |
+| 代码检查通过 | Lint 命令              | 是       |
+| 无回归       | 对比前后测试数量       | 是       |
+
+### 整合失败决策表
+
+| 失败类型                | 诊断                             | 操作                                                  |
+| ----------------------- | -------------------------------- | ----------------------------------------------------- |
+| 代理 1 文件中的测试失败 | 代理 1 的变更存在缺陷            | 以测试失败上下文重新调度代理 1（通过 `Agent` 工具）   |
+| 无关文件中的测试失败    | 跨切面回归                       | 识别根本原因，手动修复或重新调度（通过 `Agent` 工具） |
+| 构建失败                | 导入/类型问题                    | 检查是哪个代理的变更导致，修复                        |
+| 合并冲突                | 代理触碰了同一文件（本不应发生） | 回滚，将这些任务串行化                                |
+
+**停止 — 在满足以下条件前，切勿提交：**
+
+- [ ] 已收集所有代理输出
+- [ ] 未检测到文件冲突
+- [ ] 完整测试套件通过
+- [ ] 构建和代码检查通过
+
+---
+
+## 常见并行模式
+
+### 模式决策表
+
+| 模式       | 使用时机                     | 示例                             |
+| ---------- | ---------------------------- | -------------------------------- |
+| 按模块     | 独立模块或包                 | 每个微服务一个 `Agent` 调用      |
+| 按层级     | 各层操作不同文件             | API 代理、服务代理、数据代理     |
+| 按功能区域 | 独立垂直切片                 | 认证代理、个人资料代理、计费代理 |
+| 按任务类型 | 代码、测试、文档操作不同文件 | 代码代理、测试代理、文档代理     |
+
+### 示例：完整调度
 
 ```
-TASK: "Update the API to v2, add tests, and update OpenAPI spec"
+任务："将 API 更新至 v2 版本，添加测试，并更新 OpenAPI 规范"
 
-AGENT 1 - API Routes:
-  Scope: Update route handlers in src/routes/v2/
-  Context: [v2 API spec, breaking changes list]
-  Output: Modified files list, breaking changes implemented
-  Constraints: Do NOT touch tests or docs
+代理 1 - API 路由：
+  范围：更新 src/routes/v2/ 中的路由处理程序
+  上下文：[v2 API 规范、破坏性变更列表]
+  输出：修改文件列表、已实现的破坏性变更
+  约束：不得触碰测试或文档
 
-AGENT 2 - Tests:
-  Scope: Write tests in tests/v2/
-  Context: [v2 API spec, test conventions, existing v1 tests as reference]
-  Output: New test files, coverage summary
-  Constraints: Do NOT modify source code
+代理 2 - 测试：
+  范围：在 tests/v2/ 中编写测试
+  上下文：[v2 API 规范、测试约定、现有 v1 测试作为参考]
+  输出：新测试文件、覆盖率摘要
+  约束：不得修改源代码
 
-AGENT 3 - OpenAPI Spec:
-  Scope: Update openapi/v2.yaml
-  Context: [v2 API spec, OpenAPI 3.1 format]
-  Output: Updated spec file
-  Constraints: Do NOT modify code or tests
+代理 3 - OpenAPI 规范：
+  范围：更新 openapi/v2.yaml
+  上下文：[v2 API 规范、OpenAPI 3.1 格式]
+  输出：更新后的规范文件
+  约束：不得修改代码或测试
 ```
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Fails | Correct Approach |
-|-------------|-------------|-----------------|
-| Two agents modifying the same file | Merge conflicts, data loss | One file owner per `Agent` dispatch |
-| Shared mutable state between agents | Race conditions, inconsistency | Eliminate shared state |
-| Incomplete context in prompts | Agents explore and step on each other | Provide ALL needed context |
-| Vague file boundaries | Agents guess scope, modify wrong files | Explicit file lists in constraints |
-| No integration check after completion | Cross-cutting bugs go undetected | Full test suite after integration |
-| Parallelizing sequential tasks | Agent B needs Agent A's output | Verify independence first |
-| Not tracking which agent touched which file | Cannot diagnose integration failures | Maintain dispatch tracking table |
-| Dispatching too many agents (10+) | Coordination overhead exceeds savings | 2-5 `Agent` calls per dispatch round |
-| Skipping rollback preparation | Cannot recover from integration failure | Keep pre-dispatch state recoverable |
+| 反模式                       | 失败原因                   | 正确做法                              |
+| ---------------------------- | -------------------------- | ------------------------------------- |
+| 两个代理修改同一文件         | 合并冲突、数据丢失         | 每次 `Agent` 调度每个文件仅一个所有者 |
+| 代理间共享可变状态           | 竞态条件、不一致           | 消除共享状态                          |
+| 提示词中上下文不完整         | 代理探索时相互干扰         | 提供所需全部上下文                    |
+| 文件边界模糊                 | 代理猜测范围，修改错误文件 | 约束中明确列出文件                    |
+| 完成后无整合检查             | 跨切面缺陷未被发现         | 整合后运行完整测试套件                |
+| 并行化顺序任务               | 代理 B 需要代理 A 的输出   | 首先验证独立性                        |
+| 未跟踪哪个代理修改了哪个文件 | 无法诊断整合失败           | 维护调度跟踪表                        |
+| 调度过多代理（10+）          | 协调开销超过节省时间       | 每轮调度 2-5 个 `Agent` 调用          |
+| 跳过回滚准备                 | 整合失败后无法恢复         | 保持调度前状态可恢复                  |
 
 ---
 
-## Anti-Rationalization Guards
+## 反合理化防护
 
 <HARD-GATE>
-Do NOT dispatch agents (via the `Agent` tool) that modify the same file. Do NOT parallelize tasks with data dependencies. Do NOT skip integration verification. If independence criteria are not met, serialize the tasks.
+切勿（通过 `Agent` 工具）调度修改同一文件的代理。切勿并行化存在数据依赖的任务。切勿跳过整合验证。若独立性标准未满足，则将任务串行化。
 </HARD-GATE>
 
-If you catch yourself thinking:
-- "These agents probably won't conflict..." — Verify. Do not assume.
-- "The integration will be fine..." — Run the full test suite. Always.
-- "I can merge their changes to the same file manually..." — No. One file, one owner.
+若你发现自己在想：
+
+- "这些代理可能不会冲突..." — 请验证，勿假设。
+- "整合应该没问题..." — 运行完整测试套件。始终如此。
+- "我可以手动合并它们对同一文件的变更..." — 不行。一个文件，一个所有者。
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship | When |
-|-------|-------------|------|
-| `task-decomposition` | Upstream — identifies independent task clusters | Before dispatching |
-| `subagent-driven-development` | Complementary — provides review gates | Quality gates for agent output |
-| `executing-plans` | Upstream — may delegate independent tasks | During plan execution |
-| `verification-before-completion` | Downstream — verifies integrated result | After integration |
-| `code-review` | Downstream — reviews integrated changes | After all agents complete |
-| `resilient-execution` | On failure — retries failed agents | When individual agents fail |
-
----
-
-## Parallelism Safety Rules Summary
-
-| Rule | Rationale |
-|------|-----------|
-| No two agents modify the same file | Prevents merge conflicts and race conditions |
-| No shared mutable state | Eliminates data races |
-| Each agent gets complete context | Prevents agents from exploring and stepping on each other |
-| Define file boundaries explicitly | Makes ownership unambiguous |
-| Review integration after completion | Catches cross-cutting issues |
-| Atomic commit for all changes | All in or all out |
-| Always have a rollback path | Keep pre-dispatch state recoverable |
+| 技能                             | 关系                    | 时机               |
+| -------------------------------- | ----------------------- | ------------------ |
+| `task-decomposition`             | 上游 — 识别独立任务簇   | 调度前             |
+| `subagent-driven-development`    | 互补 — 提供审查关卡     | 代理输出的质量关卡 |
+| `executing-plans`                | 上游 — 可能委托独立任务 | 计划执行期间       |
+| `verification-before-completion` | 下游 — 验证整合结果     | 整合后             |
+| `code-review`                    | 下游 — 审查整合后的变更 | 所有代理完成后     |
+| `resilient-execution`            | 故障时 — 重试失败的代理 | 单个代理失败时     |
 
 ---
 
-## Skill Type
+## 并行安全规则摘要
 
-**RIGID** — Follow this process exactly. Independence verification is mandatory. All four prompt sections are mandatory. Integration verification is mandatory. No shortcuts on parallelism safety.
+| 规则                   | 理由                   |
+| ---------------------- | ---------------------- |
+| 无两个代理修改同一文件 | 防止合并冲突和竞态条件 |
+| 无共享可变状态         | 消除数据竞争           |
+| 每个代理获得完整上下文 | 防止代理探索时相互干扰 |
+| 明确定义文件边界       | 使所有权无歧义         |
+| 完成后审查整合结果     | 捕获跨切面问题         |
+| 所有变更原子提交       | 全部提交或全部回滚     |
+| 始终具备回滚路径       | 保持调度前状态可恢复   |
+
+---
+
+## 技能类型
+
+**严格模式（RIGID）** — 严格按此流程执行。独立性验证为强制项。全部四个提示词部分为强制项。整合验证为强制项。并行安全方面无任何捷径。

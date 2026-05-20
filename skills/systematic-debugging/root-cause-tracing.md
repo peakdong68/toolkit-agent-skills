@@ -1,280 +1,280 @@
-# Root Cause Tracing
+# 根本原因追踪
 
-Reference document for the systematic-debugging skill. These are structured techniques for tracing errors back to their true origin.
+系统化调试技能的参考文档。这些是用于将错误追溯至其真正源头的结构化技术。
 
 ---
 
-## 1. Backward Tracing (Error → Call Stack → Root)
+## 1. 逆向追踪（错误 → 调用栈 → 根源）
 
-The most fundamental debugging technique. Start from the symptom and trace backward through the execution path to find the origin.
+最基础的调试技术。从症状出发，沿执行路径逆向追溯以找到源头。
 
-### The Process
-
-```
-SYMPTOM (what you see)
-    ↑
-PROXIMATE CAUSE (what directly triggered it)
-    ↑
-INTERMEDIATE CAUSE (what led to that)
-    ↑
-ROOT CAUSE (the actual defect)
-```
-
-### Steps
-
-1. **Start at the error.** Read the error message and note the exact line and file.
-2. **Read the stack trace bottom-to-top.** The bottom is the origin, the top is where it manifested. Identify each frame:
-   - Which function was called?
-   - What arguments were passed?
-   - What was the expected state at that point?
-3. **Trace data flow backward.** For each variable in the error:
-   - Where was it assigned its current value?
-   - Where did that value come from?
-   - At which point did the value diverge from expectations?
-4. **Find the divergence point.** The root cause is the FIRST place where reality diverged from expectations.
-
-### Example
+### 流程
 
 ```
-Error: TypeError: Cannot read property 'name' of undefined
+症状（你看到的现象）
+    ↑
+直接原因（直接触发它的因素）
+    ↑
+中间原因（导致该直接原因的因素）
+    ↑
+根本原因（实际的缺陷）
+```
+
+### 步骤
+
+1. **从错误开始。** 阅读错误信息，并记录确切的行号和文件。
+2. **自下而上阅读调用栈。** 底部是源头，顶部是错误显现的位置。识别每一帧：
+   - 调用了哪个函数？
+   - 传入了什么参数？
+   - 在该节点预期的状态是什么？
+3. **逆向追踪数据流。** 针对错误中涉及的每个变量：
+   - 它是在哪里被赋予当前值的？
+   - 该值从何而来？
+   - 值在哪个节点开始偏离预期？
+4. **找到分歧点。** 根本原因是现实与预期**首次**发生偏离的地方。
+
+### 示例
+
+```
+错误: TypeError: Cannot read property 'name' of undefined
   at formatUser (format.js:15)
   at processUsers (process.js:42)
   at handleRequest (handler.js:8)
 
-Backward trace:
-  formatUser(user) → user is undefined
-  ↑ processUsers passes users[i] → users[i] is undefined
-  ↑ users array has fewer items than expected
-  ↑ handleRequest fetches users → API returned partial data
-  ↑ ROOT CAUSE: API pagination not handled, only first page fetched
+逆向追踪：
+  formatUser(user) → user 为 undefined
+  ↑ processUsers 传入 users[i] → users[i] 为 undefined
+  ↑ users 数组的项目数少于预期
+  ↑ handleRequest 获取 users → API 返回了部分数据
+  ↑ 根本原因：未处理 API 分页逻辑，仅获取了第一页数据
 ```
 
-### Key Principle
+### 核心原则
 
-The error message tells you WHERE the problem manifested. The root cause is almost never at that location. Trace backward until you find the first place where something went wrong.
+错误信息告诉你问题在“何处”显现。根本原因几乎从不在那个位置。持续逆向追踪，直到找到首次出错的地方。
 
 ---
 
-## 2. Binary Search Debugging (Bisect the Problem Space)
+## 2. 二分调试法（对问题空间进行二分）
 
-When you have a large codebase or a long history and don't know where the bug was introduced, use binary search to find it efficiently.
+当你面对大型代码库或较长的历史记录，且不知道 bug 是何时引入时，使用二分法可以高效定位。
 
 ### Git Bisect
 
-When you know the bug was introduced between two commits:
+当你知道 bug 是在两次提交之间引入时：
 
 ```bash
 git bisect start
-git bisect bad                    # Current commit has the bug
-git bisect good <known-good-sha>  # This commit was working
+git bisect bad                    # 当前提交存在 bug
+git bisect good <已知正常的-sha>  # 该提交运行正常
 
-# Git checks out the middle commit
-# Test it:
-# - If bug exists: git bisect bad
-# - If bug absent: git bisect good
-# Repeat until git identifies the exact commit
+# Git 会检出中间的提交
+# 进行测试：
+# - 如果存在 bug：git bisect bad
+# - 如果正常：git bisect good
+# 重复直到 git 定位到确切的提交
 
-git bisect reset  # When done
+git bisect reset  # 完成后重置
 ```
 
-**Automated bisect:** If you have a test that exposes the bug:
+**自动化 bisect：** 如果你有能复现该 bug 的测试脚本：
 ```bash
-git bisect start HEAD <known-good-sha>
+git bisect start HEAD <已知正常的-sha>
 git bisect run ./test-script.sh
 ```
 
-### Code Bisect (Without Git)
+### 代码二分（不使用 Git）
 
-When the bug is in current code but you don't know which part:
+当 bug 存在于当前代码中，但不知道具体是哪部分时：
 
-1. **Identify the full code path** from entry point to error
-2. **Add a checkpoint at the midpoint** (log statement or assertion)
-3. **Run the test:**
-   - If midpoint state is correct → bug is in the second half
-   - If midpoint state is wrong → bug is in the first half
-4. **Repeat** with the guilty half until you find the exact line
+1. **确定完整的代码路径**：从入口点到错误发生处。
+2. **在中间点设置检查点**（打印日志或断言）。
+3. **运行测试：**
+   - 如果中间点状态正确 → bug 在后半部分
+   - 如果中间点状态错误 → bug 在前半部分
+4. **重复**对有问题的一半进行排查，直到定位到确切的代码行。
 
-### Data Bisect
+### 数据二分
 
-When the bug is triggered by specific data:
+当 bug 由特定数据触发时：
 
-1. Take the failing input dataset
-2. Split it in half
-3. Test each half independently
-4. The half that fails contains the trigger
-5. Repeat until you find the exact data element causing the issue
+1. 获取导致失败的输入数据集。
+2. 将其一分为二。
+3. 分别独立测试每一半。
+4. 失败的那一半包含触发问题的数据。
+5. 重复此过程，直到找到导致问题的确切数据元素。
 
-### Efficiency
+### 效率
 
-Binary search debugging finds the problem in O(log n) steps, where n is the number of commits, lines, or data elements. For 1000 commits, that's about 10 steps.
+二分调试法能在 O(log n) 步内找到问题，其中 n 是提交数、代码行数或数据元素的数量。对于 1000 次提交，大约只需 10 步。
 
 ---
 
-## 3. Diff-Based Debugging (What Changed?)
+## 3. 基于 Diff 的调试（发生了什么变化？）
 
-Most bugs are caused by recent changes. Systematically examine what changed to find the culprit.
+大多数 bug 都是由近期的变更引起的。系统地审查变更内容以找出罪魁祸首。
 
-### What to Diff
+### 需要对比的内容
 
-| What Changed | How to Check |
+| 变更内容 | 检查方法 |
 |-------------|-------------|
-| Code | `git diff`, `git log --oneline -20`, `git diff HEAD~5` |
-| Dependencies | `git diff package.json`, `git diff Gemfile.lock`, `git diff requirements.txt` |
-| Configuration | `git diff *.yml *.json *.toml *.env*` |
-| Database schema | Migration files, schema dumps |
-| Infrastructure | Deployment configs, Docker files, CI/CD |
-| Environment | Runtime version, OS updates, env variables |
-| External services | API version changes, endpoint changes |
+| 代码 | `git diff`, `git log --oneline -20`, `git diff HEAD~5` |
+| 依赖项 | `git diff package.json`, `git diff Gemfile.lock`, `git diff requirements.txt` |
+| 配置文件 | `git diff *.yml *.json *.toml *.env*` |
+| 数据库结构 | 迁移文件、结构导出文件 |
+| 基础设施 | 部署配置、Docker 文件、CI/CD 流水线 |
+| 运行环境 | 运行时版本、系统更新、环境变量 |
+| 外部服务 | API 版本变更、端点变更 |
 
-### The Diff Investigation Process
+### Diff 调查流程
 
-1. **When did it last work?** Find the last known-good state.
-2. **What changed between then and now?**
+1. **上次正常运行是什么时候？** 找到最后一个已知正常的状态。
+2. **从那时到现在发生了什么变化？**
    ```bash
-   git log --oneline <last-good-sha>..HEAD
-   git diff <last-good-sha>..HEAD --stat
+   git log --oneline <最后正常的-sha>..HEAD
+   git diff <最后正常的-sha>..HEAD --stat
    ```
-3. **Categorize changes by risk:**
-   - High risk: Logic changes, dependency updates, config changes
-   - Medium risk: Refactoring, new features in adjacent code
-   - Low risk: Documentation, test additions, formatting
-4. **Investigate high-risk changes first.** For each:
-   - Could this change cause the observed symptom?
-   - Does reverting this change fix the bug?
+3. **按风险对变更进行分类：**
+   - 高风险：逻辑变更、依赖更新、配置变更
+   - 中风险：代码重构、相邻代码的新功能
+   - 低风险：文档更新、测试补充、代码格式化
+4. **优先调查高风险变更。** 针对每一项：
+   - 此变更是否可能导致观察到的症状？
+   - 回滚此变更是否能修复 bug？
 
-### Revert Test
+### 回滚测试
 
-The fastest way to confirm a change caused a bug:
+确认某次变更是否导致 bug 的最快方法：
 
 ```bash
-# Create a branch to test the revert
+# 创建分支以测试回滚
 git checkout -b test-revert
-git revert <suspect-commit> --no-commit
-# Run tests
-# If bug is gone → that commit is the cause
-# If bug persists → that commit is innocent
+git revert <可疑提交> --no-commit
+# 运行测试
+# 如果 bug 消失 → 该提交是罪魁祸首
+# 如果 bug 仍存在 → 该提交无关
 git checkout - && git branch -D test-revert
 ```
 
 ---
 
-## 4. Rubber Duck Methodology
+## 4. 小黄鸭调试法
 
-When you're stuck, explain the problem out loud (or in writing) to an imaginary listener. The act of articulating forces you to organize your thoughts and often reveals gaps in your understanding.
+当你卡壳时，大声（或以书面形式）向一个想象中的听众解释问题。表达的过程会迫使你整理思路，并常常能暴露出你理解上的盲区。
 
-### The Process
+### 流程
 
-1. **State the problem clearly.** "The system should do X, but instead it does Y."
-2. **Explain what you've already tried.** Walk through each investigation step.
-3. **Explain your current understanding.** Describe the code flow as you understand it.
-4. **Identify gaps.** "The part I don't understand is..."
-5. **Question assumptions.** "I'm assuming that... but what if...?"
+1. **清晰陈述问题。** “系统本应执行 X，但实际上执行了 Y。”
+2. **说明你已经尝试过的操作。** 逐步回顾每次调查步骤。
+3. **解释你当前的理解。** 按你的理解描述代码执行流程。
+4. **找出认知盲区。** “我不理解的部分是……”
+5. **质疑假设。** “我假设了……但如果……会怎样？”
 
-### Why It Works
+### 为什么有效
 
-- Forces you to be precise instead of vague
-- Exposes assumptions you didn't realize you were making
-- Converts fuzzy intuition into concrete statements that can be verified
-- Breaks tunnel vision by requiring a linear explanation
+- 迫使你精确表述，而非含糊其辞
+- 暴露你未意识到的潜在假设
+- 将模糊的直觉转化为可验证的具体陈述
+- 通过要求进行线性叙述来打破思维定势（隧道视野）
 
-### Structured Rubber Duck Template
+### 结构化小黄鸭模板
 
 ```
-PROBLEM: [What should happen vs what actually happens]
+问题：[预期行为与实际行为]
 
-EVIDENCE GATHERED:
-- Error message: [exact text]
-- Reproduction steps: [exact steps]
-- Working case: [what works for comparison]
+收集到的证据：
+- 错误信息：[确切文本]
+- 复现步骤：[确切步骤]
+- 正常用例：[用于对比的正常情况]
 
-CODE FLOW (as I understand it):
-1. [Entry point]
-2. [Step 2]
-3. [Step 3 — this is where I think it breaks]
-4. [Expected step 4 vs what actually happens]
+代码流程（按我的理解）：
+1. [入口点]
+2. [步骤 2]
+3. [步骤 3 — 我认为这里出了问题]
+4. [预期步骤 4 与实际发生的情况]
 
-HYPOTHESES TESTED:
-1. [Hypothesis] → [Result]
-2. [Hypothesis] → [Result]
+已验证的假设：
+1. [假设] → [结果]
+2. [假设] → [结果]
 
-WHAT I DON'T UNDERSTAND:
-- [Gap 1]
-- [Gap 2]
+我不理解的部分：
+- [盲区 1]
+- [盲区 2]
 
-ASSUMPTIONS I'M MAKING:
-- [Assumption 1 — verified? yes/no]
-- [Assumption 2 — verified? yes/no]
+我做出的假设：
+- [假设 1 — 已验证？是/否]
+- [假设 2 — 已验证？是/否]
 ```
 
 ---
 
-## 5. Log-Based Investigation Patterns
+## 5. 基于日志的调查模式
 
-When the bug is in production, intermittent, or involves complex interactions, logs are your primary evidence source.
+当 bug 出现在生产环境、具有间歇性或涉及复杂交互时，日志是你的主要证据来源。
 
-### Strategic Log Placement
+### 策略性日志埋点
 
-Add logs at these locations to trace execution flow:
+在以下位置添加日志以追踪执行流程：
 
 ```
-Entry points      → Log inputs and request context
-Decision points   → Log which branch was taken and why
-External calls    → Log request and response (or error)
-State mutations   → Log before and after values
-Exit points       → Log outputs and return values
-Error handlers    → Log full error with context
+入口点          → 记录输入和请求上下文
+决策点          → 记录走了哪个分支及原因
+外部调用        → 记录请求和响应（或错误）
+状态变更        → 记录变更前后的值
+出口点          → 记录输出和返回值
+错误处理器      → 记录完整错误及上下文
 ```
 
-### Log Levels for Debugging
+### 用于调试的日志级别
 
-| Level | Use For | Example |
+| 级别 | 适用场景 | 示例 |
 |-------|---------|---------|
-| ERROR | Unexpected failures | `ERROR: Failed to connect to DB: connection refused` |
-| WARN | Recoverable issues | `WARN: Retry 2/3 for API call to /users` |
-| INFO | Business events | `INFO: User 123 registered successfully` |
-| DEBUG | Technical details | `DEBUG: Cache miss for key user:123, querying DB` |
-| TRACE | Step-by-step flow | `TRACE: Entering validateUser with {email: "..."}` |
+| ERROR | 意外失败 | `ERROR: Failed to connect to DB: connection refused` |
+| WARN | 可恢复的问题 | `WARN: Retry 2/3 for API call to /users` |
+| INFO | 业务事件 | `INFO: User 123 registered successfully` |
+| DEBUG | 技术细节 | `DEBUG: Cache miss for key user:123, querying DB` |
+| TRACE | 逐步执行流 | `TRACE: Entering validateUser with {email: "..."}` |
 
-### Correlation Patterns
+### 关联模式
 
-When debugging distributed systems or async operations:
+在调试分布式系统或异步操作时：
 
-1. **Request ID:** Assign a unique ID at the entry point, include it in every log line for that request
-2. **Timestamp precision:** Use millisecond or microsecond timestamps to establish ordering
-3. **Context propagation:** Pass context (request ID, user ID, operation name) through the call chain
+1. **请求 ID：** 在入口点分配唯一 ID，并在该请求的每条日志中包含它。
+2. **时间戳精度：** 使用毫秒或微秒级时间戳以确定事件顺序。
+3. **上下文传递：** 在调用链中传递上下文（请求 ID、用户 ID、操作名称）。
 
-### Log Analysis Techniques
+### 日志分析技术
 
-**Timeline reconstruction:**
+**时间线重建：**
 ```bash
-# Extract all logs for a specific request
+# 提取特定请求的所有日志
 grep "request-id-abc123" application.log | sort -k1
 
-# Find the last successful operation before failure
+# 查找失败前的最后一次成功操作
 grep "request-id-abc123" application.log | grep -B5 "ERROR"
 ```
 
-**Pattern detection:**
+**模式检测：**
 ```bash
-# Find common patterns in errors
+# 查找错误中的常见模式
 grep "ERROR" application.log | sort | uniq -c | sort -rn | head -20
 
-# Check error frequency over time
+# 检查错误随时间出现的频率
 grep "ERROR" application.log | cut -d' ' -f1-2 | uniq -c
 ```
 
-**State reconstruction:**
-- Follow the sequence of state changes for the affected entity
-- Compare with a successful entity's log sequence
-- The first divergence point is likely the root cause
+**状态重建：**
+- 追踪受影响实体的状态变更序列。
+- 与成功实体的日志序列进行对比。
+- 首次出现分歧的节点很可能就是根本原因。
 
-### Anti-Patterns in Logging
+### 日志记录中的反模式
 
-| Anti-Pattern | Problem | Fix |
+| 反模式 | 问题 | 修复方法 |
 |-------------|---------|-----|
-| Logging sensitive data | Security risk | Redact PII, credentials, tokens |
-| Missing context | Log is useless without context | Include entity IDs, operation name |
-| Inconsistent format | Hard to parse and search | Use structured logging (JSON) |
-| Too verbose in production | Performance impact, noise | Use appropriate log levels |
-| Swallowed exceptions | Evidence destroyed | Always log before re-throwing or handling |
-| Log-and-throw | Duplicate entries, confusing | Log at the handler, not the thrower |
+| 记录敏感数据 | 安全风险 | 脱敏处理个人信息、凭证、令牌 |
+| 缺乏上下文 | 脱离上下文的日志毫无用处 | 包含实体 ID、操作名称 |
+| 格式不一致 | 难以解析和检索 | 使用结构化日志（如 JSON） |
+| 生产环境日志过于冗长 | 影响性能，产生噪音 | 使用合适的日志级别 |
+| 吞没异常 | 证据被销毁 | 在重新抛出或处理前务必记录日志 |
+| 记录后立即抛出 | 产生重复条目，造成混淆 | 在处理器中记录日志，而非抛出点 |

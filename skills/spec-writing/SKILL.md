@@ -1,287 +1,271 @@
 ---
 name: spec-writing
-description: 'Use when writing specifications for features, projects, or requirements — applies Jobs to Be Done (JTBD) methodology with acceptance criteria focus, no implementation details, and SLC release planning'
+description: "用于编写功能、项目或需求规范时调用 —— 采用待办任务（JTBD）方法论，聚焦验收标准，不包含实现细节，并支持 SLC 发布规划"
 ---
 
-# Specification Writing
+# 规范编写
 
-## Overview
+## 概述
 
-Specifications define WHAT the software should do, never HOW. This skill applies the Jobs to Be Done (JTBD) methodology to break requirements into properly scoped, testable specification files that drive autonomous implementation. Every spec produces Given/When/Then acceptance criteria free of implementation details.
+规范定义软件**应该做什么（WHAT）**，绝不定义**如何做（HOW）**。本技能采用待办任务（Jobs to Be Done, JTBD）方法论，将需求拆解为范围恰当、可测试的规范文件，以驱动自主实现。每份规范都会产出基于 Given/When/Then 的验收标准，且绝不包含实现细节。
 
-**This is a RIGID skill.** Every phase, gate, and format rule must be followed exactly.
+**这是一项刚性技能。** 每个阶段、门槛和格式规则都必须严格遵循。
 
-## The Cardinal Rule
+## 核心铁律
 
-**[HARD-GATE:SPEC]** Specifications must NEVER contain implementation details.
+**[硬性门槛：SPEC]** 规范中**绝对不可**包含实现细节。
 
-| Forbidden                                          | Allowed                                                         |
-| -------------------------------------------------- | --------------------------------------------------------------- |
-| Code blocks or snippets                            | Behavioral descriptions                                         |
-| Variable names or function signatures              | Observable outcomes                                             |
-| Technology choices ("use React", "use PostgreSQL") | Capability requirements ("renders in browser", "persists data") |
-| Algorithm suggestions ("use K-means clustering")   | Success criteria ("extracts 5-10 dominant colors")              |
-| Architecture patterns ("use MVC")                  | User-facing behaviors                                           |
-| Library references ("use Zod for validation")      | Validation requirements ("rejects malformed input")             |
+| 禁止项 | 允许项 |
+|-----------|---------|
+| 代码块或代码片段 | 行为描述 |
+| 变量名或函数签名 | 可观测的结果 |
+| 技术选型（“使用 React”、“使用 PostgreSQL”） | 能力要求（“在浏览器中渲染”、“持久化数据”） |
+| 算法建议（“使用 K-means 聚类”） | 成功标准（“提取 5-10 种主导色”） |
+| 架构模式（“使用 MVC”） | 面向用户的行为 |
+| 库引用（“使用 Zod 进行验证”） | 验证要求（“拒绝格式错误的输入”） |
 
-**Why:** Implementation-free specs preserve flexibility. The implementing agent can choose the best approach for the codebase, technology, and constraints — and change course without spec updates.
+**原因：** 无实现细节的规范保留了灵活性。实现代理可以根据代码库、技术栈和约束条件选择最佳方案，并且无需更新规范即可调整方向。
 
-## Phase 1: Jobs to Be Done (JTBD)
+## 阶段 1：待办任务（JTBD）
 
-Identify the user's or system's jobs using this format:
-
-```
-When [situation], I want to [motivation], so I can [expected outcome].
-```
-
-**Examples:**
-
-- "When I upload an image, I want to extract its color palette, so I can use those colors in my design."
-- "When I receive an API request, I want to validate the payload, so I can reject malformed data before processing."
-
-Gather jobs through discovery questions:
-
-1. Who is the user/actor?
-2. What situation triggers this need?
-3. What outcome do they want?
-4. What happens if they cannot accomplish this?
-
-STOP after JTBD identification — present all jobs to the user for confirmation before breaking into topics.
-
-## Phase 2: Topics of Concern
-
-Break each job into discrete topics. Apply the **"One Sentence Without 'And'" test:**
-
-| Test                                                           | Result | Action                                 |
-| -------------------------------------------------------------- | ------ | -------------------------------------- |
-| "This spec covers color extraction."                           | PASS   | Single topic — one spec file           |
-| "This spec covers color extraction and palette rendering."     | FAIL   | Two topics — split into two spec files |
-| "This spec covers user authentication and session management." | FAIL   | Split into two specs                   |
-| "This spec covers input validation for the registration form." | PASS   | Single topic — one spec file           |
-
-Each topic becomes one specification file.
-
-STOP after topic breakdown — confirm the list of spec files before writing them.
-
-## Phase 3: Write Specification Files
-
-**File naming convention:** `<int>-<descriptive-name>.md`
+使用以下格式识别用户或系统的任务：
 
 ```
-specs/
+当[情境]时，我想要[动机]，以便我能[预期结果]。
+```
+
+**示例：**
+- “当我上传图片时，我想要提取其配色方案，以便我能将这些颜色用于我的设计中。”
+- “当我收到 API 请求时，我想要验证负载，以便我能在处理前拒绝格式错误的数据。”
+
+通过探索性问题收集任务：
+1. 用户/执行者是谁？
+2. 什么情境触发了这一需求？
+3. 他们期望得到什么结果？
+4. 如果他们无法完成此任务，会发生什么？
+
+**在 JTBD 识别后停止** —— 在拆解主题之前，将所有任务呈现给用户确认。
+
+## 阶段 2：关注主题
+
+将每个任务拆分为独立的主题。应用**“单句不含‘和’”测试**：
+
+| 测试用例 | 结果 | 操作 |
+|------|--------|--------|
+| “本规范涵盖颜色提取。” | 通过 | 单一主题 —— 对应一份规范文件 |
+| “本规范涵盖颜色提取和调色板渲染。” | 失败 | 两个主题 —— 拆分为两份规范文件 |
+| “本规范涵盖用户认证和会话管理。” | 失败 | 拆分为两份规范 |
+| “本规范涵盖注册表单的输入验证。” | 通过 | 单一主题 —— 对应一份规范文件 |
+
+每个主题将生成一份独立的规范文件。
+
+**在主题拆解后停止** —— 在编写规范文件前，确认规范文件列表。
+
+## 阶段 3：编写规范文件
+
+**文件命名规范：** `<int>-<descriptive-name>.md`
+
+```
+specs/YYYY-MM-DD-<topic>/
 ├── 01-color-extraction.md
 ├── 02-palette-rendering.md
 ├── 03-export-formats.md
 └── 04-color-accessibility.md
 ```
 
-### Specification File Template
+### 规范文件模板
 
 ```markdown
-# [Topic Name]
+# [主题名称]
 
-## Job to Be Done
+## 待办任务
+当[情境]时，我想要[动机]，以便我能[预期结果]。
 
-When [situation], I want to [motivation], so I can [expected outcome].
+## 验收标准
 
-## Acceptance Criteria
+### [标准 1 名称]
+- Given [前置条件]
+- When [执行操作]
+- Then [可观测结果]
+- And [附加可观测结果]
 
-### [Criterion 1 Name]
+### [标准 2 名称]
+- Given [前置条件]
+- When [执行操作]
+- Then [可观测结果]
 
-- Given [precondition]
-- When [action]
-- Then [observable outcome]
-- And [additional observable outcome]
+## 边界情况
+- [描述边界条件及预期行为]
+- [描述错误条件及预期行为]
 
-### [Criterion 2 Name]
+## 数据契约
+- 输入：[描述数据结构、约束条件、有效范围]
+- 输出：[描述数据结构、保证项、不变量]
 
-- Given [precondition]
-- When [action]
-- Then [observable outcome]
-
-## Edge Cases
-
-- [Describe boundary condition and expected behavior]
-- [Describe error condition and expected behavior]
-
-## Data Contracts
-
-- Input: [Describe shape, constraints, valid ranges]
-- Output: [Describe shape, guarantees, invariants]
-
-## Non-Functional Requirements
-
-- Performance: [measurable target, e.g., "responds within 200ms for 95th percentile"]
-- Accessibility: [specific standard, e.g., "WCAG 2.1 AA"]
-- Security: [specific requirement, e.g., "input sanitized against XSS"]
+## 非功能性需求
+- 性能：[可衡量目标，例如“95% 的请求在 200ms 内响应”]
+- 无障碍性：[具体标准，例如“WCAG 2.1 AA”]
+- 安全性：[具体要求，例如“针对 XSS 进行输入清理”]
 ```
 
-### Acceptance Criteria Quality Rules
+### 验收标准质量规则
 
-| Rule                          | Good Example                                     | Bad Example                           |
-| ----------------------------- | ------------------------------------------------ | ------------------------------------- |
-| Observable behavioral outcome | "Extracts 5-10 dominant colors from any image"   | "Use K-means clustering with k=8"     |
-| Testable                      | "Color data persists across sessions"            | "Store in PostgreSQL JSONB column"    |
-| Specific and measurable       | "Palette changes appear within 500ms"            | "Use WebSocket for real-time updates" |
-| Independent (stands alone)    | "Palette renders when image loads"               | "Implement with React useEffect hook" |
-| Implementation-free           | "Passwords cannot be recovered from stored data" | "Use bcrypt with 12 salt rounds"      |
+| 规则 | 良好示例 | 不良示例 |
+|------|-------------|-------------|
+| 可观测的行为结果 | “从任意图像中提取 5-10 种主导色” | “使用 k=8 的 K-means 聚类” |
+| 可测试 | “颜色数据在会话间持久保存” | “存储在 PostgreSQL 的 JSONB 列中” |
+| 具体且可衡量 | “调色板更改在 500ms 内生效” | “使用 WebSocket 进行实时更新” |
+| 独立（自包含） | “图像加载时渲染调色板” | “使用 React useEffect 钩子实现” |
+| 无实现细节 | “无法从存储的数据中恢复密码” | “使用 bcrypt 并设置 12 轮盐值” |
 
-STOP after writing specs — run the audit checklist before proceeding to Phase 4.
+**在编写规范后停止** —— 在进入阶段 4 之前运行审计检查清单。
 
-### Spec Audit Checklist
+### 规范审计检查清单
 
-| #   | Check                            | Pass Criteria                              |
-| --- | -------------------------------- | ------------------------------------------ |
-| 1   | No implementation details        | Zero code, function names, or tech choices |
-| 2   | One Sentence Without 'And' test  | Each spec covers exactly one topic         |
-| 3   | All criteria are Given/When/Then | No free-form prose criteria                |
-| 4   | All criteria are testable        | Each can be verified by a test             |
-| 5   | Edge cases documented            | At least 2 per spec                        |
-| 6   | Data contracts defined           | Input and output shapes specified          |
-| 7   | Consistent naming                | `<int>-<descriptive-name>.md` format       |
+| # | 检查项 | 通过标准 |
+|---|-------|--------------|
+| 1 | 无实现细节 | 零代码、零函数名或技术选型 |
+| 2 | 通过“单句不含‘和’”测试 | 每份规范仅涵盖一个主题 |
+| 3 | 所有标准均为 Given/When/Then 格式 | 无自由文本格式的标准 |
+| 4 | 所有标准均可测试 | 每项均可通过测试验证 |
+| 5 | 已记录边界情况 | 每份规范至少 2 项 |
+| 6 | 已定义数据契约 | 已指定输入和输出的数据结构 |
+| 7 | 命名一致 | 符合 `<int>-<descriptive-name>.md` 格式 |
 
-## Phase 4: Story Map Organization
+## 阶段 4：故事地图组织
 
-Organize specs into a story map for release planning:
+将规范组织到故事地图中，以进行发布规划：
 
 ```
-CAPABILITY 1    CAPABILITY 2    CAPABILITY 3    CAPABILITY 4
+能力 1          能力 2          能力 3          能力 4
 ─────────────   ─────────────   ─────────────   ─────────────
-basic upload    auto-extract    manual arrange  export PNG
-bulk upload     palette gen     templates       export SVG
-drag-drop       color names     grid layout     share link
-                accessibility   animation       collaborate
+基础上传        自动提取        手动排列        导出 PNG
+批量上传        生成调色板      模板            导出 SVG
+拖放            颜色命名        网格布局        分享链接
+                无障碍性        动画            协作
 ```
 
-- **Horizontal rows** = candidate releases
-- **Top row** = minimum viable release
-- Each row adds capabilities across the board
+- **横向行** = 候选发布版本
+- **首行** = 最小可行发布版本
+- 每一行在各能力维度上逐步增加功能
 
-### SLC Release Criteria
+### SLC 发布标准
 
-For each horizontal slice, evaluate:
+对于每个横向切片，评估以下标准：
 
-| Criterion    | Question                             | Standard                        |
-| ------------ | ------------------------------------ | ------------------------------- |
-| **Simple**   | Can it ship fast with narrow scope?  | Weeks, not months               |
-| **Lovable**  | Will people actually want to use it? | Delightful, not just functional |
-| **Complete** | Does it fully accomplish a job?      | End-to-end, not half-done       |
+| 标准 | 问题 | 标准 |
+|-----------|----------|----------|
+| **简单 (Simple)** | 能否以窄范围快速交付？ | 以周计，而非以月计 |
+| **令人喜爱 (Lovable)** | 用户是否真的愿意使用？ | 令人愉悦，而非仅能运行 |
+| **完整 (Complete)** | 是否完整达成了一项任务？ | 端到端闭环，而非半成品 |
 
-**[HARD-GATE]** A release must satisfy ALL three. "Simple but incomplete" is not shippable. "Complete but not lovable" is not shippable.
+**[硬性门槛]** 一个发布版本必须**同时满足**这三项。“简单但不完整”不可发布。“完整但不令人喜爱”不可发布。
 
-STOP after story map — get user confirmation on release slicing before finalizing.
+**在故事地图绘制后停止** —— 在最终确定前，获取用户对发布切片的确认。
 
-## Phase 5: Specs Audit Mode
+## 阶段 5：规范审计模式
 
-When auditing existing specs (rather than writing new ones):
+当审计现有规范（而非编写新规范）时：
 
-1. Read all spec files in `docs/specs/<date>_<topic>/`
-2. Check each against the Cardinal Rule (no code, no implementation details)
-3. Verify "One Sentence Without 'And'" test
-4. Ensure consistent naming convention
-5. Verify Given/When/Then format for all acceptance criteria
-6. Flag violations and auto-fix where possible
+1. 读取 `specs/<date>_<id>_<topic>/` 中的所有规范文件
+2. 对照核心铁律检查每项（无代码、无实现细节）
+3. 验证“单句不含‘和’”测试
+4. 确保命名规范一致
+5. 验证所有验收标准均使用 Given/When/Then 格式
+6. 标记违规项，并在可能时自动修复
 
-Deploy up to 5 parallel subagents via the `Agent` tool (with `subagent_type="Explore"`) — one per spec file — for large spec sets.
+通过 `Agent` 工具（设置 `subagent_type="Explore"`）部署最多 5 个并行子代理（每个规范文件一个），用于处理大型规范集。
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Mistake                                     | Why It Is Wrong                          | What To Do Instead                      |
-| ------------------------------------------- | ---------------------------------------- | --------------------------------------- |
-| Including code snippets in specs            | Locks implementation approach            | Describe behavior, not mechanism        |
-| Naming technologies ("use Redis")           | Prevents better alternatives             | Describe capability ("caches results")  |
-| Combining topics with "and"                 | Spec too broad, hard to implement/test   | Split into separate spec files          |
-| Vague acceptance criteria ("works well")    | Cannot write a test for it               | Specific measurable outcome             |
-| Missing edge cases                          | Bugs in boundary conditions              | Document at least 2 edge cases per spec |
-| Skipping data contracts                     | Input/output ambiguity                   | Always define shapes and constraints    |
-| Writing specs after code                    | Specs justify code instead of driving it | Specs come BEFORE implementation        |
-| Acceptance criteria that describe UI layout | Implementation detail                    | Describe what the user can accomplish   |
+| 错误 | 为何错误 | 正确做法 |
+|---------|----------------|-------------------|
+| 在规范中包含代码片段 | 限制了实现方式 | 描述行为，而非机制 |
+| 指定技术名称（“使用 Redis”） | 阻碍了更优替代方案 | 描述能力（“缓存结果”） |
+| 用“和”合并多个主题 | 规范过于宽泛，难以实现/测试 | 拆分为独立的规范文件 |
+| 验收标准模糊（“运行良好”） | 无法据此编写测试 | 具体且可衡量的结果 |
+| 缺少边界情况 | 边界条件下易产生缺陷 | 每份规范至少记录 2 个边界情况 |
+| 跳过数据契约 | 输入/输出存在歧义 | 始终定义数据结构与约束 |
+| 先写代码后写规范 | 规范沦为代码的辩护词，而非驱动力 | 规范必须**先于**实现 |
+| 验收标准描述 UI 布局 | 属于实现细节 | 描述用户能完成的操作 |
 
-## Anti-Rationalization Guards
+## 防自我合理化防护
 
-- **[HARD-GATE]** Do NOT include ANY implementation details — no code, no tech names, no architecture
-- **[HARD-GATE]** Do NOT skip the "One Sentence Without 'And'" test — split every compound topic
-- **[HARD-GATE]** Do NOT accept acceptance criteria that are not in Given/When/Then format
-- **[HARD-GATE]** Do NOT skip the audit checklist before finalizing specs
-- **Do NOT skip** edge cases — every spec needs at least 2
-- **Do NOT skip** data contracts — every spec needs input/output shapes
-- **Do NOT** write specs after implementation — specs drive code, not the reverse
+- **[硬性门槛]** **绝不**包含任何实现细节 —— 无代码、无技术名称、无架构
+- **[硬性门槛]** **绝不**跳过“单句不含‘和’”测试 —— 拆分所有复合主题
+- **[硬性门槛]** **绝不**接受非 Given/When/Then 格式的验收标准
+- **[硬性门槛]** 在最终确定规范前，**绝不**跳过审计检查清单
+- **绝不跳过**边界情况 —— 每份规范至少需要 2 个
+- **绝不跳过**数据契约 —— 每份规范都需要输入/输出数据结构
+- **绝不**在实现之后编写规范 —— 规范驱动代码，而非相反
 
-## Integration Points
+## 集成点
 
-| Skill                       | Relationship                                                 |
-| --------------------------- | ------------------------------------------------------------ |
-| `autonomous-loop`           | Planning mode reads specs to identify implementation gaps    |
-| `acceptance-testing`        | Tests are derived directly from spec acceptance criteria     |
-| `reverse-engineering-specs` | Generates specs from existing code (brownfield)              |
-| `prd-generation`            | PRD provides high-level requirements; specs detail them      |
-| `planning`                  | Plans reference spec acceptance criteria for task definition |
-| `test-driven-development`   | Red phase writes tests matching spec acceptance criteria     |
-| `writing-skills`            | Skills can be specified using this methodology               |
+| 技能 | 关系 |
+|-------|-------------|
+| `autonomous-loop` | 规划模式读取规范以识别实现缺口 |
+| `acceptance-testing` | 测试直接源自规范的验收标准 |
+| `reverse-engineering-specs` | 从现有代码生成规范（棕地项目） |
+| `prd-generation` | PRD 提供高层需求；规范将其细化 |
+| `planning` | 计划引用规范的验收标准以定义任务 |
+| `test-driven-development` | 红绿测试阶段编写匹配规范验收标准的测试 |
+| `writing-skills` | 可使用此方法论来编写其他技能 |
 
-## Concrete Example: Complete Spec File
+## 具体示例：完整规范文件
 
 ```markdown
-# Image Color Extraction
+# 图像颜色提取
 
-## Job to Be Done
+## 待办任务
+当我将图片上传至设计工具时，我想要自动提取其主导颜色，以便我能将这些颜色用于我的设计调色板。
 
-When I upload an image to the design tool, I want to automatically extract
-its dominant colors, so I can use those colors in my design palette.
+## 验收标准
 
-## Acceptance Criteria
+### 主导颜色提取
+- Given 已上传 PNG、JPG 或 WebP 格式的图片
+- When 提取过程完成
+- Then 返回 5-10 种主导颜色的十六进制值
+- And 颜色按显著性排序（最主导的排在最前）
 
-### Dominant Color Extraction
+### 透明图片处理
+- Given 已上传包含透明区域的图片
+- When 提取过程完成
+- Then 透明区域被排除在颜色分析之外
+- And 仍至少返回 3 种主导颜色
 
-- Given an uploaded image in PNG, JPG, or WebP format
-- When the extraction process completes
-- Then 5-10 dominant colors are returned as hex values
-- And colors are ordered by prominence (most dominant first)
+### 处理反馈
+- Given 图片上传已开始
+- When 提取正在进行中
+- Then 用户能看到进度指示器
+- And 对于 10MB 以内的图片，提取在 3 秒内完成
 
-### Transparent Image Handling
+## 边界情况
+- 单色图片：返回 1 种颜色（不报错）
+- 超大图片（>50MB）：返回带有大小限制提示的错误
+- 损坏的图片文件：返回带有明确提示的错误，程序不崩溃
+- 动态 GIF：仅提取第一帧的颜色
 
-- Given an uploaded image with transparent regions
-- When the extraction process completes
-- Then transparent regions are excluded from color analysis
-- And at least 3 dominant colors are still returned
+## 数据契约
+- 输入：图片文件（PNG、JPG、WebP），最大 50MB
+- 输出：包含 1-10 个十六进制颜色字符串的数组，按显著性排序
+- 错误输出：包含错误代码和人类可读消息的错误对象
 
-### Processing Feedback
-
-- Given an image upload has started
-- When extraction is in progress
-- Then the user sees a progress indicator
-- And extraction completes within 3 seconds for images up to 10MB
-
-## Edge Cases
-
-- Single-color image: returns 1 color (not an error)
-- Very large image (>50MB): returns an error with size limit message
-- Corrupted image file: returns an error with clear message, no crash
-- Animated GIF: extracts colors from the first frame only
-
-## Data Contracts
-
-- Input: Image file (PNG, JPG, WebP), max 50MB
-- Output: Array of 1-10 hex color strings, ordered by prominence
-- Error output: Error object with code and human-readable message
-
-## Non-Functional Requirements
-
-- Performance: <3s for images up to 10MB, <10s for images up to 50MB
-- Accessibility: Color values include WCAG contrast ratio against white/black
+## 非功能性需求
+- 性能：10MB 以内图片 <3 秒，50MB 以内图片 <10 秒
+- 无障碍性：颜色值需包含相对于白色/黑色的 WCAG 对比度比率
 ```
 
-## Verification Gate
+## 验证门槛
 
-Before claiming specs are complete:
+在声明规范已完成之前：
 
-1. VERIFY the Cardinal Rule — zero implementation details in any spec
-2. VERIFY every spec passes the "One Sentence Without 'And'" test
-3. VERIFY all acceptance criteria use Given/When/Then format
-4. VERIFY every spec has edge cases and data contracts
-5. VERIFY the story map has at least one complete SLC release slice
-6. VERIFY the user has confirmed the spec set
+1. 验证核心铁律 —— 任何规范中均无实现细节
+2. 验证每份规范均通过“单句不含‘和’”测试
+3. 验证所有验收标准均使用 Given/When/Then 格式
+4. 验证每份规范均包含边界情况和数据契约
+5. 验证故事地图至少包含一个完整的 SLC 发布切片
+6. 验证用户已确认该规范集
 
-## Skill Type
+## 技能类型
 
-**Rigid** — The no-implementation-details rule, JTBD structure, Given/When/Then format, and audit checklist must be followed exactly. No elements may be skipped or adapted.
+**刚性** —— 无实现细节规则、JTBD 结构、Given/When/Then 格式以及审计检查清单必须严格遵循。不得跳过或改编任何元素。

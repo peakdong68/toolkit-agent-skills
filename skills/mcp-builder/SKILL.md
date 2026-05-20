@@ -1,71 +1,71 @@
 ---
 name: mcp-builder
 description: >
-  Use when the user needs to build MCP (Model Context Protocol) servers — tool definitions, resource
-  management, prompt templates, transport layers, and client integration. Triggers: user says "MCP",
-  "MCP server", "model context protocol", building tools for AI clients, creating AI integrations.
+  当用户需要构建 MCP（Model Context Protocol，模型上下文协议）服务器时使用——包括工具定义、资源
+  管理、提示模板、传输层和客户端集成。触发条件：用户提到 "MCP"、
+  "MCP server"、"model context protocol"、为 AI 客户端构建工具、创建 AI 集成。
 ---
 
-# MCP Builder
+# MCP Builder（MCP 构建器）
 
-## Overview
+## 概述
 
-Build production-quality MCP (Model Context Protocol) servers that expose tools, resources, and prompts to AI clients. This skill covers the full development lifecycle: tool definition, resource management, prompt templates, transport configuration (stdio, SSE), error handling, security hardening, testing, and client integration.
+构建生产质量的 MCP（模型上下文协议）服务器，向 AI 客户端暴露工具、资源和提示。本技能涵盖完整开发生命周期：工具定义、资源管理、提示模板、传输配置（stdio、SSE）、错误处理、安全加固、测试和客户端集成。
 
-## Phase 1: Design
+## 阶段 1：设计
 
-1. Identify capabilities to expose (tools, resources, prompts)
-2. Define tool schemas with Zod/JSON Schema
-3. Plan resource URI patterns
-4. Design error handling strategy
-5. Choose transport layer (stdio for CLI, SSE for web)
+1. 识别要暴露的能力（工具、资源、提示）
+2. 使用 Zod/JSON Schema 定义工具模式
+3. 规划资源 URI 模式
+4. 设计错误处理策略
+5. 选择传输层（CLI 使用 stdio，Web 使用 SSE）
 
-**STOP — Present the capability inventory and transport choice to user for approval.**
+**停止 — 向用户展示能力清单和传输选择以获取批准。**
 
-### Capability Selection Decision Table
+### 能力选择决策表
 
-| What You Have | MCP Primitive | Example |
+| 你拥有什么 | MCP 原语 | 示例 |
 |---|---|---|
-| Actions that modify state | Tool | `create-issue`, `send-email`, `deploy-app` |
-| Actions that read/query | Tool | `search-documents`, `get-status` |
-| Data the AI should read | Resource | `config://settings`, `docs://api/endpoints` |
-| Reusable prompt patterns | Prompt | `code-review`, `summarize-document` |
-| Real-time data feeds | Resource (subscribable) | `metrics://cpu/current` |
+| 修改状态的操作 | 工具（Tool） | `create-issue`、`send-email`、`deploy-app` |
+| 读取/查询的操作 | 工具（Tool） | `search-documents`、`get-status` |
+| AI 应读取的数据 | 资源（Resource） | `config://settings`、`docs://api/endpoints` |
+| 可复用的提示模式 | 提示（Prompt） | `code-review`、`summarize-document` |
+| 实时数据流 | 资源（可订阅） | `metrics://cpu/current` |
 
-### Transport Selection Decision Table
+### 传输选择决策表
 
-| Context | Transport | Why |
+| 上下文 | 传输方式 | 原因 |
 |---|---|---|
-| CLI tool, local client (Claude Desktop) | Stdio | Simple, no network overhead |
-| Web application, remote clients | SSE | Network-accessible, real-time |
-| Both local and remote | Stdio + SSE | Support both use cases |
-| High-throughput, bidirectional | WebSocket (custom) | Lower latency than SSE |
+| CLI 工具，本地客户端（Claude Desktop） | Stdio | 简单，无网络开销 |
+| Web 应用，远程客户端 | SSE | 可通过网络访问，支持实时通信 |
+| 同时支持本地和远程 | Stdio + SSE | 支持两种使用场景 |
+| 高吞吐、双向通信 | WebSocket（自定义） | 比 SSE 延迟更低 |
 
-## Phase 2: Implementation
+## 阶段 2：实现
 
-1. Set up MCP server project structure
-2. Implement tool handlers with input validation
-3. Implement resource providers
-4. Add prompt templates
-5. Configure transport and authentication
+1. 设置 MCP 服务器项目结构
+2. 实现带输入验证的工具处理程序
+3. 实现资源提供者
+4. 添加提示模板
+5. 配置传输和认证
 
-**STOP — Run basic smoke tests before moving to hardening.**
+**停止 — 在进入加固阶段前运行基本冒烟测试。**
 
-### Project Structure
+### 项目结构
 
 ```
 src/
-  index.ts          # Server entry point
+  index.ts          # 服务器入口点
   tools/
-    search.ts       # Tool implementations
+    search.ts       # 工具实现
     create.ts
   resources/
-    documents.ts    # Resource providers
+    documents.ts    # 资源提供者
     config.ts
   prompts/
-    review.ts       # Prompt templates
+    review.ts       # 提示模板
   lib/
-    database.ts     # Shared utilities
+    database.ts     # 共享工具函数
     validation.ts
 tests/
   tools.test.ts
@@ -74,7 +74,7 @@ package.json
 tsconfig.json
 ```
 
-### Tool Definition Pattern
+### 工具定义模式
 
 ```typescript
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -108,27 +108,27 @@ server.tool(
 );
 ```
 
-### Tool Design Principles
+### 工具设计原则
 
-| Principle | Rule |
+| 原则 | 规则 |
 |---|---|
-| Clear naming | verb-noun format: `search-documents`, `create-issue` |
-| Descriptive descriptions | Explain what, when, and return value |
-| Validated inputs | Zod schemas with `.describe()` on every field |
-| Structured outputs | Well-formatted text or JSON |
-| Idempotent when possible | Same input produces same result |
-| Actionable errors | Specific error messages with `isError: true` |
+| 命名清晰 | 使用动词 - 名词格式：`search-documents`、`create-issue` |
+| 描述性说明 | 解释功能、使用时机和返回值 |
+| 输入验证 | 每个字段都使用带 `.describe()` 的 Zod 模式 |
+| 结构化输出 | 格式良好的文本或 JSON |
+| 尽可能幂等 | 相同输入产生相同结果 |
+| 可操作的错误 | 具体的错误消息，附带 `isError: true` |
 
-### Tool Response Patterns
+### 工具响应模式
 
 ```typescript
-// Text response
+// 文本响应
 return { content: [{ type: 'text', text: 'Operation completed successfully' }] };
 
-// Structured data response
+// 结构化数据响应
 return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
 
-// Multi-part response
+// 多部分响应
 return {
   content: [
     { type: 'text', text: `Found ${results.length} results:` },
@@ -136,22 +136,22 @@ return {
   ],
 };
 
-// Image response
+// 图像响应
 return { content: [{ type: 'image', data: base64Data, mimeType: 'image/png' }] };
 
-// Error response
+// 错误响应
 return {
   content: [{ type: 'text', text: `Error: ${error.message}` }],
   isError: true,
 };
 ```
 
-## Resource Management
+## 资源管理
 
-### Resource Definition
+### 资源定义
 
 ```typescript
-// Static resource
+// 静态资源
 server.resource(
   'config',
   'config://app/settings',
@@ -165,7 +165,7 @@ server.resource(
   })
 );
 
-// Dynamic resource with URI template
+// 带 URI 模板的动态资源
 server.resource(
   'document',
   new ResourceTemplate('docs://{category}/{id}', { list: undefined }),
@@ -180,17 +180,17 @@ server.resource(
 );
 ```
 
-### Resource URI Conventions
+### 资源 URI 约定
 
 ```
-file:///path/to/file          — Local files
-https://api.example.com/data  — Remote HTTP resources
-db://database/table/id        — Database records
-config://app/settings         — Configuration
-docs://category/slug          — Documentation
+file:///path/to/file          — 本地文件
+https://api.example.com/data  — 远程 HTTP 资源
+db://database/table/id        — 数据库记录
+config://app/settings         — 配置
+docs://category/slug          — 文档
 ```
 
-## Prompt Templates
+## 提示模板
 
 ```typescript
 server.prompt(
@@ -215,9 +215,9 @@ server.prompt(
 );
 ```
 
-## Transport Layers
+## 传输层
 
-### Stdio Transport (CLI tools, local development)
+### Stdio 传输（CLI 工具，本地开发）
 
 ```typescript
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -226,7 +226,7 @@ const transport = new StdioServerTransport();
 await server.connect(transport);
 ```
 
-### SSE Transport (Web applications, remote servers)
+### SSE 传输（Web 应用，远程服务器）
 
 ```typescript
 import express from 'express';
@@ -246,17 +246,17 @@ app.post('/messages', async (req, res) => {
 app.listen(3001);
 ```
 
-## Phase 3: Hardening
+## 阶段 3：加固
 
-1. Add comprehensive error handling
-2. Implement rate limiting and timeouts
-3. Security review (input sanitization, permission checks)
-4. Write integration tests
-5. Document tools and resources for clients
+1. 添加全面的错误处理
+2. 实现速率限制和超时
+3. 安全审查（输入清理、权限检查）
+4. 编写集成测试
+5. 为客户端文档化工具和资源
 
-**STOP — All tests must pass and security review must be complete before deployment.**
+**停止 — 部署前所有测试必须通过，且安全审查必须完成。**
 
-### Error Handling
+### 错误处理
 
 ```typescript
 server.tool('risky-operation', 'Performs an operation that might fail', {
@@ -287,28 +287,28 @@ server.tool('risky-operation', 'Performs an operation that might fail', {
 });
 ```
 
-### Error Handling Rules
+### 错误处理规则
 
-| Rule | Why |
+| 规则 | 原因 |
 |---|---|
-| Never expose stack traces to clients | Security risk |
-| Return `isError: true` for all errors | Client can distinguish success/failure |
-| Log unexpected errors server-side | Debugging and monitoring |
-| Provide actionable error messages | Client can self-correct |
-| Handle timeouts for external calls | Prevent hanging requests |
-| Validate all inputs before processing | Reject bad data early |
+| 绝不向客户端暴露堆栈跟踪 | 安全风险 |
+| 所有错误都返回 `isError: true` | 客户端可区分成功/失败 |
+| 服务器端记录意外错误 | 便于调试和监控 |
+| 提供可操作的错误消息 | 客户端可自行纠正 |
+| 对外部调用设置超时 | 防止请求无限挂起 |
+| 处理前验证所有输入 | 尽早拒绝无效数据 |
 
-### Security Considerations
+### 安全考虑
 
-| Category | Rules |
+| 类别 | 规则 |
 |---|---|
-| Input validation | Zod schemas, path traversal prevention, length limits |
-| Permission model | Least privilege, whitelist directories, separate read/write tools |
-| Secrets | Env vars only, never in responses, mask in logs, rotate regularly |
-| Rate limiting | Limit tool invocations per client |
-| Auditing | Log all tool calls with timestamps |
+| 输入验证 | Zod 模式、路径遍历防护、长度限制 |
+| 权限模型 | 最小权限原则、白名单目录、读写工具分离 |
+| 密钥管理 | 仅使用环境变量、绝不包含在响应中、日志中脱敏、定期轮换 |
+| 速率限制 | 限制每个客户端的工具调用频率 |
+| 审计日志 | 记录所有工具调用及时间戳 |
 
-## Testing MCP Servers
+## 测试 MCP 服务器
 
 ```typescript
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -349,9 +349,9 @@ describe('MCP Server', () => {
 });
 ```
 
-## Client Integration
+## 客户端集成
 
-### Claude Desktop Configuration
+### Claude Desktop 配置
 
 ```json
 {
@@ -367,37 +367,37 @@ describe('MCP Server', () => {
 }
 ```
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | What to Do Instead |
+| 反模式 | 错误原因 | 正确做法 |
 |---|---|---|
-| Tools that do too many things | Hard to use, hard to test | Split into focused single-purpose tools |
-| Missing input validation | Crashes, security holes | Always use Zod schemas |
-| Returning raw stack traces | Security risk, confusing for AI | Return `isError: true` with clean message |
-| No timeout on external calls | Hangs indefinitely | Set timeouts on all I/O |
-| Hardcoded secrets in source | Credential exposure | Use environment variables |
-| Tools without descriptions | Clients cannot discover purpose | Write clear descriptions |
-| Blocking event loop with sync ops | Server becomes unresponsive | Use async/await for all I/O |
-| No tests | Regressions go undetected | Test with InMemoryTransport |
+| 工具功能过于庞杂 | 难以使用，难以测试 | 拆分为专注的单一功能工具 |
+| 缺少输入验证 | 崩溃、安全漏洞 | 始终使用 Zod 模式 |
+| 返回原始堆栈跟踪 | 安全风险，使 AI 困惑 | 返回 `isError: true` 并附带简洁消息 |
+| 外部调用无超时设置 | 请求可能无限挂起 | 所有 I/O 操作都设置超时 |
+| 源码中硬编码密钥 | 凭证泄露风险 | 使用环境变量 |
+| 工具缺少描述 | 客户端无法发现用途 | 编写清晰的描述 |
+| 同步操作阻塞事件循环 | 服务器无响应 | 所有 I/O 使用 async/await |
+| 无测试 | 回归问题无法被发现 | 使用 InMemoryTransport 进行测试 |
 
-## Documentation Lookup (Context7)
+## 文档查询（Context7）
 
-Use `mcp__context7__resolve-library-id` then `mcp__context7__query-docs` for up-to-date docs. Returned docs override memorized knowledge.
-- `@anthropic-ai/sdk` — for Claude API client, tool definitions, or streaming
+使用 `mcp__context7__resolve-library-id` 然后 `mcp__context7__query-docs` 获取最新文档。返回的文档将覆盖记忆中的知识。
+- `@anthropic-ai/sdk` — 用于 Claude API 客户端、工具定义或流式传输
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Integration |
+| 技能 | 集成方式 |
 |---|---|
-| `senior-devops` | Containerize and deploy MCP servers |
-| `agent-development` | MCP servers provide tools for agents |
-| `security-review` | Security hardening of tool inputs/outputs |
-| `test-driven-development` | TDD for tool implementation |
-| `deployment` | CI/CD pipeline for MCP server releases |
-| `planning` | MCP server design is part of the implementation plan |
+| `senior-devops` | 容器化并部署 MCP 服务器 |
+| `agent-development` | MCP 服务器为智能体提供工具 |
+| `security-review` | 工具输入/输出的安全加固 |
+| `test-driven-development` | 工具实现的测试驱动开发 |
+| `deployment` | MCP 服务器发布的 CI/CD 流水线 |
+| `planning` | MCP 服务器设计是实施计划的一部分 |
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt project structure, transport choice, and tooling to the use case. Tool validation with Zod and error handling with `isError` are strongly recommended. Security review is recommended before production deployment.
+**灵活（FLEXIBLE）** — 根据用例调整项目结构、传输选择和工具链。强烈推荐使用 Zod 进行工具验证，并使用 `isError` 进行错误处理。生产部署前建议进行安全审查。

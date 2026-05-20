@@ -1,381 +1,402 @@
 ---
 name: auto-improvement
-description: Use when the system needs to track its own effectiveness, learn from errors, adapt workflows, and continuously improve performance - activates automatically every session to collect metrics, classify errors, recognize patterns, and implement evidence-based workflow improvements
+description: 当系统需要追踪自身效能、从错误中学习、调整工作流并持续提升性能时使用——每个会话自动激活，用于收集指标、分类错误、识别模式并实施基于证据的工作流改进
 ---
 
-## Overview
+## 概述
 
-The auto-improvement skill implements a self-improving feedback loop that tracks effectiveness metrics, learns from errors, identifies recurring failure patterns, and adapts workflows to prevent repeated mistakes. It enables the agent to become measurably better over time through structured self-assessment rather than ad-hoc adjustments. Without this skill, the same mistakes repeat across sessions — with it, every error becomes a permanent improvement.
+`auto-improvement` 技能实现了一个自我改进的反馈循环，用于追踪效能指标、从错误中学习、识别重复出现的失败模式，并调整工作流以防止重复犯错。它使智能体能够通过结构化的自我评估（而非临时调整）在时间推移中实现可衡量的提升。没有此技能，相同的错误会在不同会话中反复出现；有了它，每一次错误都将转化为永久的改进。
 
-**This skill is ALWAYS active.** It runs automatically on every session and cannot be disabled.
+**此技能始终处于激活状态。** 它在每个会话中自动运行，且无法被禁用。
 
 ---
 
-## Phase 1: Metric Collection
+## 第一阶段：指标收集
 
-At the start of every task, instrument key decision points:
+在每个任务开始时，对关键决策点进行监控记录：
 
-1. Record task start time and initial estimate
-2. Define expected outcome and success criteria
-3. Track each decision point (approach chosen, alternatives considered)
-4. Log revision count (how many times the output was revised)
-5. Track user corrections as improvement signals
+1. 记录任务开始时间和初步预估耗时
+2. 定义预期成果和成功标准
+3. 追踪每个决策点（所选方案、考虑的备选方案）
+4. 记录修改次数（输出内容被修订的次数）
+5. 将用户纠正作为改进信号进行追踪
 
-### Core Metrics
+### 核心指标
 
-| Metric | Formula | Target | Measurement Period |
-|--------|---------|--------|--------------------|
-| First-attempt success rate | Tasks without revision / Total tasks | >80% | Per session |
-| Average revision count | Total revisions / Total tasks | <1.5 | Per session |
-| Error recurrence rate | Repeated errors / Total errors | <10% | Rolling 10 sessions |
-| Time-to-completion accuracy | Actual time / Estimated time | 0.8-1.2 | Per task |
-| User correction rate | User corrections / Total outputs | <5% | Per session |
+| 指标           | 计算公式                    | 目标    | 测量周期     |
+| -------------- | --------------------------- | ------- | ------------ |
+| 首次尝试成功率 | 无需修改的任务数 / 总任务数 | >80%    | 每次会话     |
+| 平均修改次数   | 总修改次数 / 总任务数       | <1.5    | 每次会话     |
+| 错误复发率     | 重复错误数 / 总错误数       | <10%    | 滚动10次会话 |
+| 完成时间准确度 | 实际耗时 / 预估耗时         | 0.8-1.2 | 每个任务     |
+| 用户纠正率     | 用户纠正数 / 总输出数       | <5%     | 每次会话     |
 
-### Tracking Template
+### 追踪模板
 
 ```markdown
-## Session Metrics -- [Date]
+## 会话指标 -- [日期]
 
-### Tasks
-| Task | Estimated | Actual | Revisions | Success | Error Type |
-|------|-----------|--------|-----------|---------|------------|
-| ...  | 30m       | 45m    | 1         | Partial | Execution  |
+### 任务
 
-### Summary
-- Tasks completed: X
-- First-attempt success: X/Y (Z%)
-- Total revisions: N
-- Errors by category: Comprehension(n), Execution(n), Process(n)
-- Improvement actions taken: [list]
+| 任务 | 预估时间 | 实际时间 | 修改次数 | 成功状态 | 错误类型 |
+| ---- | -------- | -------- | -------- | -------- | -------- |
+| ...  | 30分钟   | 45分钟   | 1        | 部分成功 | 执行错误 |
+
+### 摘要
+
+- 已完成任务数：X
+- 首次尝试成功：X/Y (Z%)
+- 总修改次数：N
+- 按类别统计的错误：理解类(n), 执行类(n), 流程类(n)
+- 已采取的改进措施：[列表]
 ```
 
-> **STOP: Complete metric collection setup before proceeding to error analysis. Do NOT skip instrumentation.**
+> **停止：在继续进行错误分析之前，务必完成指标收集设置。切勿跳过监控记录步骤。**
 
 ---
 
-## Phase 2: Error Analysis
+## 第二阶段：错误分析
 
-When an error occurs, classify it immediately using the taxonomy:
+发生错误时，立即使用以下分类法对其进行归类：
 
-### Error Taxonomy
+### 错误分类法
 
-| Category | Subcategory | Example | Typical Root Cause |
-|----------|-------------|---------|-------------------|
-| **Comprehension** | Misread requirement | Built feature X when Y was asked | Insufficient clarification |
-| **Comprehension** | Wrong assumption | Assumed REST when GraphQL was used | Missing context discovery |
-| **Execution** | Syntax error | Invalid TypeScript type annotation | Unfamiliar API surface |
-| **Execution** | Logic error | Off-by-one in pagination | Insufficient test coverage |
-| **Execution** | Integration error | Wrong API endpoint or payload format | Missing documentation check |
-| **Process** | Skipped step | Forgot to run tests before commit | Process not followed |
-| **Process** | Wrong order | Wrote code before understanding spec | Eagerness over methodology |
-| **Judgment** | Over-engineering | Built abstraction for single use case | Premature optimization |
-| **Judgment** | Under-engineering | Skipped error handling for "simple" task | Underestimated complexity |
-| **Knowledge** | Unknown API | Used deprecated method | Outdated training data |
-| **Knowledge** | Framework gap | Wrong Next.js pattern for app router | Need to check docs first |
+| 类别       | 子类     | 示例                              | 典型根本原因           |
+| ---------- | -------- | --------------------------------- | ---------------------- |
+| **理解类** | 误读需求 | 要求开发Y却构建了X                | 澄清不足               |
+| **理解类** | 错误假设 | 假设使用REST实际是GraphQL         | 缺少上下文探查         |
+| **执行类** | 语法错误 | 无效的TypeScript类型注解          | 不熟悉API接口          |
+| **执行类** | 逻辑错误 | 分页计算差一错误                  | 测试覆盖不足           |
+| **执行类** | 集成错误 | API端点或载荷格式错误             | 未查阅文档             |
+| **流程类** | 跳过步骤 | 提交前忘记运行测试                | 未遵循流程             |
+| **流程类** | 顺序错误 | 未理解规范就写代码                | 急于求成而非遵循方法论 |
+| **判断类** | 过度设计 | 为单一用例构建抽象                | 过早优化               |
+| **判断类** | 设计不足 | 为“简单”任务跳过错误处理          | 低估复杂度             |
+| **知识类** | 未知API  | 使用了已弃用的方法                | 训练数据过时           |
+| **知识类** | 框架盲区 | App Router模式下的Next.js用法错误 | 需优先查阅文档         |
 
-### Severity Levels
+### 严重级别
 
-| Level | Definition | Response Required |
-|-------|-----------|------------------|
-| **Critical** | Task must be completely redone | Immediate root cause analysis + add guardrail |
-| **Major** | Significant rework needed (>50% of task) | Root cause analysis + add checklist item |
-| **Minor** | Small fix needed (<30 minutes) | Log pattern, review if recurring |
-| **Cosmetic** | Style or preference issue | Note for future, no process change |
+| 级别          | 定义                         | 所需响应                          |
+| ------------- | ---------------------------- | --------------------------------- |
+| **关键**      | 任务必须完全重做             | 立即进行根本原因分析 + 添加防护栏 |
+| **重大**      | 需要大量返工（>50%的任务量） | 根本原因分析 + 添加检查清单项     |
+| **轻微**      | 需要小幅修复（<30分钟）      | 记录模式，若复发则复查            |
+| **次要/外观** | 风格或偏好问题               | 备注供未来参考，无需更改流程      |
 
-### Error Log Format
+### 错误日志格式
 
 ```markdown
-## Error Log Entry
+## 错误日志条目
 
 **ID:** ERR-[YYYY]-[MMDD]-[NNN]
-**Date:** [date]
-**Task:** [what was being done]
-**Severity:** [Critical / Major / Minor / Cosmetic]
-**Category:** [Category > Subcategory]
+**日期:** [日期]
+**任务:** [正在执行的操作]
+**严重级别:** [关键 / 重大 / 轻微 / 次要]
+**类别:** [类别 > 子类]
 
-### What Happened
-[Description of the error and its observable impact]
+### 发生了什么
 
-### Root Cause
-[Why this error occurred — the actual underlying reason]
+[错误描述及其可观测的影响]
 
-### What Was Tried
-1. [First attempt to resolve]
-2. [Second attempt if applicable]
-3. [Final resolution]
+### 根本原因
 
-### Resolution
-[What ultimately fixed the problem]
+[此错误发生的原因——实际的底层原因]
 
-### Time Lost
-[Estimated time wasted due to this error]
+### 已尝试的方案
 
-### Prevention
-- **New checklist item:** [if applicable]
-- **Memory update:** [what was persisted]
-- **Guardrail added:** [if applicable]
+1. [首次尝试解决]
+2. [第二次尝试（如适用）]
+3. [最终解决方案]
 
-### Recurrence Check
-- [ ] Similar error seen before? [Yes/No — reference previous ID]
-- [ ] Guardrail added? [Yes/No]
+### 解决结果
+
+[最终修复问题的方法]
+
+### 损失时间
+
+[因此错误浪费的预估时间]
+
+### 预防措施
+
+- **新增检查清单项：** [如适用]
+- **记忆更新：** [已持久化的内容]
+- **新增防护栏：** [如适用]
+
+### 复发检查
+
+- [ ] 以前见过类似错误？[是/否 — 引用历史ID]
+- [ ] 已添加防护栏？[是/否]
 ```
 
-> **STOP: Every error MUST be classified and logged before proceeding to fix it. Do NOT skip the log entry.**
+> **停止：在着手修复之前，必须对每个错误进行分类并记录。切勿跳过日志条目。**
 
 ---
 
-## Phase 3: Pattern Recognition
+## 第三阶段：模式识别
 
-After accumulating 3+ errors, analyze for patterns:
+积累3个及以上错误后，进行模式分析：
 
-1. Group related errors into failure categories
-2. Identify environmental triggers (specific file types, frameworks, patterns)
-3. Detect workflow bottlenecks causing consistent slowdowns
-4. Recognize successful patterns worth reinforcing
-5. Map anti-patterns to their corrective actions
+1. 将相关错误归类到失败类别中
+2. 识别环境触发因素（特定文件类型、框架、模式）
+3. 检测导致持续减速的工作流瓶颈
+4. 识别值得强化的成功模式
+5. 将反模式映射到其纠正措施
 
-### Pattern Detection Decision Table
+### 模式检测决策表
 
-| Signal | Pattern | Action |
-|--------|---------|--------|
-| Same error >2 times | Recurring failure | Create guardrail (mandatory) |
-| Same category >3 times | Systemic weakness | Add pre-flight checklist for that category |
-| Time estimate off by >50% consistently | Estimation blind spot | Adjust estimation heuristics |
-| User corrections in same area | Knowledge gap | Deep-dive learning for that domain |
-| Success rate >90% in specific area | Strength pattern | Document and reinforce |
-| Errors cluster around specific framework | Framework knowledge gap | Run context discovery for that framework |
+| 信号                   | 模式         | 行动                       |
+| ---------------------- | ------------ | -------------------------- |
+| 相同错误出现 >2 次     | 重复性失败   | 创建防护栏（强制）         |
+| 相同类别出现 >3 次     | 系统性弱点   | 针对该类别添加前置检查清单 |
+| 时间预估持续偏差 >50%  | 预估盲区     | 调整预估启发式规则         |
+| 用户在同一领域进行纠正 | 知识缺口     | 对该领域进行深度学习       |
+| 特定领域成功率 >90%    | 优势模式     | 记录并强化                 |
+| 错误集中在特定框架周围 | 框架知识缺口 | 针对该框架运行上下文探查   |
 
-### Positive Pattern Reinforcement
+### 正面模式强化
 
-When a pattern consistently leads to success, document it:
+当某个模式持续带来成功时，对其进行记录：
 
 ```markdown
-## Positive Pattern: [Name]
-OBSERVATION: [What was done and why it worked]
-EVIDENCE: [Sessions/tasks where this pattern succeeded, with success rate]
-REINFORCEMENT: [How to ensure this pattern continues to be applied]
+## 正面模式：[名称]
+
+观察：[采取了什么操作及其为何有效]
+证据：[此模式成功的会话/任务，附成功率]
+强化措施：[如何确保该模式持续被应用]
 ```
 
-> **STOP: Pattern recognition must be evidence-based. Do NOT create patterns from single occurrences.**
+> **停止：模式识别必须基于证据。切勿从单一事件中创建模式。**
 
 ---
 
-## Phase 4: Adaptation
+## 第四阶段：适应调整
 
-Generate and implement improvements based on identified patterns:
+基于识别出的模式生成并实施改进：
 
-### Pre-Flight Checklists
+### 前置检查清单
 
-Create checklists that run before high-risk operations:
+创建在执行高风险操作前运行的检查清单：
 
 ```markdown
-## Pre-Flight: Before Writing [Framework] Code
-- [ ] Identify the framework and version (check package.json / composer.json)
-- [ ] Identify the routing pattern (pages/ vs app/, file-based vs code-based)
-- [ ] Check for existing patterns in the codebase (find similar files)
-- [ ] Verify the API surface in documentation (do not assume from memory)
-- [ ] Check for project-specific conventions (linter config, type config)
+## 前置检查：在编写 [框架] 代码之前
+
+- [ ] 确认框架及版本（检查 package.json / composer.json）
+- [ ] 确认路由模式（pages/ 与 app/，基于文件还是基于代码）
+- [ ] 检查代码库中现有模式（查找相似文件）
+- [ ] 在文档中核实API接口（不要凭记忆假设）
+- [ ] 检查项目特定规范（linter配置、类型配置）
 ```
 
-### Guardrail Rules
+### 防护栏规则
 
 ```markdown
-## Guardrail: [Operation Type]
-BEFORE [specific operation]:
-1. [Check 1]
-2. [Check 2]
-3. [Check 3]
-4. [Check 4]
+## 防护栏：[操作类型]
 
-TRIGGERED BY: [keywords or conditions that activate this guardrail]
-ADDED BECAUSE: [Error ID that caused this guardrail to be created]
-EFFECTIVENESS: [Track whether this guardrail has prevented errors]
+在执行 [特定操作] 之前：
+
+1. [检查项1]
+2. [检查项2]
+3. [检查项3]
+4. [检查项4]
+
+触发条件：[激活此防护栏的关键词或条件]
+添加原因：[导致创建此防护栏的错误ID]
+有效性：[追踪此防护栏是否成功预防了错误]
 ```
 
-### Adaptation Decision Table
+### 适应调整决策表
 
-| Error Pattern | Adaptation Type | Example |
-|--------------|----------------|---------|
-| Recurring comprehension errors | Add clarification step to workflow | "Before implementing, restate the requirement in your own words" |
-| Recurring execution errors | Add pre-flight checklist | "Before writing framework code, check version and router type" |
-| Recurring process errors | Add hard checkpoint | "STOP marker before commit: did you run tests?" |
-| Recurring judgment errors | Add decision criteria table | "When to abstract vs. inline: frequency >3, complexity >medium" |
-| Recurring knowledge errors | Add context discovery step | "Before using API, check current docs, not memory" |
+| 错误模式       | 调整类型               | 示例                                      |
+| -------------- | ---------------------- | ----------------------------------------- |
+| 理解类错误频发 | 在工作流中添加澄清步骤 | “实现前，用自己的话复述需求”              |
+| 执行类错误频发 | 添加前置检查清单       | “编写框架代码前，检查版本和路由类型”      |
+| 流程类错误频发 | 添加强制检查点         | “提交前使用 STOP 标记：你运行测试了吗？”  |
+| 判断类错误频发 | 添加决策标准表         | “何时抽象 vs 内联：频率 >3，复杂度 >中等” |
+| 知识类错误频发 | 添加上下文探查步骤     | “使用API前，查阅最新文档，而非依赖记忆”   |
 
-> **STOP: Every adaptation must be validated against historical data before being persisted.**
+> **停止：每项改进在持久化之前，必须对照历史数据进行验证。**
 
 ---
 
-## Phase 5: Feedback Loop and Validation
+## 第五阶段：反馈循环与验证
 
-Measure whether improvements actually work:
+衡量改进措施是否真正有效：
 
-1. Compare current error rates against baseline (pre-improvement)
-2. Track each guardrail's prevention count
-3. Archive improvements that demonstrably reduce errors
-4. Revert improvements that do not reduce errors or add overhead
-5. Share learnings across sessions via memory files
+1. 将当前错误率与基线（改进前）进行对比
+2. 追踪每个防护栏的防错次数
+3. 归档能显著降低错误的改进措施
+4. 回滚未能减少错误或增加开销的改进
+5. 通过记忆文件跨会话共享经验
 
-### Retrospective Template
+### 复盘模板
 
 ```markdown
-## Retrospective -- [Period]
+## 复盘报告 -- [周期]
 
-### What Went Well
-- [Pattern/approach that consistently succeeded]
-- [New technique that improved outcomes]
+### 进展良好
 
-### What Went Poorly
-- [Recurring error pattern with frequency]
-- [Process gap that caused rework]
+- [持续成功的模式/方法]
+- [改善结果的新技巧]
 
-### Error Trends
-| Category | This Period | Last Period | Trend |
-|----------|------------ |-------------|-------|
-| Comprehension | 3 | 5 | Improving |
-| Execution | 7 | 4 | Worsening -- investigate |
-| Process | 1 | 3 | Improving |
-| Knowledge | 4 | 4 | Stable |
+### 表现不佳
 
-### Root Cause Analysis (Top 3 Errors)
-1. **[Error pattern]** -- Root cause: [analysis] -- Fix: [action]
-2. **[Error pattern]** -- Root cause: [analysis] -- Fix: [action]
-3. **[Error pattern]** -- Root cause: [analysis] -- Fix: [action]
+- [频繁出现的重复错误模式]
+- [导致返工的流程缺口]
 
-### Improvement Actions
-| Action | Priority | Status | Expected Impact | Actual Impact |
-|--------|----------|--------|-----------------|---------------|
-| Add pre-flight check for X | High | Done | -30% execution errors | [measured] |
-| Update memory with Y pattern | Medium | Done | -20% knowledge errors | [measured] |
-| Create guardrail for Z | High | In Progress | Prevent critical error class | [pending] |
+### 错误趋势
 
-### Metrics vs. Targets
-| Metric | Target | Actual | Status |
-|--------|--------|--------|--------|
-| First-attempt success | >80% | 75% | Below target |
-| Revision count | <1.5 | 1.8 | Below target |
-| Error recurrence | <10% | 8% | On target |
+| 类别   | 本周期 | 上周期 | 趋势           |
+| ------ | ------ | ------ | -------------- |
+| 理解类 | 3      | 5      | 改善           |
+| 执行类 | 7      | 4      | 恶化 -- 需调查 |
+| 流程类 | 1      | 3      | 改善           |
+| 知识类 | 4      | 4      | 稳定           |
+
+### 根本原因分析（前3大错误）
+
+1. **[错误模式]** -- 根本原因：[分析] -- 修复：[行动]
+2. **[错误模式]** -- 根本原因：[分析] -- 修复：[行动]
+3. **[错误模式]** -- 根本原因：[分析] -- 修复：[行动]
+
+### 改进行动
+
+| 行动            | 优先级 | 状态   | 预期影响         | 实际影响 |
+| --------------- | ------ | ------ | ---------------- | -------- |
+| 为X添加前置检查 | 高     | 已完成 | 执行类错误 -30%  | [已测量] |
+| 用Y模式更新记忆 | 中     | 已完成 | 知识类错误 -20%  | [已测量] |
+| 为Z创建防护栏   | 高     | 进行中 | 预防某类关键错误 | [待评估] |
+
+### 指标 vs 目标
+
+| 指标         | 目标 | 实际值 | 状态   |
+| ------------ | ---- | ------ | ------ |
+| 首次尝试成功 | >80% | 75%    | 未达标 |
+| 修改次数     | <1.5 | 1.8    | 未达标 |
+| 错误复发率   | <10% | 8%     | 达标   |
 ```
 
 ---
 
-## Memory File Integration
+## 记忆文件集成
 
-### What to Persist
+### 持久化内容
 
-| File | Update When | Content |
-|------|------------|---------|
-| `memory/learned-patterns.md` | New pattern discovered or error pattern identified | Coding conventions, framework patterns, anti-patterns |
-| `memory/user-preferences.md` | User corrects style, format, or approach | Communication preferences, code style, tool choices |
-| `memory/decisions-log.md` | Significant architectural or approach decision | Decision, rationale, alternatives considered |
-| `memory/project-context.md` | New project context discovered | Tech stack, architecture, dependencies |
+| 文件                         | 更新时机                   | 内容                           |
+| ---------------------------- | -------------------------- | ------------------------------ |
+| `memory/learned-patterns.md` | 发现新模式或识别出错误模式 | 编码规范、框架模式、反模式     |
+| `memory/user-preferences.md` | 用户纠正风格、格式或方法   | 沟通偏好、代码风格、工具选择   |
+| `memory/decisions-log.md`    | 做出重大架构或方案决策     | 决策内容、理由、考虑的备选方案 |
+| `memory/project-context.md`  | 发现新的项目上下文         | 技术栈、架构、依赖项           |
 
-### Update Protocol
+### 更新协议
 
-1. Identify the learning from the error or success
-2. Check if it conflicts with existing memory entries
-3. If conflict: update the existing entry with new information and date
-4. If new: add entry with context, evidence, and date
-5. Remove entries that are no longer valid (tech changed, project evolved)
+1. 从错误或成功中提炼经验
+2. 检查是否与现有记忆条目冲突
+3. 若冲突：用新信息和日期更新现有条目
+4. 若为新条目：添加条目并附带上下文、证据和日期
+5. 移除不再有效的条目（技术变更、项目演进）
 
-> **Do NOT persist gut feelings as patterns. Evidence required: 2+ occurrences minimum.**
+> **切勿将直觉作为模式持久化。需要证据：至少出现2次以上。**
 
 ---
 
-## Continuous Improvement Cycle
+## 持续改进循环
 
 ```
-Execute Tasks -> Collect Metrics -> Analyze Errors -> Identify Patterns
+执行任务 -> 收集指标 -> 分析错误 -> 识别模式
       ^                                                       |
       |                                                       v
-      +-- Persist to Memory <-- Validate Impact <-- Implement Improvements
+      +-- 持久化至记忆 <-- 验证影响 <-- 实施改进
                                       |
-                                      +-- Did not work? -> Revert, try different approach
+                                      +-- 无效？ -> 回滚，尝试其他方法
 ```
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| What NOT to Do | Why It Fails | What to Do Instead |
-|----------------|-------------|-------------------|
-| Same mistake 3 times without guardrail | Errors keep recurring with no prevention | Create guardrail after 2nd occurrence |
-| Track metrics without acting on them | Measurement theater — effort without outcome | Every metric must have an action threshold |
-| Over-correct from single error | One bad experience does not justify avoiding a tool forever | Require 2+ occurrences before creating a pattern |
-| Treat all errors equally | Wastes effort on cosmetic issues | Prioritize by frequency x impact |
-| Update memory without evidence | Poisons future sessions with wrong patterns | Require 2+ examples before persisting |
-| Create so many checklists they become overhead | Checklist fatigue leads to skipping all of them | Max 5 items per checklist, retire unused ones |
-| Blame external factors only | Misses internal process improvements | Always examine what YOU could have done differently |
-| Skip validation of improvements | No way to know if improvements actually work | Compare error rates before and after |
-| Persist outdated patterns | Stale advice causes new errors | Review and prune memory periodically |
-| Never do retrospectives | Lose the big picture, focus only on individual errors | Schedule retrospective after every 10 tasks |
-
----
-
-## Anti-Rationalization Guards
-
-| Thought | Reality |
-|---------|---------|
-| "This error is a one-off" | Log it anyway. If it happens again, you have the data. |
-| "Metrics collection slows me down" | Not collecting metrics means repeating the same mistakes. |
-| "The checklist is overkill for this task" | The checklist exists because a similar task failed before. Use it. |
-| "I will remember this lesson" | You will not. Sessions are independent. Persist to memory. |
-| "The error was not my fault" | External or internal, log the pattern. Prevention is your job. |
-| "Retrospectives are a waste of time" | Without retrospectives, you cannot see trends. Do them. |
-| "My success rate is good enough" | Good enough stagnates. The target is continuous improvement. |
-
-> **Do NOT skip error logging. Do NOT skip metric collection. These are mandatory.**
+| 切勿这样做                | 为何失败                         | 正确做法                         |
+| ------------------------- | -------------------------------- | -------------------------------- |
+| 同一错误重复3次未设防护栏 | 错误持续复发无预防               | 第2次出现后创建防护栏            |
+| 只跟踪指标不采取行动      | 形式主义测量——有投入无产出       | 每个指标必须设定行动阈值         |
+| 因单次错误过度纠正        | 一次糟糕体验不足以永久弃用某工具 | 创建模式前要求至少2次出现        |
+| 同等对待所有错误          | 在次要问题上浪费精力             | 按 频率 x 影响 进行优先级排序    |
+| 无证据更新记忆            | 用错误模式污染未来会话           | 持久化前要求至少2个示例          |
+| 检查清单过多导致负担      | 清单疲劳导致全部跳过             | 每个清单最多5项，停用未使用的    |
+| 仅归咎于外部因素          | 错失内部流程改进机会             | 始终反思“你自己”本可有何不同做法 |
+| 跳过改进验证              | 无法得知改进是否有效             | 对比改进前后的错误率             |
+| 持久化过时模式            | 陈旧建议引发新错误               | 定期审查并清理记忆               |
+| 从不进行复盘              | 失去全局视野，只关注个别错误     | 每10个任务后安排一次复盘         |
 
 ---
 
-## Integration Points
+## 反自我合理化防护
 
-| Skill | Relationship |
-|-------|-------------|
-| `self-learning` | Provides project context that prevents knowledge errors |
-| `resilient-execution` | Failed retries feed into error analysis |
-| `circuit-breaker` | Stagnation events are major error signals |
-| `verification-before-completion` | Verification failures trigger error logging |
-| `planning` | Improvement actions inform future plan quality |
-| `code-review` | Review findings feed into pattern recognition |
+| 想法                           | 现实                                             |
+| ------------------------------ | ------------------------------------------------ |
+| “这次错误只是偶然”             | 依然要记录。如果再次发生，你会有数据支撑。       |
+| “收集指标会拖慢我”             | 不收集指标意味着重复同样的错误。                 |
+| “这个任务用检查清单是大材小用” | 清单的存在正是因为类似任务曾失败过。请使用它。   |
+| “我会记住这个教训”             | 你记不住。会话是独立的。持久化到记忆中。         |
+| “错误不是我的责任”             | 无论外部还是内部原因，记录模式。预防是你的职责。 |
+| “复盘是浪费时间”               | 没有复盘，你就无法看清趋势。必须做。             |
+| “我的成功率已经够好了”         | “够用”会导致停滞。目标是持续改进。               |
 
----
-
-## Concrete Examples
-
-### Guardrail Created from Error Pattern
-```
-Error: ERR-2026-0212-003 — Dropped production table during migration
-Error: ERR-2026-0301-007 — Applied migration without rollback plan
-
-Pattern: Database operations without safety checks (2 occurrences)
-
-Guardrail Created:
-## Guardrail: Database Operations
-BEFORE any database migration or schema change:
-1. Check if there is an existing migration framework
-2. Verify the current schema state
-3. Create a rollback plan
-4. Test migration on a copy first
-
-TRIGGERED BY: any task involving database, schema, migration, model
-ADDED BECAUSE: ERR-2026-0212-003, ERR-2026-0301-007
-EFFECTIVENESS: 0 errors in 5 subsequent database tasks
-```
-
-### Positive Pattern Documentation
-```
-## Positive Pattern: Context Discovery First
-OBSERVATION: Tasks where project context was gathered first had
-a 92% first-attempt success rate vs. 64% without.
-EVIDENCE: Sessions 2026-02-01 through 2026-03-15 (47 tasks)
-REINFORCEMENT: Always run context discovery before implementation.
-Minimum: check package.json, read existing code in same domain,
-identify conventions.
-```
+> **切勿跳过错误记录。切勿跳过指标收集。这些是强制性的。**
 
 ---
 
-## Skill Type
+## 集成点
 
-**RIGID** — Error tracking, classification, and the improvement cycle must be followed consistently. Every recurring error (2+ occurrences) must result in a concrete preventive action. Memory files must be updated with evidence-based patterns only. Metric collection and error logging are mandatory on every session. Do not skip retrospectives.
+| 技能                             | 关联关系                       |
+| -------------------------------- | ------------------------------ |
+| `self-learning`                  | 提供项目上下文，防止知识类错误 |
+| `resilient-execution`            | 失败的重试会输入到错误分析中   |
+| `circuit-breaker`                | 停滞事件是重大错误信号         |
+| `verification-before-completion` | 验证失败会触发错误记录         |
+| `planning`                       | 改进行动会提升未来计划的质量   |
+| `code-review`                    | 代码审查发现会输入到模式识别中 |
+
+---
+
+## 具体示例
+
+### 从错误模式创建的防护栏
+
+```
+错误: ERR-2026-0212-003 — 迁移期间误删生产环境表
+错误: ERR-2026-0301-007 — 应用迁移时未制定回滚计划
+
+模式: 无安全检查的数据库操作（2次出现）
+
+已创建防护栏:
+## 防护栏: 数据库操作
+在执行任何数据库迁移或架构变更之前:
+1. 检查是否存在现有的迁移框架
+2. 核实当前架构状态
+3. 制定回滚计划
+4. 先在副本上测试迁移
+
+触发条件: 任何涉及数据库、架构、迁移、模型的任务
+添加原因: ERR-2026-0212-003, ERR-2026-0301-007
+有效性: 后续5个数据库任务中0错误
+```
+
+### 正面模式记录
+
+```
+## 正面模式: 上下文探查优先
+观察: 优先收集项目上下文的任务首次尝试成功率为92%，
+而未收集的仅为64%。
+证据: 2026-02-01 至 2026-03-15 的会话（47个任务）
+强化措施: 实现前始终运行上下文探查。
+最低要求: 检查 package.json，阅读同领域现有代码，
+识别项目规范。
+```
+
+---
+
+## 技能类型
+
+**严格模式（RIGID）** — 必须严格且一致地遵循错误跟踪、分类和改进循环。每个重复出现的错误（≥2次）必须落实具体的预防措施。记忆文件仅限更新有证据支持的模式。每次会话的指标收集和错误记录均为强制项。不得跳过复盘。

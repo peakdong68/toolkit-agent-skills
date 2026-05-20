@@ -1,151 +1,149 @@
 ---
 name: using-git-worktrees
 description: >
-  Use when starting a new feature branch, creating isolated development environments, or working on
-  multiple tasks simultaneously without stashing or switching branches. Triggers: user says "worktree",
-  "new branch for work", "parallel development", "isolated environment", needs to work on two things at once.
+  当开始新的功能分支、创建隔离的开发环境，或在不使用暂存（stash）或切换分支的情况下同时处理多个任务时使用。触发条件：用户提及“worktree”、“为工作新建分支”、“并行开发”、“隔离环境”，或需要同时处理两件事。
 ---
 
-# Using Git Worktrees
+# 使用 Git Worktree
 
-## Overview
+## 概述
 
-Create isolated working directories for parallel development tasks using `git worktree`, allowing multiple branches to be checked out simultaneously without conflicts. This skill enforces a deterministic, multi-phase process from directory selection through setup verification, ensuring every worktree is production-ready before any work begins.
+使用 `git worktree` 为并行开发任务创建隔离的工作目录，允许同时检出多个分支且互不冲突。本技能强制执行一个确定性的多阶段流程，从目录选择到设置验证，确保每个 worktree 在开始任何工作前都达到生产就绪状态。
 
-## When to Use
+## 适用场景
 
-- Starting a new feature branch that should not interfere with current work
-- Working on multiple tasks simultaneously (bug fix + feature)
-- Creating a clean environment for testing or code review
-- Running long processes (tests, builds) while continuing development
+- 开始不应干扰当前工作的新功能分支
+- 同时处理多个任务（如修复 bug + 开发功能）
+- 为测试或代码评审创建干净的环境
+- 在继续开发的同时运行耗时较长的进程（如测试、构建）
 
-## Phase 1: Select Worktree Directory
+## 第一阶段：选择 Worktree 目录
 
-[HARD-GATE] Do NOT skip directory selection. Do NOT assume a default path without checking priorities.
+[硬性关卡] 切勿跳过目录选择。在未检查优先级之前，切勿假设默认路径。
 
-Follow this priority order exactly:
+严格遵循以下优先级顺序：
 
-### Priority 1: Existing Worktree Matching Task
+### 优先级 1：匹配任务的现有 Worktree
 
-Check if a worktree already exists for the task:
+检查是否已存在该任务的 worktree：
 
 ```bash
 git worktree list
 ```
 
-If a matching worktree exists, use it. Do NOT create a duplicate.
+如果存在匹配的 worktree，直接使用它。切勿创建重复的 worktree。
 
-### Priority 2: CLAUDE.md Worktree Directory Hint
+### 优先级 2：CLAUDE.md 中的 Worktree 目录提示
 
-Check the project's CLAUDE.md for a configured worktree directory:
+检查项目的 CLAUDE.md 是否配置了 worktree 目录：
 
 ```
-# Example CLAUDE.md entry
+# 示例 CLAUDE.md 条目
 worktree-directory: ../worktrees
 ```
 
-If specified, create worktrees under that directory.
+如果已指定，则在该目录下创建 worktree。
 
-### Priority 3: Ask the User
+### 优先级 3：询问用户
 
-If no hint is configured and no convention is obvious, ask the user where worktrees should be created. Suggest a sensible default:
+如果未配置提示且没有明显的惯例，请询问用户应在何处创建 worktree。建议一个合理的默认值：
 
 ```
 ../worktrees/<project-name>/<branch-name>
 ```
 
-**STOP — Confirm the worktree directory with the user before proceeding.**
+**停止 — 在继续之前，请与用户确认 worktree 目录。**
 
-### Directory Selection Decision Table
+### 目录选择决策表
 
-| Condition | Action |
+| 条件 | 操作 |
 |---|---|
-| Worktree for this branch already exists | Navigate to existing worktree |
-| CLAUDE.md has `worktree-directory` | Use configured path |
-| Project has existing worktrees | Use same parent directory pattern |
-| No convention found | Ask user, suggest `../worktrees/<project>/<branch>` |
-| User specifies path inside repo root | Warn — must add to `.gitignore` |
+| 该分支的 worktree 已存在 | 导航至现有 worktree |
+| CLAUDE.md 包含 `worktree-directory` | 使用配置的路径 |
+| 项目已有现有 worktree | 使用相同的父目录模式 |
+| 未找到惯例 | 询问用户，建议 `../worktrees/<project>/<branch>` |
+| 用户指定仓库根目录内的路径 | 警告 — 必须将其添加到 `.gitignore` |
 
-## Phase 2: Safety Verification
+## 第二阶段：安全验证
 
-[HARD-GATE] Do NOT create any worktree until all safety checks pass.
+[硬性关卡] 在所有安全检查通过之前，切勿创建任何 worktree。
 
-### Check .gitignore Coverage
+### 检查 .gitignore 覆盖范围
 
-If the worktree directory is inside the repository root, ensure it is in `.gitignore`:
+如果 worktree 目录位于仓库根目录内，请确保它已包含在 `.gitignore` 中：
 
 ```bash
-# Check if the worktree path would be tracked
+# 检查 worktree 路径是否会被追踪
 git check-ignore <worktree-path>
 ```
 
-If not ignored, warn the user and suggest adding it to `.gitignore`.
+如果未被忽略，请警告用户并建议将其添加到 `.gitignore`。
 
-### Verify Clean Working Tree
+### 验证工作区是否干净
 
-Check for uncommitted changes that could cause issues:
+检查可能导致问题的未提交更改：
 
 ```bash
 git status --porcelain
 ```
 
-If the working tree is dirty, inform the user and ask how to proceed:
-- Commit changes first
-- Stash changes
-- Proceed anyway (worktree creation itself is safe)
+如果工作区不干净（有未提交的更改），请通知用户并询问如何继续：
+- 先提交更改
+- 暂存更改
+- 强制继续（创建 worktree 本身是安全的）
 
-### Verify Branch Does Not Exist in Another Worktree
+### 验证分支未在其他 Worktree 中检出
 
 ```bash
 git worktree list
 ```
 
-A branch cannot be checked out in two worktrees simultaneously. If the branch is already checked out, navigate to that existing worktree instead.
+一个分支不能同时在两个 worktree 中检出。如果该分支已被检出，请导航至该现有的 worktree。
 
-### Safety Check Decision Table
+### 安全检查决策表
 
-| Check | Result | Action |
+| 检查项 | 结果 | 操作 |
 |---|---|---|
-| Path inside repo, not in `.gitignore` | FAIL | Add to `.gitignore` first |
-| Branch already in another worktree | FAIL | Use existing worktree |
-| Working tree dirty | WARN | Inform user, ask preference |
-| Path already exists (not worktree) | FAIL | Choose different path |
-| All checks pass | PASS | Proceed to Phase 3 |
+| 路径在仓库内，但未在 `.gitignore` 中 | 失败 | 先添加到 `.gitignore` |
+| 分支已在其他 worktree 中 | 失败 | 使用现有 worktree |
+| 工作区不干净 | 警告 | 通知用户，询问偏好 |
+| 路径已存在（非 worktree） | 失败 | 选择其他路径 |
+| 所有检查通过 | 通过 | 进入第三阶段 |
 
-## Phase 3: Create the Worktree
+## 第三阶段：创建 Worktree
 
 ```bash
-# For a new branch
+# 用于新建分支
 git worktree add <path> -b <branch-name> <base-branch>
 
-# For an existing branch
+# 用于现有分支
 git worktree add <path> <existing-branch>
 ```
 
-Always tell the user the full path where the worktree was created:
+始终告知用户 worktree 创建的完整路径：
 
 ```
-Worktree created at: /absolute/path/to/worktree
-Branch: feature/my-feature
-Base: main
+Worktree 创建于: /absolute/path/to/worktree
+分支: feature/my-feature
+基准: main
 ```
 
-**STOP — Confirm the worktree was created successfully before proceeding to setup.**
+**停止 — 在进入设置阶段之前，确认 worktree 已成功创建。**
 
-## Phase 4: Project Setup and Auto-Detection
+## 第四阶段：项目设置与自动检测
 
-After creating the worktree, detect and run the project's setup commands.
+创建 worktree 后，检测并运行项目的设置命令。
 
-### Setup Detection Decision Table
+### 设置检测决策表
 
-| Indicator File | Ecosystem | Setup Command |
+| 指示文件 | 生态系统 | 设置命令 |
 |---|---|---|
 | `pnpm-lock.yaml` | Node.js (pnpm) | `pnpm install` |
 | `yarn.lock` | Node.js (yarn) | `yarn install` |
 | `package-lock.json` | Node.js (npm) | `npm install` |
-| `package.json` (no lock) | Node.js (npm) | `npm install` |
+| `package.json`（无 lock 文件） | Node.js (npm) | `npm install` |
 | `pyproject.toml` + `tool.poetry` | Python (poetry) | `poetry install` |
-| `pyproject.toml` (no poetry) | Python (pip) | `pip install -e .` |
+| `pyproject.toml`（无 poetry） | Python (pip) | `pip install -e .` |
 | `setup.py` | Python (pip) | `pip install -e .` |
 | `requirements.txt` | Python (pip) | `pip install -r requirements.txt` |
 | `go.mod` | Go | `go mod download` |
@@ -153,109 +151,109 @@ After creating the worktree, detect and run the project's setup commands.
 | `Gemfile` | Ruby | `bundle install` |
 | `composer.json` | PHP | `composer install` |
 
-### Multiple Ecosystems
+### 多生态系统
 
-If the project uses multiple ecosystems (e.g., a Go backend with a Node.js frontend), run setup for each detected ecosystem in the appropriate subdirectories.
+如果项目使用多个生态系统（例如 Go 后端搭配 Node.js 前端），请在相应的子目录中为每个检测到的生态系统运行设置命令。
 
-### Environment Files
+### 环境配置文件
 
-If the project has `.env.example` or `.env.template`:
+如果项目包含 `.env.example` 或 `.env.template`：
 
 ```bash
-# Copy environment template if .env does not exist in worktree
-cp .env.example .env  # then inform user to update values
+# 如果 worktree 中不存在 .env，则复制环境模板
+cp .env.example .env  # 然后提示用户更新配置值
 ```
 
-## Phase 5: Clean Baseline Test Verification
+## 第五阶段：干净的基线测试验证
 
-[HARD-GATE] Do NOT proceed with any work until baseline tests pass or failures are acknowledged.
+[硬性关卡] 在基线测试通过或已知失败原因之前，切勿进行任何工作。
 
-Run the project's test suite to establish a clean baseline BEFORE starting any work:
+在开始任何工作之前，运行项目的测试套件以建立干净的基线：
 
 ```bash
-# Use the project's test command
+# 使用项目的测试命令
 # Node.js: npm test / yarn test / pnpm test
 # Python: pytest / python -m pytest
 # Go: go test ./...
 # Rust: cargo test
 ```
 
-Purpose:
-- Confirms the worktree is set up correctly
-- Establishes that all tests pass before changes are made
-- Any test failures after this point are caused by your changes, not pre-existing issues
+目的：
+- 确认 worktree 设置正确
+- 确保在更改前所有测试均能通过
+- 此后的任何测试失败均由你的更改引起，而非预先存在的问题
 
-If baseline tests fail:
-- Report the failures to the user
-- Do NOT proceed with work until the baseline is understood
-- The base branch may have broken tests that need addressing first
+如果基线测试失败：
+- 向用户报告失败情况
+- 在理解基线状况之前，切勿继续工作
+- 基准分支可能存在需要优先修复的失败测试
 
-## Phase 6: Location Reporting
+## 第六阶段：位置报告
 
-Always report the worktree location clearly to the user:
+始终向用户清晰报告 worktree 的位置：
 
 ```
-Worktree ready:
-  Path:    /Users/dev/worktrees/myproject/feature-auth
-  Branch:  feature/auth-refactor
-  Base:    main
-  Setup:   npm install (completed)
-  Tests:   24 passed, 0 failed
+Worktree 已就绪：
+  路径:    /Users/dev/worktrees/myproject/feature-auth
+  分支:  feature/auth-refactor
+  基准:    main
+  设置:   npm install (已完成)
+  测试:   24 通过, 0 失败
 ```
 
-## Cleanup Patterns
+## 清理模式
 
-### After Merging or Completing Work
+### 合并或完成工作后
 
 ```bash
-# Remove the worktree
+# 移除 worktree
 git worktree remove <path>
 
-# If files remain (dirty worktree), force removal
+# 如果文件残留（不干净的 worktree），强制移除
 git worktree remove --force <path>
 
-# Prune stale worktree references
+# 清理陈旧的 worktree 引用
 git worktree prune
 ```
 
-### List All Worktrees
+### 列出所有 Worktree
 
 ```bash
 git worktree list
 ```
 
-### Handling Locked Worktrees
+### 处理被锁定的 Worktree
 
-If a worktree is locked (to prevent accidental removal):
+如果 worktree 被锁定（以防止意外移除）：
 
 ```bash
-# Unlock before removing
+# 移除前先解锁
 git worktree unlock <path>
 git worktree remove <path>
 ```
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | What to Do Instead |
+| 反模式 | 为何错误 | 正确做法 |
 |---|---|---|
-| Creating duplicate worktree for same branch | Git does not allow it; wastes time | Check `git worktree list` first |
-| Worktree inside repo without `.gitignore` | Worktree files show as untracked | Add path to `.gitignore` |
-| Skipping dependency install in worktree | Build/test failures from missing deps | Always run project setup |
-| Skipping baseline test run | Cannot distinguish pre-existing vs new failures | Run tests before starting work |
-| Assuming worktree has same env vars | `.env` files are not shared between worktrees | Copy and configure `.env` |
-| Leaving stale worktrees after merge | Disk waste, confusing `git worktree list` | Remove worktrees after branch completion |
-| Force-removing worktree with uncommitted work | Permanent data loss | Commit or stash first |
+| 为同一分支创建重复的 worktree | Git 不允许；浪费时间 | 先检查 `git worktree list` |
+| 将 worktree 放在仓库内且未配置 `.gitignore` | worktree 文件会显示为未跟踪状态 | 将路径添加到 `.gitignore` |
+| 在 worktree 中跳过依赖安装 | 因缺少依赖导致构建/测试失败 | 始终运行项目设置 |
+| 跳过运行基线测试 | 无法区分预先存在的新故障 | 在开始工作前运行测试 |
+| 假设 worktree 具有相同的环境变量 | `.env` 文件在 worktree 间不共享 | 复制并配置 `.env` |
+| 合并后遗留陈旧的 worktree | 浪费磁盘空间，使 `git worktree list` 混乱 | 分支完成后移除 worktree |
+| 强制移除包含未提交工作的 worktree | 永久丢失数据 | 先提交或暂存更改 |
 
-## Integration Points
+## 集成点
 
-| Skill | Integration |
-|---|---|
-| `finishing-a-development-branch` | After completing work in a worktree, use this to merge or create a PR |
-| `dispatching-parallel-agents` | Run agents in separate worktrees for true isolation |
-| `verification-before-completion` | Validate work before leaving the worktree |
-| `self-learning` | Check CLAUDE.md for worktree directory preferences |
-| `planning` | Worktree creation is often the first step of plan execution |
+| 技能                               | 集成方式                              |
+| -------------------------------- | --------------------------------- |
+| `finishing-a-development-branch` | 在 worktree 中完成工作后，使用此技能进行合并或创建 PR |
+| `dispatching-parallel-agents`    | 在独立的 worktree 中运行 Agent 以实现真正隔离   |
+| `verification-before-completion` | 在离开 worktree 前验证工作成果              |
+| `self-learning`                  | 检查 CLAUDE.md 获取 worktree 目录偏好     |
+| `planning`                       | 创建 worktree 通常是执行计划的第一步           |
 
-## Skill Type
+## 技能类型
 
-**RIGID** — Follow this process exactly. Every phase must be completed in order. Do NOT skip safety checks. Do NOT skip baseline test verification. Do NOT create worktrees without confirming the directory.
+**严格模式** — 必须严格遵循此流程。每个阶段必须按顺序完成。切勿跳过安全检查。切勿跳过基线测试验证。在未确认目录之前，切勿创建 worktree。

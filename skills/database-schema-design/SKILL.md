@@ -1,278 +1,281 @@
 ---
 name: database-schema-design
-description: "Use when designing database schemas, creating migrations, modeling data relationships, optimizing database queries, adding indexes, or selecting between SQL and NoSQL storage"
+description: '适用于设计数据库架构、创建迁移脚本、建模数据关系、优化数据库查询、添加索引，或在 SQL 与 NoSQL 存储之间进行选择时'
 ---
 
-# Database Schema Design
+# 数据库架构设计
 
-## Overview
+## 概述
 
-Guide the design, implementation, and optimization of database schemas with sound data modeling, safe migrations, effective indexing, and appropriate query patterns. This skill covers the full lifecycle from conceptual modeling through physical optimization, ensuring schemas that are normalized, performant, and safely evolvable.
+指导数据库架构的设计、实现与优化，涵盖合理的数据建模、安全的迁移、高效的索引以及恰当的查询模式。本技能覆盖从概念建模到物理优化的完整生命周期，确保架构具备规范化、高性能且可安全演进的特性。
 
-**Announce at start:** "I'm using the database-schema-design skill to design the database schema."
+**起始声明：** “我正在使用 database-schema-design 技能来设计数据库架构。”
 
-## Phase 1: Discovery and Conceptual Model
+## 阶段一：需求发现与概念模型
 
-Ask these questions to understand the data requirements:
+提出以下问题以理解数据需求：
 
-| # | Question | What It Determines |
-|---|----------|-------------------|
-| 1 | What entities does the system manage? | Table names |
-| 2 | What are the relationships between entities? | Foreign keys, join tables |
-| 3 | What are the key attributes of each entity? | Column definitions |
-| 4 | What are the primary query patterns? | Index strategy |
-| 5 | What is the expected data volume? (rows, growth rate) | Partitioning, scaling |
-| 6 | What is the read/write ratio? | Normalization vs denormalization |
-| 7 | SQL or NoSQL? (or both?) | Storage engine selection |
+| #   | 问题                               | 决定内容           |
+| --- | ---------------------------------- | ------------------ |
+| 1   | 系统管理哪些实体？                 | 表名               |
+| 2   | 实体之间的关系是什么？             | 外键、联结表       |
+| 3   | 每个实体的关键属性是什么？         | 列定义             |
+| 4   | 主要的查询模式是什么？             | 索引策略           |
+| 5   | 预期数据量是多少？（行数、增长率） | 分区、扩展方案     |
+| 6   | 读写比例如何？                     | 规范化 vs 反规范化 |
+| 7   | SQL 还是 NoSQL？（或两者兼用？）   | 存储引擎选择       |
 
-### Storage Engine Decision Table
+### 存储引擎决策表
 
-| Factor | Choose SQL (PostgreSQL, MySQL) | Choose Document (MongoDB) | Choose Key-Value (Redis) |
-|--------|-------------------------------|--------------------------|-------------------------|
-| Data shape | Structured, relational | Semi-structured, nested | Simple lookups, caching |
-| Query complexity | Complex joins, aggregations | Document-level queries | Key-based access only |
-| Consistency needs | ACID required | Eventual consistency OK | Ephemeral or cached data |
-| Schema evolution | Migrations manageable | Schema-free flexibility | No schema |
-| Scale pattern | Vertical first, then read replicas | Horizontal sharding | In-memory, limited size |
+| 因素       | 选择 SQL (PostgreSQL, MySQL) | 选择文档型 (MongoDB)   | 选择键值型 (Redis) |
+| ---------- | ---------------------------- | ---------------------- | ------------------ |
+| 数据结构   | 结构化、关系型               | 半结构化、嵌套型       | 简单查找、缓存     |
+| 查询复杂度 | 复杂联结、聚合查询           | 文档级查询             | 仅基于键的访问     |
+| 一致性需求 | 需要 ACID                    | 可接受最终一致性       | 临时或缓存数据     |
+| 模式演进   | 迁移可控                     | 模式灵活（无固定模式） | 无模式             |
+| 扩展模式   | 优先垂直扩展，后加只读副本   | 水平分片               | 内存存储，容量有限 |
 
-STOP after discovery — present the conceptual model (entities, relationships, cardinality) for confirmation.
+发现阶段结束后停止——展示概念模型（实体、关系、基数）以供确认。
 
-## Phase 2: Logical Model Design
+## 阶段二：逻辑模型设计
 
-Translate the conceptual model into tables, columns, types, and constraints.
+将概念模型转换为表、列、数据类型和约束。
 
-### Column Design Rules
+### 列设计规则
 
-| Decision | Guidance |
-|----------|----------|
-| Primary keys | UUIDs for distributed systems, auto-increment for single-node |
-| Column types | Use the most specific type (`timestamptz` not `varchar` for dates) |
-| Nullability | Default NOT NULL; allow NULL only when absence is meaningful |
-| Defaults | Set sensible defaults (`created_at DEFAULT now()`) |
-| Constraints | Add CHECK, UNIQUE, and FK constraints at the schema level |
-| Naming | `snake_case`, singular table names or plural — be consistent |
+| 决策项   | 指导原则                                                |
+| -------- | ------------------------------------------------------- |
+| 主键     | 分布式系统使用 UUID，单节点使用自增                     |
+| 数据类型 | 使用最精确的类型（日期用 `timestamptz` 而非 `varchar`） |
+| 空值约束 | 默认 `NOT NULL`；仅当“缺失”具有业务含义时才允许 `NULL`  |
+| 默认值   | 设置合理的默认值（如 `created_at DEFAULT now()`）       |
+| 约束     | 在架构层添加 `CHECK`、`UNIQUE` 和外键约束               |
+| 命名规范 | 使用 `snake_case`，表名单数或复数需保持一致             |
 
-### Normalization Guide
+### 规范化指南
 
-| Normal Form | Rule | Violation Example | Fix |
-|-------------|------|-------------------|-----|
-| **1NF** | Atomic values, no repeating groups | `tags VARCHAR "urgent,priority,vip"` | Separate `order_tags` table |
-| **2NF** | All non-key columns depend on entire PK | `product_name` in `order_items` (composite PK) | Move to `products` table |
-| **3NF** | No transitive dependencies | `city` depends on `zip_code`, not `user_id` | Separate `zip_codes` table |
+| 范式    | 规则                               | 违反示例                                              | 修复方法               |
+| ------- | ---------------------------------- | ----------------------------------------------------- | ---------------------- |
+| **1NF** | 原子值，无重复组                   | `tags VARCHAR "urgent,priority,vip"`                  | 拆分为 `order_tags` 表 |
+| **2NF** | 所有非主键列必须完全依赖于整个主键 | `order_items` 中存在 `product_name`（复合主键情况下） | 移至 `products` 表     |
+| **3NF** | 无传递依赖                         | `city` 依赖于 `zip_code` 而非 `user_id`               | 拆分为 `zip_codes` 表  |
 
-**Rule:** Always start normalized. Denormalize only with measured evidence.
+**原则：** 始终从规范化开始。仅在有实测依据时才进行反规范化。
 
-### Denormalization Decision Table
+### 反规范化决策表
 
-| Scenario | Pattern | When to Apply |
-|----------|---------|--------------|
-| Read-heavy dashboards | Materialized views or summary tables | Measured slow query |
-| Frequently joined data | Embed as JSONB column | Join is >80% of query time |
-| Reporting / analytics | Separate denormalized reporting tables | OLAP workload |
-| Caching layer | Computed columns refreshed on write | High-frequency reads |
+| 场景             | 模式                 | 适用时机                |
+| ---------------- | -------------------- | ----------------------- |
+| 读多写少的仪表盘 | 物化视图或汇总表     | 经测量发现查询缓慢      |
+| 频繁联结的数据   | 嵌入为 JSONB 列      | 联结操作占查询时间 >80% |
+| 报表 / 分析      | 独立的反规范化报表表 | OLAP 工作负载           |
+| 缓存层           | 写入时刷新的计算列   | 高频读取场景            |
 
-### Relationship Patterns
+### 关系模式
 
-| Relationship | Implementation | Index Needed |
-|-------------|---------------|-------------|
-| One-to-One | FK with UNIQUE constraint on child | On FK column |
-| One-to-Many | FK on the "many" side | On FK column |
-| Many-to-Many | Junction/join table with composite PK | On both FK columns |
-| Polymorphic | Separate FK columns with CHECK constraint (preferred) or type+id pattern | On type+id or each FK |
-| Self-referential (trees) | `parent_id` FK to same table; or `ltree`/materialized path | On parent_id or path |
+| 关系类型           | 实现方式                                             | 所需索引             |
+| ------------------ | ---------------------------------------------------- | -------------------- |
+| 一对一             | 子表外键加 `UNIQUE` 约束                             | 外键列               |
+| 一对多             | 外键建在“多”的一侧                                   | 外键列               |
+| 多对多             | 使用复合主键的联结表/中间表                          | 两个外键列           |
+| 多态关联           | 独立的外键列配合 `CHECK` 约束（推荐）或 type+id 模式 | type+id 列或各外键列 |
+| 自引用（树状结构） | `parent_id` 外键指向同一表；或使用 `ltree`/物化路径  | parent_id 或路径列   |
 
-STOP after logical model — present the table definitions for review.
+逻辑模型设计完成后停止——展示表定义以供评审。
 
-## Phase 3: Physical Model and Indexing
+## 阶段三：物理模型与索引
 
-### Index Type Decision Table
+### 索引类型决策表
 
-| Index Type | Best For | Example |
-|-----------|---------|---------|
-| **B-tree** (default) | Equality and range queries | `CREATE INDEX idx_users_email ON users(email)` |
-| **GIN** | Full-text search, JSONB, arrays | `CREATE INDEX idx_posts_search ON posts USING GIN(to_tsvector('english', body))` |
-| **Partial** | Subset of rows matching condition | `CREATE INDEX idx_active_users ON users(email) WHERE active = true` |
-| **Covering (INCLUDE)** | Index-only scans avoiding table lookup | `CREATE INDEX idx_users_email ON users(email) INCLUDE (name)` |
-| **Composite** | Multi-column queries | `CREATE INDEX idx_orders ON orders(tenant_id, status)` |
+| 索引类型                           | 最佳适用场景             | 示例                                                                             |
+| ---------------------------------- | ------------------------ | -------------------------------------------------------------------------------- |
+| **B-tree**（默认）                 | 等值查询和范围查询       | `CREATE INDEX idx_users_email ON users(email)`                                   |
+| **GIN**                            | 全文搜索、JSONB、数组    | `CREATE INDEX idx_posts_search ON posts USING GIN(to_tsvector('english', body))` |
+| **Partial**（部分索引）            | 匹配特定条件的行子集     | `CREATE INDEX idx_active_users ON users(email) WHERE active = true`              |
+| **Covering (INCLUDE)**（覆盖索引） | 仅索引扫描，避免回表查询 | `CREATE INDEX idx_users_email ON users(email) INCLUDE (name)`                    |
+| **Composite**（复合索引）          | 多列查询                 | `CREATE INDEX idx_orders ON orders(tenant_id, status)`                           |
 
-### Composite Index Column Order
+### 复合索引列顺序
 
-| Position | Column Type | Reason |
-|----------|------------|--------|
-| First | High-cardinality equality columns | Most selective filter first |
-| Middle | Additional equality columns | Further narrows results |
-| Last | Range columns (dates, numbers) | Range scan on remaining rows |
+| 位置 | 列类型               | 原因                     |
+| ---- | -------------------- | ------------------------ |
+| 首位 | 高基数等值列         | 最具选择性的过滤条件优先 |
+| 中间 | 其他等值列           | 进一步缩小结果集         |
+| 末尾 | 范围列（日期、数字） | 对剩余行进行范围扫描     |
 
-**Rule:** A composite index on `(A, B, C)` supports queries on `A`, `A+B`, `A+B+C` — but NOT `B` alone or `C` alone.
+**原则：** `(A, B, C)` 的复合索引支持对 `A`、`A+B`、`A+B+C` 的查询——但**不支持**单独查询 `B` 或 `C`。
 
-### Query Optimization Checklist
+### 查询优化检查清单
 
-| Signal in EXPLAIN ANALYZE | Problem | Fix |
-|--------------------------|---------|-----|
-| Seq Scan on large table | Missing index | Add appropriate index |
-| Nested Loop with large outer table | Inefficient join | Add index or restructure query |
-| High actual vs estimated rows | Stale statistics | Run `ANALYZE` on table |
-| Hash Join high memory | `work_mem` too low | Tune `work_mem` or restructure |
+| EXPLAIN ANALYZE 中的信号             | 问题                | 修复方法                   |
+| ------------------------------------ | ------------------- | -------------------------- |
+| 大表上的 Seq Scan（顺序扫描）        | 缺少索引            | 添加合适的索引             |
+| 外部表较大的 Nested Loop（嵌套循环） | 联结效率低          | 添加索引或重构查询         |
+| 实际行数与预估行数偏差大             | 统计信息过期        | 对表执行 `ANALYZE`         |
+| Hash Join（哈希联结）内存占用高      | `work_mem` 设置过低 | 调优 `work_mem` 或重构查询 |
 
-### N+1 Detection and Prevention
+### N+1 问题检测与预防
 
 ```sql
--- N+1 problem (bad):
+-- N+1 问题（错误示范）：
 SELECT * FROM users;
--- Then for EACH user: SELECT * FROM orders WHERE user_id = ?;
+-- 然后对每个用户执行：SELECT * FROM orders WHERE user_id = ?;
 
--- Fixed with join:
+-- 使用联结修复：
 SELECT u.*, o.* FROM users u LEFT JOIN orders o ON o.user_id = u.id;
 
--- Fixed with batch load:
+-- 使用批量加载修复：
 SELECT * FROM orders WHERE user_id = ANY($1);
 ```
 
-STOP after physical model — present indexes and optimization strategy for review.
+物理模型设计完成后停止——展示索引和优化策略以供评审。
 
-## Phase 4: Migration Strategy
+## 阶段四：迁移策略
 
-### Zero-Downtime Migration (Expand-Contract)
+### 零停机迁移（扩展-收缩模式）
 
-Never make a breaking change in a single migration. Use two phases:
+切勿在单次迁移中进行破坏性变更。请使用两个阶段：
 
-**Expand phase** (backward compatible):
-1. Add new column/table (nullable or with default)
-2. Deploy code that writes to both old and new
-3. Backfill existing data in batches
-4. Deploy code that reads from new
+**扩展阶段**（向后兼容）：
 
-**Contract phase** (after all code uses new schema):
-1. Remove code that writes to old
-2. Drop old column/table
+1. 添加新列/新表（允许为空或带默认值）
+2. 部署同时向旧字段和新字段写入的代码
+3. 分批回填现有数据
+4. 部署从新字段读取的代码
 
-### Migration Safety Rules
+**收缩阶段**（所有代码均使用新架构后）：
 
-| Rule | Rationale |
-|------|-----------|
-| Every migration has a corresponding rollback | Safe to revert |
-| Test rollback in staging before production | Verify reversibility |
-| Data-destructive rollbacks need explicit approval | Prevent accidental data loss |
-| Keep migration files immutable once applied | Reproducible state |
-| Backfill large tables in batches (1000 rows) | Avoid table locks |
+1. 移除向旧字段写入的代码
+2. 删除旧列/旧表
 
-### Backfill Pattern
+### 迁移安全规则
+
+| 规则                                | 理由             |
+| ----------------------------------- | ---------------- |
+| 每次迁移都必须有对应的回滚方案      | 确保可安全撤销   |
+| 在生产环境前于预发环境测试回滚      | 验证可逆性       |
+| 破坏性数据的回滚需明确审批          | 防止意外数据丢失 |
+| 迁移文件一旦应用即保持不可变        | 保证状态可复现   |
+| 大表回填需分批进行（如 1000 行/批） | 避免表锁         |
+
+### 回填模式
 
 ```sql
--- Backfill in chunks of 1000
+-- 每次回填 1000 条数据
 UPDATE users SET display_name = username
 WHERE display_name IS NULL
 AND id IN (SELECT id FROM users WHERE display_name IS NULL LIMIT 1000);
 ```
 
-### Migration Type Decision Table
+### 迁移类型决策表
 
-| Change Type | Safe Approach | Dangerous Approach |
-|------------|---------------|-------------------|
-| Add column | Add nullable or with default | Add NOT NULL without default |
-| Remove column | Expand-contract (two deploys) | Drop column directly |
-| Rename column | Add new, copy data, drop old | ALTER RENAME (breaks queries) |
-| Add index | `CREATE INDEX CONCURRENTLY` | `CREATE INDEX` (locks table) |
-| Change column type | Add new column, migrate data | `ALTER COLUMN TYPE` (locks table) |
+| 变更类型   | 安全做法                     | 危险做法                         |
+| ---------- | ---------------------------- | -------------------------------- |
+| 添加列     | 添加可为空或带默认值的列     | 添加不带默认值的 `NOT NULL` 列   |
+| 删除列     | 扩展-收缩模式（分两次部署）  | 直接删除列                       |
+| 重命名列   | 添加新列，复制数据，删除旧列 | `ALTER RENAME`（会中断现有查询） |
+| 添加索引   | `CREATE INDEX CONCURRENTLY`  | `CREATE INDEX`（会锁表）         |
+| 修改列类型 | 添加新列并迁移数据           | `ALTER COLUMN TYPE`（会锁表）    |
 
-STOP after migration plan — confirm rollback strategy before finalizing.
+迁移计划完成后停止——在最终确定前确认回滚策略。
 
-## Phase 5: Save and Transition
+## 阶段五：保存与交接
 
-After explicit approval:
+获得明确批准后：
 
-1. Save schema design to `docs/database/` or generate migration files
-2. Commit with message: `docs(db): add schema design for <feature>`
+1. 将架构设计保存至 `docs/database/` 或生成迁移文件
+2. 提交信息格式：`docs(db): add schema design for <feature>`
 
-### Transition Decision Table
+### 交接决策表
 
-| User Intent | Next Skill | Rationale |
-|-------------|-----------|-----------|
-| "Create the migrations" | `planning` | Plan migration implementation |
-| "Write specs for this" | `spec-writing` | Behavioral specs for data operations |
-| "Implement the schema" | `test-driven-development` | TDD with migration tests |
-| "Just save the design" | None | Schema design is the deliverable |
-| "Review for performance" | `performance-optimization` | Analyze query patterns |
+| 用户意图       | 下一步技能                 | 理由                    |
+| -------------- | -------------------------- | ----------------------- |
+| “创建迁移脚本” | `planning`                 | 规划迁移实现细节        |
+| “为此编写规范” | `spec-writing`             | 编写数据操作的行为规范  |
+| “实现该架构”   | `test-driven-development`  | 采用迁移测试的 TDD 方式 |
+| “仅保存设计”   | 无                         | 架构设计即为交付物      |
+| “检查性能”     | `performance-optimization` | 分析查询模式            |
 
-## ORM Guidance
+## ORM 使用指南
 
-| ORM | Language | Strength | Watch Out For |
-|-----|----------|----------|---------------|
-| **Prisma** | TypeScript | Type-safe schema, migrations | N+1 in nested queries, limited raw SQL |
-| **Drizzle** | TypeScript | SQL-like API, lightweight | Newer ecosystem, fewer guides |
-| **SQLAlchemy** | Python | Mature, flexible, raw SQL support | Complex session management |
-| **GORM** | Go | Convention-based, auto-migrate | Silent failures, implicit behavior |
+| ORM            | 语言       | 优势                     | 注意事项                              |
+| -------------- | ---------- | ------------------------ | ------------------------------------- |
+| **Prisma**     | TypeScript | 类型安全的架构与迁移     | 嵌套查询易出现 N+1，原生 SQL 支持有限 |
+| **Drizzle**    | TypeScript | 类 SQL API，轻量级       | 生态较新，文档/教程较少               |
+| **SQLAlchemy** | Python     | 成熟、灵活、支持原生 SQL | 会话管理较复杂                        |
+| **GORM**       | Go         | 基于约定、自动迁移       | 静默失败、隐式行为较多                |
 
-### ORM Best Practices
+### ORM 最佳实践
 
-- Always review generated SQL (enable query logging in development)
-- Use eager loading to prevent N+1 queries
-- Write raw SQL for complex queries rather than fighting the ORM
-- Use ORM migrations, not auto-sync in production
-- Test query performance with realistic data volumes
+- 始终审查生成的 SQL（开发环境启用查询日志）
+- 使用预加载（eager loading）防止 N+1 查询
+- 复杂查询直接编写原生 SQL，而非与 ORM 死磕
+- 使用 ORM 迁移工具，切勿在生产环境使用自动同步
+- 使用真实数据量测试查询性能
 
-## Connection Pooling
+## 连接池
 
-- Use a connection pooler (PgBouncer, built-in pool)
-- Pool size formula: `connections = (CPU cores * 2) + disk spindles`
-- Use transaction-level pooling for most workloads
-- Application servers should not open raw connections
+- 使用连接池工具（如 PgBouncer 或数据库内置连接池）
+- 连接数计算公式：`connections = (CPU 核心数 * 2) + 磁盘主轴数`
+- 大多数工作负载建议使用事务级连接池
+- 应用服务器不应直接建立原始数据库连接
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Mistake | Why It Is Wrong | What To Do Instead |
-|---------|----------------|-------------------|
-| No foreign key constraints | Orphaned data, broken relationships | Always define FK constraints |
-| VARCHAR for everything | Loses type safety, wastes storage | Use specific types (timestamptz, int, uuid) |
-| No indexes on FK columns | Slow joins on related tables | Index every FK column |
-| Premature denormalization | Complexity without measured benefit | Start normalized, denormalize with evidence |
-| Dropping columns directly | Breaks running application code | Use expand-contract pattern |
-| `CREATE INDEX` without CONCURRENTLY | Locks table during index creation | Always use `CONCURRENTLY` in production |
-| Auto-sync schema in production | Unpredictable destructive changes | Use explicit migration files |
-| No rollback plan for migrations | Cannot recover from failed deploy | Write down migration for every up migration |
-| Nullable columns everywhere | Loses data integrity guarantees | Default NOT NULL, allow NULL intentionally |
+| 错误做法                           | 为何错误                 | 正确做法                                        |
+| ---------------------------------- | ------------------------ | ----------------------------------------------- |
+| 不设置外键约束                     | 导致孤立数据、关系断裂   | 始终定义外键约束                                |
+| 所有字段都用 `VARCHAR`             | 丧失类型安全性，浪费存储 | 使用精确类型（如 `timestamptz`, `int`, `uuid`） |
+| 外键列不建索引                     | 关联表联结查询缓慢       | 为每个外键列创建索引                            |
+| 过早反规范化                       | 引入复杂度却无实测收益   | 从规范化开始，有证据后再反规范化                |
+| 直接删除列                         | 破坏正在运行的应用代码   | 使用扩展-收缩模式                               |
+| `CREATE INDEX` 不加 `CONCURRENTLY` | 建索引期间会锁表         | 生产环境务必使用 `CONCURRENTLY`                 |
+| 生产环境自动同步架构               | 不可预测的破坏性变更     | 使用明确的迁移文件                              |
+| 迁移无回滚计划                     | 部署失败无法恢复         | 为每个向上迁移编写对应的向下迁移                |
+| 滥用 `NULL` 列                     | 丧失数据完整性保障       | 默认 `NOT NULL`，仅在明确需要时允许 `NULL`      |
 
-## Anti-Rationalization Guards
+## 防自我合理化约束
 
-- **Do NOT** skip the conceptual model — understand entities and relationships first
-- **Do NOT** add indexes speculatively — measure query patterns first
-- **Do NOT** denormalize without measured evidence of a performance problem
-- **Do NOT** create migrations without rollback plans
-- **Do NOT** skip the discovery phase — understand query patterns and data volume
-- **Do NOT** drop columns or tables without expand-contract pattern in production
+- **切勿**跳过概念模型阶段——必须先理解实体与关系
+- **切勿**盲目添加索引——先测量查询模式
+- **切勿**在没有实测性能问题证据的情况下进行反规范化
+- **切勿**在没有回滚计划的情况下创建迁移
+- **切勿**跳过需求发现阶段——务必弄清查询模式与数据量
+- **切勿**在生产环境中直接删除列或表而不遵循扩展-收缩模式
 
-## Documentation Lookup (Context7)
+## 文档查询 (Context7)
 
-Use `mcp__context7__resolve-library-id` then `mcp__context7__query-docs` for up-to-date docs. Returned docs override memorized knowledge.
-- `prisma` — for schema syntax, relations, or migration API
-- `typeorm` — for entity decorators, repository patterns, or query builder
-- `knex` — for query builder syntax, migrations, or seed files
+使用 `mcp__context7__resolve-library-id` 然后调用 `mcp__context7__query-docs` 获取最新文档。返回的文档将覆盖记忆中的知识。
+
+- `prisma` — 用于语法、关系定义或迁移 API
+- `typeorm` — 用于实体装饰器、仓储模式或查询构建器
+- `knex` — 用于查询构建器语法、迁移或种子文件
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
-|-------|-------------|
-| `api-design` | Upstream: API resources map to database entities |
-| `spec-writing` | Upstream: specs define data persistence requirements |
-| `planning` | Downstream: schema design informs implementation plan |
-| `test-driven-development` | Downstream: migration tests written before migration code |
-| `performance-optimization` | Downstream: query optimization after schema is live |
-| `reverse-engineering-specs` | Upstream: reverse-engineer existing schema behavior |
-| `senior-backend` | Parallel: backend specialist for ORM and query patterns |
+| 技能                        | 关系                                 |
+| --------------------------- | ------------------------------------ |
+| `api-design`                | 上游：API 资源映射至数据库实体       |
+| `spec-writing`              | 上游：规范定义数据持久化需求         |
+| `planning`                  | 下游：架构设计指导实现计划           |
+| `test-driven-development`   | 下游：在编写迁移代码前先编写迁移测试 |
+| `performance-optimization`  | 下游：架构上线后进行查询优化         |
+| `reverse-engineering-specs` | 上游：逆向工程现有架构行为           |
+| `senior-backend`            | 并行：后端专家负责 ORM 与查询模式    |
 
-## Verification Gate
+## 验证关卡
 
-Before claiming the schema design is complete:
+在声明架构设计完成前：
 
-1. VERIFY all entities and relationships are modeled
-2. VERIFY normalization is at least 3NF (or denormalization is justified)
-3. VERIFY indexes are defined for all query patterns and FK columns
-4. VERIFY migration strategy includes rollback for every step
-5. VERIFY the user has approved the schema design
-6. VERIFY connection pooling strategy is defined for production
+1. 验证所有实体与关系均已建模
+2. 验证规范化至少达到 3NF（或反规范化有充分理由）
+3. 验证已为所有查询模式和外键列定义了索引
+4. 验证迁移策略包含每一步的回滚方案
+5. 验证用户已批准该架构设计
+6. 验证已定义生产环境的连接池策略
 
-## Skill Type
+## 技能类型
 
-**Flexible** — Adapt storage engine, normalization level, and index strategy to project needs while preserving the conceptual-to-physical modeling progression, migration safety rules, and measured-evidence-before-denormalization principle.
+**灵活型** —— 根据项目需求调整存储引擎、规范化程度和索引策略，同时保持“概念到物理”的建模演进、迁移安全规则以及“先有实测证据再反规范化”的原则。

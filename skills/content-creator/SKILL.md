@@ -1,307 +1,317 @@
 ---
 name: content-creator
 description: >
-  Use when the user needs marketing copy, social media content, brand voice development,
-  ad copy, newsletters, or persuasive writing for business audiences.
-  Trigger conditions: social media post drafting, email campaign copy, landing page text,
-  ad copy creation, brand voice definition, content calendar planning,
-  headline writing, A/B test copy variations, newsletter composition.
+  适用于用户需要营销文案、社交媒体内容、品牌语调开发、
+  广告文案、新闻通讯，或面向商业受众的说服性写作时。
+  触发条件：起草社交媒体帖子、电子邮件营销文案、落地页文本、
+  创作广告文案、定义品牌语调、规划内容日历、
+  撰写标题、制作A/B测试文案变体、撰写新闻通讯。
 ---
 
-# Content Creator
+# 内容创作者（Content Creator）
 
-## Overview
+## 概述
 
-Create compelling marketing content across channels including social media, email campaigns, landing pages, ad copy, newsletters, and brand messaging. This skill covers brand voice development, audience targeting, copywriting frameworks (AIDA, PAS, BAB), platform-specific optimization, A/B testing copy, content calendars, and conversion-focused writing.
+跨渠道创作引人入胜的营销内容，涵盖社交媒体、电子邮件营销、落地页、广告文案、新闻通讯及品牌信息传递。本技能涵盖品牌语调开发、受众定位、文案写作框架（AIDA、PAS、BAB）、平台特定优化、A/B测试文案、内容日历规划以及以转化为核心的写作。
 
-Apply this skill whenever content must persuade, engage, or convert an audience through a specific marketing channel.
+当内容需要通过特定营销渠道说服、吸引或转化受众时，请应用此技能。
 
-## Multi-Phase Process
+## 多阶段流程
 
-### Phase 1: Brand and Audience Analysis
+### 第一阶段：品牌与受众分析
 
-1. Define or review the brand voice (tone, personality, values)
-2. Identify target audience personas (demographics, psychographics, pain points)
-3. Map the customer journey stage for this content
-4. Analyze competitor messaging and positioning
-5. Establish key differentiators and value propositions
+1. 定义或回顾品牌语调（语气、个性、价值观）
+2. 识别目标受众画像（人口统计学特征、心理特征、痛点）
+3. 映射此内容所处的客户旅程阶段
+4. 分析竞争对手的信息传递与定位
+5. 确立关键差异化优势与价值主张
 
-> **STOP — Do NOT create content without a defined brand voice and audience persona.**
+> **STOP（停止）— 在未明确定义品牌语调和受众画像前，切勿开始创作内容。**
 
-### Phase 2: Content Strategy
+### 第二阶段：内容策略
 
-1. Determine content goal (awareness, engagement, conversion, retention)
-2. Select channel(s) and format(s)
-3. Identify primary and secondary keywords or themes
-4. Define call-to-action (CTA) for each piece
-5. Plan content cadence and publishing schedule
+1. 确定内容目标（认知、互动、转化、留存）
+2. 选择渠道与格式
+3. 确定核心与次要关键词或主题
+4. 为每篇内容定义行动号召（CTA）
+5. 规划内容发布频率与排期
 
-> **STOP — Do NOT begin drafting without a clear goal and CTA for each piece.**
+> **STOP（停止）— 在为每篇内容明确目标与CTA前，切勿开始起草。**
 
-### Phase 3: Creation
+### 第三阶段：创作
 
-1. Draft using appropriate copywriting framework (see decision table)
-2. Write multiple headline/hook variations (minimum 3)
-3. Adapt tone and length for each platform
-4. Create supporting visual direction or copy for images
-5. Include relevant hashtags, mentions, or links
+1. 使用合适的文案框架进行起草（参见决策表）
+2. 撰写多个标题/钩子变体（至少3个）
+3. 针对各平台调整语气与篇幅
+4. 制作配套视觉指导或图片配文
+5. 加入相关的话题标签（hashtags）、提及（mentions）或链接
 
-> **STOP — Do NOT publish without reviewing against brand voice checklist and platform guidelines.**
+> **STOP（停止）— 在未按品牌语调检查清单和平台指南审核前，切勿发布。**
 
-### Phase 4: Optimization
+### 第四阶段：优化
 
-1. A/B test headlines, CTAs, and opening lines
-2. Review for brand voice consistency
-3. Check readability (aim for grade 6-8 for general audiences)
-4. Verify compliance (disclosures, disclaimers, regulations)
-5. Schedule or publish with tracking parameters (UTMs)
+1. 对标题、CTA和开头语句进行A/B测试
+2. 检查品牌语调的一致性
+3. 检查可读性（针对大众受众，目标为6-8年级阅读水平）
+4. 验证合规性（披露声明、免责声明、法规要求）
+5. 添加追踪参数（UTM）后安排发布或直接发布
 
-## Copywriting Framework Decision Table
+## 文案框架决策表
 
-| Situation | Framework | Why |
-|---|---|---|
-| Product launch, new feature announcement | AIDA | Builds from attention to action progressively |
-| Audience aware of pain, needs motivation | PAS | Amplifies urgency before presenting solution |
-| Transformation story, before/after | BAB | Visualizes the change your product enables |
-| Testimonial-driven, social proof heavy | 4Ps | Leverages proof as primary persuasion lever |
-| Short-form (tweets, ads under 100 chars) | Hook + CTA | No room for frameworks -- lead with value |
-| Email nurture sequence | PAS or BAB | Builds relationship over multiple touches |
-| Landing page hero section | AIDA | Maps directly to hero, benefits, proof, CTA sections |
+| 场景                              | 框架                   | 原因                                 |
+| --------------------------------- | ---------------------- | ------------------------------------ |
+| 产品发布、新功能公告              | AIDA                   | 循序渐进地从吸引注意力引导至采取行动 |
+| 受众已知痛点，需要动力推动        | PAS                    | 在提供解决方案前放大紧迫感           |
+| 转型故事、使用前/后对比           | BAB                    | 直观展现你的产品所能带来的改变       |
+| 以评价驱动、重在社会证明          | 4Ps                    | 将证明作为核心说服杠杆               |
+| 短内容（推文、100字符以内的广告） | Hook + CTA（钩子+CTA） | 篇幅有限无需复杂框架——直接突出价值   |
+| 邮件培育序列                      | PAS 或 BAB             | 通过多次接触逐步建立关系             |
+| 落地页首屏（Hero Section）        | AIDA                   | 直接对应首屏、优势、证明、CTA板块    |
 
-## Copywriting Frameworks
+## 文案写作框架
 
-### AIDA (Attention, Interest, Desire, Action)
+### AIDA（注意力、兴趣、欲望、行动）
+
 ```
-Attention: Hook that stops the scroll
-Interest:  Why this matters to the reader
-Desire:    Paint the transformation/benefit
-Action:    Clear, specific CTA
-```
-
-**Example:**
-```
-Tired of spreadsheets that crash with 10,000 rows?        [Attention]
-Our engine handles 10 million rows in under a second.     [Interest]
-Imagine finishing your quarterly report in minutes,        [Desire]
-not hours.
-Start your free trial — no credit card required.           [Action]
+Attention（注意力）：阻止用户继续划屏的钩子
+Interest（兴趣）： 说明这对读者为何重要
+Desire（欲望）：   描绘转变/收益
+Action（行动）：   清晰、具体的CTA
 ```
 
-### PAS (Problem, Agitate, Solution)
+**示例：**
+
 ```
-Problem:   Name the pain point directly
-Agitate:   Amplify the consequences of inaction
-Solution:  Present your offering as the resolution
+受够了处理万行数据就崩溃的表格吗？              [注意力]
+我们的引擎能在不到一秒内处理一千万行数据。       [兴趣]
+想象一下，几分钟而非几小时就能完成季度报告，       [欲望]
+不再是奢望。
+立即开始免费试用——无需绑定信用卡。               [行动]
 ```
 
-**Example:**
-```
-Your team wastes 6 hours/week on manual data entry.       [Problem]
-That's 312 hours a year — enough to launch two new        [Agitate]
-products. What if you could get that time back?
-AutoFlow eliminates manual entry with AI-powered           [Solution]
-data capture. See it in action →
-```
+### PAS（问题、放大、解决）
 
-### BAB (Before, After, Bridge)
 ```
-Before: Current painful state
-After:  Desired future state
-Bridge: How to get there (your product/service)
+Problem（问题）：   直接点明痛点
+Agitate（放大）：   放大不作为的后果
+Solution（解决）：  将你的产品/服务作为解决方案呈现
 ```
 
-### 4Ps (Promise, Picture, Proof, Push)
+**示例：**
+
 ```
-Promise: Bold claim or benefit
-Picture: Help reader visualize the outcome
-Proof:   Social proof, data, testimonials
-Push:    Urgency or clear next step
+你的团队每周在手动数据录入上浪费6小时。           [问题]
+一年就是312小时——足够推出两款新产品了。           [放大]
+如果能把这些时间抢回来呢？
+AutoFlow通过AI驱动的数据采集，彻底告别手动录入。   [解决]
+点击观看实际演示 →
 ```
 
-## Platform-Specific Guidelines
+### BAB（使用前、使用后、桥梁）
 
-### Social Media Character Limits and Best Practices
+```
+Before（使用前）：当前痛苦的状态
+After（使用后）：  理想中的未来状态
+Bridge（桥梁）：   如何达成目标（你的产品/服务）
+```
 
-| Platform | Ideal Length | Best Practices |
-|---|---|---|
-| Twitter/X | 70-100 chars (engagement sweet spot) | Questions, threads, polls; 1-2 hashtags |
-| LinkedIn | 1300 chars (before "see more") | Professional tone, personal stories, carousels; 3-5 hashtags |
-| Instagram caption | 125 chars (before truncation) | Visual-first, emoji ok, 20-30 hashtags in comment |
-| Facebook | 40-80 chars (highest engagement) | Questions, storytelling, video preferred |
-| TikTok caption | 150 chars | Trending sounds, hooks in first 3 seconds |
-| YouTube title | 60 chars max | Keyword-front, emotional trigger, number |
-| Email subject | 30-50 chars | Personalization, curiosity gap, urgency |
-| Blog headline | 55-70 chars | How-to, numbered lists, power words |
+### 4Ps（承诺、画面、证明、推动）
 
-### Post Structure by Platform
+```
+Promise（承诺）：大胆的声明或收益
+Picture（画面）：帮助读者想象最终结果
+Proof（证明）：   社会证明、数据、客户评价
+Push（推动）：    营造紧迫感或给出清晰的下一步
+```
+
+## 平台特定指南
+
+### 社交媒体字符限制与最佳实践
+
+| 平台           | 理想长度                   | 最佳实践                                            |
+| -------------- | -------------------------- | --------------------------------------------------- |
+| Twitter/X      | 70-100字符（互动最佳区间） | 提问、话题串（threads）、投票；1-2个话题标签        |
+| LinkedIn       | 1300字符（“查看更多”前）   | 专业语气、个人故事、轮播图；3-5个话题标签           |
+| Instagram 配文 | 125字符（截断前）          | 视觉优先、可使用表情符号、20-30个话题标签放在评论区 |
+| Facebook       | 40-80字符（互动率最高）    | 提问、讲故事、优先使用视频                          |
+| TikTok 配文    | 150字符                    | 使用热门音效、前3秒设置钩子                         |
+| YouTube 标题   | 最多60字符                 | 关键词前置、情绪触发、使用数字                      |
+| 邮件主题       | 30-50字符                  | 个性化、制造好奇心缺口、紧迫感                      |
+| 博客标题       | 55-70字符                  | 教程型、数字列表、强力词汇                          |
+
+### 各平台帖子结构
+
 ```
 # LinkedIn
-[Hook line — bold statement or question]
+[钩子行——大胆的声明或提问]
 
-[2-3 short paragraphs with line breaks]
+[2-3个短段落，中间空行]
 
-[Insight or lesson]
+[洞察或经验教训]
 
-[CTA — question to drive comments]
+[CTA——引导评论的提问]
 
-#relevant #hashtags
+#相关 #话题标签
 
 ---
 
-# Twitter/X Thread
-1/ [Strong hook with the main insight]
+# Twitter/X 话题串
+1/ [包含核心洞察的强力钩子]
 
-2/ [Context or background]
+2/ [上下文或背景]
 
-3/ [Key point with evidence]
+3/ [带证据的关键点]
 
-4/ [Practical takeaway]
+4/ [实用总结/行动建议]
 
-5/ [CTA — follow, share, or reply]
+5/ [CTA——关注、转发或回复]
 
 ---
 
 # Instagram
-[First line = hook (shows in feed)]
+[第一行 = 钩子（在信息流中显示）]
 
-Full caption with story, value, or education.
+完整配文，包含故事、价值或教育内容。
 
-CTA: Save this post / Tag someone who needs this
+CTA：收藏此帖 / 标记需要此内容的人
 
 .
 .
 .
-#hashtags #in #comment #or #after #line #breaks
+#话题标签 #放在 #评论区 #或 #换行 #之后
 ```
 
-## Brand Voice Framework
+## 品牌语调框架
 
-### Voice Attributes Matrix
+### 语调属性矩阵
 
-| Attribute | We Are | We Are Not | Example |
-|---|---|---|---|
-| Tone | Confident | Arrogant | "Here's what works" not "We're the best" |
-| Language | Clear | Simplistic | Explain complex topics simply |
-| Humor | Witty | Sarcastic | Light wordplay, never at reader's expense |
-| Formality | Professional | Stuffy | First person, contractions ok |
-| Emotion | Empathetic | Manipulative | Acknowledge pain, don't exploit it |
+| 属性   | 我们是 | 我们不是   | 示例                                 |
+| ------ | ------ | ---------- | ------------------------------------ |
+| 语气   | 自信   | 傲慢       | “这是有效的方法”，而非“我们是最棒的” |
+| 语言   | 清晰   | 过于简单化 | 用简单的方式解释复杂话题             |
+| 幽默   | 机智   | 讽刺       | 轻松的文字游戏，绝不拿读者开玩笑     |
+| 正式度 | 专业   | 刻板拘谨   | 使用第一人称，允许使用缩写           |
+| 情绪   | 共情   | 操纵性     | 承认痛点，但不加以利用               |
 
-### Voice Consistency Checklist
-- Would a real person say this out loud?
-- Does it sound like the same person across all channels?
-- Is the vocabulary level appropriate for the audience?
-- Are we talking WITH the reader, not AT them?
-- Does the tone match the content gravity (don't be playful about serious topics)?
+### 语调一致性检查清单
 
-## Headline Formulas
+- 真人会这样大声说出来吗？
+- 在所有渠道上听起来是否像同一个人？
+- 词汇难度是否适合目标受众？
+- 我们是在与读者“对话”，而不是对他们“说教”吗？
+- 语气是否匹配内容的严肃程度（严肃话题切勿轻浮）？
 
-### Proven Patterns
+## 标题公式
+
+### 经过验证的模式
+
 ```
-How to [Achieve Desired Outcome] Without [Common Objection]
-[Number] [Adjective] Ways to [Achieve Goal] in [Timeframe]
-Why [Common Belief] Is Wrong (And What to Do Instead)
-The [Adjective] Guide to [Topic] for [Audience]
-[Number] Mistakes [Audience] Make with [Topic] (And How to Fix Them)
-What [Authority/Company] Taught Me About [Topic]
-[Topic]: [Subtitle That Adds Specificity]
-Stop [Bad Practice]. Start [Good Practice]. Here's How.
-```
-
-### Headline Testing Criteria
-
-| Factor | Weight | Evaluation |
-|---|---|---|
-| Clarity | 30% | Reader knows what they'll get |
-| Specificity | 25% | Numbers, outcomes, timeframes |
-| Emotional trigger | 20% | Curiosity, fear, aspiration |
-| Relevance | 15% | Matches audience pain points |
-| Uniqueness | 10% | Stands out from competitors |
-
-## Email Copy Patterns
-
-### Welcome Email
-```
-Subject: Welcome to [Brand] — here's your first win
-
-Hi [Name],
-
-You just made a great decision.
-
-Here's one thing you can do right now to get the most
-out of [Product]:
-
-[Single, specific action with link]
-
-That's it. One step. Takes 2 minutes.
-
-If you need anything, just reply to this email — a real
-human will answer.
-
-[Signature]
+如何在不[常见反对意见]的情况下[达成期望结果]
+在[时间范围]内[达成目标]的[数字][形容词]种方法
+为什么[普遍认知]是错的（以及你应该怎么做）
+面向[受众]的[形容词][主题]指南
+[受众]在[主题]上常犯的[数字]个错误（及解决方法）
+[权威/公司]教会我的关于[主题]的事
+[主题]：[增加具体性的副标题]
+停止[不良做法]。开始[良好做法]。以下是具体方法。
 ```
 
-### Promotional Email
+### 标题测试标准
+
+| 因素     | 权重 | 评估标准                     |
+| -------- | ---- | ---------------------------- |
+| 清晰度   | 30%  | 读者能清楚知道自己将获得什么 |
+| 具体性   | 25%  | 包含数字、结果、时间范围     |
+| 情绪触发 | 20%  | 激发好奇心、恐惧感或渴望     |
+| 相关性   | 15%  | 契合受众痛点                 |
+| 独特性   | 10%  | 能在竞品中脱颖而出           |
+
+## 邮件文案模式
+
+### 欢迎邮件
+
 ```
-Subject: [Benefit] — [Time Limitation]
+主题：欢迎加入[品牌]——这是你的首次胜利
 
-[Name], quick question:
+你好，[姓名]，
 
-[Problem statement as a question?]
+你刚刚做了一个很棒的决策。
 
-We built [Product/Feature] to solve exactly that.
+你现在可以做一件事，来从[产品]中获得最大价值：
 
-Here's what [Customer/Number] are saying:
-"[Testimonial]"
+[单一、具体的操作，附链接]
 
-[CTA Button: Get Started / Try Free / See How]
+就这些。只需一步。耗时2分钟。
 
-[Urgency element if genuine]
+如有任何需要，直接回复此邮件——会有真人
+为你解答。
+
+[签名]
 ```
 
-## Content Calendar Template
+### 促销邮件
 
-| Day | Platform | Content Type | Topic/Theme | CTA | Status |
-|---|---|---|---|---|---|
-| Mon | LinkedIn | Thought leadership | Industry trend | Comment | Draft |
-| Tue | Twitter | Thread | How-to tip | Follow | Scheduled |
-| Wed | Blog | Long-form article | Deep dive | Subscribe | Writing |
-| Thu | Instagram | Carousel | Quick tips | Save | Design |
-| Fri | Email | Newsletter | Weekly roundup | Read more | Template |
+```
+主题：[收益] —— [时间限制]
 
-## Anti-Patterns / Common Mistakes
+[姓名]，快速问个问题：
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
-|---|---|---|
-| Writing for the brand, not the audience | Self-serving content gets ignored | Lead with audience pain points and desires |
-| Same copy across all platforms | Ignores platform culture and format | Adapt tone, length, and structure per channel |
-| Burying the CTA in long copy | Reader never reaches the ask | Put CTA early or make it impossible to miss |
-| Leading with features, not benefits | "What it does" doesn't motivate action | Translate features into outcomes |
-| Corporate jargon ("leverage", "synergy") | Feels inauthentic and impersonal | Use plain language a friend would use |
-| No clear goal per content piece | Impossible to measure success | Define one measurable goal before drafting |
-| Clickbait headlines | Erodes trust when content doesn't deliver | Promise only what the content provides |
-| No A/B testing | Missing optimization opportunities | Test 2-3 headline and CTA variations |
-| Missing UTM tracking parameters | Cannot attribute traffic to content | Add UTMs to every outbound link |
-| Publishing without compliance check | Legal and regulatory risk | Review disclosures, disclaimers, and regulations |
+[以提问形式陈述痛点？]
 
-## Anti-Rationalization Guards
+我们打造[产品/功能]正是为了解决这个问题。
 
-- Do NOT skip brand voice definition because "we know our voice" -- document it in the matrix.
-- Do NOT publish content without a defined CTA, even for "awareness" posts.
-- Do NOT reuse the same copy across platforms without adaptation.
-- Do NOT write headlines without generating at least 3 variations to compare.
-- Do NOT skip the readability check -- grade 6-8 is the target for general audiences.
+以下是[客户/数量]的评价：
+“[客户评价]”
 
-## Integration Points
+[CTA按钮：立即开始 / 免费试用 / 查看演示]
 
-| Skill | How It Connects |
-|---|---|
-| `seo-optimizer` | Keywords and meta tag strategy inform content headlines and structure |
-| `content-research-writer` | Research findings provide evidence for marketing claims |
-| `email-composer` | Brand voice and templates feed directly into email campaigns |
-| `llm-as-judge` | Evaluate content quality against brand voice rubric |
-| `frontend-ui-design` | Landing page copy must align with visual hierarchy and CTA placement |
-| `senior-prompt-engineer` | AI-generated copy benefits from structured prompt patterns |
+[真实的紧迫感元素]
+```
 
-## Skill Type
+## 内容日历模板
 
-**FLEXIBLE** — Adapt voice, format, and framework to the brand guidelines, target audience, and distribution channel. The copywriting frameworks and platform guidelines are recommendations; brand voice consistency is the non-negotiable.
+| 星期 | 平台      | 内容类型   | 主题/方向 | CTA      | 状态     |
+| ---- | --------- | ---------- | --------- | -------- | -------- |
+| 周一 | LinkedIn  | 思想领导力 | 行业趋势  | 评论     | 草稿     |
+| 周二 | Twitter   | 话题串     | 实操技巧  | 关注     | 已排期   |
+| 周三 | 博客      | 长文       | 深度解析  | 订阅     | 撰写中   |
+| 周四 | Instagram | 轮播图     | 快速技巧  | 收藏     | 设计中   |
+| 周五 | 邮件      | 新闻通讯   | 每周精选  | 阅读更多 | 模板就绪 |
+
+## 反面模式 / 常见错误
+
+| 反面模式                         | 为何失败                     | 替代做法                         |
+| -------------------------------- | ---------------------------- | -------------------------------- |
+| 为品牌自嗨写作，而非面向受众     | 自我中心的内容会被无视       | 以受众痛点和渴望作为开头         |
+| 所有平台使用相同文案             | 忽视了平台文化与格式差异     | 按渠道调整语气、长度和结构       |
+| 将CTA埋在长篇文案中              | 读者根本看不到请求           | 将CTA前置或使其醒目到无法忽略    |
+| 强调功能而非收益                 | “它能做什么”无法激发行动     | 将功能转化为用户收益/结果        |
+| 使用企业黑话（如“杠杆”、“协同”） | 感觉不真实且缺乏人情味       | 使用朋友间交流的通俗语言         |
+| 每篇内容没有明确目标             | 无法衡量成功与否             | 起草前定义一个可衡量的目标       |
+| 标题党（Clickbait）              | 内容无法兑现承诺时会损害信任 | 只承诺内容实际提供的东西         |
+| 不做A/B测试                      | 错失优化机会                 | 测试2-3个标题和CTA变体           |
+| 缺少UTM追踪参数                  | 无法将流量归因于具体内容     | 为每个外发链接添加UTM参数        |
+| 未经合规检查直接发布             | 存在法律与监管风险           | 审核披露声明、免责声明及法规要求 |
+
+## 反自我合理化防线
+
+- 切勿以“我们清楚自己的语调”为由跳过品牌语调定义——必须在矩阵中将其文档化。
+- 切勿发布没有明确定义CTA的内容，即使是“提升认知”类帖子也不例外。
+- 切勿未经适配就在不同平台重复使用同一篇文案。
+- 切勿在不生成至少3个变体进行对比的情况下撰写标题。
+- 切勿跳过可读性检查——大众受众的目标阅读水平为6-8年级。
+
+## 集成节点
+
+| 技能                      | 连接方式                                   |
+| ------------------------- | ------------------------------------------ |
+| `seo-optimizer`           | 关键词与元标签策略为内容标题和结构提供指导 |
+| `content-research-writer` | 调研结果为营销主张提供证据支撑             |
+| `email-composer`          | 品牌语调与模板直接注入邮件营销活动         |
+| `llm-as-judge`            | 依据品牌语调评分标准评估内容质量           |
+| `frontend-ui-design`      | 落地页文案必须与视觉层级和CTA位置对齐      |
+| `senior-prompt-engineer`  | AI生成的文案可受益于结构化的提示词模式     |
+
+## 技能类型
+
+**FLEXIBLE（灵活型）** — 根据品牌指南、目标受众和分发渠道调整语调、格式与框架。文案写作框架和平台指南仅为推荐建议；保持品牌语调一致性是不可妥协的核心原则。

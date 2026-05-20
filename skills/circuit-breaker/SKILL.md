@@ -1,19 +1,19 @@
 ---
 name: circuit-breaker
-description: 'Use when running autonomous loops, repeated operations, or when detecting stagnation patterns - enforces rate limits, protects configuration files, manages recovery with cooldown periods, and prevents infinite loops during autonomous development'
+description: 在运行自主循环、重复操作或检测到停滞模式时使用 —— 强制执行速率限制、保护配置文件、通过冷却期管理恢复，并防止自主开发过程中的无限循环
 ---
 
-## Overview
+## 概述
 
-The circuit-breaker skill is a safety mechanism that prevents infinite loops, resource exhaustion, and accidental destruction during autonomous development. It operates at the **loop level** (complementing `resilient-execution` which operates at the **task level**). Without circuit-breaker protection, autonomous loops can waste hours on stagnant problems, exhaust API limits, or accidentally destroy configuration files. This skill enforces hard boundaries that keep autonomous operations productive and safe.
+熔断器技能是一种安全机制，用于防止自主开发过程中的无限循环、资源耗尽和意外破坏。它在**循环级别**运行（与在**任务级别**运行的 `resilient-execution` 相辅相成）。如果没有熔断器保护，自主循环可能会在停滞的问题上浪费数小时、耗尽 API 限额，或意外破坏配置文件。该技能强制执行硬性边界，确保自主操作既高效又安全。
 
-**Announce at start:** "Circuit breaker is active — monitoring for stagnation, rate limits, and file protection."
+**启动时宣告：**“熔断器已激活 —— 正在监控停滞情况、速率限制及文件保护。”
 
 ---
 
-## Phase 1: Circuit State Check
+## 第一阶段：熔断状态检查
 
-Before each loop iteration, check the current circuit state:
+在每次循环迭代之前，检查当前的熔断状态：
 
 ```
 +-----------+     threshold     +-----------+     cooldown     +------------+
@@ -29,247 +29,247 @@ Before each loop iteration, check the current circuit state:
                           +-----------+
 ```
 
-| State         | Meaning                        | Action                                                       |
-| ------------- | ------------------------------ | ------------------------------------------------------------ |
-| **CLOSED**    | Normal operation               | Execute iteration, monitor all thresholds                    |
-| **OPEN**      | Halted due to threshold breach | Report status, wait for cooldown, or escalate                |
-| **HALF-OPEN** | Probing after cooldown         | Allow ONE iteration. If success: close. If failure: re-open. |
+| 状态                 | 含义             | 操作                                                   |
+| -------------------- | ---------------- | ------------------------------------------------------ |
+| **CLOSED (闭合)**    | 正常运行         | 执行迭代，监控所有阈值                                 |
+| **OPEN (断开)**      | 因阈值突破而停止 | 报告状态，等待冷却期，或上报升级                       |
+| **HALF-OPEN (半开)** | 冷却期后的探测   | 允许执行一次迭代。若成功：闭合电路。若失败：重新断开。 |
 
-> **STOP: Check circuit state BEFORE executing any loop iteration. Do NOT execute if circuit is OPEN.**
-
----
-
-## Phase 2: Stagnation Detection
-
-Monitor these thresholds continuously during autonomous operation:
-
-| Condition          | Threshold                                          | Detection Method                                   | Action                               |
-| ------------------ | -------------------------------------------------- | -------------------------------------------------- | ------------------------------------ |
-| No progress        | 3 consecutive loops with zero meaningful changes   | Track files modified + tasks completed per loop    | OPEN circuit                         |
-| Identical errors   | 5 consecutive loops producing the same error       | Compare error messages across iterations           | OPEN circuit                         |
-| Output decline     | 70% decline in output volume across iterations     | Compare output line count across last 3 iterations | OPEN circuit                         |
-| Permission denials | 3 consecutive tool permission failures             | Track permission errors                            | OPEN circuit                         |
-| Test fix loop      | >80% of effort spent on test fixes only            | Track work type per iteration                      | OPEN circuit, investigate root cause |
-| Circular approach  | Same 2-3 approaches alternating without resolution | Track approach history                             | OPEN circuit                         |
-
-### Stagnation Scoring
-
-Each iteration, compute a progress score:
-
-| Indicator                                    | Score |
-| -------------------------------------------- | ----- |
-| New test passing that was previously failing | +3    |
-| Task marked complete                         | +5    |
-| File modified with meaningful changes        | +1    |
-| Build/lint error resolved                    | +2    |
-| Same error as previous iteration             | -2    |
-| No files modified                            | -3    |
-| Reverted previous changes                    | -1    |
-
-**Threshold:** If cumulative score across 3 iterations is negative, OPEN the circuit.
-
-> **STOP: If any threshold is breached, OPEN the circuit immediately. Do NOT attempt "one more try."**
+> **停止：在执行任何循环迭代之前，必须先检查熔断状态。若电路处于 OPEN（断开）状态，请勿执行。**
 
 ---
 
-## Phase 3: Recovery Protocol
+## 第二阶段：停滞检测
 
-When the circuit opens, follow this recovery sequence:
+在自主操作期间持续监控以下阈值：
 
-### Cooldown Period
+| 条件         | 阈值                              | 检测方法                                | 操作                          |
+| ------------ | --------------------------------- | --------------------------------------- | ----------------------------- |
+| 无进展       | 连续 3 次循环零有意义变更         | 跟踪每次循环修改的文件数 + 完成的任务数 | 断开电路 (OPEN)               |
+| 相同错误     | 连续 5 次循环产生相同错误         | 跨迭代比对错误信息                      | 断开电路 (OPEN)               |
+| 输出量下降   | 跨迭代输出量下降 70%              | 比对最近 3 次迭代的输出行数             | 断开电路 (OPEN)               |
+| 权限拒绝     | 连续 3 次工具权限失败             | 跟踪权限错误                            | 断开电路 (OPEN)               |
+| 测试修复循环 | >80% 的精力仅用于修复测试         | 跟踪每次迭代的工作类型                  | 断开电路 (OPEN)，调查根本原因 |
+| 循环往复方法 | 相同的 2-3 种方法交替使用且无结果 | 跟踪方法历史记录                        | 断开电路 (OPEN)               |
 
-- **Default:** 30 minutes before retry
-- **Purpose:** Prevents rapid cycling through the same failing state
-- **After cooldown:** Circuit enters HALF-OPEN state
+### 停滞评分
 
-### HALF-OPEN Behavior
+每次迭代计算一次进度评分：
 
-1. Allow exactly ONE iteration to execute
-2. If successful (positive progress score): Close circuit, resume normal operation
-3. If failed (same stagnation pattern): Re-open circuit, double the cooldown timer
+| 指标                    | 分数 |
+| ----------------------- | ---- |
+| 之前失败的测试现在通过  | +3   |
+| 任务标记为完成          | +5   |
+| 文件发生有意义的修改    | +1   |
+| 构建/语法检查错误已解决 | +2   |
+| 与上次迭代相同的错误    | -2   |
+| 无文件被修改            | -3   |
+| 回退了之前的更改        | -1   |
 
-### Recovery Strategy Decision Table
+**阈值：** 若 3 次迭代的累计评分为负数，则断开 (OPEN) 电路。
 
-| Stagnation Type                            | Strategy 1                          | Strategy 2                                 | Strategy 3                              | Strategy 4                     |
-| ------------------------------------------ | ----------------------------------- | ------------------------------------------ | --------------------------------------- | ------------------------------ |
-| No progress (stuck on same task)           | Regenerate plan with fresh analysis | Break stuck task into 3+ subtasks          | Skip to next task, return later         | Escalate to user               |
-| Identical errors (same error repeating)    | Change approach entirely            | Check if error is environmental            | Search for known issue/workaround       | Escalate with error log        |
-| Test fix loop (tests keep breaking)        | Review test assumptions             | Check if implementation approach is flawed | Simplify implementation scope           | Escalate with test analysis    |
-| Circular approach (alternating same fixes) | Step back and re-analyze root cause | Try approach NOT yet attempted             | Reduce scope to minimal working version | Escalate with approach history |
-
-> **STOP: After recovery, monitor the next 3 iterations closely. If stagnation recurs, escalate immediately.**
-
----
-
-## Phase 4: Rate Limiting
-
-Track and enforce API usage limits:
-
-| Parameter          | Default          | Purpose                            |
-| ------------------ | ---------------- | ---------------------------------- |
-| MAX_CALLS_PER_HOUR | 100              | Prevents API overuse               |
-| Reset window       | Hourly (rolling) | Automatic counter reset            |
-| Countdown display  | Active           | Shows remaining calls before limit |
-
-### Rate Limit Behavior
-
-1. Track API calls per rolling hour
-2. At 80% of limit: display warning, prioritize remaining calls
-3. At 100% of limit: pause execution, display countdown to reset
-4. Never exceed limit — wait for reset window
-
-### Three-Layer Timeout Detection
-
-For long-running operations (especially API calls with extended limits):
-
-| Layer              | Detection                       | Fallback                                   |
-| ------------------ | ------------------------------- | ------------------------------------------ |
-| 1. Timeout guard   | Exit code 124 or timeout signal | Capture partial output, log what completed |
-| 2. JSON validation | Parse response structure        | Attempt text extraction from raw response  |
-| 3. Text fallback   | Raw output capture              | Log everything, report for human review    |
+> **停止：若任何阈值被触发，立即断开 (OPEN) 电路。切勿尝试“再试一次”。**
 
 ---
 
-## Phase 5: File Protection
+## 第三阶段：恢复协议
+
+当电路断开时，遵循以下恢复流程：
+
+### 冷却期
+
+- **默认值：** 重试前等待 30 分钟
+- **目的：** 防止在同一失败状态中快速反复循环
+- **冷却期结束后：** 电路进入半开 (HALF-OPEN) 状态
+
+### 半开状态行为
+
+1. 仅允许执行一次迭代
+2. 若成功（进度评分为正）：闭合电路，恢复正常操作
+3. 若失败（出现相同停滞模式）：重新断开电路，冷却时间翻倍
+
+### 恢复策略决策表
+
+| 停滞类型                         | 策略 1                     | 策略 2                            | 策略 3                     | 策略 4               |
+| -------------------------------- | -------------------------- | --------------------------------- | -------------------------- | -------------------- |
+| 无进展（卡在相同任务）           | 重新生成计划并进行全新分析 | 将卡住的任务拆分为 3 个以上子任务 | 跳过至下一个任务，稍后返回 | 上报给用户           |
+| 相同错误（重复出现相同错误）     | 完全更换方法               | 检查错误是否与环境相关            | 搜索已知问题/解决方案      | 附带错误日志上报     |
+| 测试修复循环（测试持续失败）     | 审查测试假设               | 检查实现方法是否存在缺陷          | 简化实现范围               | 附带测试分析上报     |
+| 循环往复方法（交替使用相同修复） | 退一步重新分析根本原因     | 尝试尚未使用过的方法              | 将范围缩小至最小可运行版本 | 附带方法历史记录上报 |
+
+> **停止：恢复后，密切监控接下来的 3 次迭代。若停滞再次出现，立即上报。**
+
+---
+
+## 第四阶段：速率限制
+
+跟踪并强制执行 API 使用限额：
+
+| 参数               | 默认值         | 用途                         |
+| ------------------ | -------------- | ---------------------------- |
+| MAX_CALLS_PER_HOUR | 100            | 防止 API 过度使用            |
+| 重置窗口           | 每小时（滚动） | 自动计数器重置               |
+| 倒计时显示         | 激活中         | 显示达到限额前的剩余调用次数 |
+
+### 速率限制行为
+
+1. 按滚动小时跟踪 API 调用次数
+2. 达到限额 80% 时：显示警告，优先处理剩余调用
+3. 达到限额 100% 时：暂停执行，显示重置倒计时
+4. 绝不超额 —— 等待重置窗口
+
+### 三层超时检测
+
+针对长时间运行的操作（尤其是具有扩展限制的 API 调用）：
+
+| 层级         | 检测方式              | 备用方案                     |
+| ------------ | --------------------- | ---------------------------- |
+| 1. 超时守卫  | 退出码 124 或超时信号 | 捕获部分输出，记录已完成内容 |
+| 2. JSON 校验 | 解析响应结构          | 尝试从原始响应中提取文本     |
+| 3. 文本备用  | 原始输出捕获          | 记录所有内容，上报供人工审查 |
+
+---
+
+## 第五阶段：文件保护
 
 <HARD-GATE>
-Configuration files must NEVER be deleted during autonomous operations. This is non-negotiable.
+在自主操作期间，配置文件绝对不可被删除。此规则不可协商。
 </HARD-GATE>
 
-### Protected Paths
+### 受保护路径
 
-| Path                         | Type      | Why Protected                                 |
-| ---------------------------- | --------- | --------------------------------------------- |
-| `.ralph/`                    | Directory | Loop state and configuration                  |
-| `.ralphrc`                   | File      | Ralph configuration                           |
-| `IMPLEMENTATION_PLAN.md`     | File      | Current plan — source of truth for loop       |
-| `AGENTS.md`                  | File      | Agent definitions                             |
-| `docs/specs/<date>_<topic>/` | Directory | Specifications — source of truth for features |
-| `.claude/`                   | Directory | Claude Code configuration                     |
-| `CLAUDE.md`                  | File      | Agent operating manual                        |
-| `memory/`                    | Directory | Persisted learnings across sessions           |
+| 路径                     | 类型 | 保护原因                   |
+| ------------------------ | ---- | -------------------------- |
+| `.ralph/`                | 目录 | 循环状态与配置             |
+| `.ralphrc`               | 文件 | Ralph 配置                 |
+| `IMPLEMENTATION_PLAN.md` | 文件 | 当前计划 —— 循环的真实依据 |
+| `AGENTS.md`              | 文件 | Agent 定义                 |
+| `specs/`                 | 目录 | 规范 —— 功能特性的真实依据 |
+| `.claude/`               | 目录 | Claude Code 配置           |
+| `CLAUDE.md`              | 文件 | Agent 操作手册             |
+| `memory/`                | 目录 | 跨会话持久化学习记录       |
 
-### Protection Mechanisms
+### 保护机制
 
-| Mechanism             | How It Works                                                            | When It Triggers                           |
-| --------------------- | ----------------------------------------------------------------------- | ------------------------------------------ |
-| Allowlist enforcement | Only permitted tools can modify protected files                         | Before any file write to protected path    |
-| Integrity validation  | Check protected files exist after each iteration                        | End of every loop iteration                |
-| Pre-operation checks  | Verify protected files before destructive operations                    | Before `rm`, `git clean`, `git checkout .` |
-| Restricted commands   | Block `git clean`, `git rm` on protected paths, `rm -rf` on config dirs | When command targets protected path        |
+| 机制           | 工作原理                                                                | 触发时机                                    |
+| -------------- | ----------------------------------------------------------------------- | ------------------------------------------- |
+| 白名单强制执行 | 仅允许的工具可修改受保护文件                                            | 任何向受保护路径写入文件前                  |
+| 完整性验证     | 每次迭代后检查受保护文件是否存在                                        | 每次循环迭代结束时                          |
+| 操作前检查     | 在执行破坏性操作前验证受保护文件                                        | 执行 `rm`、`git clean`、`git checkout .` 前 |
+| 受限命令       | 阻止对受保护路径执行 `git clean`、`git rm`，阻止对配置目录执行 `rm -rf` | 当命令目标为受保护路径时                    |
 
-### Pre-Destructive Operation Checklist
+### 破坏性操作前检查清单
 
-Before any `rm`, `git clean`, or `git checkout .`:
+在执行任何 `rm`、`git clean` 或 `git checkout .` 之前：
 
-1. List all files that will be affected
-2. Check each against the protected paths list
-3. If ANY protected file would be affected: ABORT and report
-4. If safe: proceed with caution
-5. After operation: verify all protected files still exist
+1. 列出所有将受影响的文件
+2. 逐一对照受保护路径列表进行检查
+3. 若**任何**受保护文件会受到影响：中止操作并上报
+4. 若安全：谨慎执行
+5. 操作后：验证所有受保护文件是否依然存在
 
-> **STOP: If a protected file is missing after any operation, halt immediately and restore it.**
+> **停止：若任何操作后受保护文件丢失，立即暂停并恢复。**
 
 ---
 
-## Phase 6: Monitoring and Metrics
+## 第六阶段：监控与指标
 
-Track these metrics across loop iterations:
+跨循环迭代跟踪以下指标：
 
-| Metric              | Purpose                   | Alert Threshold              |
-| ------------------- | ------------------------- | ---------------------------- |
-| Loop count          | Total iterations executed | >20 for a single task        |
-| Tasks completed     | Progress measurement      | 0 for 3+ iterations          |
-| Files modified      | Change velocity           | 0 for 3+ iterations          |
-| Test pass rate      | Quality trend             | Declining for 3+ iterations  |
-| Error frequency     | Stagnation early warning  | Increasing for 3+ iterations |
-| Output volume       | Productivity trend        | 70% decline                  |
-| API calls remaining | Rate limit proximity      | <20% remaining               |
-| Progress score      | Overall health            | Negative for 3 iterations    |
+| 指标          | 用途             | 告警阈值           |
+| ------------- | ---------------- | ------------------ |
+| 循环次数      | 已执行的总迭代数 | 单个任务 >20 次    |
+| 完成任务数    | 进度测量         | 连续 3+ 次迭代为 0 |
+| 修改文件数    | 变更速度         | 连续 3+ 次迭代为 0 |
+| 测试通过率    | 质量趋势         | 连续 3+ 次迭代下降 |
+| 错误频率      | 停滞早期预警     | 连续 3+ 次迭代上升 |
+| 输出量        | 生产力趋势       | 下降 70%           |
+| 剩余 API 调用 | 速率限制接近度   | 剩余 <20%          |
+| 进度评分      | 整体健康状况     | 连续 3 次迭代为负  |
 
-### Per-Iteration Status Log
+### 每次迭代状态日志
 
 ```markdown
-## Iteration [N] — [timestamp]
+## 迭代 [N] —— [时间戳]
 
-- Circuit state: CLOSED / HALF-OPEN
-- Tasks completed: [N]
-- Files modified: [list]
-- Tests: [X passed, Y failed, Z skipped]
-- Errors encountered: [list]
-- Progress score: [+/- N]
-- API calls remaining: [N]
-- Stagnation risk: LOW / MEDIUM / HIGH
+- 熔断状态：CLOSED / HALF-OPEN
+- 已完成任务：[N]
+- 已修改文件：[列表]
+- 测试：[X 通过, Y 失败, Z 跳过]
+- 遇到错误：[列表]
+- 进度评分：[+/- N]
+- 剩余 API 调用：[N]
+- 停滞风险：LOW / MEDIUM / HIGH
 ```
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| What NOT to Do                              | Why It Fails                             | What to Do Instead                             |
-| ------------------------------------------- | ---------------------------------------- | ---------------------------------------------- |
-| Ignore stagnation signals                   | Wastes hours on unsolvable problems      | Open circuit at threshold breach               |
-| Manually override open circuit              | Bypasses safety mechanism                | Follow recovery protocol properly              |
-| Skip file protection checks                 | Config deletion derails entire project   | Always verify protected files after operations |
-| Set cooldown to zero                        | Rapid cycling through same failure       | Respect 30-minute minimum cooldown             |
-| Count test-fix-only iterations as progress  | Masks the real problem (flawed approach) | Flag >80% test-fix effort as stagnation        |
-| Delete and recreate protected files         | Loses configuration state                | Never delete protected files, only update      |
-| Ignore rate limit warnings                  | Hits hard limit mid-operation            | Prioritize when at 80% of limit                |
-| Run destructive commands without pre-checks | May delete protected files               | Always check affected files first              |
-
----
-
-## Anti-Rationalization Guards
-
-| Thought                                | Reality                                                                        |
-| -------------------------------------- | ------------------------------------------------------------------------------ |
-| "One more try will fix it"             | That is what you said 3 iterations ago. Open the circuit.                      |
-| "The error is almost fixed"            | "Almost" for 5 iterations means the approach is wrong.                         |
-| "I cannot stop now, I am so close"     | Sunk cost fallacy. Open circuit, reassess.                                     |
-| "The cooldown is too long"             | The cooldown prevents wasting more time on the same failure.                   |
-| "These config files are not important" | They are protected for a reason. Do not delete them.                           |
-| "The rate limit will not be hit"       | Track it. Do not guess.                                                        |
-| "This is a different error"            | Check if it is truly different or the same root cause manifesting differently. |
-
-> **Do NOT override an open circuit. Follow the recovery protocol.**
+| 切勿执行的操作             | 为何会失败                   | 正确做法                         |
+| -------------------------- | ---------------------------- | -------------------------------- |
+| 忽略停滞信号               | 在无解的问题上浪费数小时     | 阈值突破时立即断开电路           |
+| 手动覆盖已断开的电路       | 绕过安全机制                 | 严格遵循恢复协议                 |
+| 跳过文件保护检查           | 配置删除会彻底搞砸整个项目   | 操作后始终验证受保护文件         |
+| 将冷却期设为零             | 在同一失败状态中快速反复循环 | 尊重 30 分钟最低冷却期           |
+| 将仅修复测试的迭代计为进度 | 掩盖了真正的问题（方法有误） | 将 >80% 的测试修复精力标记为停滞 |
+| 删除并重新创建受保护文件   | 丢失配置状态                 | 绝不删除受保护文件，仅允许更新   |
+| 忽略速率限制警告           | 操作中硬碰限额导致中断       | 达到 80% 限额时优先处理调用      |
+| 未做预检查就运行破坏性命令 | 可能误删受保护文件           | 始终先检查受影响文件             |
 
 ---
 
-## Integration Points
+## 防自我合理化机制
 
-| Skill                            | Relationship                                                                                                                   |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `resilient-execution`            | Task-level retries (3 attempts). Circuit-breaker activates AFTER resilient-execution exhausts retries within individual tasks. |
-| `autonomous-loop`                | Circuit-breaker monitors the loop. Opens circuit when loop-level stagnation detected.                                          |
-| `ralph-status`                   | Status block provides metrics for stagnation detection.                                                                        |
-| `verification-before-completion` | Circuit-breaker ensures verification passes before closing a loop.                                                             |
-| `self-learning`                  | Stagnation patterns are persisted to memory for future avoidance.                                                              |
-| `auto-improvement`               | Circuit-breaker events feed into improvement metrics.                                                                          |
+| 想法                       | 现实                                             |
+| -------------------------- | ------------------------------------------------ |
+| “再试一次就能搞定”         | 你 3 次迭代前也是这么说的。断开电路。            |
+| “错误快修好了”             | 连续 5 次迭代都“快修好”，说明方法本身就是错的。  |
+| “我现在不能停，就差一点了” | 沉没成本谬误。断开电路，重新评估。               |
+| “冷却期太长了”             | 冷却期是为了防止在同一失败上浪费更多时间。       |
+| “这些配置文件不重要”       | 它们受保护是有原因的。不要删除。                 |
+| “不会触及速率限制的”       | 持续跟踪。不要靠猜。                             |
+| “这是个不同的错误”         | 检查它是否真的不同，还是同一根本原因的不同表现。 |
 
-### Scope Clarification
-
-| Scope      | Skill                 | Behavior                                                     |
-| ---------- | --------------------- | ------------------------------------------------------------ |
-| Task-level | `resilient-execution` | Try 3 approaches for a single failing task                   |
-| Loop-level | `circuit-breaker`     | Halt the entire loop when patterns indicate systemic failure |
-
-The circuit breaker activates AFTER resilient-execution has exhausted its retries within individual tasks. If tasks keep failing despite 3 retries each, the circuit breaker detects the pattern.
+> **切勿手动覆盖已断开的电路。严格遵循恢复协议。**
 
 ---
 
-## Process Summary
+## 集成点
 
-1. **Before each loop iteration:** Check circuit state (CLOSED/HALF-OPEN/OPEN)
-2. **If OPEN:** Report status, wait for cooldown, or escalate
-3. **If HALF-OPEN:** Allow one probe iteration, evaluate result
-4. **If CLOSED:** Execute normally, monitor all thresholds
-5. **After each iteration:** Update metrics, compute progress score, evaluate thresholds
-6. **If threshold exceeded:** Open circuit, report reason, begin cooldown
-7. **After cooldown:** Enter HALF-OPEN, allow one probe
-8. **After probe:** Close if successful, re-open with doubled cooldown if failed
+| 技能                             | 关系                                                                                        |
+| -------------------------------- | ------------------------------------------------------------------------------------------- |
+| `resilient-execution`            | 任务级别重试（3 次尝试）。当 `resilient-execution` 在单个任务内耗尽重试后，熔断器才会激活。 |
+| `autonomous-loop`                | 熔断器监控该循环。检测到循环级停滞时断开电路。                                              |
+| `ralph-status`                   | 状态块提供用于停滞检测的指标。                                                              |
+| `verification-before-completion` | 熔断器确保在关闭循环前验证通过。                                                            |
+| `self-learning`                  | 停滞模式将持久化到记忆中，供未来避免。                                                      |
+| `auto-improvement`               | 熔断器事件将反馈至改进指标。                                                                |
+
+### 范围界定
+
+| 范围   | 技能                  | 行为                                     |
+| ------ | --------------------- | ---------------------------------------- |
+| 任务级 | `resilient-execution` | 针对单个失败任务尝试 3 种方法            |
+| 循环级 | `circuit-breaker`     | 当模式表明存在系统性故障时，暂停整个循环 |
+
+熔断器在 `resilient-execution` 耗尽单个任务内的重试次数**之后**激活。如果任务在各自 3 次重试后仍持续失败，熔断器将检测到该模式。
 
 ---
 
-## Skill Type
+## 流程总结
 
-**RIGID** — Thresholds and protection rules must be followed exactly. Do not relax circuit breaker conditions. Do not override open circuits. Do not skip file protection checks. Do not ignore stagnation signals.
+1. **每次循环迭代前：** 检查熔断状态（CLOSED/HALF-OPEN/OPEN）
+2. **若为 OPEN：** 报告状态，等待冷却期，或上报升级
+3. **若为 HALF-OPEN：** 允许一次探测迭代，评估结果
+4. **若为 CLOSED：** 正常执行，监控所有阈值
+5. **每次迭代后：** 更新指标，计算进度评分，评估阈值
+6. **若阈值被触发：** 断开电路，报告原因，开始冷却期
+7. **冷却期结束后：** 进入 HALF-OPEN 状态，允许一次探测
+8. **探测结束后：** 若成功则闭合，若失败则以翻倍冷却期重新断开
+
+---
+
+## 技能类型
+
+**RIGID（严格）** —— 阈值与保护规则必须被严格遵循。不得放宽熔断器条件。不得手动覆盖已断开的电路。不得跳过文件保护检查。不得忽略停滞信号。

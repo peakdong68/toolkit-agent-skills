@@ -1,239 +1,239 @@
 ---
 name: acceptance-testing
-description: 'Use when validating that implementation meets specification requirements — applies acceptance-driven backpressure with behavioral validation gates that prevent completion claims without passing tests. Triggers: spec-to-code validation, feature completion verification, pre-merge acceptance gate, release readiness check.'
+description: '用于验证实现是否满足规范要求的场景——应用由验收驱动的反压机制，配合行为验证关卡，防止在未通过测试的情况下声称任务完成。触发条件：规范到代码的验证、功能完成度验证、合并前验收关卡、发布就绪检查。'
 ---
 
-# Acceptance Testing
+# 验收测试
 
-## Overview
+## 概述
 
-Acceptance-driven backpressure connects specification acceptance criteria directly to test requirements, creating a validation chain that prevents premature completion claims. The system cannot cheat — you cannot claim a feature is done unless tests derived from spec acceptance criteria actually pass.
+验收驱动的反压机制将规范的验收标准直接关联到测试需求，构建了一条验证链，以防止过早声称任务完成。系统无法作弊——除非基于规范验收标准衍生的测试实际通过，否则你不能声明功能已完成。
 
-**Announce at start:** "I'm using the acceptance-testing skill to validate against specification criteria."
+**开始时声明：**“我正在使用 acceptance-testing 技能，依据规范标准进行验证。”
 
 ---
 
-## The Backpressure Chain
+## 反压链
 
 ```
-+------------+     derives      +------------+     validates    +------------+
-|   SPECS    |---------------->|   TESTS    |---------------->|   CODE     |
++------------+     推导出       +------------+     验证        +------------+
+|    规范    |---------------->|    测试    |---------------->|    代码    |
 |            |                  |            |                  |            |
-| Acceptance |                  | Test cases |                  | Must pass  |
-| Criteria   |                  | from AC    |                  | all tests  |
+| 验收标准   |                  | 测试用例   |                  | 必须通过   |
+| (AC)       |                  | (源自AC)   |                  | 所有测试   |
 +------------+                  +------------+                  +------------+
       ^                                                              |
-      |                    backpressure                               |
+      |                        反压机制                               |
       +--------------------------------------------------------------+
-      If tests fail, implementation must change (not the spec or test)
+      若测试失败，必须修改实现（而非修改规范或测试）
 ```
 
 ---
 
-## Phase 1: Extract Acceptance Criteria
+## 阶段一：提取验收标准
 
-**Goal:** From each specification file, extract all Given/When/Then acceptance criteria.
+**目标：** 从每个规范文件中提取所有 Given/When/Then（给定/当/那么）格式的验收标准。
 
-### Actions
+### 执行步骤
 
-1. Locate all specification files (`docs/specs/<date>_<topic>/*.md`)
-2. Extract every acceptance criterion with its ID
-3. Document in structured format
+1. 定位所有规范文件（`specs/<date>_<id>_<topic>/*.md`）
+2. 提取每一项验收标准及其对应 ID
+3. 以结构化格式进行记录
 
-### Example Extraction
+### 提取示例
 
 ```markdown
-## From spec: 01-color-extraction.md
+## 来自规范：01-color-extraction.md
 
-### AC-1: Extract dominant colors
+### AC-1：提取主色调
 
-- Given an uploaded image (PNG, JPG, or WebP)
-- When color extraction is triggered
-- Then 5-10 dominant colors are returned
-- And each color includes hex, RGB, and HSL representations
+- 给定一张上传的图片（PNG、JPG 或 WebP 格式）
+- 当触发颜色提取时
+- 则返回 5-10 种主色调
+- 且每种颜色包含 hex、RGB 和 HSL 表示形式
 
-### AC-2: Handle invalid images
+### AC-2：处理无效图片
 
-- Given a corrupted or unsupported file
-- When color extraction is attempted
-- Then an appropriate error is returned
-- And no partial results are produced
+- 给定一个损坏或不支持的文件
+- 当尝试进行颜色提取时
+- 则返回适当的错误信息
+- 且不产生任何部分结果
 ```
 
-### STOP — HARD-GATE: Do NOT proceed to Phase 2 until:
+### 停止 — 硬性关卡：在满足以下条件前，请勿进入阶段二：
 
-- [ ] All spec files are located and read
-- [ ] Every acceptance criterion is extracted with an ID
-- [ ] Criteria are in Given/When/Then format
-- [ ] No criteria are ambiguous (if ambiguous, clarify with spec author)
+- [ ] 已定位并读取所有规范文件
+- [ ] 每项验收标准均已提取并分配 ID
+- [ ] 标准均采用 Given/When/Then 格式
+- [ ] 无歧义标准（若存在歧义，需与规范作者确认澄清）
 
 ---
 
-## Phase 2: Derive Test Cases
+## 阶段二：推导测试用例
 
-**Goal:** Map every acceptance criterion to at least one test case.
+**目标：** 将每项验收标准映射到至少一个测试用例。
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  HARD-GATE: Every acceptance criterion must have at least one   │
-│  corresponding test. No exceptions. If a criterion has no       │
-│  test, the feature is NOT complete.                             │
+│  硬性关卡：每项验收标准必须至少对应一个测试用例。               │
+│  绝无例外。若某项标准没有对应测试，则该功能视为                 │
+│  未完成。                                                       │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Traceability Table
+### 追溯表
 
-| Acceptance Criterion          | Test Type   | Test Description                                            | Test File:Line        |
-| ----------------------------- | ----------- | ----------------------------------------------------------- | --------------------- |
-| AC-1: Extract dominant colors | Integration | Upload valid image, verify 5-10 colors with hex/RGB/HSL     | test/color.test.js:15 |
-| AC-2: Handle invalid images   | Integration | Upload corrupted file, verify error, verify no partial data | test/color.test.js:42 |
+| 验收标准           | 测试类型 | 测试描述                                                    | 测试文件:行号         |
+| ------------------ | -------- | ----------------------------------------------------------- | --------------------- |
+| AC-1: 提取主色调   | 集成测试 | 上传有效图片，验证是否返回 5-10 种颜色及其 hex/RGB/HSL 格式 | test/color.test.js:15 |
+| AC-2: 处理无效图片 | 集成测试 | 上传损坏文件，验证是否返回错误，验证是否无部分数据输出      | test/color.test.js:42 |
 
-### Decision Table: Test Type for Acceptance Criteria
+### 决策表：验收标准对应的测试类型
 
-| Criterion Type             | Test Type                   | Rationale                                |
-| -------------------------- | --------------------------- | ---------------------------------------- |
-| Data input/output behavior | Integration                 | Tests real data flow                     |
-| Error handling behavior    | Integration                 | Tests error paths end-to-end             |
-| Performance requirement    | Load test                   | Requires measurement under load          |
-| UI behavior                | E2E (Playwright)            | Tests real browser interaction           |
-| Subjective quality         | LLM-as-judge                | Cannot be deterministically tested       |
-| Security requirement       | Integration + security test | Tests authorization and input validation |
+| 标准类型          | 测试类型            | 理由                   |
+| ----------------- | ------------------- | ---------------------- |
+| 数据输入/输出行为 | 集成测试            | 测试真实的数据流       |
+| 错误处理行为      | 集成测试            | 端到端测试错误路径     |
+| 性能要求          | 负载测试            | 需在负载下进行测量     |
+| UI 行为           | E2E (Playwright)    | 测试真实浏览器交互     |
+| 主观质量          | LLM 裁判            | 无法通过确定性方式测试 |
+| 安全要求          | 集成测试 + 安全测试 | 测试授权与输入验证     |
 
-### STOP — HARD-GATE: Do NOT proceed to Phase 3 until:
+### 停止 — 硬性关卡：在满足以下条件前，请勿进入阶段三：
 
-- [ ] Every acceptance criterion has at least one test mapped
-- [ ] Test types are appropriate for the criterion type
-- [ ] Test file locations are identified
-
----
-
-## Phase 3: Write Tests Before Implementation
-
-**Goal:** Write acceptance tests that will fail until the feature is correctly implemented.
-
-### Actions
-
-This phase integrates with `test-driven-development`:
-
-1. Write test from acceptance criterion (RED)
-2. Implement feature to pass test (GREEN)
-3. Refactor while keeping test green (REFACTOR)
-
-### Behavioral Outcome Focus
-
-| Verify This (Behavioral)         | NOT This (Implementation)       |
-| -------------------------------- | ------------------------------- |
-| "5-10 colors are returned"       | "K-means runs with k=8"         |
-| "Response time < 200ms"          | "Cache is hit on second call"   |
-| "Error message is user-friendly" | "CustomError class is thrown"   |
-| "Data persists across sessions"  | "PostgreSQL INSERT executes"    |
-| "UI updates within 500ms"        | "WebSocket message is received" |
-
-### STOP — HARD-GATE: Do NOT proceed to Phase 4 until:
-
-- [ ] All acceptance tests are written
-- [ ] Tests fail before implementation (RED confirmed)
-- [ ] Tests verify behavioral outcomes, not implementation details
+- [ ] 每项验收标准均已映射至少一个测试
+- [ ] 测试类型与标准类型相匹配
+- [ ] 已明确测试文件位置
 
 ---
 
-## Phase 4: Validation Gates
+## 阶段三：在实现前编写测试
 
-**Goal:** Before claiming any task complete, ALL gates must pass.
+**目标：** 编写验收测试，这些测试在功能被正确实现之前应处于失败状态。
 
-| Gate              | Check                     | Tool         | Required        |
-| ----------------- | ------------------------- | ------------ | --------------- |
-| Unit tests        | All pass                  | Test runner  | Always          |
-| Integration tests | All pass                  | Test runner  | Always          |
-| Acceptance tests  | All AC-derived tests pass | Test runner  | Always          |
-| Build             | Compiles without errors   | Build tool   | Always          |
-| Lint              | No violations             | Linter       | Always          |
-| Typecheck         | No type errors            | Type checker | When applicable |
+### 执行步骤
+
+本阶段与 `test-driven-development`（测试驱动开发）相集成：
+
+1. 根据验收标准编写测试（RED/红）
+2. 实现功能以通过测试（GREEN/绿）
+3. 在保持测试通过的前提下进行重构（REFACTOR/重构）
+
+### 关注行为结果
+
+| 验证此项（行为结果） | 而非此项（实现细节）          |
+| -------------------- | ----------------------------- |
+| “返回 5-10 种颜色”   | “K-means 算法以 k=8 运行”     |
+| “响应时间 < 200ms”   | “第二次调用命中缓存”          |
+| “错误信息对用户友好” | “抛出自定义 CustomError 类”   |
+| “数据在会话间持久化” | “执行 PostgreSQL INSERT 语句” |
+| “UI 在 500ms 内更新” | “接收到 WebSocket 消息”       |
+
+### 停止 — 硬性关卡：在满足以下条件前，请勿进入阶段四：
+
+- [ ] 所有验收测试均已编写完成
+- [ ] 测试在实现前处于失败状态（已确认 RED）
+- [ ] 测试验证的是行为结果，而非实现细节
+
+---
+
+## 阶段四：验证关卡
+
+**目标：** 在声称任何任务完成之前，必须通过所有关卡。
+
+| 关卡         | 检查项                 | 工具       | 必需       |
+| ------------ | ---------------------- | ---------- | ---------- |
+| 单元测试     | 全部通过               | 测试运行器 | 始终       |
+| 集成测试     | 全部通过               | 测试运行器 | 始终       |
+| 验收测试     | 所有源自 AC 的测试通过 | 测试运行器 | 始终       |
+| 构建         | 编译无错误             | 构建工具   | 始终       |
+| 代码规范检查 | 无违规                 | Linter     | 始终       |
+| 类型检查     | 无类型错误             | 类型检查器 | 视情况而定 |
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  HARD-GATE: ACCEPTANCE                                         │
+│  硬性关卡：验收 (ACCEPTANCE)                                    │
 │                                                                 │
-│  Cannot claim completion without ALL acceptance tests passing.  │
-│  If any acceptance test fails, the feature is NOT done.        │
-│  Fix the implementation, not the spec or the test.             │
+│  若未通过所有验收测试，则不得声称任务完成。                     │
+│  若任何验收测试失败，则该功能视为未完成。                       │
+│  修复实现代码，而非修改规范或测试。                             │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### STOP — HARD-GATE: Do NOT proceed to Phase 5 until:
+### 停止 — 硬性关卡：在满足以下条件前，请勿进入阶段五：
 
-- [ ] All validation gates pass
-- [ ] Acceptance tests pass with green status
-- [ ] No gates are skipped or marked as "will fix later"
+- [ ] 所有验证关卡均已通过
+- [ ] 验收测试均显示绿色通过状态
+- [ ] 无跳过或标记为“稍后修复”的关卡
 
 ---
 
-## Phase 5: Traceability Report
+## 阶段五：追溯报告
 
-**Goal:** Produce a report linking every spec criterion to its test and result.
+**目标：** 生成一份报告，将每项规范标准与其对应的测试及结果进行关联。
 
-### Report Template
+### 报告模板
 
 ```markdown
-## Acceptance Test Report
+## 验收测试报告
 
-| Spec                    | Criterion                     | Test                   | Status |
-| ----------------------- | ----------------------------- | ---------------------- | ------ |
-| 01-color-extraction.md  | AC-1: Extract dominant colors | test/color.test.js:15  | PASS   |
-| 01-color-extraction.md  | AC-2: Handle invalid images   | test/color.test.js:42  | PASS   |
-| 02-palette-rendering.md | AC-1: Render palette grid     | test/palette.test.js:8 | PASS   |
+| 规范文件                | 验收标准             | 测试用例               | 状态        |
+| ----------------------- | -------------------- | ---------------------- | ----------- |
+| 01-color-extraction.md  | AC-1: 提取主色调     | test/color.test.js:15  | 通过 (PASS) |
+| 01-color-extraction.md  | AC-2: 处理无效图片   | test/color.test.js:42  | 通过 (PASS) |
+| 02-palette-rendering.md | AC-1: 渲染调色板网格 | test/palette.test.js:8 | 通过 (PASS) |
 
-### Summary
+### 摘要
 
-- Total criteria: N
-- Tested: N
-- Passing: N
-- Failing: 0
-- Coverage: 100%
+- 标准总数：N
+- 已测试：N
+- 已通过：N
+- 已失败：0
+- 覆盖率：100%
 ```
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern                                   | Why It Is Wrong                      | Correct Approach                                   |
-| ---------------------------------------------- | ------------------------------------ | -------------------------------------------------- |
-| Changing specs to match implementation         | Defeats the purpose of specification | Fix the implementation, not the spec               |
-| Skipping edge case criteria                    | Edge cases cause production bugs     | ALL acceptance criteria get tests                  |
-| Testing implementation details                 | Brittle tests that break on refactor | Test observable behavioral outcomes                |
-| Claiming "tests pass" without acceptance tests | Unit tests alone are insufficient    | Acceptance tests are a separate, required category |
-| Writing acceptance tests after implementation  | Tests shaped to pass, not to specify | Write BEFORE implementation (TDD)                  |
-| Deferring acceptance tests to "later"          | Later never comes                    | Write them in Phase 2, before coding               |
-| Marking failing tests as "known issues"        | Hides incomplete implementation      | Fix the code until tests pass                      |
-
----
-
-## Rationalization Prevention
-
-| Excuse                                          | Reality                                                                              |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------ |
-| "The unit tests cover this"                     | Unit tests test components in isolation; acceptance tests verify integrated behavior |
-| "The spec is obvious, no need for formal tests" | Obvious specs still need verifiable tests                                            |
-| "We can manually verify this"                   | Manual verification is not repeatable or trustworthy                                 |
-| "The acceptance criteria are too vague to test" | Clarify the criteria; vague specs produce vague code                                 |
-| "This is just a cosmetic change"                | Cosmetic changes can break layout, accessibility, and UX                             |
+| 反模式                       | 错误原因                               | 正确做法                     |
+| ---------------------------- | -------------------------------------- | ---------------------------- |
+| 修改规范以匹配实现           | 违背了规范制定的初衷                   | 修复实现代码，而非修改规范   |
+| 跳过边缘情况标准             | 边缘情况会导致生产环境缺陷             | 所有验收标准都必须有对应测试 |
+| 测试实现细节                 | 测试脆弱，重构时易断裂                 | 测试可观察的行为结果         |
+| 声称“测试通过”但缺少验收测试 | 仅靠单元测试是不够的                   | 验收测试是独立且必需的类别   |
+| 在实现后编写验收测试         | 测试会被设计为仅为了通过，而非用于规范 | 在实现前编写（遵循 TDD）     |
+| 将验收测试推迟到“以后”       | “以后”永远不会到来                     | 在阶段二、编码前编写         |
+| 将失败测试标记为“已知问题”   | 掩盖了未完成的实现                     | 持续修复代码直至测试通过     |
 
 ---
 
-## Integration Points
+## 防止借口 / 自我合理化预防
 
-| Skill                            | Relationship                                                    |
-| -------------------------------- | --------------------------------------------------------------- |
-| `spec-writing`                   | Acceptance criteria come from specs                             |
-| `test-driven-development`        | TDD cycle uses acceptance-derived tests                         |
-| `llm-as-judge`                   | For subjective criteria that cannot be deterministically tested |
-| `verification-before-completion` | Final verification includes acceptance test check               |
-| `autonomous-loop`                | Exit gate requires acceptance tests passing                     |
-| `code-review`                    | Review checks acceptance test coverage                          |
-| `planning`                       | Plan includes acceptance test writing as explicit tasks         |
+| 借口                         | 事实                                             |
+| ---------------------------- | ------------------------------------------------ |
+| “单元测试已经覆盖了这一点”   | 单元测试仅测试孤立组件；验收测试验证集成后的行为 |
+| “规范很明显，不需要正式测试” | 显而易见的规范同样需要可验证的测试               |
+| “我们可以手动验证这一点”     | 手动验证不可重复且不可靠                         |
+| “验收标准太模糊，无法测试”   | 澄清标准；模糊的规范只会产生模糊的代码           |
+| “这只是外观/样式调整”        | 外观调整可能破坏布局、无障碍访问和用户体验       |
 
 ---
 
-## Skill Type
+## 集成点
 
-**RIGID** — The backpressure chain must not be bypassed. Every acceptance criterion must have a test. No completion without passing acceptance tests. Fix the implementation, not the spec or the test.
+| 技能/模块                                   | 关联关系              |
+| --------------------------------------- | ----------------- |
+| `spec-writing`（规范编写）                    | 验收标准来源于规范         |
+| `test-driven-development`（测试驱动开发）       | TDD 循环使用源自验收标准的测试 |
+| `llm-as-judge`（LLM 裁判）                  | 用于无法确定性测试的主观标准    |
+| `verification-before-completion`（完成前验证） | 最终验证包含验收测试检查      |
+| `autonomous-loop`（自主循环）                 | 退出关卡要求验收测试通过      |
+| `code-review`（代码审查）                     | 审查会检查验收测试覆盖率      |
+| `planning`（规划）                          | 计划中明确包含编写验收测试的任务  |
+
+---
+
+## 技能类型
+
+**严格（RIGID）** — 反压链绝不可被绕过。每项验收标准都必须有对应测试。未通过验收测试则绝不视为完成。修复实现代码，而非修改规范或测试。

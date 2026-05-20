@@ -1,245 +1,245 @@
 ---
-name: llm-as-judge
-description: "Use when validating subjective quality criteria that cannot be deterministically tested — applies LLM-based evaluation with structured rubrics for tone, aesthetics, UX feel, documentation quality, and code readability. Triggers: documentation quality check, error message tone review, UX copy evaluation, code readability assessment, design aesthetic review."
+名称: llm-as-judge
+描述: "用于验证无法通过确定性测试的主观质量标准——应用基于LLM的评估方法，使用结构化评分规则来评估语气、美学、UX感觉、文档质量和代码可读性。触发条件：文档质量检查、错误信息语气评审、UX文案评估、代码可读性评估、设计美学评审。"
 ---
 
 # LLM-as-Judge
 
-## Overview
+## 概述
 
-Some quality criteria are inherently subjective — tone of voice, visual aesthetics, UX feel, documentation clarity, code readability. These cannot be verified by deterministic tests. The LLM-as-judge pattern provides structured, repeatable evaluation using an LLM reviewer with defined rubrics, ensuring subjective quality is measured consistently.
+某些质量标准本质上是主观的——语气、视觉美学、UX感觉、文档清晰度、代码可读性。这些无法通过确定性测试来验证。LLM-as-judge 模式使用带有定义评分规则的 LLM 评审器，提供结构化的、可重复的评估，确保主观质量得到一致衡量。
 
-**Announce at start:** "I'm using the llm-as-judge skill to evaluate subjective quality."
-
----
-
-## Phase 1: Determine Evaluation Method
-
-**Goal:** Decide whether LLM-as-judge is the right tool.
-
-### Decision Table: LLM-as-Judge vs Deterministic Tests
-
-| Criterion Type | Method | Example |
-|---------------|--------|---------|
-| **Objective, measurable** | Deterministic test | "Response time < 200ms" |
-| **Structural, verifiable** | Deterministic test | "Returns valid JSON" |
-| **Subjective, qualitative** | LLM-as-judge | "Error messages are friendly and helpful" |
-| **Aesthetic, perceptual** | LLM-as-judge | "UI feels clean and modern" |
-| **Linguistic, tonal** | LLM-as-judge | "Documentation is clear for beginners" |
-| **Holistic, experiential** | LLM-as-judge | "The onboarding flow feels intuitive" |
-
-**Rule of thumb:** If you can write a boolean assertion, use a deterministic test. If evaluation requires judgment, use LLM-as-judge.
-
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] Confirmed that criteria are genuinely subjective
-- [ ] Deterministic testing has been ruled out
-- [ ] Specific artifacts to evaluate are identified
+**开始时声明：** "我正在使用 llm-as-judge 技能来评估主观质量。"
 
 ---
 
-## Phase 2: Define Rubric
+## 阶段 1：确定评估方法
 
-**Goal:** Create evaluation dimensions with weights and anchor points.
+**目标：** 决定 LLM-as-judge 是否是正确的工具。
 
-### Actions
+### 决策表：LLM-as-Judge vs 确定性测试
 
-1. Define 3-5 evaluation dimensions
-2. Assign weights (must sum to 1.0)
-3. Define anchor points for each dimension (1=worst, 5=adequate, 10=best)
-4. Set passing threshold
+| 标准类型 | 方法 | 示例 |
+|---------|------|------|
+| **客观的、可衡量的** | 确定性测试 | "响应时间 < 200ms" |
+| **结构化的、可验证的** | 确定性测试 | "返回有效的 JSON" |
+| **主观的、定性的** | LLM-as-judge | "错误消息友好且有帮助" |
+| **美学的、感知的** | LLM-as-judge | "UI 感觉简洁现代" |
+| **语言的、语气的** | LLM-as-judge | "文档对初学者清晰易懂" |
+| **整体的、体验的** | LLM-as-judge | "新用户引导流程感觉很直观" |
 
-### Rubric Structure
+**经验法则：** 如果能写出布尔断言，就用确定性测试。如果评估需要判断，就用 LLM-as-judge。
 
-| Dimension | Weight | Scale | Anchor: 1 | Anchor: 5 | Anchor: 10 |
-|-----------|--------|-------|-----------|-----------|------------|
-| [Name] | 0.X | 1-10 | [Worst case] | [Adequate] | [Excellent] |
-
-### Threshold Selection Table
-
-| Quality Level | Threshold | Use For |
-|--------------|-----------|---------|
-| Minimum viable | 5.0 | Internal docs, draft content |
-| Production quality | 7.0 | User-facing content, public APIs |
-| Excellence | 8.5 | Marketing, critical UX flows |
-
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] 3-5 dimensions are defined with clear descriptions
-- [ ] Weights sum to exactly 1.0
-- [ ] Anchor points are specific (not vague)
-- [ ] Passing threshold is set before evaluation
+### 停止 — 在满足以下条件之前不要进入阶段 2：
+- [ ] 已确认标准确实是主观的
+- [ ] 已排除确定性测试的可能性
+- [ ] 已确定要评估的具体工件
 
 ---
 
-## Phase 3: Evaluate
+## 阶段 2：定义评分规则
 
-**Goal:** Submit the artifact with rubric to an LLM reviewer.
+**目标：** 创建带有权重和锚点的评估维度。
 
-### Review Request Structure
+### 操作步骤
+
+1. 定义 3-5 个评估维度
+2. 分配权重（总和必须为 1.0）
+3. 为每个维度定义锚点（1=最差，5=合格，10=最佳）
+4. 设置通过阈值
+
+### 评分规则结构
+
+| 维度 | 权重 | 范围 | 锚点: 1 | 锚点: 5 | 锚点: 10 |
+|------|------|------|---------|---------|-----------|
+| [名称] | 0.X | 1-10 | [最差情况] | [合格] | [优秀] |
+
+### 阈值选择表
+
+| 质量等级 | 阈值 | 适用场景 |
+|---------|------|----------|
+| 最低可用 | 5.0 | 内部文档、草稿内容 |
+| 生产质量 | 7.0 | 面向用户的内容、公共 API |
+| 卓越 | 8.5 | 营销、关键 UX 流程 |
+
+### 停止 — 在满足以下条件之前不要进入阶段 3：
+- [ ] 已定义 3-5 个维度并有清晰的描述
+- [ ] 权重总和恰好为 1.0
+- [ ] 锚点具体明确（不模糊）
+- [ ] 在评估之前已设置通过阈值
+
+---
+
+## 阶段 3：评估
+
+**目标：** 将工件与评分规则一起提交给 LLM 评审器。
+
+### 评审请求结构
 
 ```javascript
 {
-  criteria: "Description of what to evaluate and the quality standard",
-  artifact: "The content to be evaluated (code, text, UI markup, etc.)",
+  criteria: "评估内容及质量标准的描述",
+  artifact: "待评估的内容（代码、文本、UI 标记等）",
   rubric: [
-    { dimension: "Clarity", weight: 0.3, description: "Is the content easy to understand?" },
-    { dimension: "Tone", weight: 0.3, description: "Is the tone appropriate for the audience?" },
-    { dimension: "Completeness", weight: 0.2, description: "Does it cover all necessary points?" },
-    { dimension: "Engagement", weight: 0.2, description: "Does it hold the reader's interest?" }
+    { dimension: "Clarity", weight: 0.3, description: "内容是否易于理解？" },
+    { dimension: "Tone", weight: 0.3, description: "语气是否适合目标受众？" },
+    { dimension: "Completeness", weight: 0.2, description: "是否涵盖了所有必要要点？" },
+    { dimension: "Engagement", weight: 0.2, description: "是否保持读者的兴趣？" }
   ],
   passing_threshold: 7.0,
   intelligence: "opus"
 }
 ```
 
-### Review Response Structure
+### 评审响应结构
 
 ```javascript
 {
   scores: [
-    { dimension: "Clarity", score: 8, reasoning: "Well-structured with clear headings..." },
-    { dimension: "Tone", score: 7, reasoning: "Professional but occasionally too formal..." },
-    { dimension: "Completeness", score: 9, reasoning: "Covers all key topics..." },
-    { dimension: "Engagement", score: 6, reasoning: "Could use more examples..." }
+    { dimension: "Clarity", score: 8, reasoning: "结构清晰，标题明确..." },
+    { dimension: "Tone", score: 7, reasoning: "专业但有时过于正式..." },
+    { dimension: "Completeness", score: 9, reasoning: "涵盖了所有关键主题..." },
+    { dimension: "Engagement", score: 6, reasoning: "可以使用更多示例..." }
   ],
   weighted_score: 7.4,
   pass: true,
-  summary: "Overall good quality with minor tone and engagement improvements suggested.",
+  summary: "整体质量良好，建议对语气和参与度进行小幅改进。",
   suggestions: [
-    "Add a real-world example in section 3",
-    "Use more conversational language in the introduction"
+    "在第 3 节中添加一个真实示例",
+    "在引言中使用更口语化的语言"
   ]
 }
 ```
 
-### STOP — Do NOT proceed to Phase 4 until:
-- [ ] Artifact has been submitted with full rubric
-- [ ] Each dimension has been scored independently
-- [ ] Reasoning is provided for every score
-- [ ] Weighted total is calculated
+### 停止 — 在满足以下条件之前不要进入阶段 4：
+- [ ] 工件已与完整评分规则一起提交
+- [ ] 每个维度都已独立评分
+- [ ] 每个分数都有推理说明
+- [ ] 加权总分已计算
 
 ---
 
-## Phase 4: Iterate or Accept
+## 阶段 4：迭代或接受
 
-**Goal:** Act on the evaluation results.
+**目标：** 根据评估结果采取行动。
 
-### Result Action Table
+### 结果处理表
 
-| Result | Action | Max Iterations |
-|--------|--------|---------------|
-| **Pass** (score >= threshold) | Accept the artifact, proceed | Done |
-| **Marginal fail** (within 1 point) | Apply suggestions, re-evaluate once | 1 |
-| **Clear fail** (> 1 point below) | Significant revision, apply all suggestions | 2 |
-| **Repeated fail** (3+ attempts) | Escalate — rubric or approach may need adjustment | Escalate |
+| 结果 | 行动 | 最大迭代次数 |
+|------|------|-------------|
+| **通过**（分数 >= 阈值） | 接受工件，完成 | 结束 |
+| **边缘失败**（相差 1 分以内） | 应用建议，重新评估一次 | 1 |
+| **明显失败**（低于阈值超过 1 分） | 重大修改，应用所有建议 | 2 |
+| **重复失败**（3 次以上尝试） | 升级——可能需要调整评分规则或方法 | 升级 |
 
-### STOP — Evaluation complete when:
-- [ ] Artifact passes threshold, OR
-- [ ] 3 iterations completed and escalation decision made
+### 停止 — 满足以下条件时评估完成：
+- [ ] 工件通过阈值，或
+- [ ] 完成 3 次迭代并已作出升级决策
 
 ---
 
-## Common Rubric Templates
+## 常用评分规则模板
 
-### Documentation Quality
+### 文档质量
 ```
-Clarity (0.3): Is the content easy to understand for the target audience?
-  1=incomprehensible  5=adequate but requires re-reading  10=crystal clear
-Accuracy (0.3): Is the information technically correct?
-  1=factually wrong  5=mostly correct  10=perfectly accurate
-Completeness (0.2): Does it cover all necessary topics?
-  1=missing critical info  5=covers basics  10=comprehensive
-Examples (0.2): Are there sufficient, relevant code examples?
-  1=no examples  5=some examples  10=rich, varied examples
+Clarity (0.3): 内容对目标受众是否易于理解？
+  1=完全无法理解  5=合格但需重读  10=清晰明了
+Accuracy (0.3): 信息在技术上是否正确？
+  1=事实错误  5=基本正确  10=完全准确
+Completeness (0.2): 是否涵盖所有必要主题？
+  1=缺少关键信息  5=涵盖基础知识  10=全面详尽
+Examples (0.2): 是否有足够且相关的代码示例？
+  1=无示例  5=有一些示例  10=丰富多样的示例
 Threshold: 7.0
 ```
 
-### Error Message Quality
+### 错误消息质量
 ```
-Helpfulness (0.4): Does the message help the user fix the problem?
-  1=no help at all  5=vague direction  10=exact fix steps
-Clarity (0.3): Is the message easy to understand?
-  1=cryptic  5=understandable  10=immediately clear
-Tone (0.2): Is the tone empathetic and non-blaming?
-  1=hostile/blaming  5=neutral  10=empathetic and supportive
-Actionability (0.1): Does it suggest a concrete next step?
-  1=no suggestion  5=vague suggestion  10=specific actionable step
+Helpfulness (0.4): 消息是否帮助用户解决问题？
+  1=毫无帮助  5=方向模糊  10=确切修复步骤
+Clarity (0.3): 消息是否易于理解？
+  1=晦涩难懂  5=可理解  10=立即清晰
+Tone (0.2): 语气是否富有同理心且不指责？
+  1=敌对/指责  5=中性  10=富有同理心和支持性
+Actionability (0.1): 是否建议了具体的下一步操作？
+  1=无建议  5=模糊建议  10=具体的可操作步骤
 Threshold: 7.5
 ```
 
-### Code Readability
+### 代码可读性
 ```
-Naming (0.3): Are variable/function names descriptive and consistent?
-  1=single letters everywhere  5=adequate  10=self-documenting
-Structure (0.3): Is the code logically organized?
-  1=spaghetti  5=functional  10=elegant and clear
-Simplicity (0.2): Is the code as simple as possible (but not simpler)?
-  1=over-engineered  5=reasonable  10=minimal and clear
-Documentation (0.2): Are complex sections adequately commented?
-  1=no comments where needed  5=some comments  10=well-documented why
+Naming (0.3): 变量/函数名称是否具有描述性且一致？
+  1=到处是单字母  5=合格  10=自文档化
+Structure (0.3): 代码逻辑组织是否良好？
+  1=意大利面条式  5=函数式  10=优雅清晰
+Simplicity (0.2): 代码是否尽可能简单（但不能更简单）？
+  1=过度设计  5=合理  10=最小化且清晰
+Documentation (0.2): 复杂部分是否有足够的注释？
+  1=需要注释的地方没有注释  5=有一些注释  10=清楚说明了原因
 Threshold: 7.0
 ```
 
-### UX Copy
+### UX 文案
 ```
-Clarity (0.3): Is the copy easy to understand?
-  1=confusing  5=understandable  10=immediately clear
-Brevity (0.2): Is it concise without losing meaning?
-  1=verbose  5=adequate length  10=perfectly concise
-Tone (0.2): Does it match the brand voice?
-  1=off-brand  5=neutral  10=perfectly on-brand
-Actionability (0.2): Do CTAs clearly communicate what happens next?
-  1=unclear  5=adequate  10=crystal clear action
-Accessibility (0.1): Is the language inclusive and jargon-free?
-  1=exclusionary  5=neutral  10=fully inclusive
+Clarity (0.3): 文案是否易于理解？
+  1=令人困惑  5=可理解  10=立即清晰
+Brevity (0.2): 是否在不失原意的前提下简洁？
+  1=冗长  5=长度合适  10=完美简洁
+Tone (0.2): 是否符合品牌声音？
+  1=偏离品牌  5=中性  10=完美契合品牌
+Actionability (0.2): CTA 是否清楚说明了下一步？
+  1=不清楚  5=合格  10=极其清晰的操作
+Accessibility (0.1): 语言是否包容且无术语障碍？
+  1=排他性  5=中性  10=完全包容
 Threshold: 7.5
 ```
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
-|-------------|----------------|-----------------|
-| Using LLM-as-judge for measurable criteria | Wastes tokens, less reliable than assertions | Use deterministic tests for anything quantifiable |
-| Vague rubric dimensions ("is it good?") | Produces unreliable, inconsistent scores | Specific dimensions with anchored examples |
-| No passing threshold defined | No way to determine pass/fail objectively | Always set threshold before evaluation |
-| Adjusting rubric to pass failing content | Defeats the purpose of quality gates | Fix the content, not the rubric |
-| Single evaluation without reasoning | Cannot improve without understanding why | Always require per-dimension reasoning |
-| Using weaker model for evaluation | Lower quality judgments | Use strongest available model (Opus) |
-| Skipping re-evaluation after changes | No verification that changes improved quality | Always re-evaluate after revisions |
-
----
-
-## Integration Points
-
-| Skill | Relationship |
-|-------|-------------|
-| `acceptance-testing` | LLM-as-judge handles subjective acceptance criteria |
-| `spec-writing` | Specs may include subjective quality criteria |
-| `code-review` | Readability evaluation during code review |
-| `verification-before-completion` | Subjective validation gate before completion |
-| `senior-prompt-engineer` | Prompt quality evaluation uses LLM-as-judge |
-| `tech-docs-generator` | Documentation quality evaluation |
+| 反模式 | 错误原因 | 正确方法 |
+|--------|---------|----------|
+| 对可衡量标准使用 LLM-as-judge | 浪费 token，可靠性低于断言 | 对任何可量化的内容使用确定性测试 |
+| 模糊的评分维度（"是否良好？"） | 产生不可靠、不一致的分数 | 带有锚定示例的具体维度 |
+| 未定义通过阈值 | 无法客观判断通过/失败 | 在评估前始终设置阈值 |
+| 调整评分规则让失败内容通过 | 破坏了质量门槛的意义 | 修复内容，而不是评分规则 |
+| 单次评估无推理说明 | 无法理解原因就无法改进 | 始终要求每个维度都有推理 |
+| 使用较弱的模型进行评估 | 判断质量较低 | 使用最强的可用模型（Opus） |
+| 修改后跳过重新评估 | 无法验证修改是否提高了质量 | 修改后始终重新评估 |
 
 ---
 
-## Downstream Steering Pattern
+## 集成点
+
+| 技能 | 关系 |
+|------|------|
+| `acceptance-testing` | LLM-as-judge 处理主观验收标准 |
+| `spec-writing` | 规范可能包含主观质量标准 |
+| `code-review` | 代码评审期间的可读性评估 |
+| `verification-before-completion` | 完成前的主观验证门禁 |
+| `senior-prompt-engineer` | 提示质量评估使用 LLM-as-judge |
+| `tech-docs-generator` | 文档质量评估 |
+
+---
+
+## 下游控制模式
 
 ```
 +----------+     +----------+     +----------+     +----------+
-|  SPECS   |---->|   CODE   |---->|  TESTS   |---->| LLM-AS-  |
-|          |     |          |     |(determin)|     |  JUDGE   |
-|          |     |          |     |          |     |(subject) |
+|  规范    |---->|   代码   |---->|   测试   |---->| LLM-AS-  |
+|          |     |          |     |（确定性）|     |  JUDGE   |
+|          |     |          |     |          |     |（主观）  |
 +----------+     +----------+     +----------+     +----+-----+
                       ^                                  |
-                      |          backpressure             |
+                      |            反向压力               |
                       +----------------------------------+
 ```
 
-Deterministic tests validate objective criteria. LLM-as-judge validates subjective criteria. Both must pass.
+确定性测试验证客观标准。LLM-as-judge 验证主观标准。两者都必须通过。
 
 ---
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt rubric dimensions and thresholds to context. The pattern structure (define rubric, evaluate, score, iterate) is fixed. Always set the threshold before evaluation, never after.
+**灵活** — 根据上下文调整评分规则维度和阈值。模式结构（定义评分规则、评估、打分、迭代）是固定的。始终在评估前设置阈值，绝不在评估后设置。

@@ -1,104 +1,104 @@
-# Anthropic Best Practices for Skill Authoring
+# Anthropic 技能编写最佳实践
 
-Reference document for writing Claude Code skills that follow Anthropic's official guidance.
+编写遵循 Anthropic 官方指南的 Claude Code 技能的参考文档。
 
-## Progressive Disclosure (3-Tier Context Loading)
+## 渐进式披露（三级上下文加载）
 
-Load context incrementally to minimize token usage:
+逐步加载上下文以最小化 token 使用量：
 
-### Tier 1: Always Loaded
-- The `description` field in frontmatter
-- Used for skill selection/matching
-- Must be under 1024 characters
-- Contains trigger conditions only
+### 第一级：始终加载
+- frontmatter 中的 `description` 字段
+- 用于技能选择/匹配
+- 必须少于 1024 个字符
+- 仅包含触发条件
 
-### Tier 2: Loaded When Skill is Selected
-- The SKILL.md body content
-- Contains instructions, steps, patterns
-- Must be under 500 lines
-- Should be self-contained
+### 第二级：技能选中时加载
+- SKILL.md 正文内容
+- 包含说明、步骤、模式
+- 必须少于 500 行
+- 应保持自包含
 
-### Tier 3: Loaded On Demand
-- Referenced files (checklists, templates, examples)
-- Loaded only when explicitly needed during execution
-- One level deep -- referenced files should not reference other files
+### 第三级：按需加载
+- 被引用的文件（检查清单、模板、示例）
+- 仅在执行过程中明确需要时加载
+- 仅限一级深度——被引用的文件不应再引用其他文件
 
-## Description as Trigger Condition
+## 将 Description 作为触发条件
 
-The `description` field is a search index, not documentation.
+`description` 字段是搜索索引，而非说明文档。
 
-**Do:**
+**正确做法：**
 ```yaml
-description: "Use when reviewing pull requests, checking code quality, or performing pre-merge validation"
+description: "在审查拉取请求、检查代码质量或执行合并前验证时使用"
 ```
 
-**Do not:**
+**错误做法：**
 ```yaml
-description: "This skill helps developers perform thorough code reviews using best practices from Google's engineering guidelines"
+description: "该技能帮助开发者使用 Google 工程指南中的最佳实践进行全面的代码审查"
 ```
 
-Rules:
-- Start with "Use when..."
-- List 2-5 specific trigger scenarios
-- Use verbs that match user intent (creating, debugging, deploying, reviewing)
-- Maximum 1024 characters
-- No marketing language or superlatives
+规则：
+- 以“在……时使用”（Use when...）开头
+- 列出 2 到 5 个具体的触发场景
+- 使用与用户意图匹配的动词（如创建、调试、部署、审查）
+- 最多 1024 个字符
+- 避免使用营销话术或最高级形容词
 
-## Body Under 500 Lines
+## 正文控制在 500 行以内
 
-The SKILL.md body is loaded into context whenever the skill is invoked. Every line costs tokens.
+每当调用技能时，SKILL.md 正文都会加载到上下文中。每一行都会消耗 token。
 
-Strategies to stay under 500 lines:
-- Use tables instead of verbose lists
-- Move reference material to separate files
-- Use terse imperative sentences
-- Include code examples only when the pattern is non-obvious
-- Eliminate repeated information
+控制在 500 行以内的策略：
+- 使用表格替代冗长的列表
+- 将参考资料移至单独的文件
+- 使用简洁的祈使句
+- 仅在模式不明显时才包含代码示例
+- 消除重复信息
 
-## File References One Level Deep
+## 文件引用仅限一级深度
 
-Skills can reference other files for detailed content:
+技能可以引用其他文件以获取详细内容：
 
 ```markdown
-See [OWASP Checklist](./owasp-checklist.md) for detailed vulnerability patterns.
+有关详细的漏洞模式，请参阅 [OWASP 检查清单](./owasp-checklist.md)。
 ```
 
-Rules:
-- Referenced files are loaded only when needed
-- References must be one level deep (a referenced file must not reference another file)
-- Use relative paths from the skill directory
-- Referenced files should be self-contained
+规则：
+- 被引用的文件仅在需要时加载
+- 引用必须仅限一级深度（被引用的文件不得再引用其他文件）
+- 使用相对于技能目录的路径
+- 被引用的文件应保持自包含
 
-## Forward Slashes Only
+## 仅使用正斜杠
 
-All file paths in skills must use forward slashes, regardless of platform:
+技能中的所有文件路径必须使用正斜杠（/），无论操作系统平台为何：
 
 ```yaml
-# Correct
+# 正确
 templates/skills/my-skill/SKILL.md
 
-# Incorrect
+# 错误
 templates\skills\my-skill\SKILL.md
 ```
 
-## Self-Contained Skills
+## 自包含技能
 
-Skills should minimize external dependencies:
+技能应尽量减少外部依赖：
 
-- Do not assume specific tools are installed unless checking first
-- Do not reference URLs that may change or become unavailable
-- Include essential information directly in the skill body
-- Use referenced files (in the same directory) for supplementary content
-- Do not depend on other skills being present -- reference them as optional enhancements
+- 除非事先检查，否则不要假设已安装特定工具
+- 不要引用可能变更或失效的 URL
+- 将必要信息直接包含在技能正文中
+- 使用（同一目录下的）被引用文件作为补充内容
+- 不要依赖其他技能的存在——仅将其引用为可选增强功能
 
-## Allowed-Tools Field for Security
+## 用于安全的 Allowed-Tools 字段
 
-When a skill should only use specific tools, restrict access:
+当技能应仅使用特定工具时，需限制访问权限：
 
 ```yaml
 ---
 name: read-only-review
-description: "Use when performing read-only code analysis"
+description: "在执行只读代码分析时使用"
 allowed-tools:
   - Read
   - Grep
@@ -106,33 +106,33 @@ allowed-tools:
 ---
 ```
 
-This prevents the skill from accidentally modifying files, running commands, or accessing resources it should not touch.
+这可以防止技能意外修改文件、运行命令或访问不应接触的资源。
 
-Use cases:
-- Read-only analysis skills (no Bash, no Edit, no Write)
-- Skills that should not access the network (no WebFetch)
-- Skills restricted to specific MCP tools
+适用场景：
+- 只读分析技能（禁用 Bash、Edit、Write）
+- 不应访问网络的技能（禁用 WebFetch）
+- 仅限使用特定 MCP 工具的技能
 
-## Testing Skills Before Deployment
+## 部署前的技能测试
 
-### Manual Testing
+### 手动测试
 
-1. Write 3-5 test prompts that should trigger the skill
-2. Write 2-3 prompts that should NOT trigger it
-3. Invoke each prompt and verify correct skill selection
-4. Check that the skill produces expected output for each test prompt
-5. Verify token usage is within budget
+1. 编写 3 到 5 个应触发该技能的测试提示词
+2. 编写 2 到 3 个不应触发该技能的提示词
+3. 调用每个提示词并验证技能选择是否正确
+4. 检查技能是否为每个测试提示词生成预期输出
+5. 验证 token 使用量是否在预算范围内
 
-### Checklist
+### 检查清单
 
-- [ ] Description starts with "Use when..."
-- [ ] Description is under 1024 characters
-- [ ] Body is under 500 lines
-- [ ] All file paths use forward slashes
-- [ ] Referenced files exist and are one level deep
-- [ ] No external URL dependencies that could break
-- [ ] Frontmatter has `name` and `description`
-- [ ] Skill is self-contained (works without other skills installed)
-- [ ] Test prompts trigger correctly
-- [ ] Near-miss prompts do not trigger incorrectly
-- [ ] Token usage is within target for skill type
+- [ ] Description 以“在……时使用”（Use when...）开头
+- [ ] Description 少于 1024 个字符
+- [ ] 正文少于 500 行
+- [ ] 所有文件路径均使用正斜杠
+- [ ] 被引用的文件存在且仅限一级深度
+- [ ] 无可能导致失效的外部 URL 依赖
+- [ ] Frontmatter 包含 `name` 和 `description`
+- [ ] 技能自包含（无需安装其他技能即可运行）
+- [ ] 测试提示词能正确触发
+- [ ] 近似提示词（边界情况）不会错误触发
+- [ ] Token 使用量符合该技能类型的目标要求

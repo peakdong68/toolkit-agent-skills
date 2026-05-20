@@ -1,410 +1,410 @@
 ---
 name: task-decomposition
-description: "Use when hierarchical task breakdown is needed, when dependency mapping between tasks is required, when effort estimation and parallelization planning is needed, or when creating work breakdown structures. Triggers on /decompose command, when complex tasks need to be broken into manageable subtasks, when critical path analysis is needed for scheduling, or when identifying tasks that can run concurrently."
+description: "当需要分层任务拆解、需要映射任务间依赖关系、需要进行工作量估算与并行化规划，或需要创建工作分解结构（WBS）时使用。触发条件：调用 `/decompose` 命令、复杂任务需拆分为可管理的子任务、进度排期需要关键路径分析，或需识别可并发执行的任务时。"
 ---
 
-# Task Decomposition
+# 任务分解
 
-## Overview
+## 概述
 
-Task decomposition breaks complex tasks into manageable, well-defined subtasks with clear dependencies, effort estimates, and parallelization opportunities. It covers hierarchical work breakdown structures (WBS), dependency graph construction, critical path analysis, task sizing, and identification of concurrent execution opportunities. Essential for planning multi-step implementations, project estimation, and autonomous loop task selection.
+任务分解将复杂任务拆解为可管理、定义清晰的子任务，并明确其依赖关系、工作量估算及并行化机会。它涵盖分层工作分解结构（WBS）、依赖图构建、关键路径分析、任务规模评估以及并发执行机会的识别。对于规划多步实施、项目估算以及自主循环中的任务选择至关重要。
 
-**Announce at start:** "I'm using the task-decomposition skill to break this work into a structured hierarchy with dependencies and estimates."
+**开始时声明：**“我正在使用任务分解技能，将此项工作拆解为具有依赖关系和估算值的结构化层次。”
 
-## Trigger Conditions
+## 触发条件
 
-- Complex task needs to be broken into subtasks
-- Dependency mapping is needed between work items
-- Effort estimation is required for planning
-- Parallelization opportunities need to be identified
-- `/decompose` command invoked
-- Transition from planning skill for complex plans
-- Autonomous loop needs task selection guidance
+- 复杂任务需要拆分为子任务
+- 工作项之间需要映射依赖关系
+- 规划需要工作量估算
+- 需要识别并行化机会
+- 调用 `/decompose` 命令
+- 从规划技能过渡到处理复杂计划
+- 自主循环需要任务选择指导
 
 ---
 
-## Phase 1: Scope Definition
+## 第一阶段：范围定义
 
-**Goal:** Define clear boundaries for the decomposition.
+**目标：**为分解划定清晰的边界。
 
-1. Define the overall deliverable and acceptance criteria
-2. Identify the boundaries (what is in scope, what is not)
-3. Determine the decomposition granularity level
-4. Identify stakeholders and their requirements
-5. Establish constraints (time, resources, dependencies)
+1. 明确整体交付物及验收标准
+2. 划定边界（明确范围内与范围外内容）
+3. 确定分解的粒度级别
+4. 识别干系人及其需求
+5. 确立约束条件（时间、资源、依赖关系）
 
-### Granularity Decision Table
+### 粒度决策表
 
-| Context | Target Level | Typical Duration | Rationale |
+| 场景 | 目标级别 | 典型耗时 | 依据 |
 |---------|-------------|-----------------|-----------|
-| Autonomous loop (Ralph) | L3-L4 (Task/Subtask) | 15 min - 4 hours | ONE task per loop iteration |
-| Sprint planning | L2-L3 (Story/Task) | 0.5-2 days | Sprint-sized work items |
-| Roadmap planning | L0-L1 (Epic/Feature) | 2-8 weeks | High-level milestone tracking |
-| Bug fix | L3-L4 (Task/Subtask) | 15 min - 2 hours | Focused, specific fixes |
+| 自主循环（Ralph） | L3-L4（任务/子任务） | 15 分钟 - 4 小时 | 每次循环迭代仅处理一个任务 |
+| 迭代规划（Sprint planning） | L2-L3（用户故事/任务） | 0.5-2 天 | 适配迭代规模的工作项 |
+| 路线图规划 | L0-L1（史诗/特性） | 2-8 周 | 高层级里程碑跟踪 |
+| 缺陷修复 | L3-L4（任务/子任务） | 15 分钟 - 2 小时 | 聚焦、具体的修复 |
 
-### Granularity Levels
+### 粒度级别
 
-| Level | Name | Typical Duration | Example |
+| 级别 | 名称 | 典型耗时 | 示例 |
 |-------|------|-----------------|---------|
-| L0 | Epic | 2-8 weeks | "User authentication system" |
-| L1 | Feature | 2-5 days | "OAuth2 login flow" |
-| L2 | Story | 0.5-2 days | "Google OAuth provider integration" |
-| L3 | Task | 1-4 hours | "Implement Google callback handler" |
-| L4 | Subtask | 15-60 minutes | "Parse OAuth token response" |
+| L0 | 史诗 (Epic) | 2-8 周 | “用户认证系统” |
+| L1 | 特性 (Feature) | 2-5 天 | “OAuth2 登录流程” |
+| L2 | 用户故事 (Story) | 0.5-2 天 | “集成 Google OAuth 提供商” |
+| L3 | 任务 (Task) | 1-4 小时 | “实现 Google 回调处理器” |
+| L4 | 子任务 (Subtask) | 15-60 分钟 | “解析 OAuth 令牌响应” |
 
-**STOP — Do NOT proceed to Phase 2 until:**
-- [ ] Deliverable and acceptance criteria are defined
-- [ ] Scope boundaries are clear (in/out)
-- [ ] Target granularity level is chosen
-- [ ] Constraints are identified
+**停止 — 在完成以下事项前，切勿进入第二阶段：**
+- [ ] 已明确交付物及验收标准
+- [ ] 范围边界清晰（范围内/范围外）
+- [ ] 已选定目标粒度级别
+- [ ] 已识别约束条件
 
 ---
 
-## Phase 2: Hierarchical Breakdown
+## 第二阶段：分层拆解
 
-**Goal:** Decompose the work into a tree structure meeting the INVEST criteria.
+**目标：**将工作拆解为满足 INVEST 准则的树状结构。
 
-1. Identify top-level work streams (epics or major components)
-2. Break each work stream into features or milestones
-3. Decompose features into implementable tasks
-4. Apply the "2-hour rule" — no task should exceed 2 hours of focused work
-5. Ensure each task has a clear definition of done
-6. Verify MECE (Mutually Exclusive, Collectively Exhaustive) coverage
+1. 识别顶层工作流（史诗或主要组件）
+2. 将每个工作流拆分为特性或里程碑
+3. 将特性拆解为可执行的任务
+4. 应用“2小时法则”——单个任务的专注工作时间不应超过2小时
+5. 确保每个任务都有清晰的“完成定义”(DoD)
+6. 验证 MECE（相互独立，完全穷尽）覆盖度
 
-### The INVEST Criteria for Tasks
+### 任务的 INVEST 准则
 
-| Criterion | Question | Bad Example | Good Example |
+| 准则 | 评估问题 | 错误示例 | 正确示例 |
 |-----------|---------|-------------|-------------|
-| **I**ndependent | Can this be done without waiting for others? | "Implement auth after DB is ready" | "Implement auth with mock DB" |
-| **N**egotiable | Is the approach flexible? | "Use Redis for caching" | "Add caching layer for user sessions" |
-| **V**aluable | Does completing this deliver value? | "Set up folder structure" | "Create user registration endpoint" |
-| **E**stimable | Can you estimate the effort? | "Improve performance" | "Add database index for user lookup query" |
-| **S**mall | Can one person finish it in < 2 hours? | "Build the dashboard" | "Create dashboard chart component for revenue data" |
-| **T**estable | Can you verify it is done? | "Make it better" | "Response time < 200ms for /api/users" |
+| **I**ndependent (独立) | 能否在不依赖他人的情况下完成？ | “等数据库就绪后再实现认证” | “使用模拟数据库实现认证” |
+| **N**egotiable (可协商) | 实现方案是否灵活？ | “使用 Redis 做缓存” | “为用户会话添加缓存层” |
+| **V**aluable (有价值) | 完成此项是否能交付价值？ | “建立文件夹结构” | “创建用户注册接口” |
+| **E**stimable (可估算) | 能否估算出工作量？ | “提升性能” | “为 user 查询添加数据库索引” |
+| **S**mall (小型) | 单人能否在 < 2 小时内完成？ | “构建仪表盘” | “创建用于展示收入数据的仪表盘图表组件” |
+| **T**estable (可测试) | 能否验证其是否完成？ | “让它变得更好” | “`/api/users` 响应时间 < 200ms” |
 
-### MECE Verification
+### MECE 验证
 
-| Check | Question |
+| 检查项 | 验证问题 |
 |-------|---------|
-| Mutually Exclusive | Does any task overlap with another? (Should not) |
-| Collectively Exhaustive | Do all tasks together cover the full deliverable? (Should) |
-| No orphans | Does every task contribute to the deliverable? |
-| No gaps | Is there any work needed that has no task? |
+| 相互独立 | 是否有任何任务与其他任务重叠？（应无） |
+| 完全穷尽 | 所有任务加起来是否覆盖了完整的交付物？（应是） |
+| 无孤立项 | 每个任务是否都对交付物有贡献？ |
+| 无遗漏 | 是否存在必要的工作却没有对应任务？ |
 
-**STOP — Do NOT proceed to Phase 3 until:**
-- [ ] All work streams are identified
-- [ ] Tasks meet INVEST criteria
-- [ ] MECE coverage is verified
-- [ ] No task exceeds 2 hours
+**停止 — 在完成以下事项前，切勿进入第三阶段：**
+- [ ] 已识别所有工作流
+- [ ] 任务均符合 INVEST 准则
+- [ ] 已验证 MECE 覆盖度
+- [ ] 无任何任务超过 2 小时
 
 ---
 
-## Phase 3: Dependency Mapping
+## 第三阶段：依赖关系映射
 
-**Goal:** Build a directed acyclic graph (DAG) of task dependencies.
+**目标：**构建任务依赖关系的有向无环图 (DAG)。
 
-1. Identify input/output dependencies between tasks
-2. Classify dependency types
-3. Build a directed acyclic graph (DAG)
-4. Identify the critical path (longest dependency chain)
-5. Flag circular dependencies as errors to resolve
-6. Mark external dependencies (API access, approvals, third-party)
+1. 识别任务间的输入/输出依赖
+2. 分类依赖类型
+3. 构建有向无环图 (DAG)
+4. 识别关键路径（最长依赖链）
+5. 将循环依赖标记为需解决的错误
+6. 标记外部依赖（API 访问、审批、第三方）
 
-### Dependency Types
+### 依赖类型
 
-| Type | Symbol | Meaning | Example |
+| 类型 | 符号 | 含义 | 示例 |
 |------|--------|---------|---------|
-| Finish-to-Start (FS) | A -> B | B cannot start until A finishes | "Deploy" after "Build passes" |
-| Start-to-Start (SS) | A => B | B can start when A starts | "Write docs" when "Write code" starts |
-| Finish-to-Finish (FF) | A =>> B | B cannot finish until A finishes | "Testing" finishes after "Development" |
-| Start-to-Finish (SF) | A ~> B | B cannot finish until A starts | Rare — shift handoff scenarios |
+| 完成到开始 (FS) | A -> B | A 完成前 B 不能开始 | “构建通过”后执行“部署” |
+| 开始到开始 (SS) | A => B | A 开始时 B 即可开始 | “编写文档”与“编写代码”同时开始 |
+| 完成到完成 (FF) | A =>> B | A 完成前 B 不能完成 | “测试”在“开发”完成后结束 |
+| 开始到完成 (SF) | A ~> B | A 开始前 B 不能完成 | 罕见——交接班场景 |
 
-### Dependency Notation Format
+### 依赖关系标注格式
 
 ```
-Task 1: Set up database schema
-Task 2: Create data access layer         [depends: 1]
-Task 3: Implement API endpoints          [depends: 2]
-Task 4: Write unit tests for DAL         [depends: 2]
-Task 5: Write API integration tests      [depends: 3, 4]
-Task 6: Create frontend components       [depends: none]
-Task 7: Connect frontend to API          [depends: 3, 6]
-Task 8: End-to-end testing               [depends: 5, 7]
+任务 1：设置数据库架构
+任务 2：创建数据访问层         [依赖: 1]
+任务 3：实现 API 接口          [依赖: 2]
+任务 4：为数据访问层编写单元测试 [依赖: 2]
+任务 5：编写 API 集成测试      [依赖: 3, 4]
+任务 6：创建前端组件           [依赖: 无]
+任务 7：将前端连接至 API       [依赖: 3, 6]
+任务 8：端到端测试             [依赖: 5, 7]
 
-Parallel tracks:
-  Track A: 1 -> 2 -> 3 -> 5 -> 8
-  Track B: 1 -> 2 -> 4 -> 5 -> 8
-  Track C: 6 -> 7 -> 8
-  Critical path: 1 -> 2 -> 3 -> 7 -> 8
+并行轨道：
+  轨道 A: 1 -> 2 -> 3 -> 5 -> 8
+  轨道 B: 1 -> 2 -> 4 -> 5 -> 8
+  轨道 C: 6 -> 7 -> 8
+  关键路径: 1 -> 2 -> 3 -> 7 -> 8
 ```
 
-### Circular Dependency Resolution
+### 循环依赖解决
 
-| Detection | Resolution |
+| 检测情况 | 解决策略 |
 |-----------|-----------|
-| A depends on B, B depends on A | Break into smaller tasks that remove the cycle |
-| A depends on B's interface, B depends on A's interface | Define interfaces first as a separate task |
-| Tight coupling between components | Introduce an abstraction layer task |
+| A 依赖 B，B 依赖 A | 拆分为更小的任务以消除循环 |
+| A 依赖 B 的接口，B 依赖 A 的接口 | 先将接口定义作为独立任务 |
+| 组件间紧耦合 | 引入抽象层任务 |
 
-**STOP — Do NOT proceed to Phase 4 until:**
-- [ ] All dependencies are mapped
-- [ ] No circular dependencies exist
-- [ ] Critical path is identified
-- [ ] External dependencies are flagged
+**停止 — 在完成以下事项前，切勿进入第四阶段：**
+- [ ] 已映射所有依赖关系
+- [ ] 不存在循环依赖
+- [ ] 已识别关键路径
+- [ ] 已标记外部依赖
 
 ---
 
-## Phase 4: Parallelization Planning
+## 第四阶段：并行化规划
 
-**Goal:** Identify independent task clusters that can run concurrently.
+**目标：**识别可并发执行的独立任务集群。
 
-1. Identify independent task clusters (no dependencies between them)
-2. Group tasks by resource type (read, write, build, test)
-3. Determine maximum parallelism based on resource constraints
-4. Sequence tasks within each parallel track
-5. Plan synchronization points (merge gates)
+1. 识别独立任务集群（彼此间无依赖）
+2. 按资源类型分组任务（读取、写入、构建、测试）
+3. 根据资源限制确定最大并行度
+4. 排列每个并行轨道内的任务顺序
+5. 规划同步点（合并关卡）
 
-### Resource-Based Parallelism Limits
+### 基于资源的并行限制
 
-| Resource Type | Max Parallel | Rationale |
+| 资源类型 | 最大并行数 | 依据 |
 |--------------|-------------|-----------|
-| Code reading / analysis | Unlimited | No side effects |
-| File creation / editing | 3-5 | Avoid merge conflicts |
-| Build / compile | 1 | Resource contention |
-| Test execution | 1-2 | Shared state, ports |
-| Database migrations | 1 | Sequential by nature |
-| Documentation | Unlimited | Independent files |
+| 代码阅读/分析 | 无限制 | 无副作用 |
+| 文件创建/编辑 | 3-5 | 避免合并冲突 |
+| 构建/编译 | 1 | 资源争用 |
+| 测试执行 | 1-2 | 共享状态、端口冲突 |
+| 数据库迁移 | 1 | 本质上是顺序执行 |
+| 文档编写 | 无限制 | 文件相互独立 |
 
-### Parallelization Pattern Decision Table
+### 并行化模式决策表
 
-| Pattern | When to Use | Example |
+| 模式 | 适用场景 | 示例 |
 |---------|-----------|---------|
-| Independent Clusters | Work streams with no shared state | Backend, Frontend, Infra |
-| By Layer | Layers touch different files | API, Service, Data |
-| By Feature Area | Independent vertical slices | Auth, Profile, Billing |
-| By Task Type | Code, tests, docs touch different files | Implement, Test, Document |
+| 独立集群 | 工作流间无共享状态 | 后端、前端、基础设施 |
+| 按层级 | 各层操作不同文件 | API 层、服务层、数据层 |
+| 按特性领域 | 独立的垂直切片 | 认证、个人资料、计费 |
+| 按任务类型 | 代码、测试、文档操作不同文件 | 实现、测试、文档化 |
 
-### Synchronization Points
+### 同步点
 
 ```
   +------+     +------+     +------+
-  |Task A|     |Task B|     |Task C|
+  |任务 A|     |任务 B|     |任务 C|
   +--+---+     +--+---+     +--+---+
      |            |            |
      v            v            v
   ======================================
-     SYNC GATE: All Complete
-     Verify: no conflicts, tests pass
+     同步关卡：全部完成
+     验证：无冲突，测试通过
   ======================================
                  |
                  v
           +----------+
-          |Next Phase|
+          |下一阶段  |
           +----------+
 ```
 
-**STOP — Do NOT proceed to Phase 5 until:**
-- [ ] Independent clusters are identified
-- [ ] Resource constraints are considered
-- [ ] Synchronization points are defined
-- [ ] Maximum parallelism is determined
+**停止 — 在完成以下事项前，切勿进入第五阶段：**
+- [ ] 已识别独立集群
+- [ ] 已考虑资源限制
+- [ ] 已定义同步点
+- [ ] 已确定最大并行度
 
 ---
 
-## Phase 5: Estimation and Prioritization
+## 第五阶段：估算与优先级排序
 
-**Goal:** Estimate effort for each task and create an execution timeline.
+**目标：**估算每项任务的工作量并制定执行时间线。
 
-### T-Shirt Sizing to Hours
+### T恤尺码换算为小时
 
-| Size | Hours | Confidence | Example |
+| 尺码 | 小时 | 置信度 | 示例 |
 |------|-------|-----------|---------|
-| XS | 0.5-1h | High | Rename a variable, fix a typo |
-| S | 1-2h | High | Add a simple endpoint, write a test |
-| M | 2-4h | Medium | Implement a feature with known pattern |
-| L | 4-8h | Low | New feature with research needed |
-| XL | 8h+ | Very Low | **Must be decomposed further** |
+| XS | 0.5-1h | 高 | 重命名变量、修复拼写错误 |
+| S | 1-2h | 高 | 添加简单接口、编写测试 |
+| M | 2-4h | 中 | 使用已知模式实现特性 |
+| L | 4-8h | 低 | 需要调研的新特性 |
+| XL | 8h+ | 极低 | **必须进一步分解** |
 
-### Estimation Heuristics
+### 估算启发式规则
 
-| Scenario | Multiplier | Rationale |
+| 场景 | 乘数 | 依据 |
 |----------|-----------|-----------|
-| Known pattern | 1.2x base estimate | 20% buffer for unknowns |
-| Unknown pattern | 2x base estimate | Add research spike task first |
-| Integration work | 1.5x sum of components | Integration is harder than parts |
-| First-time technology | 3x "if I knew how" estimate | Learning curve |
-| Bug fixes | Time-box 2h investigation | Then re-estimate |
+| 已知模式 | 1.2x 基础估算 | 20% 缓冲应对未知情况 |
+| 未知模式 | 2x 基础估算 | 先添加调研探索任务 (Spike) |
+| 集成工作 | 1.5x 组件总和 | 集成难度高于各部分之和 |
+| 首次使用的技术 | 3x “如果我会”的估算 | 学习曲线成本 |
+| 缺陷修复 | 时间盒限定 2h 调研 | 之后重新估算 |
 
-### Three-Point Estimation
+### 三点估算
 
 ```
-Expected = (Optimistic + 4 * Most Likely + Pessimistic) / 6
+预期值 = (乐观值 + 4 * 最可能值 + 悲观值) / 6
 
-Example:
-  Optimistic:  2 hours (everything goes smoothly)
-  Most Likely: 4 hours (normal development pace)
-  Pessimistic: 10 hours (major unexpected issues)
-  Expected:    (2 + 16 + 10) / 6 = 4.7 hours
+示例：
+  乐观值：  2 小时（一切顺利）
+  最可能值：4 小时（正常开发节奏）
+  悲观值：  10 小时（出现重大意外问题）
+  预期值：    (2 + 16 + 10) / 6 = 4.7 小时
 ```
 
-### Prioritization Decision Table
+### 优先级排序决策表
 
-| Factor | Weight | How to Evaluate |
+| 因素 | 权重 | 评估方式 |
 |--------|--------|----------------|
-| On critical path | Highest | Delays here delay everything |
-| Blocks other tasks | High | Unblocking multiplies throughput |
-| Business value | High | User-facing impact |
-| Risk reduction | Medium | De-risks unknowns early |
-| Quick win | Medium | Low effort, high morale |
-| Nice to have | Low | Only after core work is done |
+| 位于关键路径上 | 最高 | 此处延期将导致整体延期 |
+| 阻塞其他任务 | 高 | 解除阻塞可成倍提升吞吐量 |
+| 业务价值 | 高 | 面向用户的影响 |
+| 降低风险 | 中 | 尽早消除未知风险 |
+| 速赢项 | 中 | 低投入，高士气 |
+| 锦上添花 | 低 | 仅在核心工作完成后考虑 |
 
 ---
 
-## Work Breakdown Structure Template
+## 工作分解结构 (WBS) 模板
 
 ```markdown
-# WBS: [Project Name]
+# WBS: [项目名称]
 
-## 1. [Work Stream A]
-### 1.1 [Feature]
-- [ ] 1.1.1 [Task] — Est: 2h — Deps: none — Priority: P0
-- [ ] 1.1.2 [Task] — Est: 1h — Deps: 1.1.1 — Priority: P0
-- [ ] 1.1.3 [Task] — Est: 3h — Deps: 1.1.1 — Priority: P1
+## 1. [工作流 A]
+### 1.1 [特性]
+- [ ] 1.1.1 [任务] — 估算: 2h — 依赖: 无 — 优先级: P0
+- [ ] 1.1.2 [任务] — 估算: 1h — 依赖: 1.1.1 — 优先级: P0
+- [ ] 1.1.3 [任务] — 估算: 3h — 依赖: 1.1.1 — 优先级: P1
 
-### 1.2 [Feature]
-- [ ] 1.2.1 [Task] — Est: 1h — Deps: none — Priority: P0
-- [ ] 1.2.2 [Task] — Est: 2h — Deps: 1.2.1, 1.1.2 — Priority: P1
+### 1.2 [特性]
+- [ ] 1.2.1 [任务] — 估算: 1h — 依赖: 无 — 优先级: P0
+- [ ] 1.2.2 [任务] — 估算: 2h — 依赖: 1.2.1, 1.1.2 — 优先级: P1
 
-## 2. [Work Stream B]
-### 2.1 [Feature]
-- [ ] 2.1.1 [Task] — Est: 1h — Deps: none — Priority: P0
-- [ ] 2.1.2 [Task] — Est: 4h — Deps: 2.1.1 — Priority: P0
+## 2. [工作流 B]
+### 2.1 [特性]
+- [ ] 2.1.1 [任务] — 估算: 1h — 依赖: 无 — 优先级: P0
+- [ ] 2.1.2 [任务] — 估算: 4h — 依赖: 2.1.1 — 优先级: P0
 
-## Summary
-- Total tasks: N
-- Estimated total effort: Xh
-- Critical path duration: Yh
-- Max parallelism: Z tracks
-- External dependencies: [list]
+## 摘要
+- 总任务数：N
+- 估算总工作量：Xh
+- 关键路径耗时：Yh
+- 最大并行度：Z 条轨道
+- 外部依赖：[列表]
 ```
 
 ---
 
-## Critical Path Analysis
+## 关键路径分析
 
-### How to Find the Critical Path
+### 如何寻找关键路径
 
-1. List all tasks with durations and dependencies
-2. Forward pass: calculate earliest start (ES) and earliest finish (EF)
-3. Backward pass: calculate latest start (LS) and latest finish (LF)
-4. Float = LS - ES (tasks with zero float are on the critical path)
-5. The critical path is the longest chain through the dependency graph
+1. 列出所有任务及其耗时和依赖关系
+2. 正向推算：计算最早开始时间 (ES) 和最早完成时间 (EF)
+3. 逆向推算：计算最晚开始时间 (LS) 和最晚完成时间 (LF)
+4. 浮动时间 = LS - ES（浮动时间为零的任务位于关键路径上）
+5. 关键路径是依赖图中最长的链条
 
-### Optimization Strategies
+### 优化策略
 
-| Strategy | When | Effect | Risk |
+| 策略 | 适用时机 | 效果 | 风险 |
 |----------|------|--------|------|
-| Parallelize | Independent tasks on critical path | Reduces calendar time | Low |
-| Fast-track | Overlap sequential tasks | Reduces duration | Medium — may cause rework |
-| Crash | Add resources to critical tasks | Reduces duration | Medium — coordination cost |
-| Scope reduction | Remove non-essential tasks | Reduces total work | Low — if non-essential is correct |
-| Spike first | Unknown tasks blocking the path | De-risks estimates | Low |
+| 并行化 | 关键路径上的独立任务 | 缩短日历时间 | 低 |
+| 快速跟进 | 重叠顺序任务 | 缩短工期 | 中 — 可能导致返工 |
+| 赶工 | 向关键任务增加资源 | 缩短工期 | 中 — 产生协调成本 |
+| 范围削减 | 移除非必要任务 | 减少总工作量 | 低 — 前提是“非必要”判断正确 |
+| 优先探索 (Spike) | 阻塞路径的未知任务 | 降低估算风险 | 低 |
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Fails | Correct Approach |
+| 反模式 | 失败原因 | 正确做法 |
 |-------------|-------------|-----------------|
-| Tasks too large to estimate | "Build the backend" is not a task | Decompose until estimable (< 2h) |
-| Missing dependencies | Surface during implementation, cause rework | Map ALL dependencies upfront |
-| Circular dependencies | Indicate unclear architecture | Break the cycle with interface tasks |
-| All tasks sequential | No parallelism possible | Identify independent clusters |
-| Estimation without decomposition | Guessing at L0 level, always wrong | Estimate at leaf level, sum up |
-| Ignoring external dependencies | Block progress unexpectedly | Flag and plan for them |
-| Over-decomposition | Noise, not signal (50 subtasks for a form) | Stop at meaningful, testable units |
-| Ignoring critical path | Priorities work on non-critical tasks | Always prioritize critical path |
-| Not re-estimating | Estimates drift as you learn | Re-estimate after each phase |
-| Tasks without acceptance criteria | Cannot verify completion | Every task has definition of done |
+| 任务过大无法估算 | “构建后端”不是一个任务 | 持续分解直到可估算（< 2h） |
+| 缺失依赖关系 | 实施阶段暴露，导致返工 | 提前映射所有依赖关系 |
+| 循环依赖 | 表明架构不清晰 | 通过接口定义任务打破循环 |
+| 全部任务串行 | 无法并行 | 识别独立集群 |
+| 未分解即估算 | 在 L0 级别猜测，注定错误 | 在叶节点估算，再向上汇总 |
+| 忽略外部依赖 | 意外阻塞进度 | 标记并提前规划 |
+| 过度分解 | 噪音大于信号（为一个表单拆出50个子任务） | 停在有意义、可测试的单元即可 |
+| 忽略关键路径 | 将优先级浪费在非关键任务上 | 始终优先处理关键路径 |
+| 不重新估算 | 随着认知加深，估算会产生偏差 | 每个阶段结束后重新估算 |
+| 任务无验收标准 | 无法验证是否完成 | 每个任务都必须有“完成定义” |
 
 ---
 
-## Anti-Rationalization Guards
+## 反合理化防护
 
 <HARD-GATE>
-Do NOT skip dependency mapping. Do NOT leave tasks larger than 2 hours. Do NOT estimate without decomposing first. Every task must have dependencies, estimates, and acceptance criteria.
+禁止跳过依赖关系映射。禁止保留超过 2 小时的任务。禁止在未先行分解的情况下进行估算。每个任务都必须具备依赖关系、工作量估算和验收标准。
 </HARD-GATE>
 
-If you catch yourself thinking:
-- "I can estimate the whole thing without breaking it down..." — No. Decompose first.
-- "Dependencies are obvious, I don't need to map them..." — Map them. Hidden dependencies cause failures.
-- "This task is fine at 8 hours..." — Decompose it. XL tasks must be broken down.
-- "The critical path doesn't matter for small projects..." — It does. It tells you what to prioritize.
+如果你发现自己正在想：
+- “我可以不拆分就直接估算整体……” —— 不行。先分解。
+- “依赖关系很明显，我不需要映射……” —— 必须映射。隐藏的依赖会导致失败。
+- “这个任务 8 小时没问题……” —— 分解它。XL 级任务必须拆解。
+- “小项目不需要关心关键路径……” —— 需要。它指明了你的优先级。
 
 ---
 
-## Subagent Dispatch Opportunities
+## 子智能体分发机会
 
-| Task Pattern | Dispatch To | When |
+| 任务模式 | 分发至 | 时机 |
 |---|---|---|
-| Parallelizable leaf tasks identified during decomposition | Parallel subagents via `Agent` tool | When tasks have no shared dependencies |
-| Architecture analysis of task boundaries | `planner` agent | When decomposition reveals cross-cutting concerns |
-| Validation of decomposition completeness | `spec-reviewer` agent | When task tree is complete but unverified |
+| 分解过程中识别出的可并行叶任务 | 通过 `Agent` 工具分发的并行子智能体 | 任务间无共享依赖时 |
+| 任务边界的架构分析 | `planner` 智能体 | 分解暴露出横切关注点时 |
+| 分解完整性验证 | `spec-reviewer` 智能体 | 任务树已构建完成但尚未验证时 |
 
-Mark each decomposed task with a `parallelizable: yes/no` flag in the output table. Follow the `dispatching-parallel-agents` skill protocol when dispatching.
+在输出表格中为每个分解后的任务标记 `parallelizable: yes/no` 标志。分发时请遵循 `dispatching-parallel-agents` 技能协议。
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship | When |
+| 技能 | 关系 | 时机 |
 |-------|-------------|------|
-| `planning` | Upstream — provides the plan to decompose | Complex plans need WBS |
-| `task-management` | Downstream — receives decomposed tasks | For execution tracking |
-| `dispatching-parallel-agents` | Downstream — receives parallelizable clusters | For concurrent execution |
-| `autonomous-loop` | Downstream — task selection from WBS | Ralph task selection |
-| `executing-plans` | Downstream — batch creation from WBS | Plan execution |
-| `subagent-driven-development` | Downstream — independent tasks for subagents | Delegated implementation |
-| `spec-writing` | Complementary — specs inform decomposition | Understanding requirements |
+| `planning` | 上游 —— 提供待分解的计划 | 复杂计划需要 WBS 时 |
+| `task-management` | 下游 —— 接收已分解的任务 | 用于执行跟踪 |
+| `dispatching-parallel-agents` | 下游 —— 接收可并行集群 | 用于并发执行 |
+| `autonomous-loop` | 下游 —— 从 WBS 中选择任务 | Ralph 任务选择 |
+| `executing-plans` | 下游 —— 从 WBS 批量创建任务 | 计划执行 |
+| `subagent-driven-development` | 下游 —— 为子智能体分配独立任务 | 委托实现 |
+| `spec-writing` | 互补 —— 规格说明指导分解 | 理解需求时 |
 
 ---
 
-## Concrete Examples
+## 具体示例
 
-### Example: Decomposition of "Add User Authentication"
+### 示例：“添加用户认证”的分解
 
 ```
-# WBS: User Authentication
+# WBS: 用户认证
 
-## 1. Core Auth
-### 1.1 Token Management
-- [ ] 1.1.1 Implement JWT generation — Est: 1h — Deps: none — P0
-- [ ] 1.1.2 Implement JWT validation — Est: 1h — Deps: 1.1.1 — P0
-- [ ] 1.1.3 Implement refresh token rotation — Est: 2h — Deps: 1.1.2 — P1
+## 1. 核心认证
+### 1.1 令牌管理
+- [ ] 1.1.1 实现 JWT 生成 — 估算: 1h — 依赖: 无 — 优先级: P0
+- [ ] 1.1.2 实现 JWT 验证 — 估算: 1h — 依赖: 1.1.1 — 优先级: P0
+- [ ] 1.1.3 实现刷新令牌轮换 — 估算: 2h — 依赖: 1.1.2 — 优先级: P1
 
-### 1.2 Auth Middleware
-- [ ] 1.2.1 Create auth middleware — Est: 1h — Deps: 1.1.2 — P0
-- [ ] 1.2.2 Add role-based access control — Est: 2h — Deps: 1.2.1 — P1
+### 1.2 认证中间件
+- [ ] 1.2.1 创建认证中间件 — 估算: 1h — 依赖: 1.1.2 — 优先级: P0
+- [ ] 1.2.2 添加基于角色的访问控制 — 估算: 2h — 依赖: 1.2.1 — 优先级: P1
 
-## 2. Auth Endpoints
-### 2.1 Registration
-- [ ] 2.1.1 POST /auth/register endpoint — Est: 1h — Deps: 1.1.1 — P0
-- [ ] 2.1.2 Email validation — Est: 30m — Deps: none — P0
+## 2. 认证接口
+### 2.1 注册
+- [ ] 2.1.1 POST /auth/register 接口 — 估算: 1h — 依赖: 1.1.1 — 优先级: P0
+- [ ] 2.1.2 邮箱验证 — 估算: 30m — 依赖: 无 — 优先级: P0
 
-### 2.2 Login
-- [ ] 2.2.1 POST /auth/login endpoint — Est: 1h — Deps: 1.1.1, 1.2.1 — P0
-- [ ] 2.2.2 POST /auth/refresh endpoint — Est: 1h — Deps: 1.1.3 — P1
+### 2.2 登录
+- [ ] 2.2.1 POST /auth/login 接口 — 估算: 1h — 依赖: 1.1.1, 1.2.1 — 优先级: P0
+- [ ] 2.2.2 POST /auth/refresh 接口 — 估算: 1h — 依赖: 1.1.3 — 优先级: P1
 
-## Summary
-- Total tasks: 8
-- Estimated total effort: 10.5h
-- Critical path: 1.1.1 -> 1.1.2 -> 1.2.1 -> 2.2.1 (4h)
-- Max parallelism: 3 tracks (Token, Middleware, Endpoints)
-- External dependencies: none
+## 摘要
+- 总任务数：8
+- 估算总工作量：10.5h
+- 关键路径：1.1.1 -> 1.1.2 -> 1.2.1 -> 2.2.1 (4h)
+- 最大并行度：3 条轨道（令牌、中间件、接口）
+- 外部依赖：无
 ```
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — Follow the decomposition phases in order. Every task must meet the INVEST criteria and have explicit dependencies, estimates, and acceptance criteria. The dependency graph and critical path analysis are mandatory for multi-day work.
+**严格 (RIGID)** —— 必须按顺序遵循分解阶段。每个任务必须符合 INVEST 准则，并具备明确的依赖关系、估算值和验收标准。对于跨日工作，依赖图与关键路径分析为强制要求。

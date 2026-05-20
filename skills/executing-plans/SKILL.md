@@ -1,367 +1,373 @@
 ---
 name: executing-plans
-description: "Use when you have an approved implementation plan document and need to execute it step by step. Triggers on /execute command, when transitioning from planning with an approved plan, or when resuming execution of a partially completed plan. Provides batch-based execution with TDD, checkpoint reviews, and verification gates."
+description: '适用于已获批准的实施计划文档，需逐步执行时使用。在调用 /execute 命令、规划阶段获批后转入执行，或恢复部分已完成的计划执行时触发。提供基于批次的执行流程，包含 TDD、检查点审查和验证门禁。'
 ---
 
-# Executing Plans
+# 执行计划
 
-## Overview
+## 概述
 
-This skill turns an approved plan document into working code through disciplined, batch-based execution. Each step is implemented with TDD, verified before proceeding, and reviewed at checkpoints. It provides the structural framework for moving from plan to production code with consistent quality gates.
+本技能通过严谨的、基于批次的执行流程，将已批准的计划文档转化为可运行的代码。每个步骤均采用 TDD 实现，在继续前进行验证，并在检查点进行审查。它为从计划到生产代码的转化提供了结构化的框架，并设有严格的质量门禁。
 
-**Announce at start:** "I'm using the executing-plans skill to implement the approved plan at [plan path]."
+**开始时声明：**“我正在使用 executing-plans 技能来实现位于 [plan path] 的已批准计划。”
 
-## Trigger Conditions
+## 触发条件
 
-- An approved plan document exists and is ready for implementation
-- `/execute` command invoked with a plan reference
-- Resuming a partially completed plan execution
-- Transition from planning skill after plan approval
-
----
-
-## Phase 1: Read the Plan
-
-**Goal:** Thoroughly understand the plan before writing any code.
-
-1. Read the entire plan document from start to finish
-2. Identify all implementation steps and count them
-3. Map dependencies between steps (what must be done first)
-4. Note any ambiguities or open questions
-5. Confirm understanding with the user before proceeding
-
-### Plan Comprehension Checklist
-
-| Check | Question |
-|-------|---------|
-| Goal clarity | Can you explain the plan's goal in one sentence? |
-| Step count | How many implementation steps are there? |
-| Dependencies | Which steps depend on which? |
-| Ambiguities | Are there any unclear or underspecified steps? |
-| Verification | Does every step have a verification method? |
-
-**STOP — Do NOT proceed to Phase 2 until:**
-- [ ] You can explain the plan's goal in one sentence
-- [ ] You can list all implementation steps
-- [ ] Dependencies are mapped
-- [ ] Any ambiguities are noted and resolved with user
-- [ ] User has confirmed you may proceed
+- 存在已批准的计划文档且已准备好实施
+- `/execute` 命令被调用并附带计划引用
+- 恢复部分已完成的计划执行
+- 计划获批后从规划技能过渡而来
 
 ---
 
-## Phase 2: Create Task Batch
+## 第一阶段：阅读计划
 
-**Goal:** Break the plan into small, executable task batches.
+**目标：** 在编写任何代码之前彻底理解计划。
 
-### Batch Size Decision Table
+1. 从头到尾完整阅读计划文档
+2. 识别所有实施步骤并统计数量
+3. 梳理步骤间的依赖关系（哪些必须先完成）
+4. 记录任何歧义或悬而未决的问题
+5. 在继续前与用户确认理解无误
 
-| Task Complexity | Batch Size | Examples |
-|----------------|-----------|---------|
-| Simple (config, boilerplate) | Up to 5 tasks | ENV vars, imports, type definitions |
-| Standard (features, logic) | 3 tasks | Endpoints, services, components |
-| Complex (integrations, security) | 2 tasks | OAuth flows, payment processing |
-| Critical (data migration, auth) | 1 task | Database migrations, credential handling |
+### 计划理解检查清单
 
-### Task Requirements (STIC)
+| 检查项     | 问题                             |
+| ---------- | -------------------------------- |
+| 目标清晰度 | 你能用一句话解释该计划的目标吗？ |
+| 步骤数量   | 共有多少个实施步骤？             |
+| 依赖关系   | 哪些步骤依赖于其他步骤？         |
+| 歧义点     | 是否存在不明确或定义不足的步骤？ |
+| 验证方式   | 每个步骤是否都有对应的验证方法？ |
 
-| Criterion | Description |
-|-----------|------------|
-| **S**pecific | Clear definition of what to implement |
-| **T**estable | Can be verified with automated tests |
-| **I**ndependent | Minimal coupling to other tasks in the batch (where possible) |
-| **C**ompact | Completable in a focused session (2-5 minutes) |
+**停止 — 在满足以下条件前，请勿进入第二阶段：**
 
-### Task Template
+- [ ] 你能用一句话解释该计划的目标
+- [ ] 你能列出所有实施步骤
+- [ ] 依赖关系已梳理清晰
+- [ ] 任何歧义均已记录并与用户解决
+- [ ] 用户已确认你可以继续
+
+---
+
+## 第二阶段：创建任务批次
+
+**目标：** 将计划拆分为小型、可执行的任务批次。
+
+### 批次大小决策表
+
+| 任务复杂度             | 批次大小      | 示例                         |
+| ---------------------- | ------------- | ---------------------------- |
+| 简单（配置、样板代码） | 最多 5 个任务 | 环境变量、导入语句、类型定义 |
+| 标准（功能、逻辑）     | 3 个任务      | 接口端点、服务、组件         |
+| 复杂（集成、安全）     | 2 个任务      | OAuth 流程、支付处理         |
+| 关键（数据迁移、认证） | 1 个任务      | 数据库迁移、凭据处理         |
+
+### 任务要求 (STIC)
+
+| 标准                    | 描述                             |
+| ----------------------- | -------------------------------- |
+| **S**pecific（具体）    | 明确定义需要实现的内容           |
+| **T**estable（可测试）  | 可通过自动化测试进行验证         |
+| **I**ndependent（独立） | 与批次内其他任务的耦合度尽可能低 |
+| **C**ompact（紧凑）     | 可在专注的会话中完成（2-5 分钟） |
+
+### 任务模板
 
 ```
-Task: [concise description]
-Plan Step: [reference to plan section]
-Files to Create/Modify: [list of exact file paths]
-Acceptance Criteria:
-  - [specific, testable criterion 1]
-  - [specific, testable criterion 2]
-Dependencies: [other tasks that must be done first, or "none"]
-Verification: [exact command to run]
+任务: [简明描述]
+计划步骤: [对应计划章节的引用]
+需创建/修改的文件: [具体文件路径列表]
+验收标准:
+  - [具体、可测试的标准 1]
+  - [具体、可测试的标准 2]
+依赖项: [必须先完成的其他任务，或“无”]
+验证方式: [运行的确切命令]
 ```
 
-**STOP — Do NOT proceed to Phase 3 until:**
-- [ ] Tasks created for the current batch
-- [ ] Each task has clear acceptance criteria
-- [ ] Dependencies are satisfied (previous tasks complete)
-- [ ] Tasks ordered by dependency (independent tasks first)
+**停止 — 在满足以下条件前，请勿进入第三阶段：**
+
+- [ ] 已为当前批次创建任务
+- [ ] 每个任务都有明确的验收标准
+- [ ] 依赖项已满足（前置任务已完成）
+- [ ] 任务已按依赖关系排序（独立任务优先）
 
 ---
 
-## Phase 3: Execute Tasks
+## 第三阶段：执行任务
 
-**Goal:** Execute each task one at a time using TDD.
+**目标：** 使用 TDD 逐个执行每个任务。
 
-### Per-Task Workflow
+### 单任务工作流
 
 ```
-1. ANNOUNCE which task you are starting
-2. IMPLEMENT using test-driven-development skill:
-   a. Write failing test (RED)
-   b. Write minimal code to pass (GREEN)
-   c. Refactor (REFACTOR)
-   d. Repeat RED-GREEN-REFACTOR for each behavior
-3. VERIFY using verification-before-completion skill:
-   a. Run full test suite (not just new tests)
-   b. Run lint, type-check, build as applicable
-   c. Confirm all checks pass
-4. MARK task as complete
-5. PROCEED to next task
+1. 声明你正在开始哪个任务
+2. 使用 test-driven-development 技能进行实现：
+   a. 编写失败的测试 (RED)
+   b. 编写最小化代码使其通过 (GREEN)
+   c. 重构代码 (REFACTOR)
+   d. 对每个行为重复 RED-GREEN-REFACTOR 循环
+3. 使用 verification-before-completion 技能进行验证：
+   a. 运行完整测试套件（而不仅仅是新测试）
+   b. 运行 lint、类型检查、构建等（如适用）
+   c. 确认所有检查均通过
+4. 将任务标记为完成
+5. 继续执行下一个任务
 ```
 
-### Execution Rules
+### 执行规则
 
-| Rule | Rationale |
-|------|-----------|
-| One task at a time | Do not start task 2 until task 1 is verified |
-| Follow TDD strictly | No production code without a failing test |
-| Do not deviate from the plan | If plan needs changes, stop and discuss with user |
-| Do not skip verification | Every task must pass verification before marking complete |
-| Report progress | Announce start and completion of each task |
+| 规则               | 原理                                   |
+| ------------------ | -------------------------------------- |
+| 一次仅执行一个任务 | 在任务 1 验证通过前，不要开始任务 2    |
+| 严格遵循 TDD       | 没有失败测试的铺垫，绝不编写生产代码   |
+| 不偏离计划         | 如果计划需要修改，立即停止并与用户讨论 |
+| 不跳过验证         | 每个任务在标记完成前必须通过验证       |
+| 报告进度           | 宣告每个任务的开始与完成               |
 
-### Task Outcome Decision Table
+### 任务结果决策表
 
-| Outcome | Action | Next Step |
-|---------|--------|-----------|
-| Verification passes | Mark complete | Next task |
-| Test failure, obvious fix | Fix and re-verify | Same task |
-| Test failure, unclear cause | Invoke `systematic-debugging` | Same task after fix |
-| Plan step is ambiguous | Stop and ask user | Wait for clarification |
-| Plan step is not feasible | Report blocker | Wait for direction |
-| Unexpected dependency found | Report and reorder | Adjust batch |
+| 结果               | 行动                        | 下一步             |
+| ------------------ | --------------------------- | ------------------ |
+| 验证通过           | 标记为完成                  | 下一个任务         |
+| 测试失败，原因明显 | 修复并重新验证              | 同一任务           |
+| 测试失败，原因不明 | 调用 `systematic-debugging` | 修复后继续同一任务 |
+| 计划步骤存在歧义   | 停止并询问用户              | 等待澄清           |
+| 计划步骤不可行     | 报告阻碍点                  | 等待指示           |
+| 发现意外依赖       | 报告并重新排序              | 调整批次           |
 
-**STOP — Do NOT proceed to next task until:**
-- [ ] Current task's acceptance criteria are met
-- [ ] All tests pass (new and existing)
-- [ ] Verification-before-completion has been executed
-- [ ] Task marked as complete
+**停止 — 在满足以下条件前，请勿进入下一个任务：**
+
+- [ ] 当前任务的验收标准已达成
+- [ ] 所有测试均通过（含新增与现有测试）
+- [ ] 已执行 verification-before-completion 验证
+- [ ] 任务已标记为完成
 
 ---
 
-## Phase 4: Batch Checkpoint
+## 第四阶段：批次检查点
 
-**Goal:** After completing all tasks in a batch, perform a full checkpoint review.
+**目标：** 在完成批次中的所有任务后，进行全面的检查点审查。
 
-### Checkpoint Steps
+### 检查点步骤
 
-1. Run full test suite — all tests, not just those from the current batch
-2. Run all verification commands — lint, type-check, build, format
-3. Review what was implemented — summarize completed tasks and outcomes
-4. Assess progress against the plan — how far through are we?
-5. Identify any issues or risks that came up during execution
-6. Report to user and ask for direction
+1. 运行完整测试套件——所有测试，而不仅限于当前批次新增的测试
+2. 运行所有验证命令——lint、类型检查、构建、格式化等
+3. 审查已实现内容——总结已完成的任务及其结果
+4. 评估相对于计划的进度——我们完成了多少？
+5. 识别执行过程中出现的任何问题或风险
+6. 向用户汇报并请求下一步指示
 
-### Checkpoint Report Template
+### 检查点报告模板
 
 ```
 BATCH CHECKPOINT
 ================
-Batch: [N] of [estimated total]
-Tasks Completed: [list]
+批次: [N] / [预估总数]
+已完成任务: [列表]
 
-Verification Results:
-  Tests:      [X passed, Y failed, Z skipped]
-  Build:      [pass/fail]
-  Lint:       [pass/fail, N warnings]
-  Type-check: [pass/fail]
+验证结果:
+  测试:      [X 通过, Y 失败, Z 跳过]
+  构建:      [通过/失败]
+  代码规范:  [通过/失败, N 个警告]
+  类型检查:  [通过/失败]
 
-Progress: [N of M plan steps complete] ([percentage]%)
+进度: [已完成 M 个计划步骤中的 N 个] ([百分比]%)
 
-Issues Encountered:
-  - [issue 1 and how it was resolved]
+遇到的问题:
+  - [问题 1 及其解决方式]
 
-Risks or Concerns:
-  - [risk 1]
+风险或担忧:
+  - [风险 1]
 
-Next Batch Preview:
-  - [task 1]
-  - [task 2]
-  - [task 3]
+下一批次预览:
+  - [任务 1]
+  - [任务 2]
+  - [任务 3]
 
-Awaiting direction: Continue with next batch / Adjust plan / Other?
+等待指示: 继续下一批次 / 调整计划 / 其他？
 ```
 
-**STOP — Do NOT proceed to next batch until:**
-- [ ] Full test suite passes
-- [ ] All verification commands pass
-- [ ] Checkpoint report presented to user
-- [ ] User has confirmed to continue
+**停止 — 在满足以下条件前，请勿进入下一个批次：**
+
+- [ ] 完整测试套件通过
+- [ ] 所有验证命令通过
+- [ ] 检查点报告已提交给用户
+- [ ] 用户已确认继续
 
 ---
 
-## Phase 5: Continue, Adjust, or Complete
+## 第五阶段：继续、调整或完成
 
-**Goal:** Act on user direction after each checkpoint.
+**目标：** 根据每次检查点后用户的指示采取行动。
 
-### Direction Decision Table
+### 方向决策表
 
-| User Direction | Action | Next Phase |
-|---------------|--------|-----------|
-| "Continue" | Create next batch of tasks | Phase 2 |
-| "Adjust plan" | Discuss changes, update plan document | Phase 2 (with updated plan) |
-| "Stop here" | Summarize progress, note remaining work | Completion |
-| "Skip ahead to [step]" | Verify dependencies are met, then jump | Phase 2 (at new step) |
-| "Go back and redo [task]" | Revert if needed, re-execute with corrections | Phase 3 |
+| 用户指示            | 行动                       | 下一阶段                     |
+| ------------------- | -------------------------- | ---------------------------- |
+| “继续”              | 创建下一批次任务           | 第二阶段                     |
+| “调整计划”          | 讨论变更，更新计划文档     | 第二阶段（使用更新后的计划） |
+| “在此停止”          | 总结进度，记录剩余工作     | 完成                         |
+| “跳至 [某步骤]”     | 验证依赖项已满足，然后跳转 | 第二阶段（从新步骤开始）     |
+| “返回重做 [某任务]” | 必要时回滚，带修正重新执行 | 第三阶段                     |
 
-Never proceed to the next batch without explicit user approval.
+未经用户明确批准，切勿进入下一个批次。
 
 ---
 
-## Critical Blocker Handling
+## 关键阻碍处理
 
-When you encounter something that prevents task completion, do NOT work around it. Stop and escalate.
+当你遇到阻碍任务完成的情况时，**切勿**尝试绕过它。立即停止并上报。
 
-### Blocker Classification
+### 阻碍分类
 
-| Type | Examples | Action |
-|------|---------|--------|
-| Ambiguous spec | Plan step could mean multiple things | Present interpretations, ask user |
-| Missing dependency | Required API or library unavailable | Report with alternatives |
-| Contradiction | Step conflicts with another part of the plan | Identify both sides, ask user |
-| Security concern | Planned approach has vulnerability | Report risk, propose safer alternative |
-| Feasibility | Step cannot be implemented as described | Explain why, propose alternatives |
+| 类型       | 示例                     | 行动                           |
+| ---------- | ------------------------ | ------------------------------ |
+| 规格歧义   | 计划步骤可能有多种理解   | 提供不同解释，询问用户         |
+| 缺失依赖   | 所需的 API 或库不可用    | 报告并提供替代方案             |
+| 逻辑冲突   | 步骤与计划其他部分相矛盾 | 指出冲突双方，询问用户         |
+| 安全担忧   | 计划方案存在漏洞         | 报告风险，提出更安全的替代方案 |
+| 可行性问题 | 步骤无法按描述实现       | 解释原因，提出替代方案         |
 
-### Blocker Report Format
+### 阻碍报告格式
 
 ```
 CRITICAL BLOCKER
 ================
-Task: [which task is blocked]
-Blocker: [clear description of the problem]
-Impact: [what cannot proceed until this is resolved]
-Options:
-  A. [option with tradeoffs]
-  B. [option with tradeoffs]
-  C. [skip this step and continue]
+任务: [受阻的任务名称]
+阻碍: [清晰描述问题]
+影响: [在解决前无法继续的内容]
+选项:
+  A. [方案及权衡]
+  B. [方案及权衡]
+  C. [跳过此步骤并继续]
 
-Awaiting direction before proceeding.
+等待指示后再继续。
 ```
 
-**Do NOT** guess what the user intended. **Do NOT** implement a workaround without approval. **Do NOT** skip the blocked task silently. **DO** present options with clear tradeoffs. **DO** continue with non-blocked tasks if possible (but flag the skip).
+**切勿**猜测用户意图。**切勿**在未经批准的情况下实施变通方案。**切勿**静默跳过受阻任务。**必须**提供带有明确权衡的选项。**必须**在可能的情况下继续执行未受阻的任务（但需标记跳过）。
 
 ---
 
-## Subagent Dispatch Option
+## 子代理分发选项
 
-For larger plans, individual tasks can be dispatched to subagents for parallel execution.
+对于大型计划，可将单个任务分发给子代理进行并行执行。
 
-### When to Suggest Subagent Dispatch
+### 何时建议子代理分发
 
-| Condition | Threshold |
-|-----------|-----------|
-| Independent tasks in plan | 10+ tasks with few dependencies |
-| Task specification quality | Each task has clear acceptance criteria |
-| Speed requirement | User has indicated urgency |
-| Task interdependency | Low coupling between tasks |
+| 条件             | 阈值                       |
+| ---------------- | -------------------------- |
+| 计划中的独立任务 | 10+ 个任务且依赖关系较少   |
+| 任务规范质量     | 每个任务都有明确的验收标准 |
+| 速度要求         | 用户已表明紧迫性           |
+| 任务相互依赖性   | 任务间耦合度低             |
 
-When conditions are met, suggest switching to the `subagent-driven-development` skill for the remaining work.
-
----
-
-## Anti-Patterns / Common Mistakes
-
-| Anti-Pattern | Why It Fails | Correct Approach |
-|-------------|-------------|-----------------|
-| Implementing entire plan at once | No checkpoints, no quality gates | Batch-based execution with checkpoints |
-| Skipping TDD because "it's simple" | Bugs accumulate, regressions appear | Every task uses TDD, no exceptions |
-| Working around blockers silently | User unaware, wrong assumptions baked in | Stop and escalate blockers |
-| Proceeding without approval after batch | Direction may have changed | Always checkpoint and wait |
-| Deviating from the plan | Unauthorized changes, scope creep | Discuss changes before implementing |
-| Running only new tests | Regressions go undetected | Full test suite at checkpoints |
-| Marking tasks complete without verification | False progress, accumulated bugs | Verification is mandatory |
-| Batches larger than 5 tasks | Hard to review, too much risk per batch | Keep batches small |
-| Skipping checkpoint report | User loses visibility into progress | Always present full checkpoint |
-| Not committing at batch boundaries | Huge diffs, hard to revert | Commit after each batch |
+满足条件时，建议切换至 `subagent-driven-development` 技能以完成剩余工作。
 
 ---
 
-## Anti-Rationalization Guards
+## 反模式 / 常见错误
+
+| 反模式                     | 为何失败                   | 正确做法                     |
+| -------------------------- | -------------------------- | ---------------------------- |
+| 一次性实现整个计划         | 无检查点，无质量门禁       | 基于批次执行并设置检查点     |
+| 因“很简单”而跳过 TDD       | 缺陷累积，出现回归问题     | 每个任务均使用 TDD，绝无例外 |
+| 静默绕过阻碍               | 用户不知情，错误假设被固化 | 停止并上报阻碍               |
+| 批次完成后未经批准直接继续 | 方向可能已改变             | 始终进行检查点审查并等待     |
+| 偏离计划                   | 未经授权的变更，范围蔓延   | 实施前讨论变更               |
+| 仅运行新增测试             | 回归缺陷无法被发现         | 检查点处运行完整测试套件     |
+| 未经验证就标记任务完成     | 虚假进度，缺陷累积         | 验证是强制性的               |
+| 批次超过 5 个任务          | 难以审查，单批次风险过高   | 保持批次小型化               |
+| 跳过检查点报告             | 用户失去对进度的可见性     | 始终提交完整检查点报告       |
+| 批次边界未提交代码         | 差异过大，难以回滚         | 每个批次后提交               |
+
+---
+
+## 反自我合理化防护
 
 <HARD-GATE>
-Do NOT skip any verification step. Do NOT proceed past a checkpoint without user approval. Do NOT deviate from the approved plan without discussion.
+切勿跳过任何验证步骤。未经用户批准，切勿越过检查点继续。未经讨论，切勿偏离已批准的计划。
 </HARD-GATE>
 
-If you catch yourself thinking:
-- "I know what comes next, I'll skip the checkpoint..." — No. Report and wait.
-- "This verification is redundant..." — Run it anyway. Fresh evidence only.
-- "The plan is close enough, I'll adjust as I go..." — Discuss adjustments first.
+如果你发现自己产生以下想法：
+
+- “我知道下一步是什么，跳过检查点吧……”——不行。汇报并等待。
+- “这个验证是多余的……”——照常运行。只需新鲜证据。
+- “计划差不多就行，我边做边调……”——先讨论调整方案。
 
 ---
 
-## Subagent Dispatch Opportunities
+## 子代理分发机会
 
-| Task Pattern | Dispatch To | When |
-|---|---|---|
-| Independent plan steps with no shared state | Parallel subagents via `Agent` tool | When dependency analysis shows no blockers between steps |
-| Code review of completed step | `code-reviewer` agent | After each major plan step completion |
-| Test execution for completed features | Background `Bash` task | When tests can run independently of ongoing work |
+| 任务模式                 | 分发至                            | 时机                           |
+| ------------------------ | --------------------------------- | ------------------------------ |
+| 无共享状态的独立计划步骤 | 通过 `Agent` 工具并行分发给子代理 | 依赖分析显示步骤间无阻碍时     |
+| 已完成步骤的代码审查     | `code-reviewer` 代理              | 每个主要计划步骤完成后         |
+| 已完成功能的测试执行     | 后台 `Bash` 任务                  | 测试可独立于进行中的工作运行时 |
 
-Follow the `dispatching-parallel-agents` skill protocol when dispatching.
-
----
-
-## Integration Points
-
-| Skill | Relationship | When |
-|-------|-------------|------|
-| `planning` | Upstream — provides approved plan document | Plan is the input to this skill |
-| `test-driven-development` | Per-task — TDD cycle for every code task | Phase 3 execution |
-| `verification-before-completion` | Per-task — verification gate | Before marking any task complete |
-| `systematic-debugging` | On failure — investigate unexpected failures | When task encounters errors |
-| `code-review` | At checkpoints — review code quality | Phase 4 batch review |
-| `subagent-driven-development` | Alternative — parallel execution path | For large independent task sets |
-| `resilient-execution` | On failure — retry with alternatives | When task approaches fail |
-| `task-management` | Complementary — provides task tracking | Can be used together |
+分发时请遵循 `dispatching-parallel-agents` 技能协议。
 
 ---
 
-## Concrete Examples
+## 集成点
 
-### Example: Batch Creation from Plan
+| 技能                             | 关系                              | 时机                 |
+| -------------------------------- | --------------------------------- | -------------------- |
+| `planning`                       | 上游——提供已批准的计划文档        | 计划作为本技能的输入 |
+| `test-driven-development`        | 每任务级——每个代码任务的 TDD 循环 | 第三阶段执行         |
+| `verification-before-completion` | 每任务级——验证门禁                | 标记任何任务完成前   |
+| `systematic-debugging`           | 失败时——调查意外失败              | 任务遇到错误时       |
+| `code-review`                    | 检查点处——审查代码质量            | 第四阶段批次审查     |
+| `subagent-driven-development`    | 替代方案——并行执行路径            | 用于大型独立任务集   |
+| `resilient-execution`            | 失败时——使用备选方案重试          | 任务方法失败时       |
+| `task-management`                | 补充——提供任务跟踪                | 可配合使用           |
 
-Plan: "Add user authentication with JWT"
+---
+
+## 具体示例
+
+### 示例：从计划创建批次
+
+计划：“添加基于 JWT 的用户认证”
 
 ```
 Batch 1 (3 tasks):
-  Task 1: Write failing test for JWT token generation
+  Task 1: 为 JWT 令牌生成编写失败测试
     Files: tests/auth/jwt.test.ts
-    Verification: npm test -- --grep "JWT generation" → FAIL (expected)
+    Verification: npm test -- --grep "JWT generation" → FAIL（预期失败）
 
-  Task 2: Implement JWT token generation
+  Task 2: 实现 JWT 令牌生成
     Files: src/auth/jwt.ts
     Verification: npm test -- --grep "JWT generation" → PASS
 
-  Task 3: Write failing test for auth middleware
+  Task 3: 为认证中间件编写失败测试
     Files: tests/middleware/auth.test.ts
-    Verification: npm test -- --grep "auth middleware" → FAIL (expected)
+    Verification: npm test -- --grep "auth middleware" → FAIL（预期失败）
 
-[CHECKPOINT after batch 1]
+[批次 1 后检查点]
 
 Batch 2 (3 tasks):
-  Task 4: Implement auth middleware
-  Task 5: Write failing test for login endpoint
-  Task 6: Implement login endpoint
+  Task 4: 实现认证中间件
+  Task 5: 为登录接口编写失败测试
+  Task 6: 实现登录接口
 
-[CHECKPOINT after batch 2]
+[批次 2 后检查点]
 ```
 
 ---
 
-## Completion Criteria
+## 完成标准
 
-The plan execution is complete when:
-1. All plan steps have been implemented as tasks
-2. All tasks have passed verification
-3. Full test suite passes
-4. Final checkpoint report presented to user
-5. User confirms the plan is complete
+计划执行在满足以下条件时视为完成：
+
+1. 所有计划步骤均已作为任务实现
+2. 所有任务均已通过验证
+3. 完整测试套件通过
+4. 最终检查点报告已提交给用户
+5. 用户确认计划已完成
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — Follow this process exactly. Batches, checkpoints, and verification gates are non-negotiable. No task is complete without verification. No batch proceeds without user approval.
+**严格 (RIGID)** — 严格遵循此流程。批次、检查点和验证门禁不可妥协。任何任务未经验证均不算完成。任何批次未经用户批准均不得继续。

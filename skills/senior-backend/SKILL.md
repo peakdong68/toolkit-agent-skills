@@ -1,140 +1,140 @@
 ---
 name: senior-backend
-description: "Use when the user needs API design, microservices architecture, event-driven systems, database integration, caching strategies, or backend observability. Triggers: REST/GraphQL API implementation, service architecture design, message queue setup, rate limiting, health checks, OpenTelemetry integration."
+description: "当用户需要 API 设计、微服务架构、事件驱动系统、数据库集成、缓存策略或后端可观测性时使用。触发条件：REST/GraphQL API 实现、服务架构设计、消息队列设置、速率限制、健康检查、OpenTelemetry 集成。"
 ---
 
-# Senior Backend Engineer
+# 高级后端工程师
 
-## Overview
+## 概述
 
-Design and implement robust, scalable backend systems with a focus on API design, service architecture, data management, and operational excellence. This skill covers RESTful and GraphQL API patterns, message-driven architecture, caching strategies, rate limiting, health checks, and full observability with OpenTelemetry.
+设计并实现健壮、可扩展的后端系统，重点关注 API 设计、服务架构、数据管理和运维卓越性。本技能涵盖 RESTful 和 GraphQL API 模式、消息驱动架构、缓存策略、速率限制、健康检查以及使用 OpenTelemetry 实现完整可观测性。
 
-**Announce at start:** "I'm using the senior-backend skill for backend system design and implementation."
+**开始时声明：** "我正在使用 senior-backend 技能进行后端系统设计与实现。"
 
 ---
 
-## Phase 1: API Design
+## 阶段 1：API 设计
 
-**Goal:** Define the contract before writing implementation code.
+**目标：** 在编写实现代码之前先定义契约。
 
-### Actions
+### 操作
 
-1. Define resource models and relationships
-2. Design endpoint structure (REST) or schema (GraphQL)
-3. Establish authentication and authorization strategy
-4. Define rate limiting and throttling policies
-5. Create API documentation (OpenAPI/GraphQL schema)
+1. 定义资源模型及其关系
+2. 设计端点结构（REST）或模式（GraphQL）
+3. 建立认证与授权策略
+4. 定义速率限制和节流策略
+5. 创建 API 文档（OpenAPI/GraphQL 模式）
 
-### API Style Decision Table
+### API 风格决策表
 
-| Factor | REST | GraphQL | gRPC |
+| 因素 | REST | GraphQL | gRPC |
 |--------|------|---------|------|
-| Multiple consumers with different data needs | Poor fit | Strong fit | Poor fit |
-| Simple CRUD operations | Strong fit | Overkill | Overkill |
-| Real-time subscriptions | Requires WebSocket add-on | Built-in | Built-in (streaming) |
-| Service-to-service | Good | Overkill | Strong fit |
-| Public API | Strong fit | Good | Poor fit (tooling) |
-| Mobile with bandwidth constraints | Overfetching risk | Strong fit | Strong fit |
+| 多个消费者有不同数据需求 | 不适合 | 非常适合 | 不适合 |
+| 简单 CRUD 操作 | 非常适合 | 过度设计 | 过度设计 |
+| 实时订阅 | 需额外添加 WebSocket | 内置支持 | 内置支持（流式） |
+| 服务间通信 | 良好 | 过度设计 | 非常适合 |
+| 公共 API | 非常适合 | 良好 | 不适合（工具链支持弱） |
+| 带宽受限的移动端 | 存在过度获取风险 | 非常适合 | 非常适合 |
 
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] Resource models are defined
-- [ ] Endpoint structure or schema is documented
-- [ ] Auth strategy is chosen
-- [ ] API contract is reviewable (OpenAPI/GraphQL schema)
+### 停止 — 在完成以下事项前，请勿进入阶段 2：
+- [ ] 资源模型已定义
+- [ ] 端点结构或模式已文档化
+- [ ] 认证策略已选定
+- [ ] API 契约可评审（OpenAPI/GraphQL 模式）
 
 ---
 
-## Phase 2: Implementation
+## 阶段 2：实现
 
-**Goal:** Build the service layer with clear separation of concerns.
+**目标：** 构建具有清晰关注点分离的服务层。
 
-### Actions
+### 操作
 
-1. Set up project structure with clear layering
-2. Implement data access layer (repositories/DAOs)
-3. Build service layer with business logic
-4. Create API controllers/resolvers
-5. Add middleware (auth, logging, error handling, CORS)
-6. Implement caching strategy
+1. 设置具有清晰分层的项目结构
+2. 实现数据访问层（仓库/DAO）
+3. 构建包含业务逻辑的服务层
+4. 创建 API 控制器/解析器
+5. 添加中间件（认证、日志、错误处理、CORS）
+6. 实现缓存策略
 
-### RESTful URL Structure
+### RESTful URL 结构
 
 ```
-GET    /api/v1/users              # List users (paginated)
-GET    /api/v1/users/:id          # Get single user
-POST   /api/v1/users              # Create user
-PUT    /api/v1/users/:id          # Full update
-PATCH  /api/v1/users/:id          # Partial update
-DELETE /api/v1/users/:id          # Delete user
-GET    /api/v1/users/:id/orders   # Nested resources
-POST   /api/v1/users/:id/activate # State transitions
+GET    /api/v1/users              # 列出用户（分页）
+GET    /api/v1/users/:id          # 获取单个用户
+POST   /api/v1/users              # 创建用户
+PUT    /api/v1/users/:id          # 完整更新
+PATCH  /api/v1/users/:id          # 部分更新
+DELETE /api/v1/users/:id          # 删除用户
+GET    /api/v1/users/:id/orders   # 嵌套资源
+POST   /api/v1/users/:id/activate # 状态转换
 ```
 
-### HTTP Status Code Decision Table
+### HTTP 状态码决策表
 
-| Code | Meaning | When to Use |
+| 代码 | 含义 | 使用场景 |
 |------|---------|-------------|
-| 200 | OK | Successful GET, PUT, PATCH |
-| 201 | Created | Successful POST creating resource |
-| 204 | No Content | Successful DELETE |
-| 400 | Bad Request | Validation errors |
-| 401 | Unauthorized | Missing or invalid auth |
-| 403 | Forbidden | Auth valid but insufficient permissions |
-| 404 | Not Found | Resource does not exist |
-| 409 | Conflict | Duplicate or state conflict |
-| 422 | Unprocessable Entity | Semantically invalid input |
-| 429 | Too Many Requests | Rate limit exceeded |
-| 500 | Internal Server Error | Unexpected server failure |
+| 200 | 成功 | 成功的 GET、PUT、PATCH 请求 |
+| 201 | 已创建 | 成功创建资源的 POST 请求 |
+| 204 | 无内容 | 成功的 DELETE 请求 |
+| 400 | 错误请求 | 验证错误 |
+| 401 | 未授权 | 缺少或无效的认证信息 |
+| 403 | 禁止访问 | 认证有效但权限不足 |
+| 404 | 未找到 | 资源不存在 |
+| 409 | 冲突 | 重复或状态冲突 |
+| 422 | 无法处理的实体 | 语义上无效的输入 |
+| 429 | 请求过多 | 超出速率限制 |
+| 500 | 内部服务器错误 | 意外的服务器故障 |
 
-### Response Format
+### 响应格式
 
 ```json
-// Success (single)
+// 成功（单个）
 { "data": { "id": "123", "name": "Alice" }, "meta": { "requestId": "req_abc123" } }
 
-// Success (collection)
+// 成功（集合）
 { "data": [...], "meta": { "page": 1, "pageSize": 20, "totalCount": 150, "totalPages": 8 } }
 
-// Error
-{ "error": { "code": "VALIDATION_ERROR", "message": "Invalid input", "details": [...] } }
+// 错误
+{ "error": { "code": "VALIDATION_ERROR", "message": "输入无效", "details": [...] } }
 ```
 
-### Caching Strategy Decision Table
+### 缓存策略决策表
 
-| Strategy | Description | Use Case |
+| 策略 | 描述 | 使用场景 |
 |----------|------------|----------|
-| Cache-Aside | App checks cache, falls back to DB | General purpose |
-| Write-Through | Write to cache and DB simultaneously | Strong consistency |
-| Write-Behind | Write to cache, async write to DB | High write throughput |
-| Read-Through | Cache loads from DB on miss | Transparent caching |
+| 旁路缓存（Cache-Aside） | 应用先查缓存，未命中则回源数据库 | 通用场景 |
+| 直写缓存（Write-Through） | 同时写入缓存和数据库 | 强一致性要求 |
+| 回写缓存（Write-Behind） | 先写缓存，异步写入数据库 | 高写入吞吐量场景 |
+| 读透缓存（Read-Through） | 缓存未命中时自动从数据库加载 | 透明缓存 |
 
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] Project structure follows layered architecture
-- [ ] Input validation is at the edge (Zod, Joi, class-validator)
-- [ ] Error handling returns structured error responses
-- [ ] Caching strategy is implemented with invalidation plan
+### 停止 — 在完成以下事项前，请勿进入阶段 3：
+- [ ] 项目结构遵循分层架构
+- [ ] 输入验证位于边缘（Zod、Joi、class-validator）
+- [ ] 错误处理返回结构化错误响应
+- [ ] 缓存策略已实现并包含失效计划
 
 ---
 
-## Phase 3: Hardening
+## 阶段 3：加固
 
-**Goal:** Prepare the service for production operation.
+**目标：** 为生产环境运行做好准备。
 
-### Actions
+### 操作
 
-1. Add comprehensive error handling
-2. Implement health checks and readiness probes
-3. Set up observability (traces, metrics, logs)
-4. Load test critical paths
-5. Document runbooks for operational scenarios
+1. 添加全面的错误处理
+2. 实现健康检查和就绪探针
+3. 设置可观测性（追踪、指标、日志）
+4. 对关键路径进行负载测试
+5. 为运维场景编写操作手册
 
-### Health Check Endpoints
+### 健康检查端点
 
 ```json
-// GET /health — lightweight liveness check
+// GET /health — 轻量级存活检查
 { "status": "healthy" }
 
-// GET /health/ready — readiness with dependency checks
+// GET /health/ready — 包含依赖检查的就绪状态
 {
   "status": "healthy",
   "checks": {
@@ -147,21 +147,21 @@ POST   /api/v1/users/:id/activate # State transitions
 }
 ```
 
-### Observability: RED Method Metrics
+### 可观测性：RED 方法指标
 
-| Metric | Description | Implementation |
+| 指标 | 描述 | 实现方式 |
 |--------|------------|---------------|
-| **Rate** | Requests per second | Counter incremented per request |
-| **Errors** | Error rate per second | Counter incremented per error |
-| **Duration** | Latency distribution | Histogram (p50, p95, p99) |
+| **Rate（速率）** | 每秒请求数 | 每次请求递增计数器 |
+| **Errors（错误）** | 每秒错误率 | 每次错误递增计数器 |
+| **Duration（持续时间）** | 延迟分布 | 直方图（p50、p95、p99） |
 
-### Structured Logging Format
+### 结构化日志格式
 
 ```json
 {
   "timestamp": "2025-01-15T10:30:00.123Z",
   "level": "info",
-  "message": "User created",
+  "message": "用户已创建",
   "service": "user-service",
   "traceId": "abc123",
   "spanId": "def456",
@@ -170,36 +170,36 @@ POST   /api/v1/users/:id/activate # State transitions
 }
 ```
 
-### Rate Limiting Algorithm Decision Table
+### 速率限制算法决策表
 
-| Algorithm | Pros | Cons | Best For |
+| 算法 | 优点 | 缺点 | 最适合 |
 |-----------|------|------|----------|
-| Fixed Window | Simple, low memory | Burst at boundaries | Internal APIs |
-| Sliding Window | Smooth distribution | More memory | Public APIs |
-| Token Bucket | Controlled bursts | Slightly complex | Industry standard |
-| Leaky Bucket | Constant output | No burst allowed | Strict rate control |
+| 固定窗口 | 简单，内存占用低 | 边界处突发流量 | 内部 API |
+| 滑动窗口 | 流量分布平滑 | 内存占用较高 | 公共 API |
+| 令牌桶 | 可控突发 | 略微复杂 | 行业标准 |
+| 漏桶 | 输出速率恒定 | 不允许突发 | 严格速率控制 |
 
-### STOP — Hardening complete when:
-- [ ] Health check endpoints respond correctly
-- [ ] Structured logging is configured
-- [ ] Metrics are exported (RED method)
-- [ ] Load test completed on critical paths
-- [ ] Error handling returns appropriate status codes
+### 停止 — 加固完成标准：
+- [ ] 健康检查端点响应正确
+- [ ] 已配置结构化日志
+- [ ] 指标已导出（RED 方法）
+- [ ] 关键路径已完成负载测试
+- [ ] 错误处理返回适当的状态码
 
 ---
 
-## Event-Driven Architecture Patterns
+## 事件驱动架构模式
 
-### Message Queue Pattern Decision Table
+### 消息队列模式决策表
 
-| Pattern | Use Case | Example |
+| 模式 | 使用场景 | 示例 |
 |---------|----------|---------|
-| Pub/Sub | Broadcast to multiple consumers | User registered -> email, analytics, CRM |
-| Work Queue | Distribute tasks across workers | Image processing, PDF generation |
-| Request/Reply | Async request with response | Price calculation service |
-| Dead Letter | Handle failed messages | Retry policy exceeded |
+| 发布/订阅（Pub/Sub） | 向多个消费者广播 | 用户注册 -> 邮件、分析、CRM |
+| 工作队列（Work Queue） | 在多个工作节点间分发任务 | 图片处理、PDF 生成 |
+| 请求/回复（Request/Reply） | 异步请求并等待响应 | 价格计算服务 |
+| 死信队列（Dead Letter） | 处理失败消息 | 超过重试策略限制 |
 
-### Event Schema
+### 事件模式
 
 ```json
 {
@@ -215,67 +215,67 @@ POST   /api/v1/users/:id/activate # State transitions
 
 ---
 
-## GraphQL Anti-Patterns
+## GraphQL 反模式
 
-| Anti-Pattern | Problem | Fix |
+| 反模式 | 问题 | 修复方案 |
 |-------------|---------|-----|
-| N+1 queries | Performance degradation | DataLoader for batching |
-| Unbounded queries | DoS vulnerability | Enforce depth and complexity limits |
-| Over-fetching in resolvers | Wasted DB queries | Select only requested fields |
+| N+1 查询 | 性能下降 | 使用 DataLoader 进行批处理 |
+| 无边界查询 | DoS 漏洞风险 | 强制执行深度和复杂度限制 |
+| 解析器中过度获取 | 浪费数据库查询 | 仅选择请求的字段 |
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
+| 反模式 | 为何错误 | 正确做法 |
 |-------------|----------------|-----------------|
-| Exposing database IDs directly | Security risk, coupling to DB | Use UUIDs or prefixed IDs |
-| Synchronous external service calls in request path | Single point of failure, latency | Async with queues or circuit breaker |
-| N+1 query patterns | Linear performance degradation | Eager loading or DataLoader |
-| Catching and swallowing errors | Silent failures, impossible debugging | Log and propagate with context |
-| Shared mutable state across handlers | Race conditions, unpredictable behavior | Stateless request handling |
-| Skipping input validation | Injection, data corruption | Validate at the edge, always |
-| Generic 500 for all errors | Poor developer experience | Specific error codes and messages |
-| No API versioning | Breaking changes affect all consumers | Version from day one (`/v1/`) |
+| 直接暴露数据库 ID | 安全风险，与数据库耦合 | 使用 UUID 或带前缀的 ID |
+| 请求路径中同步调用外部服务 | 单点故障，延迟增加 | 使用队列或断路器实现异步 |
+| N+1 查询模式 | 性能线性下降 | 预加载或使用 DataLoader |
+| 捕获并吞掉错误 | 静默失败，无法调试 | 记录日志并携带上下文传播 |
+| 处理器间共享可变状态 | 竞态条件，行为不可预测 | 无状态请求处理 |
+| 跳过输入验证 | 注入攻击、数据损坏 | 始终在边缘进行验证 |
+| 所有错误都返回通用 500 | 开发者体验差 | 使用具体错误码和消息 |
+| 无 API 版本控制 | 破坏性变更影响所有消费者 | 从第一天起就进行版本控制（`/v1/`） |
 
 ---
 
-## Documentation Lookup (Context7)
+## 文档查阅（Context7）
 
-Use `mcp__context7__resolve-library-id` then `mcp__context7__query-docs` for up-to-date docs. Returned docs override memorized knowledge.
-- `express` — for middleware patterns, routing, or request/response API
-- `fastify` — for plugin system, hooks, or schema validation
-- `nestjs` — for decorators, modules, providers, or guards
-- `prisma` — for schema syntax, client API, or migration commands
+使用 `mcp__context7__resolve-library-id` 然后 `mcp__context7__query-docs` 获取最新文档。返回的文档优先于记忆中的知识。
+- `express` — 用于中间件模式、路由或请求/响应 API
+- `fastify` — 用于插件系统、钩子或模式验证
+- `nestjs` — 用于装饰器、模块、提供者或守卫
+- `prisma` — 用于模式语法、客户端 API 或迁移命令
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关系 |
 |-------|-------------|
-| `senior-architect` | Architecture decisions guide backend service boundaries |
-| `security-review` | Backend security follows OWASP and auth patterns |
-| `performance-optimization` | Backend performance uses caching and query tuning |
-| `testing-strategy` | Backend test strategy defines integration test approach |
-| `code-review` | Review verifies API design and error handling |
-| `acceptance-testing` | API behavior becomes acceptance criteria |
-| `senior-fullstack` | Backend serves the full-stack tRPC layer |
+| `senior-architect` | 架构决策指导后端服务边界划分 |
+| `security-review` | 后端安全遵循 OWASP 和认证模式 |
+| `performance-optimization` | 后端性能优化使用缓存和查询调优 |
+| `testing-strategy` | 后端测试策略定义集成测试方法 |
+| `code-review` | 代码审查验证 API 设计和错误处理 |
+| `acceptance-testing` | API 行为成为验收标准 |
+| `senior-fullstack` | 后端为全栈 tRPC 层提供服务 |
 
 ---
 
-## Key Principles
+## 关键原则
 
-- API versioning from day one (`/v1/`)
-- Input validation at the edge (Zod, Joi, class-validator)
-- Idempotency keys for non-GET endpoints
-- Graceful shutdown (drain connections, finish in-flight requests)
-- Circuit breaker for external service calls
-- Database migrations versioned and reversible
-- Secrets in environment variables, never in code
+- 从第一天起进行 API 版本控制（`/v1/`）
+- 在边缘进行输入验证（Zod、Joi、class-validator）
+- 为非 GET 端点使用幂等键
+- 优雅关闭（释放连接，完成进行中的请求）
+- 对外部服务调用使用断路器
+- 数据库迁移需版本化且可回滚
+- 密钥存放在环境变量中，绝不在代码中硬编码
 
 ---
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt API style and architecture to the project context. The three-phase process (design, implement, harden) is strongly recommended. Health checks, structured logging, and error handling are non-negotiable for production services.
+**灵活（FLEXIBLE）** — 根据项目上下文适配 API 风格和架构。强烈推荐采用三阶段流程（设计、实现、加固）。对于生产服务，健康检查、结构化日志和错误处理是不可或缺的。

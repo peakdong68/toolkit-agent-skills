@@ -1,135 +1,133 @@
 ---
 name: reverse-engineering-specs
-description: 'Use when onboarding to an existing codebase that lacks specifications — exhaustively traces code paths and produces implementation-free behavioral specifications for safe refactoring, feature addition, or legacy modernization'
+description: "适用于接入缺乏规范的现有代码库时——彻底追踪代码路径，并生成无实现细节的行为规范，以支持安全的重构、功能添加或遗留系统现代化"
 ---
 
-# Reverse Engineering Specifications
+# 逆向工程规范
 
-## Overview
+## 概述
 
-For brownfield/legacy projects without documentation, this skill generates implementation-free specifications by exhaustively analyzing existing code. The output is a complete behavioral description that drives autonomous development on top of the existing codebase — enabling safe refactoring, feature addition, and modernization.
+对于缺乏文档的棕地/遗留项目，此技能通过彻底分析现有代码来生成无实现细节的规范。输出结果是一份完整的行为描述，用于驱动在现有代码库之上的自主开发——从而实现安全的重构、功能添加和现代化改造。
 
-**Key principle:** Document actual behavior, including bugs. Bugs are "documented features" until explicitly marked for fixing.
+**核心原则：** 记录实际行为，包括缺陷（Bug）。在被明确标记为需要修复之前，Bug 将被视为“已记录的特性”。
 
-**This is a RIGID skill.** Every code path must be traced. No assumptions, no skipping.
+**这是一项严格（RIGID）技能。** 必须追踪每一条代码路径。不做假设，不跳过任何内容。
 
-## Phase 1: Exhaustive Code Investigation
+## 阶段 1：全面代码调查
 
-**[HARD-GATE]** Every code path must be traced. No assumptions, no skipping.
+**[硬性门槛]** 必须追踪每一条代码路径。不做假设，不跳过任何内容。
 
-Deploy parallel subagents via the `Agent` tool (up to 5, with `subagent_type="Explore"`) to analyze:
+通过 `Agent` 工具部署并行子智能体（最多 5 个，使用 `subagent_type="Explore"`）以分析：
 
-| Analysis Target   | What to Document                                             | Priority |
-| ----------------- | ------------------------------------------------------------ | -------- |
-| Entry points      | All ways the system can be invoked (HTTP, CLI, events, cron) | P0       |
-| Code paths        | Every branch, loop, conditional, early return                | P0       |
-| Data flows        | Input → transformation → output for every pipeline           | P0       |
-| State mutations   | Every place state is read, written, or deleted               | P0       |
-| Error handling    | Try/catch blocks, error codes, fallback behaviors            | P0       |
-| Side effects      | External calls, file I/O, database writes, event emissions   | P1       |
-| Configuration     | Environment variables, config files, feature flags           | P1       |
-| Dependencies      | External services, libraries, APIs consumed                  | P1       |
-| Concurrency       | Async operations, race conditions, locking mechanisms        | P2       |
-| Implicit behavior | Convention-based routing, middleware chains, decorators      | P2       |
+| 分析目标 | 需记录内容 | 优先级 |
+|----------------|-----------------|----------|
+| 入口点 | 系统可被调用的所有方式（HTTP、CLI、事件、定时任务） | P0 |
+| 代码路径 | 每一个分支、循环、条件判断、提前返回 | P0 |
+| 数据流 | 每个管道中的输入 → 转换 → 输出 | P0 |
+| 状态变更 | 读取、写入或删除状态的每一个位置 | P0 |
+| 错误处理 | Try/catch 块、错误码、回退行为 | P0 |
+| 副作用 | 外部调用、文件 I/O、数据库写入、事件触发 | P1 |
+| 配置 | 环境变量、配置文件、功能开关 | P1 |
+| 依赖项 | 使用的外部服务、库、API | P1 |
+| 并发 | 异步操作、竞态条件、锁定机制 | P2 |
+| 隐式行为 | 基于约定的路由、中间件链、装饰器 | P2 |
 
-### Investigation Strategy Decision Table
+### 调查策略决策表
 
-| Codebase Size         | Strategy                           | Subagent Count |
-| --------------------- | ---------------------------------- | -------------- |
-| Small (<50 files)     | Single-pass full scan              | 2              |
-| Medium (50-500 files) | Module-by-module scan              | 3              |
-| Large (500+ files)    | Entry-point-first, then depth scan | 5              |
+| 代码库规模          | 策略         | 子智能体数量 |
+| -------------- | ---------- | ------ |
+| 小型（<50 个文件）    | 单次全量扫描     | 2      |
+| 中型（50-500 个文件） | 逐模块扫描      | 3      |
+| 大型（500+ 个文件）   | 先入口点，后深度扫描 | 5      |
 
-STOP after investigation — present a summary of discovered entry points, data flows, and behaviors. Get confirmation before generating specs.
+调查结束后暂停——汇总已发现的入口点、数据流和行为。在生成规范前获取确认。
 
-## Phase 2: Behavioral Specification Generation
+## 阶段 2：行为规范生成
 
-Transform code analysis into implementation-free specs following the `spec-writing` skill format.
+遵循 `spec-writing` 技能格式，将代码分析转化为无实现细节的规范。
 
-### Transformation Rules
+### 转换规则
 
-| Rule                                     | Explanation                                              |
-| ---------------------------------------- | -------------------------------------------------------- |
-| Strip ALL implementation details         | No function names, variable names, technology references |
-| Describe WHAT, never HOW                 | Observable behavior only                                 |
-| Document actual behavior (bugs included) | Bugs become "current behavior" in specs                  |
-| Use Given/When/Then format               | For all acceptance criteria                              |
-| Include data contracts                   | Input shapes, output shapes, invariants                  |
-| Separate known issues                    | Bugs go in KNOWN_ISSUES.md, not inline                   |
+| 规则 | 说明 |
+|------|-------------|
+| 剔除所有实现细节 | 不包含函数名、变量名、技术引用 |
+| 描述“做什么”，绝不描述“怎么做” | 仅限可观察的行为 |
+| 记录实际行为（包含缺陷） | 缺陷在规范中将成为“当前行为” |
+| 使用 Given/When/Then 格式 | 适用于所有验收标准 |
+| 包含数据契约 | 输入结构、输出结构、不变量 |
+| 分离已知问题 | 缺陷放入 KNOWN_ISSUES.md，不内联在正文中 |
 
-### Implementation Detail Stripping
+### 剔除实现细节对照表
 
-| Code Artifact                | What You See              | What You Write in Spec                                        |
-| ---------------------------- | ------------------------- | ------------------------------------------------------------- |
-| `jwt.verify(token, secret)`  | Token validation with JWT | "Credentials are validated against the authentication system" |
-| `redis.get(cacheKey)`        | Redis cache lookup        | "Previously computed results are retrieved from cache"        |
-| `if (user.role === 'admin')` | Role check                | "Privileged operations require administrator access"          |
-| `res.status(429).json(...)`  | Rate limiting response    | "Excessive requests receive a rate limit error"               |
-| `bcrypt.hash(pw, 12)`        | Password hashing          | "Passwords are stored in a non-reversible format"             |
+| 代码构件 | 你看到的内容 | 在规范中应写的内容 |
+|--------------|-------------|----------------------|
+| `jwt.verify(token, secret)` | 带 JWT 的令牌验证 | "凭据将通过身份验证系统进行验证" |
+| `redis.get(cacheKey)` | Redis 缓存查找 | "先前计算的结果将从缓存中获取" |
+| `if (user.role === 'admin')` | 角色检查 | "特权操作需要管理员权限" |
+| `res.status(429).json(...)` | 限流响应 | "过多的请求将收到限流错误" |
+| `bcrypt.hash(pw, 12)` | 密码哈希 | "密码将以不可逆格式存储" |
 
-STOP after spec generation — run the completeness checklist before organizing.
+规范生成结束后暂停——在组织整理前运行完整性检查清单。
 
-## Phase 3: Specification Organization
+## 阶段 3：规范整理
 
-Create spec files following the naming convention:
+按照以下命名约定创建规范文件：
 
 ```
-docs/specs/<date>_<topic>/
-├── 01-[first-capability].md
-├── 02-[second-capability].md
+specs/<date>_<id>_<topic>/
+├── 01-[第一项能力].md
+├── 02-[第二项能力].md
 ├── ...
-├── NN-[last-capability].md
+├── NN-[最后一项能力].md
 └── KNOWN_ISSUES.md
 ```
 
-### KNOWN_ISSUES.md Format
+### KNOWN_ISSUES.md 格式
 
 ```markdown
-# Known Issues
+# 已知问题
 
-## [Issue Title]
-
-- **Current behavior:** [What actually happens]
-- **Expected behavior:** [What should happen, if known]
-- **Affected specs:** [Which spec files reference this behavior]
-- **Severity:** [Critical | High | Medium | Low]
-- **Notes:** [Additional context]
+## [问题标题]
+- **当前行为：** [实际发生的情况]
+- **预期行为：** [如果已知，应发生的情况]
+- **受影响的规范：** [哪些规范文件引用了此行为]
+- **严重程度：** [关键 | 高 | 中 | 低]
+- **备注：** [补充上下文]
 ```
 
-### Severity Classification
+### 严重程度分类
 
-| Severity     | Criteria                                        | Action                      |
-| ------------ | ----------------------------------------------- | --------------------------- |
-| **Critical** | Data loss, security vulnerability, system crash | Fix before any new features |
-| **High**     | Incorrect results, broken workflow              | Fix in next release         |
-| **Medium**   | Poor UX, performance issue                      | Plan for future fix         |
-| **Low**      | Cosmetic, minor inconsistency                   | Fix opportunistically       |
+| 严重程度 | 判定标准 | 处理措施 |
+|----------|----------|--------|
+| **关键** | 数据丢失、安全漏洞、系统崩溃 | 在添加任何新功能前修复 |
+| **高** | 结果错误、工作流中断 | 在下一个版本中修复 |
+| **中** | 用户体验差、性能问题 | 规划未来修复 |
+| **低** | 界面瑕疵、轻微不一致 | 在方便时顺手修复 |
 
-STOP after organization — present the spec file list and KNOWN_ISSUES for review.
+整理结束后暂停——提交规范文件列表和 KNOWN_ISSUES 以供审查。
 
-## Phase 4: Quality Verification
+## 阶段 4：质量验证
 
-**[HARD-GATE]** All checks must pass before this phase is complete.
+**[硬性门槛]** 在此阶段完成前，所有检查项必须通过。
 
-| #   | Check               | Question                                         | Status |
-| --- | ------------------- | ------------------------------------------------ | ------ |
-| 1   | Entry points        | Are ALL entry points documented?                 | [ ]    |
-| 2   | Code paths          | Are ALL branches and conditionals traced?        | [ ]    |
-| 3   | Data flows          | Are ALL input→output pipelines described?        | [ ]    |
-| 4   | State mutations     | Are ALL state changes captured?                  | [ ]    |
-| 5   | Error handling      | Are ALL error paths documented?                  | [ ]    |
-| 6   | Side effects        | Are ALL external interactions noted?             | [ ]    |
-| 7   | Edge cases          | Are boundary conditions described?               | [ ]    |
-| 8   | Concurrency         | Are async behaviors documented?                  | [ ]    |
-| 9   | Configuration       | Are ALL config options listed?                   | [ ]    |
-| 10  | Dependencies        | Are ALL external dependencies identified?        | [ ]    |
-| 11  | Implementation-free | Zero code, tech names, or architecture in specs? | [ ]    |
-| 12  | Given/When/Then     | All acceptance criteria in correct format?       | [ ]    |
+| # | 检查项 | 问题 | 状态 |
+|---|-------|----------|--------|
+| 1 | 入口点 | 是否已记录所有入口点？ | [ ] |
+| 2 | 代码路径 | 是否追踪了所有分支和条件判断？ | [ ] |
+| 3 | 数据流 | 是否描述了所有输入→输出管道？ | [ ] |
+| 4 | 状态变更 | 是否捕获了所有状态变更？ | [ ] |
+| 5 | 错误处理 | 是否记录了所有错误路径？ | [ ] |
+| 6 | 副作用 | 是否注明了所有外部交互？ | [ ] |
+| 7 | 边界情况 | 是否描述了边界条件？ | [ ] |
+| 8 | 并发 | 是否记录了异步行为？ | [ ] |
+| 9 | 配置 | 是否列出了所有配置选项？ | [ ] |
+| 10 | 依赖项 | 是否识别了所有外部依赖？ | [ ] |
+| 11 | 无实现细节 | 规范中是否零代码、零技术名称或零架构描述？ | [ ] |
+| 12 | Given/When/Then | 所有验收标准是否均使用正确格式？ | [ ] |
 
-## Concrete Example: Code to Spec Transformation
+## 具体示例：从代码到规范的转换
 
-### Code (input — what you analyze):
-
+### 代码（输入——你需要分析的内容）：
 ```javascript
 function checkAuth(req, res, next) {
   const token = req.headers.authorization?.split(' ')[1];
@@ -144,105 +142,97 @@ function checkAuth(req, res, next) {
 }
 ```
 
-### Spec (output — what you produce):
-
+### 规范（输出——你需要生成的内容）：
 ```markdown
-# Request Authentication
+# 请求身份验证
 
-## Job to Be Done
+## 待完成的任务 (Job to Be Done)
+当请求到达受保护的端点时，我需要验证调用者的身份，以确保只有授权用户才能访问系统。
 
-When a request arrives at a protected endpoint, I want to verify the
-caller's identity, so I can ensure only authorized users access the system.
+## 验收标准
 
-## Acceptance Criteria
+### 凭据有效
+- Given（给定）一个在授权标头中包含有效凭据的请求
+- When（当）请求被处理时
+- Then（那么）请求将传递到下一个处理器
+- And（并且）已认证的用户身份可供下游处理器使用
 
-### Valid Credentials
+### 凭据缺失
+- Given（给定）一个不包含凭据的请求
+- When（当）请求被处理时
+- Then（那么）返回 401 状态码
+- And（并且）错误消息提示凭据缺失
 
-- Given a request with valid credentials in the authorization header
-- When the request is processed
-- Then the request proceeds to the next handler
-- And the authenticated user identity is available to downstream handlers
+### 凭据无效
+- Given（给定）一个包含无效或过期凭据的请求
+- When（当）请求被处理时
+- Then（那么）返回 403 状态码
+- And（并且）错误消息提示凭据无效
 
-### Missing Credentials
+## 边界情况
+- 格式错误的授权标头（缺少 "Bearer" 前缀）：视为凭据缺失
+- 过期凭据：视为凭据无效
 
-- Given a request without credentials
-- When the request is processed
-- Then a 401 status is returned
-- And an error message indicates missing credentials
-
-### Invalid Credentials
-
-- Given a request with invalid or expired credentials
-- When the request is processed
-- Then a 403 status is returned
-- And an error message indicates invalid credentials
-
-## Edge Cases
-
-- Malformed authorization header (missing "Bearer" prefix): treated as missing credentials
-- Expired credentials: treated as invalid credentials
-
-## Data Contracts
-
-- Input: Authorization header in "Bearer <credential>" format
-- Output on success: User identity object attached to request context
-- Output on failure: JSON error response with appropriate status code
+## 数据契约
+- 输入："Bearer <credential>" 格式的授权标头
+- 成功时输出：附加到请求上下文的用户身份对象
+- 失败时输出：带有相应状态码的 JSON 错误响应
 ```
 
-Notice: No mention of JWT, middleware, Express, environment variables, or any implementation detail.
+注意：未提及 JWT、中间件、Express、环境变量或任何实现细节。
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Mistake                                   | Why It Is Wrong                                      | What To Do Instead                         |
-| ----------------------------------------- | ---------------------------------------------------- | ------------------------------------------ |
-| Skipping "boring" code paths              | Undocumented behavior causes bugs during refactoring | Trace EVERY path, even error handlers      |
-| Leaking implementation details into specs | Defeats the purpose of behavioral specs              | Strip all tech names, function names, code |
-| Marking bugs as "correct behavior"        | Loses the information that it is a bug               | Document in KNOWN_ISSUES.md with severity  |
-| Skipping async/concurrency analysis       | Race conditions are the hardest bugs to find         | Document all async behavior                |
-| Analyzing only happy paths                | Most bugs live in error paths                        | Document ALL error handling paths          |
-| Guessing behavior instead of tracing code | Spec becomes fiction                                 | Read every line — no assumptions           |
-| Generating specs without user review      | Misunderstandings propagate                          | Present for review after each phase        |
+| 错误 | 为何错误 | 正确做法 |
+|---------|----------------|-------------------|
+| 跳过“枯燥”的代码路径 | 未记录的行为会在重构期间引发缺陷 | 追踪每一条路径，包括错误处理程序 |
+| 将实现细节泄露到规范中 | 违背了行为规范的初衷 | 剔除所有技术名称、函数名和代码 |
+| 将缺陷标记为“正确行为” | 丢失了该行为实为缺陷的信息 | 在 KNOWN_ISSUES.md 中按严重程度记录 |
+| 跳过异步/并发分析 | 竞态条件是最难发现的缺陷 | 记录所有异步行为 |
+| 仅分析正常路径（Happy Paths） | 大多数缺陷潜伏在错误路径中 | 记录所有错误处理路径 |
+| 猜测行为而非追踪代码 | 规范会变成虚构内容 | 逐行阅读——不做假设 |
+| 未经用户审查直接生成规范 | 误解会随之蔓延 | 每个阶段结束后提交审查 |
 
-## Anti-Rationalization Guards
+## 反合理化防范机制
 
-- **[HARD-GATE]** Do NOT skip any code path — every branch, conditional, and error handler must be traced
-- **[HARD-GATE]** Do NOT include ANY implementation details in specs — no code, tech names, or architecture
-- **[HARD-GATE]** Do NOT mark the completeness checklist as done until ALL 12 items pass
-- **Do NOT skip** concurrency analysis — even if the code "looks synchronous"
-- **Do NOT skip** configuration analysis — env vars and feature flags change behavior
-- **Do NOT** assume behavior from function names — read the actual code
-- **Do NOT** fix bugs while reverse-engineering — document them in KNOWN_ISSUES.md
+- **[硬性门槛]** 绝不跳过任何代码路径——必须追踪每一个分支、条件判断和错误处理程序
+- **[硬性门槛]** 规范中绝不包含任何实现细节——无代码、无技术名称、无架构描述
+- **[硬性门槛]** 在全部 12 项通过前，绝不将完整性检查清单标记为完成
+- **绝不跳过**并发分析——即使代码“看起来是同步的”
+- **绝不跳过**配置分析——环境变量和功能开关会改变行为
+- **绝不**根据函数名假设行为——阅读实际代码
+- **绝不**在逆向工程期间修复缺陷——将其记录在 KNOWN_ISSUES.md 中
 
-## Integration Points
+## 集成点
 
-| Skill                  | Relationship                                                       |
-| ---------------------- | ------------------------------------------------------------------ |
-| `spec-writing`         | Output follows spec-writing format; use for audit after generation |
-| `autonomous-loop`      | Specs feed into planning mode for gap analysis                     |
-| `acceptance-testing`   | Tests derived from reverse-engineered acceptance criteria          |
-| `self-learning`        | Populate memory files with discovered project context              |
-| `planning`             | After specs exist, plan improvements or new features               |
-| `systematic-debugging` | Known issues inform debugging priorities                           |
+| 技能 | 关联关系 |
+|-------|-------------|
+| `spec-writing` | 输出遵循 spec-writing 格式；生成后用于审计 |
+| `autonomous-loop` | 规范输入至规划模式，用于差距分析 |
+| `acceptance-testing` | 测试用例源于逆向工程得出的验收标准 |
+| `self-learning` | 将发现的项目上下文填充至记忆文件 |
+| `planning` | 规范生成后，规划改进或新功能 |
+| `systematic-debugging` | 已知问题用于指导调试优先级 |
 
-## Workflow After Reverse Engineering
+## 逆向工程完成后的工作流
 
-| Step | Skill                              | Purpose                                         |
-| ---- | ---------------------------------- | ----------------------------------------------- |
-| 1    | `reverse-engineering-specs` (this) | Generate behavioral specs from code             |
-| 2    | `spec-writing` (audit mode)        | Verify quality and completeness                 |
-| 3    | `planning`                         | Identify gaps, plan improvements                |
-| 4    | `autonomous-loop`                  | Implement features or fixes with specs as guide |
+| 步骤 | 技能 | 目的 |
+|------|-------|---------|
+| 1 | `reverse-engineering-specs`（本技能） | 从代码生成行为规范 |
+| 2 | `spec-writing`（审计模式） | 验证质量与完整性 |
+| 3 | `planning` | 识别差距，规划改进 |
+| 4 | `autonomous-loop` | 以规范为指导实现功能或修复 |
 
-## Verification Gate
+## 验证门槛
 
-Before claiming reverse engineering is complete:
+在声明逆向工程完成之前：
 
-1. VERIFY the completeness checklist (all 12 items) passes
-2. VERIFY zero implementation details in any spec file
-3. VERIFY all acceptance criteria use Given/When/Then format
-4. VERIFY KNOWN_ISSUES.md exists and categorizes all discovered bugs
-5. VERIFY the user has reviewed the spec set and KNOWN_ISSUES
+1. 验证完整性检查清单（全部 12 项）已通过
+2. 验证任何规范文件中均无实现细节
+3. 验证所有验收标准均使用 Given/When/Then 格式
+4. 验证 KNOWN_ISSUES.md 存在且对所有发现的缺陷进行了分类
+5. 验证用户已审查规范集和 KNOWN_ISSUES
 
-## Skill Type
+## 技能类型
 
-**Flexible** — Adapt investigation depth and subagent count to codebase size while preserving the exhaustive-investigation and implementation-free output rules. No code paths may be skipped.
+**灵活型**——根据代码库规模调整调查深度和子智能体数量，同时保留全面调查和无实现细节输出的规则。绝不跳过任何代码路径。

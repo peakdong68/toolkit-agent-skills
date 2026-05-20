@@ -1,175 +1,175 @@
 ---
 name: senior-data-scientist
-description: "Use when the user needs ML pipelines, statistical analysis, data preprocessing, feature engineering, model selection, experiment tracking, or data visualization. Triggers: dataset exploration, model training, feature engineering, hyperparameter tuning, experiment tracking setup, statistical hypothesis testing, visualization creation."
+description: "当用户需要机器学习管道、统计分析、数据预处理、特征工程、模型选择、实验跟踪或数据可视化时使用。触发条件：数据集探索、模型训练、特征工程、超参数调优、实验跟踪设置、统计假设检验、可视化创建。"
 ---
 
-# Senior Data Scientist
+# 高级数据科学家
 
-## Overview
+## 概述
 
-Build end-to-end data science workflows from data exploration through model deployment. This skill covers data preprocessing, feature engineering, model selection, hyperparameter tuning, cross-validation, experiment tracking with MLflow/W&B, statistical testing, visualization with matplotlib/seaborn/plotly, and Jupyter notebook best practices.
+构建从数据探索到模型部署的端到端数据科学工作流。本技能涵盖数据预处理、特征工程、模型选择、超参数调优、交叉验证、使用 MLflow/W&B 进行实验跟踪、统计检验、使用 matplotlib/seaborn/plotly 进行可视化，以及 Jupyter Notebook 最佳实践。
 
-**Announce at start:** "I'm using the senior-data-scientist skill for data science workflow."
+**开始时声明：** "我正在使用 senior-data-scientist 技能执行数据科学工作流。"
 
 ---
 
-## Phase 1: Data Understanding
+## 阶段 1：数据理解
 
-**Goal:** Profile the dataset and establish a baseline before any modeling.
+**目标：** 在任何建模之前对数据集进行分析并建立基线。
 
-### Actions
+### 操作
 
-1. Load and profile the dataset (shape, types, distributions)
-2. Identify missing values, outliers, and data quality issues
-3. Perform exploratory data analysis (EDA)
-4. Define the target variable and success metrics
-5. Establish baseline performance
+1. 加载并分析数据集（形状、类型、分布）
+2. 识别缺失值、异常值和数据质量问题
+3. 执行探索性数据分析（EDA）
+4. 定义目标变量和成功指标
+5. 建立基线性能
 
-### Baseline Models (Always Start Here)
+### 基线模型（始终从此开始）
 
-| Task | Baseline Model | Why |
+| 任务 | 基线模型 | 原因 |
 |------|---------------|-----|
-| Classification | Majority class classifier | Lower bound for accuracy |
-| Classification | Logistic regression | Simple, interpretable |
-| Regression | Mean predictor | Lower bound for RMSE |
-| Regression | Linear regression | Simple, interpretable |
-| Time series | Naive forecast (previous value) | Lower bound for MAE |
-| Time series | Seasonal naive | Captures basic seasonality |
+| 分类 | 多数类分类器 | 准确率的理论下限 |
+| 分类 | 逻辑回归 | 简单、可解释 |
+| 回归 | 均值预测器 | RMSE 的理论下限 |
+| 回归 | 线性回归 | 简单、可解释 |
+| 时间序列 | 朴素预测（前一时刻值） | MAE 的理论下限 |
+| 时间序列 | 季节性朴素预测 | 捕捉基本季节性 |
 
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] Dataset is profiled (shape, types, distributions)
-- [ ] Missing values and outliers are documented
-- [ ] Target variable is defined
-- [ ] Success metrics are chosen
-- [ ] Baseline performance is established
+### 停止 — 在完成以下事项前请勿进入阶段 2：
+- [ ] 数据集已完成分析（形状、类型、分布）
+- [ ] 缺失值和异常值已记录
+- [ ] 目标变量已定义
+- [ ] 成功指标已选定
+- [ ] 基线性能已建立
 
 ---
 
-## Phase 2: Feature Engineering
+## 阶段 2：特征工程
 
-**Goal:** Transform raw data into features that improve model performance.
+**目标：** 将原始数据转换为能够提升模型性能的特征。
 
-### Actions
+### 操作
 
-1. Handle missing values (imputation strategy)
-2. Encode categorical variables
-3. Scale/normalize numerical features
-4. Create derived features
-5. Feature selection (remove redundant/irrelevant)
+1. 处理缺失值（选择插补策略）
+2. 编码分类变量
+3. 缩放/归一化数值特征
+4. 创建衍生特征
+5. 特征选择（移除冗余/无关特征）
 
-### Missing Value Strategy Decision Table
+### 缺失值处理策略决策表
 
-| Strategy | When to Use | Implementation |
+| 策略 | 适用场景 | 实现方式 |
 |----------|-------------|---------------|
-| Drop rows | < 5% missing, MCAR | `df.dropna()` |
-| Mean/Median | Numerical, no outliers | `SimpleImputer(strategy='median')` |
-| Mode | Categorical | `SimpleImputer(strategy='most_frequent')` |
-| KNN Imputer | Structured missing patterns | `KNNImputer(n_neighbors=5)` |
-| Iterative | Complex relationships | `IterativeImputer()` |
-| Flag + Impute | Missingness is informative | Add `is_missing` column + impute |
+| 删除行 | 缺失率 < 5%，完全随机缺失（MCAR） | `df.dropna()` |
+| 均值/中位数 | 数值型，无异常值 | `SimpleImputer(strategy='median')` |
+| 众数 | 分类变量 | `SimpleImputer(strategy='most_frequent')` |
+| KNN 插补 | 结构化缺失模式 | `KNNImputer(n_neighbors=5)` |
+| 迭代插补 | 复杂关系 | `IterativeImputer()` |
+| 标记 + 插补 | 缺失本身具有信息量 | 添加 `is_missing` 列 + 插补 |
 
-### Categorical Encoding Decision Table
+### 分类变量编码决策表
 
-| Method | When | Cardinality |
+| 方法 | 适用场景 | 基数 |
 |--------|------|-------------|
-| One-Hot | Nominal, low cardinality | < 10 categories |
-| Label/Ordinal | Ordinal features | Any |
-| Target Encoding | High cardinality nominal | > 10 categories |
-| Frequency Encoding | When frequency matters | Any |
-| Binary Encoding | Very high cardinality | > 50 categories |
+| 独热编码（One-Hot） | 名义变量，低基数 | < 10 个类别 |
+| 标签编码/序数编码 | 有序特征 | 任意 |
+| 目标编码 | 高基数名义变量 | > 10 个类别 |
+| 频率编码 | 当频率具有意义时 | 任意 |
+| 二进制编码 | 极高基数 | > 50 个类别 |
 
-### Scaling Decision Table
+### 缩放方法决策表
 
-| Scaler | When | Robust to Outliers? |
+| 缩放器 | 适用场景 | 对异常值鲁棒？ |
 |--------|------|-------------------|
-| StandardScaler | Default choice (mean=0, std=1) | No |
-| RobustScaler | Outliers present (median/IQR) | Yes |
-| MinMaxScaler | Neural networks, distance-based [0,1] | No |
+| StandardScaler | 默认选择（均值=0，标准差=1） | 否 |
+| RobustScaler | 存在异常值（基于中位数/IQR） | 是 |
+| MinMaxScaler | 神经网络、基于距离的算法 [0,1] | 否 |
 
-### Feature Types and Engineering
+### 特征类型与工程方法
 
-| Feature Type | Techniques |
+| 特征类型 | 技术方法 |
 |-------------|-----------|
-| Numerical | Log transform, polynomial, binning, interactions (A*B, A/B) |
-| Temporal | Hour, day-of-week, is_weekend, time_since_event, cyclical (sin/cos), lags |
-| Text | TF-IDF, word count, sentiment scores, named entities, embeddings |
-| Categorical | Encoding (above), interaction with numerical features |
+| 数值型 | 对数变换、多项式、分箱、交互项（A*B, A/B） |
+| 时间型 | 小时、星期几、是否周末、距事件时间、周期性编码（sin/cos）、滞后特征 |
+| 文本型 | TF-IDF、词频、情感得分、命名实体、嵌入向量 |
+| 分类变量 | 编码（如上）、与数值特征的交互 |
 
-### Feature Selection Decision Table
+### 特征选择决策表
 
-| Method | Type | Use When |
+| 方法 | 类型 | 适用场景 |
 |--------|------|----------|
-| Correlation matrix | Filter | Initial exploration |
-| Mutual information | Filter | Non-linear relationships |
-| Recursive Feature Elimination | Wrapper | Model-specific selection |
-| L1 Regularization | Embedded | Linear models |
-| Feature importance | Embedded | Tree-based models |
-| Permutation importance | Model-agnostic | Final validation |
+| 相关系数矩阵 | 过滤法 | 初步探索 |
+| 互信息 | 过滤法 | 非线性关系 |
+| 递归特征消除（RFE） | 包装法 | 模型特定选择 |
+| L1 正则化 | 嵌入法 | 线性模型 |
+| 特征重要性 | 嵌入法 | 树模型 |
+| 置换重要性 | 模型无关 | 最终验证 |
 
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] Missing values are handled with justified strategy
-- [ ] Categorical variables are encoded appropriately
-- [ ] Numerical features are scaled
-- [ ] Feature engineering is done BEFORE train/test split on training data only
-- [ ] Feature selection has reduced dimensionality if needed
+### 停止 — 在完成以下事项前请勿进入阶段 3：
+- [ ] 缺失值已采用合理策略处理
+- [ ] 分类变量已适当编码
+- [ ] 数值特征已缩放
+- [ ] 特征工程仅在训练数据上执行，且在训练/测试分割之后
+- [ ] 如有需要，特征选择已降低维度
 
 ---
 
-## Phase 3: Modeling
+## 阶段 3：建模
 
-**Goal:** Select, train, and evaluate candidate models.
+**目标：** 选择、训练并评估候选模型。
 
-### Actions
+### 操作
 
-1. Select candidate algorithms
-2. Set up cross-validation strategy
-3. Train and evaluate candidates
-4. Hyperparameter tuning
-5. Final model selection and evaluation
+1. 选择候选算法
+2. 设置交叉验证策略
+3. 训练并评估候选模型
+4. 超参数调优
+5. 最终模型选择与评估
 
-### Algorithm Decision Table
+### 算法选择决策表
 
-| Data Characteristics | Try First | Also Consider |
+| 数据特征 | 首选尝试 | 其他考虑 |
 |---------------------|-----------|---------------|
-| Tabular, < 10K rows | Random Forest, XGBoost | Logistic/Linear Regression |
-| Tabular, > 10K rows | XGBoost, LightGBM | CatBoost, Neural Network |
-| High dimensionality | Lasso/Ridge, SVM | Random Forest with selection |
-| Time series | Prophet, ARIMA | LSTM, XGBoost with lag features |
-| Text classification | Fine-tuned transformer | TF-IDF + Logistic Regression |
-| Image classification | Pre-trained CNN (ResNet, EfficientNet) | Vision Transformer |
-| Regression | XGBoost, Random Forest | Linear Regression, Neural Network |
-| Anomaly detection | Isolation Forest | LOF, Autoencoder |
+| 表格数据，< 10K 行 | 随机森林、XGBoost | 逻辑/线性回归 |
+| 表格数据，> 10K 行 | XGBoost、LightGBM | CatBoost、神经网络 |
+| 高维数据 | Lasso/Ridge、SVM | 带特征选择的随机森林 |
+| 时间序列 | Prophet、ARIMA | LSTM、带滞后特征的 XGBoost |
+| 文本分类 | 微调 Transformer | TF-IDF + 逻辑回归 |
+| 图像分类 | 预训练 CNN（ResNet、EfficientNet） | Vision Transformer |
+| 回归 | XGBoost、随机森林 | 线性回归、神经网络 |
+| 异常检测 | 隔离森林 | LOF、自编码器 |
 
-### Cross-Validation Strategy Decision Table
+### 交叉验证策略决策表
 
-| Strategy | When | Code |
+| 策略 | 适用场景 | 代码 |
 |----------|------|------|
-| K-Fold (k=5) | Default, balanced data | `KFold(n_splits=5)` |
-| Stratified K-Fold | Classification, imbalanced | `StratifiedKFold(n_splits=5)` |
-| Time Series Split | Temporal data | `TimeSeriesSplit(n_splits=5)` |
-| Group K-Fold | Grouped observations | `GroupKFold(n_splits=5)` |
-| Leave-One-Out | Very small datasets | `LeaveOneOut()` |
+| K 折交叉验证（k=5） | 默认，数据均衡 | `KFold(n_splits=5)` |
+| 分层 K 折交叉验证 | 分类任务，数据不均衡 | `StratifiedKFold(n_splits=5)` |
+| 时间序列分割 | 时序数据 | `TimeSeriesSplit(n_splits=5)` |
+| 分组 K 折交叉验证 | 分组观测数据 | `GroupKFold(n_splits=5)` |
+| 留一法 | 极小数据集 | `LeaveOneOut()` |
 
-### Evaluation Metrics Decision Table
+### 评估指标决策表
 
-| Task | Primary Metric | Secondary Metrics |
+| 任务 | 主要指标 | 次要指标 |
 |------|---------------|-------------------|
-| Binary Classification | AUC-ROC | F1, Precision, Recall, AP |
-| Multiclass | Macro F1 | Accuracy, Confusion Matrix |
-| Regression | RMSE | MAE, R-squared, MAPE |
-| Ranking | NDCG | MAP, MRR |
-| Anomaly Detection | F1, AP | Precision@K, Recall@K |
+| 二分类 | AUC-ROC | F1、精确率、召回率、AP |
+| 多分类 | 宏观 F1 | 准确率、混淆矩阵 |
+| 回归 | RMSE | MAE、R²、MAPE |
+| 排序 | NDCG | MAP、MRR |
+| 异常检测 | F1、AP | Precision@K、Recall@K |
 
-### Hyperparameter Tuning Decision Table
+### 超参数调优决策表
 
-| Method | Compute Budget | Search Space | Implementation |
+| 方法 | 计算预算 | 搜索空间 | 实现方式 |
 |--------|---------------|-------------|----------------|
-| Grid Search | Low (< 100 combos) | Small, known ranges | `GridSearchCV` |
-| Random Search | Medium | Large, uncertain | `RandomizedSearchCV` |
-| Bayesian (Optuna) | Any | Large, expensive | `optuna.create_study()` |
-| Successive Halving | Large | Many candidates | `HalvingRandomSearchCV` |
+| 网格搜索 | 低（< 100 种组合） | 小范围，已知区间 | `GridSearchCV` |
+| 随机搜索 | 中等 | 大范围，不确定 | `RandomizedSearchCV` |
+| 贝叶斯优化（Optuna） | 任意 | 大范围，计算昂贵 | `optuna.create_study()` |
+| 连续减半法 | 大 | 候选众多 | `HalvingRandomSearchCV` |
 
-### Common Hyperparameters (XGBoost/LightGBM)
+### 常见超参数（XGBoost/LightGBM）
 
 ```python
 param_space = {
@@ -182,37 +182,37 @@ param_space = {
 }
 ```
 
-### STOP — Do NOT proceed to Phase 4 until:
-- [ ] At least 2 candidate models are evaluated
-- [ ] Cross-validation is used (not just train/test split)
-- [ ] Results beat the baseline from Phase 1
-- [ ] Best model is selected with justification
-- [ ] Overfitting is checked (train vs validation gap)
+### 停止 — 在完成以下事项前请勿进入阶段 4：
+- [ ] 至少评估了 2 个候选模型
+- [ ] 使用了交叉验证（而非仅训练/测试分割）
+- [ ] 结果优于阶段 1 的基线
+- [ ] 已选定最佳模型并给出理由
+- [ ] 已检查过拟合（训练集与验证集差距）
 
 ---
 
-## Phase 4: Deployment
+## 阶段 4：部署
 
-**Goal:** Serialize, serve, and monitor the model in production.
+**目标：** 序列化、服务化并监控生产环境中的模型。
 
-### Actions
+### 操作
 
-1. Serialize model and preprocessing pipeline
-2. Create prediction API or batch pipeline
-3. Set up monitoring for data drift and model degradation
-4. Document model card (inputs, outputs, limitations, biases)
+1. 序列化模型和预处理管道
+2. 创建预测 API 或批量处理管道
+3. 设置数据漂移和模型性能退化的监控
+4. 编写模型卡片（输入、输出、限制、偏见）
 
-### STOP — Deployment complete when:
-- [ ] Model is serialized with preprocessing pipeline
-- [ ] Prediction API or batch pipeline works end-to-end
-- [ ] Monitoring is configured for data drift
-- [ ] Model card is documented
+### 停止 — 部署完成条件：
+- [ ] 模型与预处理管道已序列化
+- [ ] 预测 API 或批量管道可端到端运行
+- [ ] 已配置数据漂移监控
+- [ ] 模型卡片已编写完成
 
 ---
 
-## Experiment Tracking
+## 实验跟踪
 
-### MLflow Pattern
+### MLflow 模式
 
 ```python
 import mlflow
@@ -227,112 +227,112 @@ with mlflow.start_run(run_name="xgboost-v2"):
     mlflow.set_tag("version", "2.1")
 ```
 
-### What to Track
+### 需要跟踪的内容
 
-| Category | Items |
+| 类别 | 项目 |
 |----------|-------|
-| Parameters | All hyperparameters, random seed |
-| Metrics | Train and validation metrics |
-| Data | Data version/hash, feature list |
-| Artifacts | Plots, reports, model files |
-| Metadata | Training duration, model size |
+| 参数 | 所有超参数、随机种子 |
+| 指标 | 训练集和验证集指标 |
+| 数据 | 数据版本/哈希、特征列表 |
+| 产物 | 图表、报告、模型文件 |
+| 元数据 | 训练时长、模型大小 |
 
 ---
 
-## Statistical Tests Decision Table
+## 统计检验决策表
 
-| Question | Test | Assumption |
+| 问题 | 检验方法 | 假设条件 |
 |----------|------|-----------|
-| Two group means different? | t-test (independent) | Normal distribution |
-| Two groups (non-normal)? | Mann-Whitney U | None |
-| Paired measurements? | Paired t-test | Normal differences |
-| 3+ group means? | ANOVA | Normal, equal variance |
-| Categorical association? | Chi-squared | Expected freq > 5 |
-| Distribution normal? | Shapiro-Wilk | n < 5000 |
-| Two distributions different? | Kolmogorov-Smirnov | Continuous data |
+| 两组均值是否不同？ | t 检验（独立样本） | 正态分布 |
+| 两组（非正态）？ | Mann-Whitney U 检验 | 无 |
+| 配对测量？ | 配对 t 检验 | 差值正态 |
+| 3 组及以上均值？ | 方差分析（ANOVA） | 正态、方差齐性 |
+| 分类变量关联性？ | 卡方检验 | 期望频数 > 5 |
+| 分布是否正态？ | Shapiro-Wilk 检验 | n < 5000 |
+| 两个分布是否不同？ | Kolmogorov-Smirnov 检验 | 连续数据 |
 
-### P-Value Guidelines
+### P 值使用指南
 
-- p < 0.05: statistically significant (conventional)
-- Always report effect size alongside p-value
-- Adjust for multiple comparisons (Bonferroni, FDR)
-- Statistical significance is not practical significance
+- p < 0.05：统计显著（常规标准）
+- 始终同时报告效应量与 p 值
+- 对多重比较进行校正（Bonferroni、FDR）
+- 统计显著性不等于实际意义
 
 ---
 
-## Visualization Decision Table
+## 可视化决策表
 
-| Data Type | Plot | Library |
+| 数据类型 | 图表类型 | 推荐库 |
 |-----------|------|---------|
-| Distribution | Histogram, KDE, Box plot | seaborn |
-| Comparison | Bar chart, Grouped bar | matplotlib |
-| Correlation | Scatter, Heatmap | seaborn |
-| Trend | Line chart | matplotlib/plotly |
-| Composition | Stacked bar, Pie (max 5 slices) | matplotlib |
-| Interactive | Scatter, Line, Dashboard | plotly |
+| 分布 | 直方图、核密度图、箱线图 | seaborn |
+| 对比 | 条形图、分组条形图 | matplotlib |
+| 相关性 | 散点图、热力图 | seaborn |
+| 趋势 | 折线图 | matplotlib/plotly |
+| 构成 | 堆叠条形图、饼图（最多 5 块） | matplotlib |
+| 交互式 | 散点图、折线图、仪表板 | plotly |
 
-### Visualization Rules
+### 可视化规则
 
-- Title every plot descriptively
-- Label axes with units
-- Use colorblind-safe palettes (`seaborn: colorblind`)
-- Start y-axis at 0 for bar charts
-- Annotate key findings directly on plots
-
----
-
-## Jupyter Notebook Structure
-
-```
-1. ## Setup (imports, configuration)
-2. ## Data Loading
-3. ## Exploratory Data Analysis
-4. ## Data Preprocessing
-5. ## Feature Engineering
-6. ## Modeling
-7. ## Evaluation
-8. ## Conclusions
-```
-
-### Notebook Best Practices
-
-- Restart and run all before sharing
-- Keep cells focused and sequential
-- Use markdown cells for explanations
-- Extract reusable code to `.py` modules
-- Version control with `nbstripout`
-- Pin all dependency versions
+- 每个图表添加描述性标题
+- 坐标轴标注单位
+- 使用色盲友好配色（`seaborn: colorblind`）
+- 条形图 Y 轴从 0 开始
+- 在图表上直接标注关键发现
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## Jupyter Notebook 结构
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
+```
+1. ## 环境设置（导入、配置）
+2. ## 数据加载
+3. ## 探索性数据分析
+4. ## 数据预处理
+5. ## 特征工程
+6. ## 建模
+7. ## 评估
+8. ## 结论
+```
+
+### Notebook 最佳实践
+
+- 分享前重启并运行全部单元格
+- 保持单元格聚焦且顺序清晰
+- 使用 Markdown 单元格添加解释
+- 将可复用代码提取到 `.py` 模块
+- 使用 `nbstripout` 进行版本控制
+- 固定所有依赖版本
+
+---
+
+## 反模式 / 常见错误
+
+| 反模式 | 错误原因 | 正确做法 |
 |-------------|----------------|-----------------|
-| Training on test data | Data leakage, inflated metrics | Strict train/test separation |
-| Feature engineering before split | Leaks test information into features | Engineer on training data only |
-| Reporting training metrics | Not generalizable | Report validation/test metrics |
-| Accuracy on imbalanced data | Misleading (majority class wins) | Use F1, AUC-ROC, or AP |
-| Tuning on test set | Overfitting to test data | Use validation set for tuning |
-| No baseline comparison | Cannot measure improvement | Always establish baseline first |
-| Cherry-picking evaluation examples | Selection bias | Report on full evaluation set |
-| Deploying without drift monitoring | Silent model degradation | Monitor input distributions |
+| 在测试集上训练 | 数据泄露，指标虚高 | 严格分离训练/测试集 |
+| 分割前进行特征工程 | 测试信息泄露到特征中 | 仅在训练数据上进行特征工程 |
+| 报告训练集指标 | 不具备泛化性 | 报告验证集/测试集指标 |
+| 在不均衡数据上使用准确率 | 误导性（多数类主导） | 使用 F1、AUC-ROC 或 AP |
+| 在测试集上调参 | 对测试集过拟合 | 使用验证集进行调优 |
+| 无基线对比 | 无法衡量改进效果 | 建模前始终先建立基线 |
+| 挑选评估示例 | 选择偏差 | 在完整评估集上报告结果 |
+| 部署时无漂移监控 | 模型静默退化 | 监控输入数据分布 |
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关联关系 |
 |-------|-------------|
-| `senior-prompt-engineer` | Prompt evaluation uses statistical testing methods |
-| `testing-strategy` | ML testing follows the evaluation methodology |
-| `performance-optimization` | Model inference optimization follows measurement cycle |
-| `acceptance-testing` | Model performance thresholds become acceptance criteria |
-| `llm-as-judge` | Subjective output evaluation uses LLM-as-judge |
-| `code-review` | Notebook and pipeline code reviewed for quality |
+| `senior-prompt-engineer` | 提示词评估使用统计检验方法 |
+| `testing-strategy` | ML 测试遵循本评估方法论 |
+| `performance-optimization` | 模型推理优化遵循测量循环 |
+| `acceptance-testing` | 模型性能阈值成为验收标准 |
+| `llm-as-judge` | 主观输出评估使用 LLM 作为评判器 |
+| `code-review` | Notebook 和管道代码进行质量审查 |
 
 ---
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt preprocessing, modeling, and evaluation approaches to the specific data characteristics, business requirements, and compute constraints. The four-phase process and experiment tracking are strongly recommended. Always establish a baseline before modeling.
+**灵活（FLEXIBLE）** — 根据具体数据特征、业务需求和计算约束，灵活调整预处理、建模和评估方法。强烈推荐采用四阶段流程和实验跟踪。建模前务必先建立基线。

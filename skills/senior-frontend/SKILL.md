@@ -1,62 +1,62 @@
 ---
 name: senior-frontend
-description: "Use when the user needs production-grade React/Next.js/TypeScript development with rigorous component architecture, state management, performance optimization, and >85% test coverage. Triggers: React component development, Next.js page creation, state management design, frontend performance audit, component library setup."
+description: "当用户需要生产级的 React/Next.js/TypeScript 开发，且要求严格的组件架构、状态管理、性能优化以及 >85% 的测试覆盖率时使用。触发条件：React 组件开发、Next.js 页面创建、状态管理设计、前端性能审计、组件库搭建。"
 ---
 
-# Senior Frontend Engineer
+# 高级前端工程师
 
-## Overview
+## 概述
 
-Deliver production-grade frontend code following a structured three-phase workflow: context discovery, development, and handoff. This skill enforces strict quality standards including atomic design component architecture, comprehensive state management patterns, SSR/SSG/ISR optimization, and mandatory >85% test coverage with Vitest, React Testing Library, and Playwright.
+遵循结构化的三阶段工作流（上下文探索、开发、交付）交付生产级前端代码。本技能强制执行严格的质量标准，包括原子设计组件架构、全面的状态管理模式、SSR/SSG/ISR 优化，以及使用 Vitest、React Testing Library 和 Playwright 进行强制性的 >85% 测试覆盖率。
 
-**Announce at start:** "I'm using the senior-frontend skill for production-grade React/TypeScript development."
-
----
-
-## Phase 1: Context Discovery
-
-**Goal:** Understand the existing codebase before writing any code.
-
-### Actions
-
-1. Analyze existing codebase structure and conventions
-2. Identify the tech stack version (React 18/19, Next.js 14/15, TypeScript version)
-3. Review existing component library and design system
-4. Check state management approach already in use
-5. Understand build tooling and CI pipeline
-6. Map existing test infrastructure and coverage
-
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] Tech stack versions are identified
-- [ ] Existing patterns and conventions are documented
-- [ ] Test infrastructure is mapped
-- [ ] State management approach is identified
+**开始声明：** “我正在使用 senior-frontend 技能进行生产级 React/TypeScript 开发。”
 
 ---
 
-## Phase 2: Development
+## 第一阶段：上下文探索
 
-**Goal:** Implement with strict TypeScript, atomic design, and TDD.
+**目标：** 在编写任何代码之前，充分理解现有代码库。
 
-### Actions
+### 行动步骤
 
-1. Design component architecture following atomic design
-2. Implement with TypeScript strict mode
-3. Write tests alongside implementation (TDD when appropriate)
-4. Optimize for performance (bundle size, rendering, loading)
-5. Ensure accessibility compliance
+1. 分析现有代码库结构和规范
+2. 确认技术栈版本（React 18/19、Next.js 14/15、TypeScript 版本）
+3. 审查现有组件库和设计系统
+4. 检查当前已采用的状态管理方案
+5. 了解构建工具链和 CI 流水线
+6. 梳理现有测试基础设施和覆盖率情况
 
-### Component Architecture Decision Table (Atomic Design)
+### 停止点 — 在满足以下条件前，请勿进入第二阶段：
+- [ ] 已确认技术栈版本
+- [ ] 已记录现有模式和规范
+- [ ] 已梳理测试基础设施
+- [ ] 已确认状态管理方案
 
-| Level | Description | Business Logic | Example |
+---
+
+## 第二阶段：开发
+
+**目标：** 严格遵循 TypeScript、原子设计和 TDD（测试驱动开发）进行实现。
+
+### 行动步骤
+
+1. 遵循原子设计原则设计组件架构
+2. 使用 TypeScript 严格模式进行开发
+3. 编写测试代码并与实现同步进行（适当时采用 TDD）
+4. 针对性能进行优化（包体积、渲染、加载）
+5. 确保符合无障碍（Accessibility）标准
+
+### 组件架构决策表（原子设计）
+
+| 层级 | 描述 | 业务逻辑 | 示例 |
 |-------|------------|---------------|---------|
-| **Atoms** | Smallest building blocks | None | Button, Input, Icon, Badge |
-| **Molecules** | Composed of atoms | Minimal | FormField, SearchBar, Card |
-| **Organisms** | Complex with business logic | Yes | DataTable, NavigationBar, CommentThread |
-| **Templates** | Page structure without data | Layout only | DashboardLayout, AuthLayout |
-| **Pages** | Templates connected to data | Data fetching | UsersPage, SettingsPage |
+| **原子** | 最小的构建单元 | 无 | Button, Input, Icon, Badge |
+| **分子** | 由原子组合而成 | 极少 | FormField, SearchBar, Card |
+| **有机体** | 包含业务逻辑的复杂组件 | 有 | DataTable, NavigationBar, CommentThread |
+| **模板** | 不包含数据的页面结构 | 仅布局 | DashboardLayout, AuthLayout |
+| **页面** | 连接数据的模板 | 数据获取 | UsersPage, SettingsPage |
 
-### Atom Example
+### 原子组件示例
 
 ```typescript
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -74,71 +74,71 @@ export function Button({ variant = 'primary', size = 'md', isLoading, children, 
 }
 ```
 
-### State Management Decision Table
+### 状态管理决策表
 
-| State Type | Solution | When to Use |
+| 状态类型 | 解决方案 | 适用场景 |
 |------------|----------|-------------|
-| Server state | React Query / TanStack Query | API data, caching, sync |
-| Form state | React Hook Form + Zod | Form validation, submission |
-| Global UI state | Zustand | Theme, sidebar open, modals |
-| Local UI state | useState / useReducer | Component-specific state |
-| URL state | nuqs / useSearchParams | Filters, pagination, tabs |
-| Complex local | useReducer | Multiple related state transitions |
-| Shared context | React Context | Theme, locale, auth (infrequent updates) |
+| 服务端状态 | React Query / TanStack Query | API 数据、缓存、同步 |
+| 表单状态 | React Hook Form + Zod | 表单验证、提交 |
+| 全局 UI 状态 | Zustand | 主题、侧边栏开关、模态框 |
+| 局部 UI 状态 | useState / useReducer | 组件专属状态 |
+| URL 状态 | nuqs / useSearchParams | 筛选条件、分页、标签页 |
+| 复杂局部状态 | useReducer | 多个相关联的状态转换 |
+| 共享上下文 | React Context | 主题、语言环境、认证（低频更新） |
 
-### SSR / SSG / ISR Decision Table (Next.js App Router)
+### SSR / SSG / ISR 决策表（Next.js App Router）
 
-| Pattern | Use When | Cache Strategy |
+| 模式 | 适用场景 | 缓存策略 |
 |---------|----------|---------------|
-| Static (SSG) | Content rarely changes | Build time |
-| ISR | Content changes periodically | Revalidate interval |
-| SSR | Content changes per request | No cache |
-| Client | User-specific, interactive | Browser |
+| 静态生成 (SSG) | 内容极少变更 | 构建时 |
+| 增量静态再生 (ISR) | 内容周期性变更 | 重新验证间隔 |
+| 服务端渲染 (SSR) | 内容随每次请求变更 | 不缓存 |
+| 客户端渲染 | 用户专属、交互式内容 | 浏览器 |
 
-### Server vs Client Component Decision
+### 服务端与客户端组件决策
 
-| Need | Component Type |
+| 需求 | 组件类型 |
 |------|---------------|
-| Direct data fetching | Server (default) |
-| Event handlers (onClick, onChange) | Client (`'use client'`) |
-| useState / useReducer | Client |
-| useEffect / useLayoutEffect | Client |
-| Browser APIs (window, localStorage) | Client |
-| Third-party libs using client features | Client |
-| No interactivity needed | Server (default) |
+| 直接获取数据 | 服务端（默认） |
+| 事件处理器（onClick, onChange） | 客户端 (`'use client'`) |
+| useState / useReducer | 客户端 |
+| useEffect / useLayoutEffect | 客户端 |
+| 浏览器 API（window, localStorage） | 客户端 |
+| 使用客户端特性的第三方库 | 客户端 |
+| 无需交互 | 服务端（默认） |
 
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] Components follow atomic design hierarchy
-- [ ] TypeScript strict mode is enabled, no `any` types
-- [ ] Tests are written for all components
-- [ ] Accessibility is verified (axe-core)
+### 停止点 — 在满足以下条件前，请勿进入第三阶段：
+- [ ] 组件遵循原子设计层级
+- [ ] 已启用 TypeScript 严格模式，无 `any` 类型
+- [ ] 所有组件均已编写测试
+- [ ] 无障碍性已通过验证（axe-core）
 
 ---
 
-## Phase 3: Handoff
+## 第三阶段：交付
 
-**Goal:** Verify quality gates and prepare for review.
+**目标：** 验证质量门禁并准备代码审查。
 
-### Actions
+### 行动步骤
 
-1. Verify test coverage meets >85% threshold
-2. Run full lint and type check
-3. Document complex components with JSDoc/TSDoc
-4. Create Storybook stories for UI components
-5. Performance audit (Lighthouse, bundle analysis)
+1. 验证测试覆盖率是否达到 >85% 阈值
+2. 运行完整的 Lint 和类型检查
+3. 使用 JSDoc/TSDoc 为复杂组件编写文档
+4. 为 UI 组件创建 Storybook 故事
+5. 性能审计（Lighthouse、包体积分析）
 
-### Performance Checklist
+### 性能检查清单
 
-- [ ] Bundle size < 200KB gzipped (initial load)
-- [ ] Largest Contentful Paint < 2.5s
-- [ ] First Input Delay < 100ms
-- [ ] Cumulative Layout Shift < 0.1
-- [ ] Images: next/image with proper sizing and formats
-- [ ] Fonts: next/font with display swap
-- [ ] No layout thrashing (batch DOM reads/writes)
-- [ ] Virtualization for lists > 100 items
+- [ ] 压缩后初始加载包体积 < 200KB
+- [ ] 最大内容绘制 (LCP) < 2.5s
+- [ ] 首次输入延迟 (FID) < 100ms
+- [ ] 累积布局偏移 (CLS) < 0.1
+- [ ] 图片：使用 next/image 并配置正确的尺寸和格式
+- [ ] 字体：使用 next/font 并配置 display: swap
+- [ ] 无布局抖动（批量处理 DOM 读写）
+- [ ] 超过 100 项的列表使用虚拟滚动
 
-### Coverage Thresholds
+### 覆盖率阈值
 
 ```json
 {
@@ -153,17 +153,17 @@ export function Button({ variant = 'primary', size = 'md', isLoading, children, 
 }
 ```
 
-### STOP — Handoff complete when:
-- [ ] Test coverage >85% verified
-- [ ] Lint and type check pass with zero errors
-- [ ] Performance audit completed
-- [ ] Complex components documented
+### 停止点 — 满足以下条件即视为交付完成：
+- [ ] 已验证测试覆盖率 >85%
+- [ ] Lint 和类型检查通过且零错误
+- [ ] 性能审计已完成
+- [ ] 复杂组件已编写文档
 
 ---
 
-## Testing Requirements
+## 测试要求
 
-### Unit Tests (Vitest + React Testing Library)
+### 单元测试（Vitest + React Testing Library）
 
 ```typescript
 describe('Button', () => {
@@ -186,14 +186,14 @@ describe('Button', () => {
 });
 ```
 
-### Integration Tests
+### 集成测试
 
-- Component compositions (form submission flow)
-- Data fetching with MSW (Mock Service Worker)
-- Routing and navigation
-- Error boundaries and fallbacks
+- 组件组合（表单提交流程）
+- 使用 MSW (Mock Service Worker) 模拟数据获取
+- 路由与导航
+- 错误边界与降级方案
 
-### E2E Tests (Playwright)
+### 端到端测试（Playwright）
 
 ```typescript
 test('user can complete checkout', async ({ page }) => {
@@ -207,7 +207,7 @@ test('user can complete checkout', async ({ page }) => {
 
 ---
 
-## React Query Patterns
+## React Query 模式
 
 ```typescript
 function useUsers(filters: UserFilters) {
@@ -243,69 +243,69 @@ function useUpdateUser() {
 
 ---
 
-## Memoization Decision Table
+## 记忆化决策表
 
-| Technique | Use When | Do NOT Use When |
+| 技术 | 适用场景 | 不适用场景 |
 |-----------|----------|----------------|
-| `useMemo` | Expensive computation, referential equality for deps | Simple calculations, primitive values |
-| `useCallback` | Functions passed to memoized children | Functions not passed as props |
-| `React.memo` | Component re-renders often with same props | Props change on every render |
-| None | Default — do not memoize | Always profile first |
+| `useMemo` | 昂贵计算、依赖项引用相等性检查 | 简单计算、原始值 |
+| `useCallback` | 传递给记忆化子组件的函数 | 未作为 props 传递的函数 |
+| `React.memo` | 组件经常使用相同 props 重新渲染 | Props 在每次渲染时都发生变化 |
+| 无（不记忆化） | 默认选项 — 不要盲目记忆化 | 务必先进行性能分析 |
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
+| 反模式 | 错误原因 | 正确做法 |
 |-------------|----------------|-----------------|
-| `useEffect` for data fetching | Race conditions, no caching, no dedup | React Query or Server Components |
-| Prop drilling more than 2 levels | Tight coupling, maintenance burden | Composition, context, or Zustand |
-| Business logic in components | Untestable, unreusable | Extract to hooks or utility functions |
-| Barrel exports | Breaks tree-shaking, slower builds | Direct imports |
-| Testing implementation details | Brittle tests that break on refactor | Test behavior: user actions and outcomes |
-| `any` type anywhere | Defeats TypeScript's purpose | `unknown` + type guards |
-| Inline styles for non-dynamic values | Inconsistent, hard to maintain | CSS modules, Tailwind, or styled-components |
-| Memoizing everything | Adds complexity, often slower | Profile first, memoize second |
+| 使用 `useEffect` 获取数据 | 竞态条件、无缓存、无去重 | 使用 React Query 或服务端组件 |
+| Props 穿透超过 2 层 | 强耦合、维护负担重 | 使用组合模式、Context 或 Zustand |
+| 组件内包含业务逻辑 | 难以测试、无法复用 | 提取到 Hooks 或工具函数中 |
+| 使用 Barrel Exports (index.ts) | 破坏 Tree-shaking、构建变慢 | 直接导入 |
+| 测试实现细节 | 测试脆弱，重构时易失败 | 测试行为：用户操作与结果 |
+| 任何地方使用 `any` 类型 | 违背 TypeScript 初衷 | 使用 `unknown` + 类型守卫 |
+| 非动态值使用内联样式 | 不一致、难以维护 | CSS Modules、Tailwind 或 styled-components |
+| 对所有内容进行记忆化 | 增加复杂度，往往反而更慢 | 先分析性能，后决定是否记忆化 |
 
 ---
 
-## Documentation Lookup (Context7)
+## 文档查询（Context7）
 
-Use `mcp__context7__resolve-library-id` then `mcp__context7__query-docs` for up-to-date docs. Returned docs override memorized knowledge.
-- `react` — when uncertain about hooks API, component lifecycle, or React 19+ features
-- `next.js` — for App Router, Server Components, or Next.js-specific APIs
-- `typescript` — for advanced type patterns or compiler options
-- `tailwindcss` — for utility classes, configuration, or plugin API
-- `vitest` — for test runner API, matchers, or mock utilities
+使用 `mcp__context7__resolve-library-id` 后接 `mcp__context7__query-docs` 获取最新文档。返回的文档将覆盖已记忆的知识。
+- `react` — 当不确定 Hooks API、组件生命周期或 React 19+ 特性时
+- `next.js` — 涉及 App Router、服务端组件或 Next.js 专属 API 时
+- `typescript` — 涉及高级类型模式或编译器选项时
+- `tailwindcss` — 涉及工具类、配置或插件 API 时
+- `vitest` — 涉及测试运行器 API、匹配器或模拟工具时
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关系 |
 |-------|-------------|
-| `testing-strategy` | Strategy defines frontend test frameworks |
-| `test-driven-development` | Components are built with TDD cycle |
-| `react-best-practices` | Detailed React patterns complement this skill |
-| `performance-optimization` | Frontend performance follows optimization methodology |
-| `code-review` | Review verifies component architecture and test coverage |
-| `clean-code` | Code quality principles apply to component code |
-| `webapp-testing` | Playwright E2E tests use this skill's page structure |
-| `acceptance-testing` | UI acceptance criteria drive component tests |
+| `testing-strategy` | 该策略定义前端测试框架 |
+| `test-driven-development` | 组件通过 TDD 循环构建 |
+| `react-best-practices` | 详细的 React 模式是对本技能的补充 |
+| `performance-optimization` | 前端性能遵循该优化方法论 |
+| `code-review` | 代码审查用于验证组件架构和测试覆盖率 |
+| `clean-code` | 代码质量原则适用于组件代码 |
+| `webapp-testing` | Playwright E2E 测试使用本技能的页面结构 |
+| `acceptance-testing` | UI 验收标准驱动组件测试 |
 
 ---
 
-## Key Principles
+## 核心原则
 
-- TypeScript strict mode, no `any` (use `unknown` + type guards)
-- Prefer composition over inheritance
-- Colocate tests, styles, and stories with components
-- Server Components by default; Client Components only when required
-- Error boundaries at route and feature boundaries
-- Accessibility is not optional (test with axe-core)
+- 启用 TypeScript 严格模式，禁止使用 `any`（改用 `unknown` + 类型守卫）
+- 优先使用组合而非继承
+- 将测试、样式和故事文件与组件放在一起（就近存放）
+- 默认使用服务端组件；仅在必要时使用客户端组件
+- 在路由和功能边界处设置错误边界
+- 无障碍性不是可选项（必须使用 axe-core 测试）
 
 ---
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt component architecture and state management to the existing project conventions. The three-phase workflow is strongly recommended. Test coverage must target >85%. TypeScript strict mode is non-negotiable.
+**FLEXIBLE（灵活）** — 根据现有项目约定调整组件架构和状态管理。强烈推荐三阶段工作流。测试覆盖率必须瞄准 >85%。TypeScript 严格模式是不可妥协的硬性要求。

@@ -1,374 +1,370 @@
 ---
 name: email-composer
 description: >
-  Use when the user needs professional email drafting, tone adjustment, template creation,
-  or communication strategy for business correspondence.
-  Trigger conditions: draft professional email, adjust email tone, create email template,
-  write cold outreach, compose follow-up, draft escalation email, write apology email,
-  craft meeting request, compose status update, plan email communication strategy.
+  当用户需要起草专业邮件、调整语气、创建模板或制定商务通信策略时使用。
+  触发条件：起草专业邮件、调整邮件语气、创建邮件模板、撰写陌生联络邮件、撰写跟进邮件、起草升级汇报邮件、撰写道歉邮件、起草会议请求、撰写状态更新、规划邮件沟通策略。
 ---
 
-# Email Composer
+# 邮件撰写助手
 
-## Overview
+## 概述
 
-Draft clear, effective professional emails with appropriate tone, structure, and purpose. This skill covers business correspondence, cold outreach, follow-ups, escalations, apologies, negotiations, internal communications, and stakeholder updates. Includes tone calibration, cultural sensitivity, and templates for common business scenarios.
+起草清晰、高效的专业邮件，并匹配恰当的语气、结构和目的。本技能涵盖商务信函、陌生联络、跟进、升级汇报、道歉、谈判、内部沟通及利益相关者同步。包含语气校准、文化敏感度考量以及常见商务场景模板。
 
-Apply this skill whenever professional email communication needs to be drafted, refined, or strategized.
+每当需要起草、润色或规划专业邮件沟通时，即可应用此技能。
 
-## Multi-Phase Process
+## 多阶段流程
 
-### Phase 1: Context Assessment
+### 第一阶段：背景评估
 
-1. Identify the recipient(s) and their relationship to the sender
-2. Determine the email's primary purpose (inform, request, persuade, respond)
-3. Assess the appropriate formality level (see tone matrix)
-4. Consider cultural and organizational norms
-5. Identify any sensitive topics requiring careful framing
+1. 识别收件人及其与发件人的关系
+2. 确定邮件的主要目的（告知、请求、说服、回复）
+3. 评估恰当的正式程度（参见语气矩阵）
+4. 考虑文化与组织规范
+5. 识别需要谨慎措辞的敏感话题
 
-> **STOP — Do NOT begin drafting without knowing the recipient, purpose, and tone level.**
+> **停止 — 在未明确收件人、目的和语气级别前，切勿开始起草。**
 
-### Phase 2: Structure Planning
+### 第二阶段：结构规划
 
-1. Craft a clear, specific subject line
-2. Plan the opening (context-setting or relationship acknowledgment)
-3. Organize the body (one idea per paragraph, most important first)
-4. Define the call to action or next steps
-5. Choose an appropriate sign-off
+1. 构思清晰、具体的主题行
+2. 规划开头（设定背景或建立关系）
+3. 组织正文（每段一个核心观点，最重要的放前面）
+4. 明确行动号召（CTA）或下一步计划
+5. 选择合适的结尾敬语
 
-> **STOP — Do NOT draft the full email without a subject line and clear CTA defined.**
+> **停止 — 在未确定主题行和明确的行动号召前，切勿起草完整邮件。**
 
-### Phase 3: Drafting
+### 第三阶段：起草
 
-1. Write using the selected tone and formality level
-2. Keep paragraphs short (2-4 sentences maximum)
-3. Use bullet points for multiple items or action items
-4. Bold or highlight key dates, deadlines, or decisions
-5. Include all necessary context without over-explaining
+1. 使用选定的语气和正式程度进行撰写
+2. 保持段落简短（最多2-4句）
+3. 使用项目符号列出多项内容或行动项
+4. 加粗或高亮关键日期、截止日期或决策
+5. 包含所有必要背景信息，避免过度解释
 
-> **STOP — Do NOT send without completing the review phase.**
+> **停止 — 未完成审查阶段前，切勿发送。**
 
-### Phase 4: Review
+### 第四阶段：审查
 
-1. Read aloud for natural flow and tone
-2. Check that the subject line matches the content
-3. Verify all names, dates, and attachments are correct
-4. Ensure the CTA is clear and actionable
-5. Consider how the email reads if forwarded out of context
+1. 大声朗读以检查流畅度和语气是否自然
+2. 检查主题行是否与内容匹配
+3. 核实所有姓名、日期和附件是否正确
+4. 确保行动号召（CTA）清晰且可执行
+5. 考虑该邮件在被脱离上下文转发时的阅读感受
 
-## Email Type Decision Table
+## 邮件类型决策表
 
-| Situation | Structure | Tone | Key Element |
-|---|---|---|---|
-| Status update to stakeholders | Inverted Pyramid | Professional | Bold status indicator, bullet points |
-| Request for approval/decision | BLUF | Professional | Recommendation first, supporting data |
-| Delivering bad news | Sandwich | Formal | Empathy, explanation, constructive close |
-| Meeting request | Direct | Professional-Friendly | Agenda items, time options |
-| Cold outreach | Personalized Hook | Professional | Specific observation about recipient |
-| Follow-up (no response) | Gentle Reminder | Professional | Easy options, graceful out |
-| Escalation | Structured Report | Formal | Impact, attempts made, specific ask |
-| Apology | Acknowledgment + Action | Formal | Honest explanation, preventive measures |
-| Internal team update | Quick Update | Friendly Professional | Brevity, action items highlighted |
-| Negotiation | Collaborative | Professional | Shared interests, multiple options |
+| 场景               | 结构             | 语气      | 关键要素                       |
+| ------------------ | ---------------- | --------- | ------------------------------ |
+| 利益相关者状态更新 | 倒金字塔         | 专业      | 加粗状态标识，项目符号         |
+| 请求批准/决策      | BLUF（结论先行） | 专业      | 建议优先，附支持数据           |
+| 传达坏消息         | 三明治法         | 正式      | 表达共情，说明原因，建设性结尾 |
+| 会议请求           | 直接型           | 专业-友好 | 议程项目，时间选项             |
+| 陌生联络           | 个性化切入点     | 专业      | 针对收件人的具体观察           |
+| 跟进（未回复）     | 温和提醒         | 专业      | 提供便捷选项，礼貌退出机制     |
+| 升级汇报           | 结构化报告       | 正式      | 影响说明，已做尝试，具体诉求   |
+| 道歉               | 承认+行动        | 正式      | 诚实解释，预防措施             |
+| 内部团队更新       | 快速更新         | 友好专业  | 简洁，高亮行动项               |
+| 谈判               | 协作型           | 专业      | 共同利益，多套方案             |
 
-## Tone Calibration Matrix
+## 语气校准矩阵
 
-| Tone Level | When to Use | Characteristics | Example Opening |
-|---|---|---|---|
-| **Formal** | C-suite, legal, first contact with executives | No contractions, full titles, structured | "Dear Ms. Chen, I am writing to formally request..." |
-| **Professional** | Standard business, cross-team, clients | Contractions ok, warm but focused | "Hi Sarah, I wanted to follow up on our conversation..." |
-| **Friendly Professional** | Familiar colleagues, regular collaborators | Casual openings, personality shows | "Hey team, quick update on the launch timeline..." |
-| **Casual** | Close teammates, informal updates | Conversational, emoji acceptable | "Just a heads up — the deploy is going out at 3pm" |
+| 语气级别     | 适用场景                   | 特征                             | 开头示例                                     |
+| ------------ | -------------------------- | -------------------------------- | -------------------------------------------- |
+| **正式**     | 高管、法务、首次联系高管   | 不用缩写，使用全称头衔，结构严谨 | “尊敬的陈女士，我致信旨在正式请求……”         |
+| **专业**     | 标准商务、跨团队、客户     | 可使用缩写，热情且专注           | “Sarah你好，我想跟进一下我们之前的谈话……”    |
+| **友好专业** | 熟悉的同事、常规合作者     | 开头随意，展现个性               | “团队大家好，快速同步一下产品上线的时间线……” |
+| **随意**     | 关系密切的队友、非正式同步 | 对话式，可接受表情符号           | “提醒一下——部署将在下午3点开始”              |
 
-### Tone Adjustment Signals
+### 语气调整信号
 
-| Signal | Shift Toward |
-|---|---|
-| Bad news, rejection, complaint | More formal, more empathetic |
-| Good news, congratulations | Warmer, more enthusiastic |
-| Urgency, deadline | More direct, shorter sentences |
-| Sensitive/political topic | More formal, more careful word choice |
-| Follow-up after no response | Slightly more formal, provide easy out |
+| 信号               | 调整方向                   |
+| ------------------ | -------------------------- |
+| 坏消息、拒绝、投诉 | 更正式，更具共情力         |
+| 好消息、祝贺       | 更温暖，更热情             |
+| 紧急、截止日期     | 更直接，句子更短           |
+| 敏感/政治性话题    | 更正式，措辞更谨慎         |
+| 未回复后的跟进     | 稍显正式，提供轻松退出选项 |
 
-## Email Structure Patterns
+## 邮件结构模式
 
-### The Inverted Pyramid (Default)
+### 倒金字塔结构（默认）
+
 ```
-Subject: [Action Required] Q3 Budget Approval — Due Friday
+主题：[需采取行动] Q3预算审批 — 周五截止
 
-Hi Maria,
+Maria你好，
 
-[BOTTOM LINE FIRST]
-I need your approval on the Q3 budget by Friday, March 19.
+[核心诉求先行]
+我需要您在3月19日（周五）前批准Q3预算。
 
-[CONTEXT]
-The finance team reviewed our proposal and approved the
-$240K allocation with one change: marketing spend shifted
-from Q3 to Q4.
+[背景说明]
+财务团队已审核我们的提案，并批准了24万美元的拨款，
+仅有一处调整：营销费用从Q3顺延至Q4。
 
-[DETAILS]
-Key changes from the original proposal:
-- Marketing: $80K → $60K (Q3), $20K moved to Q4
-- Engineering: unchanged at $120K
-- Operations: $40K (new line item for tooling)
+[详细情况]
+与原提案的关键变更：
+- 营销：8万 → 6万（Q3），2万移至Q4
+- 工程：保持不变，12万
+- 运营：4万（新增工具采购项）
 
-[ACTION]
-Could you review the attached spreadsheet and reply with
-your approval? Happy to jump on a quick call if you have
-questions.
+[行动要求]
+能否请您审阅附件中的电子表格并回复批准？
+如有任何疑问，随时可以简短通话沟通。
 
-Thanks,
+谢谢，
 Alex
 ```
 
-### The BLUF (Bottom Line Up Front)
+### BLUF（结论先行结构）
+
 ```
-Subject: Decision Needed: Vendor Selection for Auth Service
+主题：需决策：认证服务供应商选择
 
-Hi team,
+团队好，
 
-RECOMMENDATION: Go with Auth0 (Option B).
+**建议：** 选择 Auth0（选项B）。
 
-Here's why:
-1. 40% lower total cost over 3 years
-2. Better compliance certifications (SOC2, HIPAA)
-3. Faster integration timeline (2 weeks vs. 6 weeks)
+理由如下：
+1. 3年总成本降低40%
+2. 更完善的合规认证（SOC2、HIPAA）
+3. 集成时间线更短（2周 vs. 6周）
 
-Full comparison attached. Please reply by Thursday with
-your vote or concerns.
-```
-
-### The Sandwich (Difficult Messages)
-```
-[Positive/Neutral Opening]
-Thank you for the thorough proposal on the new dashboard.
-The data visualization approach is exactly what we needed.
-
-[Difficult Content]
-After reviewing with the team, we've identified some concerns
-with the timeline and resource allocation that we need to
-address before moving forward...
-
-[Constructive/Forward-Looking Close]
-I'd love to schedule 30 minutes this week to work through
-these together. I'm confident we can find an approach that
-works for everyone.
+完整对比已附。请于周四前回复您的投票或疑虑。
 ```
 
-## Templates for Common Scenarios
+### 三明治结构（困难/敏感信息）
 
-### Meeting Request
 ```
-Subject: Meeting Request: [Topic] — [Suggested Date/Time]
+[正面/中性开头]
+感谢你们提交的新仪表盘详细提案。
+数据可视化方案正是我们所需要的。
 
-Hi [Name],
+[困难/核心内容]
+经团队评审，我们在时间线和资源分配方面发现了一些顾虑，
+需要在推进前予以解决……
 
-I'd like to schedule [duration] to discuss [topic].
-
-Specifically, I'd like to cover:
-- [Agenda item 1]
-- [Agenda item 2]
-
-Would [date/time option 1] or [date/time option 2] work
-for you? Happy to adjust to your availability.
-
-Best,
-[Name]
+[建设性/面向未来的结尾]
+我很希望本周能安排30分钟共同梳理这些问题。
+我相信我们一定能找到适合各方的方案。
 ```
 
-### Project Status Update
+## 常见场景模板
+
+### 会议请求
+
 ```
-Subject: [Project Name] Status Update — Week of [Date]
+主题：会议请求：[主题] — [建议日期/时间]
 
-Hi [stakeholders],
+[姓名]你好，
 
-**Status: On Track** (or At Risk / Blocked)
+我希望安排 [时长] 来讨论 [主题]。
 
-**Completed this week:**
-- [Accomplishment 1]
-- [Accomplishment 2]
+具体而言，我希望涵盖以下内容：
+- [议程项1]
+- [议程项2]
 
-**In progress:**
-- [Task 1] — expected completion [date]
-- [Task 2] — expected completion [date]
+[日期/时间选项1] 或 [日期/时间选项2] 对您是否方便？
+我也很乐意配合您的空闲时间进行调整。
 
-**Blockers/Risks:**
-- [Blocker] — [mitigation plan or help needed]
-
-**Next week's priorities:**
-- [Priority 1]
-- [Priority 2]
-
-Let me know if you have questions or want to discuss any
-of these items.
-
-[Name]
+祝好，
+[姓名]
 ```
 
-### Escalation Email
+### 项目状态更新
+
 ```
-Subject: [Escalation] [Issue] — Impact on [Project/Deadline]
+主题：[项目名称] 状态更新 — [日期] 当周
 
-Hi [Manager/Stakeholder],
+各位利益相关者好，
 
-I'm escalating [issue] because [reason — timeline impact,
-blocked dependencies, unresolved after N attempts].
+**状态：正常推进**（或 存在风险 / 受阻）
 
-**Background:**
-[2-3 sentences of context]
+**本周已完成：**
+- [成果1]
+- [成果2]
 
-**Impact if unresolved:**
-- [Consequence 1 with timeline]
-- [Consequence 2]
+**进行中：**
+- [任务1] — 预计完成日期 [日期]
+- [任务2] — 预计完成日期 [日期]
 
-**What I've tried:**
-- [Attempt 1 — outcome]
-- [Attempt 2 — outcome]
+**阻碍/风险：**
+- [阻碍项] — [缓解计划或所需协助]
 
-**What I need:**
-[Specific ask — decision, resource, intervention]
+**下周重点：**
+- [优先级1]
+- [优先级2]
 
-**Recommended next step:**
-[Your suggestion]
+如有任何疑问或希望讨论上述事项，请随时告知。
 
-I'm available to discuss this at your earliest convenience.
-
-[Name]
+[姓名]
 ```
 
-### Apology / Mistake Acknowledgment
+### 升级汇报邮件
+
 ```
-Subject: Regarding [Issue] — Our Apology and Next Steps
+主题：[升级汇报] [问题] — 对[项目/截止日期]的影响
 
-Hi [Name],
+[经理/利益相关者]你好，
 
-I want to apologize for [specific issue]. This fell short
-of the standard you should expect from us.
+我将 [问题] 升级汇报，原因是 [原因 — 时间线影响、依赖项受阻、尝试N次未解决]。
 
-**What happened:**
-[Brief, honest explanation — no excuses]
+**背景：**
+[2-3句背景说明]
 
-**What we're doing about it:**
-- [Immediate fix]
-- [Preventive measure for the future]
+**未解决的潜在影响：**
+- [后果1，附时间线]
+- [后果2]
 
-**What this means for you:**
-[Any impact, compensation, or timeline adjustment]
+**已尝试的措施：**
+- [尝试1 — 结果]
+- [尝试2 — 结果]
 
-I take full responsibility for this and am committed to
-making it right. Please don't hesitate to reach out if
-you have any concerns.
+**所需支持：**
+[具体诉求 — 决策、资源、介入]
 
-Sincerely,
-[Name]
-```
+**建议的下一步：**
+[你的建议]
 
-### Cold Outreach
-```
-Subject: [Personalized hook — reference their work/company]
+我随时可在您方便时讨论此事。
 
-Hi [Name],
-
-I noticed [specific observation about their company/role/content].
-[One sentence connecting their situation to your offering.]
-
-[Company/Product] helps [target audience] [achieve outcome].
-For example, [brief case study or metric].
-
-Would you be open to a 15-minute call to explore whether
-this could help [their company]? No pressure either way.
-
-Best,
-[Name]
-[Title, Company]
+[姓名]
 ```
 
-### Follow-Up After No Response
+### 道歉 / 失误承认
+
 ```
-Subject: Re: [Original Subject]
+主题：关于 [问题] — 我们的致歉与后续步骤
 
-Hi [Name],
+[姓名]你好，
 
-I wanted to follow up on my email from [date] about [topic].
+我想就 [具体问题] 向您致歉。此次表现未达到您对我们应有的期望标准。
 
-I understand you're busy — would it help if I:
-- [Simplified option A]
-- [Alternative option B]
-- [Easy opt-out: "Let me know if this isn't a priority
-   right now and I'll circle back later"]
+**事件经过：**
+[简要、诚实的说明 — 不找借口]
 
-[Name]
-```
+**我们的应对措施：**
+- [即时修复方案]
+- [未来的预防措施]
 
-## Subject Line Best Practices
+**对您的影响：**
+[任何影响、补偿或时间线调整]
 
-### Formula
-```
-[Action Tag] + [Specific Topic] + [Context/Deadline]
+我对此承担全部责任，并致力于妥善解决。如有任何疑虑，请随时与我联系。
 
-Examples:
-"[Action Required] Q3 Budget Approval — Due March 19"
-"[FYI] New Deploy Process Starting Monday"
-"[Decision Needed] Vendor Selection by EOW"
-"[Update] Sprint 12 Retro Notes"
-"[Blocked] API Integration — Need Access Keys"
+诚挚地，
+[姓名]
 ```
 
-### Subject Line Rules
+### 陌生联络邮件
 
-| Rule | Good | Bad |
-|---|---|---|
-| Be specific | "Q3 Marketing Budget: $80K Reallocation" | "Budget Update" |
-| Include action if needed | "[Review Required] PR #342" | "Please look at this" |
-| Keep under 50 chars | "Launch timeline shifted to April 3" | "Update regarding the potential shift in our product launch timeline" |
-| No ALL CAPS | "[Urgent] Server outage in prod" | "URGENT SERVER DOWN!!!" |
-| Match the content | "Meeting recap: 3 action items" | "Great chat today!" |
+```
+主题：[个性化切入点 — 提及对方的工作/公司]
 
-## Cultural Considerations
+[姓名]你好，
 
-| Context | Adjustment |
-|---|---|
-| East Asian business culture | More formal, acknowledge hierarchy, indirect negative feedback |
-| German business culture | Direct and precise, titles important (Herr/Frau), structured |
-| US startup culture | Casual, first names, brief, action-oriented |
-| UK business culture | Polite hedging ("I wonder if...", "Perhaps we might...") |
-| Cross-timezone | State timezone explicitly, suggest multiple options |
-| Non-native English speakers | Simpler vocabulary, shorter sentences, avoid idioms |
+我注意到 [关于对方公司/职位/内容的具体观察]。
+[一句话将其现状与您的服务/产品关联。]
 
-## Anti-Patterns / Common Mistakes
+[公司/产品] 致力于帮助 [目标受众] [实现某种成果]。
+例如，[简要案例或数据]。
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
-|---|---|---|
-| Burying the ask at the bottom | Reader may never reach it | Lead with the request (BLUF) |
-| Reply-all unnecessarily | Clutters inboxes, annoys recipients | Reply only to those who need to act |
-| Passive-aggressive tone | Damages relationships and trust | Be direct and professional |
-| Long emails requiring mobile scrolling | Recipients skip or defer | Keep to 5-8 sentences for mobile |
-| Vague subject lines ("Quick question") | Gets deprioritized or lost | Include topic and action needed |
-| Too many asks for too many people | Diffusion of responsibility | One primary ask per email |
-| No deadline ("when you get a chance") | Means never | Specify date and time |
-| CC-ing manager without telling recipient | Perceived as hostile escalation | Mention it in the email or tell them first |
-| Humor or sarcasm in text | Misinterpreted without vocal tone | Save humor for in-person |
-| Sending emotional emails immediately | Regret and reputation damage | Wait 30 minutes before sending |
+不知您是否愿意进行15分钟的简短通话，探讨这是否能为
+[对方公司] 带来帮助？无论结果如何均无压力。
 
-## Anti-Rationalization Guards
+祝好，
+[姓名]
+[职位，公司]
+```
 
-- Do NOT skip the context assessment because "it's just a quick email" -- every email represents you.
-- Do NOT draft without a defined CTA -- even "FYI" emails should state what you expect.
-- Do NOT send without the read-aloud review, especially for sensitive emails.
-- Do NOT use a casual tone with someone you haven't corresponded with before.
-- Do NOT send an escalation email without documenting what you have already tried.
+### 未回复后的跟进邮件
 
-## Integration Points
+```
+主题：回复：[原始主题]
 
-| Skill | How It Connects |
-|---|---|
-| `content-creator` | Brand voice and copywriting frameworks apply to marketing emails |
-| `content-research-writer` | Research summaries inform executive briefing emails |
-| `docx-processing` | Generated documents attach to emails |
-| `pdf-processing` | Generated PDF reports attach to emails |
-| `xlsx-processing` | Spreadsheet attachments accompany data-driven emails |
-| `llm-as-judge` | Evaluate email tone and clarity against rubric |
+[姓名]你好，
 
-## Skill Type
+我想跟进一下我于 [日期] 发送的关于 [主题] 的邮件。
 
-**FLEXIBLE** — Adapt tone, structure, and formality to the relationship, organizational culture, and communication purpose. The BLUF structure and clear subject line practices are strongly recommended for all professional correspondence.
+理解您事务繁忙，以下哪种方式对您更有帮助：
+- [简化选项A]
+- [替代选项B]
+- [轻松退出选项：“若目前非优先事项请告知，我后续再联系”]
+
+[姓名]
+```
+
+## 主题行最佳实践
+
+### 公式
+
+```
+[行动标签] + [具体主题] + [背景/截止日期]
+
+示例：
+"[需采取行动] Q3预算审批 — 3月19日截止"
+"[仅供参考] 新部署流程将于周一启用"
+"[需决策] 本周五前确定供应商"
+"[状态更新] 第12次迭代回顾纪要"
+"[受阻] API集成 — 需访问密钥"
+```
+
+### 主题行规则
+
+| 规则               | 推荐写法                    | 不推荐写法                               |
+| ------------------ | --------------------------- | ---------------------------------------- |
+| 具体明确           | “Q3营销预算：8万重新分配”   | “预算更新”                               |
+| 需要时包含行动指令 | “[需审核] PR #342”          | “请看一下这个”                           |
+| 控制在50字符以内   | “上线时间推迟至4月3日”      | “关于我们产品上线时间可能推迟的更新通知” |
+| 避免全大写         | “[紧急] 生产环境服务器宕机” | “紧急！！！服务器挂了！！！”             |
+| 与内容匹配         | “会议回顾：3项行动点”       | “今天聊得很愉快！”                       |
+
+## 文化考量
+
+| 文化背景     | 调整建议                                     |
+| ------------ | -------------------------------------------- |
+| 东亚商务文化 | 更正式，尊重层级，负面反馈需委婉             |
+| 德国商务文化 | 直接精准，重视头衔（Herr/Frau），结构严谨    |
+| 美国初创文化 | 随意，直呼其名，简短，注重行动               |
+| 英国商务文化 | 礼貌委婉（“我在想是否……”、“或许我们可以……”） |
+| 跨时区       | 明确标注时区，提供多个时间选项               |
+| 非英语母语者 | 使用简单词汇，短句，避免习语/俚语            |
+
+## 反模式 / 常见错误
+
+| 反模式                         | 为何失败               | 正确做法                  |
+| ------------------------------ | ---------------------- | ------------------------- |
+| 将诉求埋在邮件末尾             | 读者可能根本看不到     | 开头直接提出请求（BLUF）  |
+| 滥用“回复全部”                 | 塞满收件箱，惹恼收件人 | 仅回复需要行动的人        |
+| 消极攻击/阴阳怪气的语气        | 破坏关系与信任         | 直接且专业                |
+| 长邮件导致手机需滚动           | 收件人会跳过或推迟阅读 | 控制在5-8句以适应手机屏幕 |
+| 模糊的主题行（如“问个小问题”） | 被降权或淹没           | 包含主题和所需行动        |
+| 向多人提出过多诉求             | 责任分散效应           | 每封邮件只设一个主要诉求  |
+| 无明确截止日期（“有空时看看”） | 往往意味着“永远不看”   | 明确具体日期和时间        |
+| 未告知收件人即抄送其上级       | 被视为敌意升级         | 在邮件中说明或提前告知    |
+| 文字中使用幽默或讽刺           | 缺乏语音语调易被误解   | 幽默留到线下交流          |
+| 情绪化时立即发送邮件           | 导致后悔与声誉受损     | 发送前等待30分钟冷静      |
+
+## 防自我合理化准则
+
+- **切勿**因“只是封快速邮件”而跳过背景评估——每封邮件都代表你的专业形象。
+- **切勿**在未定义明确行动号召（CTA）的情况下起草——即使是“仅供参考（FYI）”邮件也应说明你的期望。
+- **切勿**在未进行大声朗读审查的情况下发送，尤其是敏感邮件。
+- **切勿**对从未联系过的人使用随意语气。
+- **切勿**在未记录已尝试措施的情况下发送升级汇报邮件。
+
+## 技能集成点
+
+| 技能                      | 关联方式                             |
+| ------------------------- | ------------------------------------ |
+| `content-creator`         | 品牌声音与文案撰写框架适用于营销邮件 |
+| `content-research-writer` | 研究摘要用于高管简报邮件             |
+| `docx-processing`         | 生成的文档可作为邮件附件             |
+| `pdf-processing`          | 生成的PDF报告可作为邮件附件          |
+| `xlsx-processing`         | 电子表格附件配合数据驱动型邮件       |
+| `llm-as-judge`            | 根据量规评估邮件语气与清晰度         |
+
+## 技能类型
+
+**灵活型（FLEXIBLE）** —— 根据人际关系、组织文化和沟通目的调整语气、结构和正式程度。强烈建议在所有专业通信中采用结论先行（BLUF）结构和清晰的主题行实践。

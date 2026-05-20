@@ -1,62 +1,62 @@
 ---
 name: webapp-testing
-description: "Use when the user needs Playwright-based web application testing — screenshots, browser log analysis, interaction verification, visual regression, accessibility, and network mocking. Triggers: E2E test setup, visual regression testing, accessibility audit, Playwright configuration, page object model creation, CI test pipeline."
+description: "当用户需要基于 Playwright 的 Web 应用程序测试时使用——包括截图、浏览器日志分析、交互验证、视觉回归测试、无障碍访问审计和网络请求模拟。触发场景：E2E 测试搭建、视觉回归测试、无障碍访问审计、Playwright 配置、页面对象模型创建、CI 测试流水线。"
 ---
 
-# Web App Testing
+# Web 应用程序测试
 
-## Overview
+## 概述
 
-Comprehensive web application testing using Playwright as the primary tool. This skill covers end-to-end testing workflows including screenshot capture for visual verification, browser console log analysis, user interaction simulation, visual regression testing, accessibility auditing with axe-core, network request mocking, and mobile viewport testing.
+使用 Playwright 作为主要工具进行全面的 Web 应用程序测试。本技能涵盖端到端测试工作流，包括用于视觉验证的截图捕获、浏览器控制台日志分析、用户交互模拟、视觉回归测试、使用 axe-core 进行无障碍访问审计、网络请求模拟以及移动视口测试。
 
-**Announce at start:** "I'm using the webapp-testing skill for Playwright-based web application testing."
+**开始时声明：** "我正在使用 webapp-testing 技能进行基于 Playwright 的 Web 应用程序测试。"
 
 ---
 
-## Phase 1: Test Planning
+## 第一阶段：测试规划
 
-**Goal:** Identify what to test and set up the infrastructure.
+**目标：** 确定测试内容并搭建基础设施。
 
-### Actions
+### 操作
 
-1. Identify critical user flows to test
-2. Define test environments and viewports
-3. Set up test fixtures and data
-4. Configure Playwright project settings
-5. Establish visual baseline screenshots
+1. 识别需要测试的关键用户流程
+2. 定义测试环境和视口
+3. 设置测试夹具和数据
+4. 配置 Playwright 项目设置
+5. 建立视觉基线截图
 
-### User Flow Priority Decision Table
+### 用户流程优先级决策表
 
-| Flow Type | Priority | Test Depth |
+| 流程类型 | 优先级 | 测试深度 |
 |-----------|----------|-----------|
-| Authentication (login/logout/register) | Critical | Full happy + error paths |
-| Core business workflow (purchase, submit) | Critical | Full happy + error + edge cases |
-| Navigation and routing | High | All major routes |
-| Search and filtering | High | Common queries + empty state |
-| Settings and profile | Medium | Happy path |
-| Admin/back-office | Medium | Key operations only |
+| 身份验证（登录/登出/注册） | 关键 | 完整正常路径 + 错误路径 |
+| 核心业务工作流程（购买、提交） | 关键 | 完整正常路径 + 错误路径 + 边界情况 |
+| 导航和路由 | 高 | 所有主要路由 |
+| 搜索和过滤 | 高 | 常见查询 + 空状态 |
+| 设置和个人资料 | 中 | 正常路径 |
+| 管理/后台 | 中 | 仅关键操作 |
 
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] Critical user flows are identified and prioritized
-- [ ] Test environments and viewports are defined
-- [ ] Playwright config is ready
-- [ ] Test data strategy is defined
+### 停止 — 在完成以下事项前，请勿进入第二阶段：
+- [ ] 已识别并优先排序关键用户流程
+- [ ] 已定义测试环境和视口
+- [ ] Playwright 配置已就绪
+- [ ] 已定义测试数据策略
 
 ---
 
-## Phase 2: Test Implementation
+## 第二阶段：测试实现
 
-**Goal:** Write tests using page object models and accessible locators.
+**目标：** 使用页面对象模型和可访问定位器编写测试。
 
-### Actions
+### 操作
 
-1. Write page object models for key pages
-2. Implement end-to-end test scenarios
-3. Add visual regression snapshots
-4. Integrate accessibility checks
-5. Configure network mocking for isolated tests
+1. 为关键页面编写页面对象模型
+2. 实现端到端测试场景
+3. 添加视觉回归快照
+4. 集成无障碍访问检查
+5. 配置网络请求模拟以实现隔离测试
 
-### Playwright Configuration
+### Playwright 配置
 
 ```typescript
 import { defineConfig, devices } from '@playwright/test';
@@ -92,7 +92,7 @@ export default defineConfig({
 });
 ```
 
-### Page Object Model
+### 页面对象模型
 
 ```typescript
 class LoginPage {
@@ -115,57 +115,57 @@ class LoginPage {
 }
 ```
 
-### Locator Selection Decision Table
+### 定位器选择决策表
 
-| Locator Type | Priority | When to Use |
+| 定位器类型 | 优先级 | 使用场景 |
 |-------------|----------|-------------|
-| `getByRole` | 1st choice | Any element with ARIA role (button, link, heading) |
-| `getByLabel` | 2nd choice | Form fields with labels |
-| `getByPlaceholder` | 3rd choice | Fields without visible labels |
-| `getByText` | 4th choice | Non-interactive visible text |
-| `getByTestId` | Last resort | When no accessible locator works |
-| CSS selector / XPath | Never | Breaks with styling changes |
+| `getByRole` | 首选 | 任何具有 ARIA 角色的元素（按钮、链接、标题） |
+| `getByLabel` | 次选 | 带有标签的表单字段 |
+| `getByPlaceholder` | 第三选择 | 没有可见标签的字段 |
+| `getByText` | 第四选择 | 非交互式可见文本 |
+| `getByTestId` | 最后手段 | 当没有可用的可访问定位器时 |
+| CSS 选择器 / XPath | 永不使用 | 会因样式更改而失效 |
 
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] Page object models exist for key pages
-- [ ] Tests use accessible locators exclusively
-- [ ] Visual baselines are established
-- [ ] Accessibility checks are integrated
-- [ ] Network mocking is configured for isolated tests
-
----
-
-## Phase 3: CI Integration
-
-**Goal:** Configure reliable, fast test execution in CI.
-
-### Actions
-
-1. Configure headless browser execution
-2. Set up screenshot artifact collection
-3. Configure retry and flake detection
-4. Add reporting (HTML report, JUnit XML)
-5. Set up visual diff review process
-
-### CI Configuration Checklist
-
-- [ ] Tests run headless in CI
-- [ ] Retries enabled (2 retries for CI)
-- [ ] Screenshot and video artifacts collected on failure
-- [ ] JUnit XML output for CI integration
-- [ ] HTML report generated for manual review
-- [ ] Visual diff snapshots reviewed before merge
-
-### STOP — CI integration complete when:
-- [ ] Tests run reliably in CI pipeline
-- [ ] Artifacts are collected on failure
-- [ ] Flaky tests are identified and fixed (not skipped)
+### 停止 — 在完成以下事项前，请勿进入第三阶段：
+- [ ] 关键页面已存在页面对象模型
+- [ ] 测试仅使用可访问定位器
+- [ ] 已建立视觉基线
+- [ ] 已集成无障碍访问检查
+- [ ] 已为隔离测试配置网络请求模拟
 
 ---
 
-## Screenshot Capture Patterns
+## 第三阶段：CI 集成
 
-### Full Page
+**目标：** 在 CI 中配置可靠、快速的测试执行。
+
+### 操作
+
+1. 配置无头浏览器执行
+2. 设置截图产物收集
+3. 配置重试和波动检测
+4. 添加报告功能（HTML 报告、JUnit XML）
+5. 设置视觉差异审查流程
+
+### CI 配置检查清单
+
+- [ ] 测试在 CI 中以无头模式运行
+- [ ] 启用重试（CI 环境下重试 2 次）
+- [ ] 失败时收集截图和视频产物
+- [ ] 输出 JUnit XML 以供 CI 集成
+- [ ] 生成 HTML 报告供人工审查
+- [ ] 合并前审查视觉差异快照
+
+### 停止 — 当满足以下条件时，CI 集成完成：
+- [ ] 测试在 CI 流水线中可靠运行
+- [ ] 失败时能收集产物
+- [ ] 波动测试已被识别并修复（而非跳过）
+
+---
+
+## 截图捕获模式
+
+### 全页截图
 
 ```typescript
 test('homepage renders correctly', async ({ page }) => {
@@ -177,7 +177,7 @@ test('homepage renders correctly', async ({ page }) => {
 });
 ```
 
-### Element-Level
+### 元素级截图
 
 ```typescript
 test('navigation bar matches design', async ({ page }) => {
@@ -187,7 +187,7 @@ test('navigation bar matches design', async ({ page }) => {
 });
 ```
 
-### Dynamic Content Masking
+### 动态内容遮罩
 
 ```typescript
 test('dashboard layout', async ({ page }) => {
@@ -205,7 +205,7 @@ test('dashboard layout', async ({ page }) => {
 
 ---
 
-## Browser Log Analysis
+## 浏览器日志分析
 
 ```typescript
 test('no console errors on page load', async ({ page }) => {
@@ -226,7 +226,7 @@ test('no console errors on page load', async ({ page }) => {
 
 ---
 
-## Accessibility Testing with axe-core
+## 使用 axe-core 进行无障碍访问测试
 
 ```typescript
 import AxeBuilder from '@axe-core/playwright';
@@ -243,7 +243,7 @@ test('page has no accessibility violations', async ({ page }) => {
 
 ---
 
-## Network Request Mocking
+## 网络请求模拟
 
 ```typescript
 test('displays users from API', async ({ page }) => {
@@ -269,7 +269,7 @@ test('handles API errors gracefully', async ({ page }) => {
 
 ---
 
-## Mobile Viewport Testing
+## 移动视口测试
 
 ```typescript
 test.describe('mobile responsive', () => {
@@ -286,7 +286,7 @@ test.describe('mobile responsive', () => {
 
 ---
 
-## Test Organization
+## 测试组织
 
 ```
 tests/
@@ -309,49 +309,49 @@ tests/
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
+| 反模式 | 错误原因 | 正确做法 |
 |-------------|----------------|-----------------|
-| CSS selectors or XPath | Break with styling changes | Use accessible locators (role, label, text) |
-| `page.waitForTimeout()` | Arbitrary delays, flaky | Use `expect().toBeVisible()` or similar |
-| Testing third-party components in detail | Not your code to test | Test your integration, not their internals |
-| Hardcoded test data | Breaks across environments | Use fixtures and factories |
-| Tests depending on execution order | Fragile, hard to debug | Each test must be independent |
-| Ignoring flaky tests | Erodes trust in test suite | Fix root cause or quarantine |
-| Screenshots without masking dynamic content | Always different, always failing | Mask timestamps, avatars, charts |
-| No accessibility checks | Missing critical quality gate | axe-core on every page |
+| CSS 选择器或 XPath | 会因样式更改而失效 | 使用可访问定位器（role、label、text） |
+| `page.waitForTimeout()` | 任意延迟，导致测试波动 | 使用 `expect().toBeVisible()` 或类似断言 |
+| 详细测试第三方组件 | 不是你要测试的代码 | 测试你的集成，而非其内部实现 |
+| 硬编码测试数据 | 在不同环境中会失效 | 使用夹具和工厂函数 |
+| 测试依赖执行顺序 | 脆弱，难以调试 | 每个测试必须独立 |
+| 忽略波动测试 | 侵蚀对测试套件信任 | 修复根本原因或隔离处理 |
+| 截图未遮罩动态内容 | 总是不同，总是失败 | 遮罩时间戳、头像、图表等 |
+| 无无障碍访问检查 | 遗漏关键质量关卡 | 每个页面都运行 axe-core |
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关系 |
 |-------|-------------|
-| `senior-frontend` | Frontend components are tested by E2E tests |
-| `testing-strategy` | E2E tests are the top of the testing pyramid |
-| `acceptance-testing` | User flow tests serve as acceptance tests |
-| `performance-optimization` | Performance budgets can be verified in E2E |
-| `code-review` | Review checks that tests use accessible locators |
-| `security-review` | Security headers and auth flows tested in E2E |
+| `senior-frontend` | E2E 测试用于测试前端组件 |
+| `testing-strategy` | E2E 测试位于测试金字塔顶端 |
+| `acceptance-testing` | 用户流程测试可作为验收测试 |
+| `performance-optimization` | 性能预算可在 E2E 中验证 |
+| `code-review` | 审查时检查测试是否使用可访问定位器 |
+| `security-review` | 在 E2E 中测试安全头和认证流程 |
 
 ---
 
-## Quality Checklist
+## 质量检查清单
 
-- [ ] All critical user flows covered
-- [ ] Tests use accessible locators (role, label, text)
-- [ ] Network mocking for isolated tests
-- [ ] Visual regression baselines reviewed and approved
-- [ ] Accessibility scans on all pages
-- [ ] Mobile viewport tests for responsive features
-- [ ] No `waitForTimeout` (use proper assertions)
-- [ ] CI pipeline configured with retries
-- [ ] Screenshot artifacts collected on failure
-- [ ] Flaky tests identified and fixed (not skipped)
+- [ ] 所有关键用户流程已覆盖
+- [ ] 测试使用可访问定位器（role、label、text）
+- [ ] 隔离测试使用网络请求模拟
+- [ ] 视觉回归基线已审查并批准
+- [ ] 所有页面已进行无障碍访问扫描
+- [ ] 响应式功能已进行移动视口测试
+- [ ] 无 `waitForTimeout`（使用正确断言）
+- [ ] CI 流水线已配置重试机制
+- [ ] 失败时收集截图产物
+- [ ] 波动测试已被识别并修复（而非跳过）
 
 ---
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt test depth to the project's critical paths. The page object model pattern and accessible locators are strongly recommended. Accessibility checks are mandatory on every page. Visual regression baselines must be reviewed before merge.
+**灵活** — 根据项目的关键路径调整测试深度。强烈推荐使用页面对象模型模式和可访问定位器。每个页面必须进行无障碍访问检查。视觉回归基线必须在合并前审查。

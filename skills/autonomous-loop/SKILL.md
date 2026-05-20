@@ -1,342 +1,342 @@
 ---
 name: autonomous-loop
-description: 'Use when running Ralph-style iterative autonomous development. Triggers on  /goal  or  /ralph or  /loop  commands, when autonomous iterative development is needed, when a project has specs and an implementation plan ready for iterative execution, or when deterministic context loading with subagent delegation and dual-condition exit gates is required. Orchestrates PLANNING, BUILDING, and STATUS cycles.'
+description: '在运行 Ralph 风格的迭代式自主开发时使用。当调用 /ralph 或 /loop 或  /goal命令、需要进行自主迭代开发、项目已具备规范且实施计划已准备好进行迭代执行，或需要具有子代理委派和双条件退出门控的确定性上下文加载时触发。用于编排 PLANNING（规划）、BUILDING（构建）和 STATUS（状态）周期。'
 ---
 
-# Autonomous Loop
+# 自主循环 (Autonomous Loop)
 
-## Overview
+## 概述
 
-The autonomous loop implements Ralph's iterative development methodology. Each iteration loads identical context (PROMPT + AGENTS files), executes one focused task, reports structured status, and persists state to disk for the next iteration. The loop continues until the dual-condition exit gate is satisfied. The core innovation is that deterministic conditions allow Claude to autonomously plan, build, and iterate toward quality without human intervention in the loop.
+自主循环实现了 Ralph 的迭代式开发方法论。每次迭代都会加载相同的上下文（PROMPT + AGENTS 文件），执行一项聚焦的任务，报告结构化状态，并将状态持久化到磁盘以供下一次迭代使用。循环将持续运行，直到满足双条件退出门控。其核心创新在于：确定性条件使得 Claude 能够在循环中自主进行规划、构建和迭代以达成质量目标，而无需人工干预。
 
-**Announce at start:** "I'm starting the autonomous loop. Loading context and beginning PLANNING mode."
+**启动时宣告：** “我正在启动自主循环。正在加载上下文并开始 PLANNING（规划）模式。”
 
-## Trigger Conditions
+## 触发条件
 
-- `/ralph` or `/loop` or `/goal` command invoked
-- Project has specs and is ready for iterative autonomous development
-- Multi-task implementation that benefits from autonomous iteration
-- User requests autonomous execution without per-task approval
+- 调用 `/ralph` 或 `/loop` 或 `/goal` 命令
+- 项目已具备规范，并准备好进行迭代式自主开发
+- 受益于自主迭代的多任务实现
+- 用户请求自主执行，且无需逐项任务审批
 
 ---
 
-## Architecture
+## 架构
 
 ```
 +--------------------------------------------------+
-|                 AUTONOMOUS LOOP                    |
+|                 自主循环 (AUTONOMOUS LOOP)         |
 |                                                    |
 |  +----------+    +----------+    +-----------+    |
-|  | PLANNING |---→| BUILDING |---→|  STATUS   |    |
-|  |   MODE   |    |   MODE   |    |  CHECK    |    |
+|  | 规划模式 |---→| 构建模式 |---→|  状态检查 |    |
+|  | (PLANNING)|    | (BUILDING)|    | (STATUS)  |    |
 |  +----------+    +----------+    +-----+-----+    |
 |       ^                               |           |
 |       |            +-----------+      |           |
-|       +------------|  EXIT GATE|←-----+           |
-|                    |  (dual)   |                   |
+|       +------------| 退出门控  |←-----+           |
+|                    |  (双条件) |                   |
 |                    +-----+-----+                   |
 |                          |                         |
-|                    PASS: EXIT                      |
-|                    FAIL: LOOP                      |
+|                    通过：退出                       |
+|                    失败：循环                       |
 +--------------------------------------------------+
 ```
 
 ---
 
-## Phase 1: PLANNING MODE (Gap Analysis)
+## 阶段 1：PLANNING（规划）模式（差距分析）
 
-**Goal:** Analyze specs against implementation to identify and prioritize remaining work.
+**目标：** 对照规范分析现有实现，以识别并优先处理剩余工作。
 
 <HARD-GATE>
-Planning mode produces NO implementation code. It is analysis and planning ONLY.
+规划模式不产生任何实现代码。它仅用于分析和规划。
 </HARD-GATE>
 
-### Steps
+### 步骤
 
-1. **Knowledge Gathering** — Deploy up to 5 parallel subagents via the `Agent` tool (with `subagent_type="Explore"` and `model="sonnet"`) to study specs, existing implementation plans, and utility libraries
-2. **Code Analysis** — Deploy up to 5 parallel subagents via the `Agent` tool (with `subagent_type="Explore"`) to study `src/*` against `docs/specs/<date>_<topic>/*`, identifying gaps between specification and implementation
-3. **Synthesis** — Deploy a synthesis subagent via the `Agent` tool (with `model="opus"`) to synthesize findings and prioritize incomplete work
-4. **Plan Refresh** — Update `IMPLEMENTATION_PLAN.md` as organized, prioritized bullet list
+1. **知识收集** — 通过 `Agent` 工具（配置 `subagent_type="Explore"` 和 `model="sonnet"`）部署最多 5 个并行子代理，用于研究规范、现有实施计划和工具库
+2. **代码分析** — 通过 `Agent` 工具（配置 `subagent_type="Explore"`）部署最多 5 个并行子代理，对比 `src/*` 与 `specs/<date>_<id>_<topic>/*`，识别规范与实现之间的差距
+3. **综合归纳** — 通过 `Agent` 工具（配置 `model="opus"`）部署一个综合子代理，用于汇总发现结果并优先排序未完成的工作
+4. **计划刷新** — 将 `IMPLEMENTATION_PLAN.md` 更新为有序、按优先级排列的要点列表
 
-### Planning Mode Constraints
+### 规划模式约束
 
-| Constraint                                        | Rationale                                          |
-| ------------------------------------------------- | -------------------------------------------------- |
-| Verify ALL assumptions through code search        | Never assume something is absent                   |
-| Treat `src/lib` as authoritative standard library | Consolidate, do not duplicate                      |
-| Output is a prioritized task list                 | Not code, not designs — tasks only                 |
-| Identify missing specs                            | Specs gaps are blockers, not things to guess about |
+| 约束                         | 依据                               |
+| ---------------------------- | ---------------------------------- |
+| 通过代码搜索验证所有假设     | 绝不假设某项内容不存在             |
+| 将 `src/lib` 视为权威标准库  | 进行整合，切勿重复造轮子           |
+| 输出为按优先级排序的任务列表 | 仅输出任务，不输出代码或设计图     |
+| 识别缺失的规范               | 规范缺口是阻塞项，而非可猜测的内容 |
 
-### Planning Mode Output
+### 规划模式输出
 
 ```
-IMPLEMENTATION_PLAN.md updated:
-- [x] Completed tasks (checked off)
-- [ ] Remaining task 1 (highest priority)
-- [ ] Remaining task 2
-- [ ] Remaining task 3
+IMPLEMENTATION_PLAN.md 已更新：
+- [x] 已完成的任务（已勾选）
+- [ ] 剩余任务 1（最高优先级）
+- [ ] 剩余任务 2
+- [ ] 剩余任务 3
 ...
-Missing specs identified: [list or "none"]
+已识别的缺失规范：[列表或“无”]
 ```
 
-**STOP — Do NOT proceed to Phase 2 until:**
+**停止 — 在满足以下条件前，切勿进入阶段 2：**
 
-- [ ] All specs have been read and analyzed
-- [ ] Code has been compared against specs
-- [ ] IMPLEMENTATION_PLAN.md is updated with prioritized tasks
-- [ ] Missing specs are identified (if any)
-
----
-
-## Phase 2: BUILDING MODE (Implementation)
-
-**Goal:** Select and complete exactly ONE task per iteration.
-
-### "ONE Task Per Loop" Principle
-
-Each iteration selects and completes exactly one task from IMPLEMENTATION_PLAN.md. This reduces context switching, enables clear progress measurement, and makes debugging easier.
-
-### Steps
-
-1. **Study** — Read specs and current IMPLEMENTATION_PLAN.md
-2. **Select** — Choose the most important remaining task
-3. **Search** — Find existing code patterns (do NOT assume implementations are missing)
-4. **Implement** — Write complete, production-quality code (no placeholders, no stubs)
-5. **Test** — Run tests immediately after implementation
-6. **Update** — Refresh IMPLEMENTATION_PLAN.md with findings and progress
-7. **Commit** — Descriptive conventional commit message with rationale
-
-### Task Selection Decision Table
-
-| Condition                       | Which Task to Select               |
-| ------------------------------- | ---------------------------------- |
-| Blocker exists for other tasks  | Select the blocker task            |
-| Test failures exist             | Select task that fixes the failure |
-| All tasks independent           | Select highest priority task       |
-| Multiple tasks at same priority | Select the one with clearest spec  |
-| Spec is missing for top task    | Run PLANNING mode to identify gap  |
-
-### Subagent Rules During Building
-
-| Resource              | Budget                  | Rationale                               |
-| --------------------- | ----------------------- | --------------------------------------- |
-| Read/search subagents | Up to 5 parallel Sonnet | Fast context gathering                  |
-| Build subagent        | Only 1 Sonnet at a time | Serialize builds to detect failures     |
-| Main context          | 40-60% utilization      | The "smart zone" — enough room to think |
-
-### Building Mode Constraints
-
-| Constraint                   | Rationale                                |
-| ---------------------------- | ---------------------------------------- |
-| No placeholders or stubs     | Every line of code is production-quality |
-| Search before implementing   | Code may already exist elsewhere         |
-| Run tests immediately        | Backpressure catches errors early        |
-| Update plan after every task | Keep plan current with reality           |
-| Commit after every task      | Small atomic commits, easy to revert     |
-
-**STOP — Do NOT proceed to Phase 3 until:**
-
-- [ ] Task is fully implemented (no stubs)
-- [ ] Tests have been run
-- [ ] IMPLEMENTATION_PLAN.md is updated
-- [ ] Changes are committed
+- [ ] 已阅读并分析所有规范
+- [ ] 已将代码与规范进行对比
+- [ ] `IMPLEMENTATION_PLAN.md` 已更新为按优先级排序的任务
+- [ ] 已识别缺失的规范（如有）
 
 ---
 
-## Phase 3: STATUS CHECK
+## 阶段 2：BUILDING（构建）模式（实现）
 
-**Goal:** Produce a RALPH_STATUS block and evaluate exit conditions.
+**目标：** 每次迭代仅选择并完成恰好一项任务。
 
-After each BUILD iteration, invoke the `ralph-status` skill to produce a structured status block.
+### “每次循环仅一项任务”原则
 
-### Exit Evaluation
+每次迭代从 `IMPLEMENTATION_PLAN.md` 中选择并完成恰好一项任务。这能减少上下文切换，便于清晰衡量进度，并使调试更加容易。
 
-| Check                    | Condition                                  | Result            |
-| ------------------------ | ------------------------------------------ | ----------------- |
-| Tasks remaining?         | IMPLEMENTATION_PLAN.md has unchecked items | Continue loop     |
-| Tests passing?           | Full test suite passes                     | Required for exit |
-| Errors in iteration?     | Clean execution, no unresolved exceptions  | Required for exit |
-| Meaningful work remains? | No TODOs, no incomplete features           | Required for exit |
+### 步骤
 
-### Loop Decision
+1. **研究** — 阅读规范及当前的 `IMPLEMENTATION_PLAN.md`
+2. **选择** — 挑选最重要的剩余任务
+3. **搜索** — 查找现有代码模式（切勿假设实现缺失）
+4. **实现** — 编写完整、生产级质量的代码（无占位符，无桩代码）
+5. **测试** — 实现完成后立即运行测试
+6. **更新** — 用最新发现和进度刷新 `IMPLEMENTATION_PLAN.md`
+7. **提交** — 提交附带理由的描述性常规提交信息
 
-| Status      | Tasks Remaining | Tests   | Action                         |
-| ----------- | --------------- | ------- | ------------------------------ |
-| IN_PROGRESS | Yes             | Any     | Loop back to Phase 1 or 2      |
-| IN_PROGRESS | No              | FAILING | Loop — fix failures first      |
-| BLOCKED     | Any             | Any     | Report blocker, wait for input |
-| COMPLETE    | No              | PASSING | Evaluate exit gate             |
+### 任务选择决策表
+
+| 条件                     | 选择哪项任务                 |
+| ------------------------ | ---------------------------- |
+| 存在阻塞其他任务的阻塞项 | 选择该阻塞项任务             |
+| 存在测试失败             | 选择修复该失败的任务         |
+| 所有任务相互独立         | 选择优先级最高的任务         |
+| 多个任务优先级相同       | 选择规范最清晰的那项         |
+| 最高优先级任务缺少规范   | 运行 PLANNING 模式以识别缺口 |
+
+### 构建期间子代理规则
+
+| 资源            | 预算                   | 依据                         |
+| --------------- | ---------------------- | ---------------------------- |
+| 读取/搜索子代理 | 最多 500 个并行 Sonnet | 快速收集上下文               |
+| 构建子代理      | 每次仅 1 个 Sonnet     | 串行构建以检测失败           |
+| 主上下文        | 40-60% 利用率          | “智能区”——保留足够的思考空间 |
+
+### 构建模式约束
+
+| 约束               | 依据                                   |
+| ------------------ | -------------------------------------- |
+| 禁止占位符或桩代码 | 每一行代码都必须是生产级质量           |
+| 先搜索再实现       | 代码可能已存在于其他地方               |
+| 立即运行测试       | 早期回压（backpressure）可尽早捕获错误 |
+| 每项任务后更新计划 | 保持计划与实际情况同步                 |
+| 每项任务后提交     | 小步原子提交，便于回滚                 |
+
+**停止 — 在满足以下条件前，切勿进入阶段 3：**
+
+- [ ] 任务已完全实现（无桩代码）
+- [ ] 已运行测试
+- [ ] `IMPLEMENTATION_PLAN.md` 已更新
+- [ ] 更改已提交
 
 ---
 
-## Exit Conditions — Dual-Condition Gate
+## 阶段 3：STATUS CHECK（状态检查）
+
+**目标：** 生成 RALPH_STATUS 块并评估退出条件。
+
+每次 BUILD 迭代完成后，调用 `ralph-status` 技能以生成结构化状态块。
+
+### 退出评估
+
+| 检查项                 | 条件                                  | 结果         |
+| ---------------------- | ------------------------------------- | ------------ |
+| 是否有剩余任务？       | `IMPLEMENTATION_PLAN.md` 存在未勾选项 | 继续循环     |
+| 测试是否通过？         | 完整测试套件通过                      | 退出必要条件 |
+| 迭代中是否有错误？     | 执行干净，无未解决异常                | 退出必要条件 |
+| 是否仍有有意义的工作？ | 无 TODO，无未完成功能                 | 退出必要条件 |
+
+### 循环决策
+
+| 状态                  | 剩余任务 | 测试            | 动作                 |
+| --------------------- | -------- | --------------- | -------------------- |
+| IN_PROGRESS（进行中） | 有       | 任意            | 循环回阶段 1 或 2    |
+| IN_PROGRESS（进行中） | 无       | FAILING（失败） | 循环——优先修复失败   |
+| BLOCKED（阻塞）       | 任意     | 任意            | 报告阻塞项，等待输入 |
+| COMPLETE（完成）      | 无       | PASSING（通过） | 评估退出门控         |
+
+---
+
+## 退出条件——双条件门控
 
 <HARD-GATE>
-Both conditions must be true simultaneously to exit the loop:
+必须同时满足以下两个条件方可退出循环：
 </HARD-GATE>
 
-| Condition             | Threshold                                  | Verification                  |
-| --------------------- | ------------------------------------------ | ----------------------------- |
-| Completion indicators | >= 2 recent occurrences of "done" language | Heuristic detection in output |
-| Explicit EXIT_SIGNAL  | `EXIT_SIGNAL: true` in status block        | Intentional declaration       |
+| 条件             | 阈值                                       | 验证方式       |
+| ---------------- | ------------------------------------------ | -------------- |
+| 完成指标         | 最近输出中至少 2 次出现“完成/done”相关表述 | 启发式输出检测 |
+| 明确 EXIT_SIGNAL | 状态块中 `EXIT_SIGNAL: true`               | 意图声明       |
 
-### EXIT_SIGNAL May Only Be `true` When ALL Of:
+### `EXIT_SIGNAL` 仅在满足以下所有条件时方可设为 `true`：
 
-- IMPLEMENTATION_PLAN.md has no remaining tasks
-- All tests pass
-- No errors in latest iteration
-- No meaningful work remains
+- `IMPLEMENTATION_PLAN.md` 无剩余任务
+- 所有测试通过
+- 最新迭代中无错误
+- 无剩余的有意义工作
 
-This prevents false positives where completion language appears while productive work continues.
+这可防止在仍有 productive 工作继续进行时，因出现完成类表述而产生误判。
 
-### Exit Decision Table
+### 退出决策表
 
-| Completion Language | EXIT_SIGNAL | Action                             |
-| ------------------- | ----------- | ---------------------------------- |
-| < 2 occurrences     | false       | Continue loop                      |
-| >= 2 occurrences    | false       | Continue — may be casual language  |
-| < 2 occurrences     | true        | Continue — signal without evidence |
-| >= 2 occurrences    | true        | EXIT the loop                      |
-
----
-
-## Context Efficiency
-
-| Resource        | Budget             | Strategy                                  |
-| --------------- | ------------------ | ----------------------------------------- |
-| Main context    | 40-60% of window   | Keep focused; delegate heavy lifting      |
-| Read subagents  | Up to 5 parallel   | Searching, file reading, pattern matching |
-| Build subagents | 1 at a time        | Implementation, test execution            |
-| Token format    | Markdown over JSON | ~30% more efficient                       |
+| 完成类表述 | EXIT_SIGNAL | 动作                     |
+| ---------- | ----------- | ------------------------ |
+| < 2 次     | false       | 继续循环                 |
+| >= 2 次    | false       | 继续——可能仅为日常用语   |
+| < 2 次     | true        | 继续——有信号但无证据支撑 |
+| >= 2 次    | true        | 退出循环                 |
 
 ---
 
-## Steering Mechanisms
+## 上下文效率
 
-### Upstream Steering (Shaping Inputs)
-
-| Mechanism                              | Purpose                          |
-| -------------------------------------- | -------------------------------- |
-| First ~5,000 tokens for detailed specs | Front-load specification context |
-| Identical files each iteration         | Deterministic context loading    |
-| Existing code patterns as guides       | Generate consistent code         |
-
-### Downstream Steering (Validation Gates)
-
-| Gate         | What It Catches           |
-| ------------ | ------------------------- |
-| Tests        | Invalid implementations   |
-| Builds       | Compilation errors        |
-| Linters      | Style inconsistencies     |
-| Typecheckers | Contract violations       |
-| LLM-as-judge | Subjective quality issues |
+| 资源       | 预算               | 策略                         |
+| ---------- | ------------------ | ---------------------------- |
+| 主上下文   | 窗口的 40-60%      | 保持聚焦；将繁重工作委派出去 |
+| 读取子代理 | 最多 500 个并行    | 搜索、文件读取、模式匹配     |
+| 构建子代理 | 每次 1 个          | 实现、测试执行               |
+| Token 格式 | Markdown 优于 JSON | 效率提升约 30%               |
 
 ---
 
-## State Persistence
+## 引导机制
 
-The only persistent state between iterations is the file system:
+### 上游引导（塑造输入）
 
-| File                             | Purpose                         | Managed By                  |
-| -------------------------------- | ------------------------------- | --------------------------- |
-| `IMPLEMENTATION_PLAN.md`         | Task list and progress          | Planning and Building modes |
-| `docs/specs/<date>_<topic>/*.md` | Specification files             | `spec-writing` skill        |
-| `AGENTS.md`                      | Operational notes and learnings | Building mode               |
-| Source code + tests              | The actual implementation       | Building mode               |
+| 机制                            | 目的             |
+| ------------------------------- | ---------------- |
+| 前 ~5,000 个 Token 用于详细规范 | 前置规范上下文   |
+| 每次迭代加载相同文件            | 确定性上下文加载 |
+| 以现有代码模式为指导            | 生成一致的代码   |
 
-**IMPLEMENTATION_PLAN.md is disposable** — it can be regenerated from specs at any time by running a planning iteration.
+### 下游引导（验证门控）
 
----
-
-## Anti-Patterns / Common Mistakes
-
-| Anti-Pattern                        | Why It Fails                              | Correct Approach                         |
-| ----------------------------------- | ----------------------------------------- | ---------------------------------------- |
-| Multiple tasks per iteration        | Context switching, unclear progress       | ONE task per loop                        |
-| Assuming code is missing            | May exist elsewhere, leads to duplication | Always search first                      |
-| Skipping tests after implementation | Bugs accumulate, no backpressure          | Run tests IMMEDIATELY                    |
-| Modifying plan only during planning | Plan drifts from reality                  | Update during BOTH planning and building |
-| Keeping stale plans                 | Tasks based on outdated assumptions       | Regenerate liberally — planning is cheap |
-| Manual context management           | Main context overflows                    | Trust subagent delegation                |
-| Exiting without dual-condition      | Premature exit, work incomplete           | Both conditions must be true             |
-| Not committing after each task      | Large changesets, hard to revert          | Commit every iteration                   |
-| Placeholder or stub code            | Incomplete implementations accumulate     | Production-quality code only             |
-| Skipping STATUS CHECK               | No exit evaluation, loop runs forever     | Every iteration ends with status         |
+| 门控                     | 拦截内容     |
+| ------------------------ | ------------ |
+| 测试                     | 无效实现     |
+| 构建                     | 编译错误     |
+| Linter                   | 风格不一致   |
+| 类型检查器               | 契约违规     |
+| LLM-as-judge（LLM 裁判） | 主观质量问题 |
 
 ---
 
-## Anti-Rationalization Guards
+## 状态持久化
+
+迭代之间唯一的持久化状态是文件系统：
+
+| 文件                     | 用途               | 管理者              |
+| ------------------------ | ------------------ | ------------------- |
+| `IMPLEMENTATION_PLAN.md` | 任务列表与进度     | 规划与构建模式      |
+| `specs/*.md`             | 规范文件           | `spec-writing` 技能 |
+| `AGENTS.md`              | 操作笔记与经验学习 | 构建模式            |
+| 源代码 + 测试            | 实际实现           | 构建模式            |
+
+**`IMPLEMENTATION_PLAN.md` 是可丢弃的**——可随时通过运行一次规划迭代，从规范中重新生成。
+
+---
+
+## 反模式 / 常见错误
+
+| 反模式                 | 失败原因                     | 正确做法                   |
+| ---------------------- | ---------------------------- | -------------------------- |
+| 每次迭代执行多项任务   | 上下文切换频繁，进度不清晰   | 每次循环仅一项任务         |
+| 假设代码缺失           | 代码可能存在于他处，导致重复 | 始终先搜索                 |
+| 实现后跳过测试         | Bug 累积，缺乏回压机制       | 实现后立刻运行测试         |
+| 仅在规划期修改计划     | 计划脱离实际情况             | 在规划和构建阶段均更新     |
+| 保留陈旧计划           | 任务基于过时假设             | 频繁重新生成——规划成本很低 |
+| 手动管理上下文         | 主上下文溢出                 | 信任子代理委派             |
+| 未通过双条件门控即退出 | 提前退出，工作未完成         | 必须同时满足两项条件       |
+| 每项任务后不提交       | 变更集过大，难以回滚         | 每次迭代均提交             |
+| 使用占位符或桩代码     | 不完整实现不断累积           | 仅编写生产级质量代码       |
+| 跳过状态检查           | 无退出评估，循环无限运行     | 每次迭代均以状态检查结束   |
+
+---
+
+## 反自我合理化防护
 
 <HARD-GATE>
-Do NOT exit the loop without the dual-condition gate passing. Do NOT implement more than one task per iteration. Do NOT write placeholder or stub code. Do NOT skip the STATUS CHECK.
+未通过双条件门控前，切勿退出循环。每次迭代切勿执行超过一项任务。切勿编写占位符或桩代码。切勿跳过状态检查。
 </HARD-GATE>
 
-If you catch yourself thinking:
+如果你发现自己产生以下想法：
 
-- "I can do two quick tasks in this iteration..." — No. ONE task per loop.
-- "The plan is probably fine, skip planning mode..." — Verify. Plans drift.
-- "Tests can wait until the next iteration..." — Run tests NOW. Backpressure is essential.
-- "Everything is done, I can exit..." — Check the dual-condition gate. Both must be true.
-
----
-
-## Subagent Dispatch Opportunities
-
-| Task Pattern                           | Dispatch To                                    | When                                                     |
-| -------------------------------------- | ---------------------------------------------- | -------------------------------------------------------- |
-| Independent file reads across codebase | `Agent` tool with `subagent_type="Explore"`    | When loop iteration needs context from multiple areas    |
-| Test execution during build phase      | `Bash` tool with `run_in_background=true`      | When tests can validate work without blocking progress   |
-| Code review between iterations         | `Agent` tool dispatching `code-reviewer` agent | After completing a build iteration, before next planning |
-
-Follow the `dispatching-parallel-agents` skill protocol when dispatching.
+- “我这次迭代可以顺手做两个小任务……” —— 不行。每次循环仅限一项任务。
+- “计划应该没问题，跳过规划模式吧……” —— 请验证。计划会偏离。
+- “测试可以等到下次迭代再做……” —— 现在立刻运行测试。回压机制至关重要。
+- “全都做完了，我可以退出了……” —— 检查双条件门控。两项必须同时为真。
 
 ---
 
-## Integration Points
+## 子代理调度时机
 
-| Skill                            | Relationship                                  | When                           |
-| -------------------------------- | --------------------------------------------- | ------------------------------ |
-| `ralph-status`                   | Per-iteration — produces status blocks        | Phase 3: STATUS CHECK          |
-| `circuit-breaker`                | Safety net — monitors loop health             | Halts on stagnation            |
-| `spec-writing`                   | Upstream — creates specs consumed by planning | Before loop starts             |
-| `acceptance-testing`             | Validation — validates behavioral outcomes    | During building mode           |
-| `resilient-execution`            | Per-task — retry on failure                   | When task implementation fails |
-| `task-management`                | Tracking — tracks individual tasks            | Within iterations              |
-| `llm-as-judge`                   | Quality — evaluates subjective criteria       | Downstream steering            |
-| `verification-before-completion` | Final gate — verifies completion claim        | Before EXIT_SIGNAL: true       |
+| 任务模式               | 调度至                                    | 时机                           |
+| ---------------------- | ----------------------------------------- | ------------------------------ |
+| 跨代码库的独立文件读取 | `Agent` 工具（`subagent_type="Explore"`） | 当循环迭代需要多区域上下文时   |
+| 构建阶段的测试执行     | `Bash` 工具（`run_in_background=true`）   | 当测试可验证工作且不阻塞进度时 |
+| 迭代间的代码审查       | `Agent` 工具调度 `code-reviewer` 代理     | 完成构建迭代后、下次规划前     |
+
+调度时请遵循 `dispatching-parallel-agents` 技能协议。
 
 ---
 
-## Concrete Examples
+## 集成点
 
-### Example: Planning Mode Output
+| 技能                             | 关系                       | 时机                        |
+| -------------------------------- | -------------------------- | --------------------------- |
+| `ralph-status`                   | 每次迭代——生成状态块       | 阶段 3：状态检查            |
+| `circuit-breaker`                | 安全网——监控循环健康度     | 停滞时中止                  |
+| `spec-writing`                   | 上游——创建供规划消费的规范 | 循环开始前                  |
+| `acceptance-testing`             | 验证——验证行为结果         | 构建模式期间                |
+| `resilient-execution`            | 每项任务——失败时重试       | 任务实现失败时              |
+| `task-management`                | 跟踪——跟踪单个任务         | 迭代内部                    |
+| `llm-as-judge`                   | 质量——评估主观标准         | 下游引导                    |
+| `verification-before-completion` | 最终门控——验证完成声明     | 设置 `EXIT_SIGNAL: true` 前 |
+
+---
+
+## 具体示例
+
+### 示例：规划模式输出
 
 ```
-IMPLEMENTATION_PLAN.md:
-- [x] Set up project structure
-- [x] Implement core data types
-- [ ] Implement user authentication (P0 — blocks 3 other tasks)
-- [ ] Add API rate limiting (P1)
-- [ ] Implement webhook handlers (P1)
-- [ ] Add monitoring and logging (P2)
+IMPLEMENTATION_PLAN.md：
+- [x] 搭建项目结构
+- [x] 实现核心数据类型
+- [ ] 实现用户认证（P0——阻塞其他 3 项任务）
+- [ ] 添加 API 限流（P1）
+- [ ] 实现 Webhook 处理器（P1）
+- [ ] 添加监控与日志（P2）
 
-Missing specs: Rate limiting spec needs error response format defined.
+缺失规范：限流规范需定义错误响应格式。
 ```
 
-### Example: Building Mode Iteration
+### 示例：构建模式迭代
 
 ```
-Task selected: Implement user authentication
-Searched: Found existing password hashing in src/lib/crypto.ts
-Implemented: src/auth/service.ts, src/auth/middleware.ts
-Tests: 8 passing, 0 failing
-Committed: feat(auth): implement JWT-based user authentication
+选中任务：实现用户认证
+搜索：在 src/lib/crypto.ts 中发现现有密码哈希逻辑
+实现：src/auth/service.ts, src/auth/middleware.ts
+测试：8 通过，0 失败
+提交：feat(auth): implement JWT-based user authentication
 
-Updated IMPLEMENTATION_PLAN.md:
-- [x] Implement user authentication
+已更新 IMPLEMENTATION_PLAN.md：
+- [x] 实现用户认证
 ```
 
-### Example: Status Block
+### 示例：状态块
 
 ```
 ---RALPH_STATUS---
@@ -346,12 +346,12 @@ FILES_MODIFIED: 4
 TESTS_STATUS: PASSING
 WORK_TYPE: IMPLEMENTATION
 EXIT_SIGNAL: false
-RECOMMENDATION: Next: implement API rate limiting (P1)
+RECOMMENDATION: 下一步：实现 API 限流 (P1)
 ---END_RALPH_STATUS---
 ```
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — Follow this process exactly. The determinism of the loop depends on consistent execution. ONE task per loop. Status block every iteration. Dual-condition exit gate. No exceptions.
+**严格遵循（RIGID）**——请严格照此流程执行。循环的确定性依赖于一致的执行。每次循环仅限一项任务。每次迭代必输出状态块。严格执行双条件退出门控。无例外。

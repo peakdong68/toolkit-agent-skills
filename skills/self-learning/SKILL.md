@@ -1,298 +1,298 @@
 ---
 name: self-learning
-description: Use when starting work on a new or unfamiliar project, when encountering unexpected patterns, when user corrects your assumptions, or when explicitly invoked via /learn - auto-discovers and remembers project context through structured codebase analysis
+description: 当开始处理新或不熟悉的项目、遇到意外模式、用户纠正你的假设，或通过 /learn 显式调用时使用 - 通过结构化代码库分析自动发现并记忆项目上下文
 ---
 
-## Overview
+## 概述
 
-The self-learning skill automatically discovers, understands, and persists project context across sessions. It builds a mental model of the codebase, tech stack, conventions, and team preferences by scanning actual project artifacts. Without self-learning, every session starts from zero — with it, the agent accumulates institutional knowledge that improves accuracy and reduces errors over time.
+self-learning（自主学习）技能会自动发现、理解并跨会话持久化项目上下文。它通过扫描实际的项目制品，构建关于代码库、技术栈、规范和团队偏好的心智模型。没有 self-learning，每次会话都从零开始；有了它，智能体会积累团队沉淀知识，从而随时间推移提高准确性并减少错误。
 
-**Announce at start:** "I'm using the self-learning skill to understand this project."
+**开始时声明：**“我正在使用 self-learning 技能来了解这个项目。”
 
 ---
 
-## Phase 1: Trigger Identification
+## 第一阶段：触发条件识别
 
-Determine which trigger activated this skill:
+确定激活此技能的触发条件：
 
-| Trigger | Context | Action |
+| 触发条件 | 上下文 | 操作 |
 |---------|---------|--------|
-| New project | No memory files exist | Full discovery (Phases 2-5) |
-| Unfamiliar area | Working in unknown part of codebase | Targeted discovery (Phase 2-3 for that area) |
-| User correction | User says "that's wrong" or corrects an assumption | Correction protocol (Phase 6) |
-| Explicit `/learn` | User invokes the command | Full discovery (Phases 2-5) |
-| Session start | Memory files exist but may be stale | Load and validate memory (Phase 7) |
+| 新项目 | 不存在记忆文件 | 完整发现（第 2-5 阶段） |
+| 不熟悉区域 | 在代码库的未知部分工作 | 定向发现（针对该区域的第 2-3 阶段） |
+| 用户纠正 | 用户说“那是错的”或纠正假设 | 纠正协议（第 6 阶段） |
+| 显式 `/learn` | 用户调用该命令 | 完整发现（第 2-5 阶段） |
+| 会话开始 | 记忆文件存在但可能已过时 | 加载并验证记忆（第 7 阶段） |
 
-> **STOP: Identify your trigger before proceeding. Different triggers require different phases.**
+> **停止：在继续之前确认你的触发条件。不同的触发条件需要不同的阶段。**
 
 ---
 
-## Phase 2: Project Structure Scan
+## 第二阶段：项目结构扫描
 
-Use Explore agents to examine these files in order of priority:
+使用 Explore 智能体按优先级顺序检查以下文件：
 
-| File/Directory | What It Reveals | Priority |
+| 文件/目录 | 揭示的信息 | 优先级 |
 |----------------|----------------|----------|
-| `package.json` / `pyproject.toml` / `go.mod` / `Cargo.toml` / `composer.json` | Tech stack, dependencies, scripts | Critical |
-| `README.md` / `CLAUDE.md` / `AGENTS.md` | Project purpose, conventions, rules | Critical |
-| Directory structure (top 2 levels) | Architecture pattern (monorepo, MVC, hexagonal, etc.) | Critical |
-| `tsconfig.json` / `eslint.config.*` / `.prettierrc` / `phpstan.neon` | Coding standards, strictness level | High |
-| `.gitignore` | What is excluded, deployment hints | High |
-| `docker-compose.yml` / `Dockerfile` | Infrastructure, services | Medium |
-| `.github/workflows/` / `.gitlab-ci.yml` | CI/CD setup, required checks | Medium |
-| `.env.example` | Environment variables, external services | Medium |
-| `specs/` / `docs/` | Existing specifications and documentation | Medium |
+| `package.json` / `pyproject.toml` / `go.mod` / `Cargo.toml` / `composer.json` | 技术栈、依赖项、脚本 | 关键 |
+| `README.md` / `CLAUDE.md` / `AGENTS.md` | 项目目的、规范、规则 | 关键 |
+| 目录结构（前 2 层） | 架构模式（单体仓库、MVC、六边形架构等） | 关键 |
+| `tsconfig.json` / `eslint.config.*` / `.prettierrc` / `phpstan.neon` | 编码规范、严格程度 | 高 |
+| `.gitignore` | 排除内容、部署提示 | 高 |
+| `docker-compose.yml` / `Dockerfile` | 基础设施、服务 | 中 |
+| `.github/workflows/` / `.gitlab-ci.yml` | CI/CD 设置、必需检查 | 中 |
+| `.env.example` | 环境变量、外部服务 | 中 |
+| `specs/` / `docs/` | 现有规范与文档 | 中 |
 
-**Action:** For each file found, extract key facts. Do NOT read every file — scan strategically.
+**操作：** 对于找到的每个文件，提取关键事实。不要阅读每个文件——进行战略性扫描。
 
-> **STOP: Complete the structure scan before analyzing code patterns.**
+> **停止：在分析代码模式之前完成结构扫描。**
 
 ---
 
-## Phase 3: Code Pattern Analysis
+## 第三阶段：代码模式分析
 
-Examine 3-5 representative files to identify patterns:
+检查 3-5 个代表性文件以识别模式：
 
-| Pattern Category | What to Look For | Example Indicators |
+| 模式类别 | 查找内容 | 示例指标 |
 |-----------------|------------------|-------------------|
-| Naming conventions | Variable/function/file naming | camelCase, snake_case, kebab-case, PascalCase |
-| Import/export | Module organization | Barrel exports, relative vs absolute paths, path aliases |
-| Error handling | How failures are managed | try/catch, Result types, error boundaries, custom exceptions |
-| Testing patterns | Test framework and style | File naming (`*.test.ts` vs `*.spec.ts`), structure (describe/it vs test) |
-| State management | How data flows | Redux, Zustand, Context, Vuex, Pinia, Livewire |
-| API patterns | Communication style | REST, GraphQL, tRPC, RPC, WebSocket |
-| Database access | Data layer approach | ORM (Prisma, Eloquent, TypeORM), raw SQL, query builder |
-| Component patterns | UI structure | Atomic design, feature folders, co-located styles |
+| 命名规范 | 变量/函数/文件命名 | camelCase、snake_case、kebab-case、PascalCase |
+| 导入/导出 | 模块组织方式 | 聚合导出（Barrel exports）、相对路径 vs 绝对路径、路径别名 |
+| 错误处理 | 失败处理方式 | try/catch、Result 类型、错误边界、自定义异常 |
+| 测试模式 | 测试框架与风格 | 文件命名（`*.test.ts` vs `*.spec.ts`）、结构（describe/it vs test） |
+| 状态管理 | 数据流动方式 | Redux、Zustand、Context、Vuex、Pinia、Livewire |
+| API 模式 | 通信风格 | REST、GraphQL、tRPC、RPC、WebSocket |
+| 数据库访问 | 数据层方法 | ORM（Prisma、Eloquent、TypeORM）、原生 SQL、查询构建器 |
+| 组件模式 | UI 结构 | 原子设计、特性文件夹、样式就近放置 |
 
-**Action:** Open 3-5 files from different areas of the codebase. Record observed patterns with specific examples.
+**操作：** 打开代码库中不同区域的 3-5 个文件。记录观察到的模式及具体示例。
 
 ---
 
-## Phase 4: Git History Analysis
+## 第四阶段：Git 历史分析
 
 ```bash
-git log --oneline -20          # Recent commits — development velocity, commit style
-git shortlog -sn -20           # Active contributors
-git branch -a                  # Branching strategy
-git log --diff-filter=A --name-only --pretty=format: -10 | head -30  # Recently added files
+git log --oneline -20          # 近期提交 — 开发速度、提交风格
+git shortlog -sn -20           # 活跃贡献者
+git branch -a                  # 分支策略
+git log --diff-filter=A --name-only --pretty=format: -10 | head -30  # 最近新增的文件
 ```
 
-**Extract:** Development velocity, commit message conventions, branching strategy, active areas.
+**提取：** 开发速度、提交信息规范、分支策略、活跃区域。
 
-> **STOP: Complete all discovery phases before persisting to memory.**
+> **停止：在将发现持久化到记忆之前，完成所有发现阶段。**
 
 ---
 
-## Phase 5: Persist to Memory
+## 第五阶段：持久化到记忆
 
-Update the following memory files (create if they do not exist, append if they do):
+更新以下记忆文件（如果不存在则创建，存在则追加）：
 
 ### `memory/project-context.md`
 ```markdown
-# Project Context
-<!-- Updated by self-learning skill -->
-<!-- Last updated: YYYY-MM-DD -->
+# 项目上下文
+<!-- 由 self-learning 技能更新 -->
+<!-- 最后更新：YYYY-MM-DD -->
 
-## Purpose
-[What this project does, who it is for]
+## 目的
+[此项目做什么，面向谁]
 
-## Tech Stack
-- Language: [e.g., TypeScript 5.x]
-- Framework: [e.g., Next.js 15]
-- Database: [e.g., PostgreSQL via Prisma]
-- Testing: [e.g., Vitest + Playwright]
-- CI/CD: [e.g., GitHub Actions]
+## 技术栈
+- 语言：[例如，TypeScript 5.x]
+- 框架：[例如，Next.js 15]
+- 数据库：[例如，通过 Prisma 使用 PostgreSQL]
+- 测试：[例如，Vitest + Playwright]
+- CI/CD：[例如，GitHub Actions]
 
-## Architecture
-[e.g., Monorepo with apps/ and packages/]
-[Key directories and their purposes]
+## 架构
+[例如，包含 apps/ 和 packages/ 的单体仓库]
+[关键目录及其用途]
 
-## Key Dependencies
-[Critical libraries and their roles]
+## 关键依赖
+[核心库及其作用]
 ```
 
 ### `memory/learned-patterns.md`
 ```markdown
-# Learned Patterns
-<!-- Updated by self-learning skill -->
-<!-- Last updated: YYYY-MM-DD -->
+# 已学习模式
+<!-- 由 self-learning、code-review  和 brainstorming 技能更新 -->
+<!-- 最后更新：YYYY-MM-DD -->
 
-## Naming Conventions
-[What was observed with specific examples]
+## 命名规范
+[观察到的内容及具体示例]
 
-## Code Organization
-[Import patterns, file structure, module boundaries]
+## 代码组织
+[导入模式、文件结构、模块边界]
 
-## Error Handling
-[How errors are handled in this project with examples]
+## 错误处理
+[此项目中如何处理错误，附示例]
 
-## Testing Approach
-[Framework, patterns, naming, coverage expectations]
+## 测试方法
+[框架、模式、命名、覆盖率期望]
 ```
 
 ### `memory/user-preferences.md`
 ```markdown
-# User Preferences
-<!-- Updated by self-learning skill -->
-<!-- Last updated: YYYY-MM-DD -->
+# 用户偏好
+<!-- 由 self-learning 技能更新 -->
+<!-- 最后更新：YYYY-MM-DD -->
 
-## Communication Style
-[Terse? Detailed? Prefers code over explanation?]
+## 沟通风格
+[简洁？详细？偏好代码而非解释？]
 
-## Workflow Preferences
-[PR workflow? Branch naming? Commit style?]
+## 工作流偏好
+[PR 工作流？分支命名？提交风格？]
 
-## Review Preferences
-[What they focus on in reviews?]
+## 审查偏好
+[他们在审查中关注什么？]
 ```
 
 ### `memory/decisions-log.md`
 ```markdown
-# Decisions Log
-<!-- Updated by self-learning and brainstorming skills -->
+# 决策日志
+<!-- 由 self-learning、code-review 和 brainstorming 技能更新 -->
 
-## YYYY-MM-DD: [Decision Title]
-**Decision:** [What was decided]
-**Context:** [Why this came up]
-**Rationale:** [Why this was chosen over alternatives]
-**Alternatives considered:** [What else was considered]
+## YYYY-MM-DD: [决策标题]
+**决策：** [决定了什么]
+**背景：** [为何出现此问题]
+**理由：** [为何选择此项而非其他替代方案]
+**考虑的替代方案：** [还考虑了哪些方案]
 ```
 
 ---
 
-## Phase 6: Correction Protocol
+## 第六阶段：纠正协议
 
-When the user corrects an assumption:
+当用户纠正假设时：
 
-1. **Acknowledge** the correction immediately — do not defend the wrong assumption
-2. **Identify** which memory file should be updated
-3. **Update** the memory file with the correction, including date and context
-4. **Apply** the correction to current work immediately
-5. **Propagate** — check if the correction invalidates other assumptions in memory
+1. **立即承认** 纠正——不要为错误的假设辩护
+2. **识别** 应更新哪个记忆文件
+3. **更新** 记忆文件，记录纠正内容，包括日期和背景
+4. **立即应用** 纠正到当前工作
+5. **传播** — 检查该纠正是否使记忆中的其他假设失效
 
-| Correction Type | Memory File to Update | Example |
+| 纠正类型 | 需更新的记忆文件 | 示例 |
 |----------------|----------------------|---------|
-| Naming convention wrong | `learned-patterns.md` | "We use snake_case, not camelCase" |
-| Tech stack wrong | `project-context.md` | "We use Vitest, not Jest" |
-| Workflow preference | `user-preferences.md` | "Always create PRs, never push to main" |
-| Architecture misunderstanding | `project-context.md` | "That is a microservice, not a monolith" |
-| Decision context | `decisions-log.md` | "We chose X because of Y, not Z" |
+| 命名规范错误 | `learned-patterns.md` | “我们使用 snake_case，而不是 camelCase” |
+| 技术栈错误 | `project-context.md` | “我们使用 Vitest，而不是 Jest” |
+| 工作流偏好 | `user-preferences.md` | “始终创建 PR，绝不直接推送到 main” |
+| 架构误解 | `project-context.md` | “那是微服务，而不是单体应用” |
+| 决策背景 | `decisions-log.md` | “我们选择 X 是因为 Y，而不是 Z” |
 
-> **Do NOT skip the memory update. Corrections that are not persisted will be repeated.**
-
----
-
-## Phase 7: Session Start — Memory Validation
-
-When memory files already exist:
-
-1. Load all memory files from `memory/` directory
-2. Check `Last updated` dates — flag anything older than 30 days
-3. Spot-check 2-3 facts against current codebase (e.g., does `package.json` still list the same framework?)
-4. If discrepancies found, run a targeted re-scan of the changed area
-5. Update stale entries with current information
+> **切勿跳过记忆更新。未持久化的纠正将会被重复犯下。**
 
 ---
 
-## Decision Table: Discovery Depth
+## 第七阶段：会话开始 — 记忆验证
 
-| Situation | Discovery Depth | Time Budget |
+当记忆文件已存在时：
+
+1. 从 `memory/` 目录加载所有记忆文件
+2. 检查 `最后更新日期` — 标记任何超过 30 天的内容
+3. 针对当前代码库抽查 2-3 个事实（例如，`package.json` 是否仍列出相同的框架？）
+4. 如果发现差异，对变更区域运行定向重新扫描
+5. 使用最新信息更新过时的条目
+
+---
+
+## 决策表：发现深度
+
+| 情况 | 发现深度 | 时间预算 |
 |-----------|----------------|-------------|
-| Brand new project, no memory files | Full (all phases) | 3-5 minutes |
-| New area of known project | Targeted (Phase 2-3 for that area only) | 1-2 minutes |
-| User correction | Correction protocol only (Phase 6) | 30 seconds |
-| Session start with existing memory | Validation only (Phase 7) | 1 minute |
-| Major refactor detected (many changed files) | Full re-scan | 3-5 minutes |
+| 全新项目，无记忆文件 | 完整（所有阶段） | 3-5 分钟 |
+| 已知项目的新区域 | 定向（仅针对该区域的第 2-3 阶段） | 1-2 分钟 |
+| 用户纠正 | 仅纠正协议（第 6 阶段） | 30 秒 |
+| 会话开始且存在记忆 | 仅验证（第 7 阶段） | 1 分钟 |
+| 检测到重大重构（大量文件变更） | 完整重新扫描 | 3-5 分钟 |
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| What NOT to Do | Why It Fails | What to Do Instead |
+| 切勿执行的操作 | 为何会失败 | 正确的替代做法 |
 |----------------|-------------|-------------------|
-| Read every file in the project | Wastes context window, slow | Scan strategically: config files first, then 3-5 representative code files |
-| Assume conventions from one file | One file may be an outlier | Verify patterns across 2+ files before persisting |
-| Overwrite memory files completely | Loses historical context and user corrections | Append or update specific sections, preserve history |
-| Skip git history | Misses development velocity and team patterns | Always check recent commits and contributors |
-| Persist guesses as facts | Poisons future sessions with wrong context | Only persist observations backed by evidence |
-| Ignore user corrections | Repeats the same mistakes | Corrections override observations immediately |
-| Deep-dive into implementation details | Loses the forest for the trees | Focus on patterns and conventions, not specific logic |
-| Skip memory validation on session start | Uses stale context | Always spot-check memory against current codebase |
+| 阅读项目中的每个文件 | 浪费上下文窗口，速度慢 | 战略性扫描：优先配置文件，然后是 3-5 个代表性代码文件 |
+| 仅凭单个文件假设规范 | 单个文件可能是特例 | 在持久化前，跨 2 个以上文件验证模式 |
+| 完全覆盖记忆文件 | 丢失历史上下文和用户纠正 | 追加或更新特定部分，保留历史 |
+| 跳过 Git 历史 | 错过开发速度和团队模式 | 始终检查近期提交和贡献者 |
+| 将猜测作为事实持久化 | 用错误上下文毒害未来会话 | 仅持久化有证据支持的观察结果 |
+| 忽略用户纠正 | 重复犯同样的错误 | 纠正内容立即覆盖观察结果 |
+| 深入钻研实现细节 | 见树不见林 | 关注模式和规范，而非具体逻辑 |
+| 会话开始时跳过记忆验证 | 使用过时的上下文 | 始终对照当前代码库抽查记忆 |
 
 ---
 
-## Anti-Rationalization Guards
+## 反合理化防线
 
-| Thought | Reality |
+| 想法 | 现实 |
 |---------|---------|
-| "I already know this framework" | You do not know THIS project's conventions. Scan. |
-| "The memory files are recent enough" | Spot-check anyway. Code changes fast. |
-| "This correction is minor" | Minor corrections prevent major errors. Persist it. |
-| "I will remember this without writing it down" | You will not. Sessions are independent. Persist to memory. |
-| "Scanning will take too long" | Not scanning leads to wrong assumptions that take longer to fix. |
+| “我已经熟悉这个框架了” | 你并不了解 THIS 项目的规范。去扫描。 |
+| “记忆文件还算新” | 无论如何都要抽查。代码变更很快。 |
+| “这个纠正微不足道” | 微小的纠正能防止重大错误。持久化它。 |
+| “我不写下来也能记住” | 你记不住。会话是独立的。持久化到记忆。 |
+| “扫描太耗时间了” | 不扫描会导致错误的假设，修复它们更耗时。 |
 
-> **Do NOT skip memory persistence. If you discovered it, write it down.**
+> **切勿跳过记忆持久化。只要你发现了它，就把它写下来。**
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
+| 技能 | 关系 |
 |-------|-------------|
-| `using-toolkit` | Triggers self-learning at session start |
-| `brainstorming` | Loads project context before idea generation |
-| `planning` | Uses learned patterns to propose consistent approaches |
-| `code-review` | Checks code against learned conventions |
-| `auto-improvement` | Records discovery effectiveness metrics |
-| `resilient-execution` | Failure patterns inform future approach selection |
+| `using-toolkit` | 在会话开始时触发 self-learning |
+| `brainstorming` | 在生成想法前加载项目上下文 |
+| `planning` | 使用已学习模式提出一致的方法 |
+| `code-review` | 对照已学习规范检查代码 |
+| `auto-improvement` | 记录发现效果指标 |
+| `resilient-execution` | 失败模式为未来的方法选择提供依据 |
 
 ---
 
-## Concrete Examples
+## 具体示例
 
-### Discovery Command Sequence
+### 发现命令序列
 ```bash
-# Step 1: Identify tech stack
+# 步骤 1：识别技术栈
 cat package.json | head -50
-# or
+# 或
 cat composer.json | head -50
-# or
+# 或
 cat pyproject.toml
 
-# Step 2: Check project structure
+# 步骤 2：检查项目结构
 ls -la
 ls -la src/ || ls -la app/ || ls -la lib/
 
-# Step 3: Examine coding standards
+# 步骤 3：检查编码规范
 cat tsconfig.json 2>/dev/null || cat phpstan.neon 2>/dev/null
 cat .eslintrc* 2>/dev/null || cat .prettierrc* 2>/dev/null
 
-# Step 4: Git activity
+# 步骤 4：Git 活动
 git log --oneline -20
 git shortlog -sn -20
 ```
 
-### Memory Update After Correction
+### 纠正后的记忆更新
 ```markdown
-## 2026-03-15: Naming Convention Correction
-**Previous assumption:** Project uses camelCase for database columns
-**Correction:** Project uses snake_case for database columns (user corrected)
-**Evidence:** Checked `migrations/` directory — all columns use snake_case
-**Updated:** learned-patterns.md, Naming Conventions section
+## 2026-03-15: 命名规范纠正
+**先前假设：** 项目对数据库列使用 camelCase
+**纠正：** 项目对数据库列使用 snake_case（用户纠正）
+**证据：** 检查 `migrations/` 目录 — 所有列均使用 snake_case
+**已更新：** learned-patterns.md，命名规范部分
 ```
 
 ---
 
-## Key Principles
+## 核心原则
 
-- **Observe, do not assume** — base learnings on evidence from the codebase
-- **Incremental updates** — append to memory files, do not overwrite
-- **Verify before persisting** — double-check observations with 2+ examples
-- **Respect corrections** — user corrections override observations immediately
-- **Stay current** — re-scan when significant changes occur
+- **观察，而非假设** — 基于代码库中的证据进行学习
+- **增量更新** — 追加到记忆文件，不要覆盖
+- **持久化前验证** — 用 2 个以上示例双重确认观察结果
+- **尊重纠正** — 用户纠正立即覆盖观察结果
+- **保持最新** — 发生重大变更时重新扫描
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — Discovery phases must be followed in order. Memory persistence is mandatory. Corrections must be recorded immediately. Do not skip phases or rationalize away the need to scan.
+**刚性（RIGID）** — 发现阶段必须按顺序执行。记忆持久化是强制性的。纠正必须立即记录。不得跳过阶段或为不扫描找借口。

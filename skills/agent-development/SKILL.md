@@ -1,184 +1,184 @@
 ---
 name: agent-development
 description: >
-  Use when the user needs to build AI agents — tool use patterns, memory management, planning strategies,
-  multi-agent coordination, evaluation, and safety guardrails. Triggers: user says "agent", "build an agent",
-  "tool use", "agent loop", "multi-agent", "memory management", "guardrails", "agent evaluation".
+  当用户需要构建智能体时使用——涵盖工具使用模式、记忆管理、规划策略、
+  多智能体协作、评估以及安全防护机制。触发条件：用户提到"智能体"、"构建智能体"、
+  "工具使用"、"智能体循环"、"多智能体"、"记忆管理"、"安全防护"、"智能体评估"。
 ---
 
-# Agent Development
+# 智能体开发
 
-## Overview
+## 概述
 
-Design and build AI agents that effectively use tools, manage memory, plan multi-step tasks, coordinate with other agents, and operate within safety guardrails. This skill covers the full agent development lifecycle from architecture through evaluation, with emphasis on observable, testable, and safe agent behavior.
+设计并构建能够有效使用工具、管理记忆、规划多步骤任务、与其他智能体协作，并在安全防护机制内运行的智能体。本技能涵盖从架构设计到评估的完整智能体开发生命周期，重点强调可观察、可测试且安全的智能体行为。
 
-## Phase 1: Agent Design
+## 阶段一：智能体设计
 
-1. Define the agent's purpose and scope
-2. Identify required tools and capabilities
-3. Design memory architecture (short-term, long-term)
-4. Plan agent loop structure (observe, think, act)
-5. Define safety boundaries and guardrails
+1. 定义智能体的目标与范围
+2. 识别所需工具与能力
+3. 设计记忆架构（短期、长期）
+4. 规划智能体循环结构（观察、思考、行动）
+5. 定义安全边界与防护机制
 
-**STOP — Present agent design to user for approval before implementation.**
+**暂停 — 在实现之前，向用户展示智能体设计方案以获得批准。**
 
-### Agent Architecture Decision Table
+### 智能体架构决策表
 
-| Agent Type | When to Use | Loop Pattern | Complexity |
-|---|---|---|---|
-| Single-turn tool user | Simple queries with tool calls | Request -> Tool -> Response | Low |
-| ReAct agent | Multi-step reasoning tasks | Thought -> Action -> Observation -> loop | Medium |
-| Plan-and-execute | Complex tasks with dependencies | Plan -> Execute steps -> Validate | Medium-High |
-| Multi-agent orchestrator | Parallel/specialized sub-tasks | Dispatch -> Collect -> Synthesize | High |
-| Autonomous loop (Ralph-style) | Long-running iterative development | Plan -> Build -> Verify -> Exit gate | High |
+| 智能体类型               | 适用场景               | 循环模式                         | 复杂度 |
+| ------------------------ | ---------------------- | -------------------------------- | ------ |
+| 单次工具调用型           | 带工具调用的简单查询   | 请求 -> 工具 -> 响应             | 低     |
+| ReAct 智能体             | 多步骤推理任务         | 思考 -> 行动 -> 观察 -> 循环     | 中     |
+| 规划-执行型              | 具有依赖关系的复杂任务 | 规划 -> 执行步骤 -> 验证         | 中-高  |
+| 多智能体协调器           | 并行/专业化子任务      | 分发 -> 收集 -> 综合             | 高     |
+| 自主循环型（Ralph 风格） | 长期迭代开发           | 规划 -> 构建 -> 验证 -> 退出条件 | 高     |
 
-## Phase 2: Implementation
+## 阶段二：实现
 
-1. Build the agent loop with tool dispatch
-2. Implement memory management (context window, persistence)
-3. Add planning and decomposition logic
-4. Integrate error recovery and retry patterns
-5. Implement output validation
+1. 构建带工具调度的智能体循环
+2. 实现记忆管理（上下文窗口、持久化）
+3. 添加规划与任务分解逻辑
+4. 集成错误恢复与重试模式
+5. 实现输出验证
 
-**STOP — Run smoke tests on the agent loop before adding complexity.**
+**暂停 — 在增加复杂度之前，先对智能体循环进行冒烟测试。**
 
-### Tool Use Patterns
+### 工具使用模式
 
-#### Tool Definition Best Practices
+#### 工具定义最佳实践
 
-| Principle | Rule | Example |
-|---|---|---|
-| Clear naming | verb-noun format | `search_documents`, `create_file` |
-| Detailed descriptions | Include when to use AND when NOT to use | "Use for keyword search. Do NOT use for semantic similarity." |
-| Well-typed parameters | Descriptions and examples on every param | `query: string // "e.g., 'user authentication'"` |
-| Predictable returns | Consistent format across tools | Always return `{ success, data, error }` |
-| Self-correcting errors | Help agent recover | "Invalid date format. Expected ISO 8601: YYYY-MM-DD" |
+| 原则         | 规则                         | 示例                                            |
+| ------------ | ---------------------------- | ----------------------------------------------- |
+| 命名清晰     | 动词-名词格式                | `search_documents`、`create_file`               |
+| 描述详尽     | 包含何时使用及何时**不**使用 | "用于关键词搜索。**勿**用于语义相似度匹配。"    |
+| 参数类型明确 | 每个参数都附带描述与示例     | `query: string // "例如：'用户认证'"`           |
+| 返回可预测   | 所有工具保持一致的返回格式   | 始终返回 `{ success, data, error }`             |
+| 错误可自纠正 | 帮助智能体恢复               | "日期格式无效。预期格式为 ISO 8601：YYYY-MM-DD" |
 
-#### Tool Selection Strategy
-
-```
-Given a task:
-1. Identify required information and actions
-2. Map to available tools
-3. Determine tool call order (dependencies)
-4. Execute with result validation
-5. Retry or try alternative tool on failure
-```
-
-#### Tool Design Principles
-
-- **Composable**: small tools that combine for complex tasks
-- **Idempotent**: safe to retry without side effects (where possible)
-- **Observable**: return enough context for the agent to verify success
-- **Bounded**: timeouts and size limits on all operations
-- **Documented**: every parameter and return value described
-
-### Memory Management
-
-#### Memory Type Decision Table
-
-| Type | Duration | Storage | Use Case |
-|---|---|---|---|
-| Working Memory | Current turn | Context window | Active reasoning |
-| Short-term Memory | Current session | In-context or buffer | Recent conversation |
-| Long-term Memory | Across sessions | Database/file | Learned patterns, user prefs |
-| Episodic Memory | Specific events | Indexed store | Past task outcomes |
-| Semantic Memory | Knowledge | Vector DB | Domain knowledge retrieval |
-
-#### Context Window Management
+#### 工具选择策略
 
 ```
-Strategy: Sliding window with importance-based retention
-
-1. Always retain: system prompt, tool definitions, current task
-2. Summarize: older conversation turns into compressed summaries
-3. Evict: least relevant context when approaching limit
-4. Retrieve: pull relevant long-term memory on demand
-
-Budget allocation:
-  System prompt + tools: ~20%
-  Current task context:  ~40%
-  Conversation history:  ~25%
-  Retrieved memory:      ~15%
+给定任务：
+1. 识别所需信息与操作
+2. 映射到可用工具
+3. 确定工具调用顺序（依赖关系）
+4. 执行并验证结果
+5. 失败时重试或尝试替代工具
 ```
 
-#### Memory Update Triggers
+#### 工具设计原则
 
-| Trigger | Action |
-|---|---|
-| User correction | Update learned patterns |
-| Task completion | Store outcome and approach |
-| Error recovery | Record what failed and what worked |
-| New domain knowledge | Index for future retrieval |
+- **可组合**：小型工具可组合完成复杂任务
+- **幂等性**：可安全重试而不产生副作用（尽可能）
+- **可观察**：返回足够上下文供智能体验证成功
+- **有边界**：所有操作设置超时与大小限制
+- **有文档**：每个参数与返回值均有描述
 
-### Planning Strategies
+### 记忆管理
 
-#### Hierarchical Task Decomposition
+#### 记忆类型决策表
 
-```
-1. Break high-level goal into sub-goals
-2. For each sub-goal, identify required actions
-3. Order actions by dependencies
-4. Execute with checkpoints between phases
-5. Re-plan if intermediate results change the approach
-```
+| 类型     | 持续时间 | 存储位置         | 使用场景               |
+| -------- | -------- | ---------------- | ---------------------- |
+| 工作记忆 | 当前轮次 | 上下文窗口       | 活跃推理               |
+| 短期记忆 | 当前会话 | 上下文内或缓冲区 | 近期对话               |
+| 长期记忆 | 跨会话   | 数据库/文件      | 学习到的模式、用户偏好 |
+| 情景记忆 | 特定事件 | 索引存储         | 过往任务结果           |
+| 语义记忆 | 知识     | 向量数据库       | 领域知识检索           |
 
-#### ReAct Pattern (Reason + Act)
-
-```
-Thought: I need to find the user's recent orders to answer their question.
-Action: search_orders(user_id="123", limit=5)
-Observation: Found 5 orders, most recent is #456 from yesterday.
-Thought: The user asked about order #456. I have the details now.
-Action: respond with order details
-```
-
-#### Plan-and-Execute Pattern
+#### 上下文窗口管理
 
 ```
-1. Create a complete plan before any action
-2. Execute each step, checking preconditions
-3. After each step, validate the result
-4. If a step fails, re-plan from current state
-5. Never modify the plan mid-step (finish or abort first)
+策略：基于重要性保留的滑动窗口
+
+1. 始终保留：系统提示词、工具定义、当前任务
+2. 摘要处理：将较早的对话轮次压缩为摘要
+3. 淘汰：接近限制时移除最不相关的上下文
+4. 检索：按需拉取相关的长期记忆
+
+预算分配：
+  系统提示词 + 工具：~20%
+  当前任务上下文：  ~40%
+  对话历史：        ~25%
+  检索的记忆：      ~15%
 ```
 
-#### Reflection Pattern
+#### 记忆更新触发条件
+
+| 触发条件   | 操作                   |
+| ---------- | ---------------------- |
+| 用户纠正   | 更新学习到的模式       |
+| 任务完成   | 存储结果与方法         |
+| 错误恢复   | 记录失败原因与解决方案 |
+| 新领域知识 | 索引以供未来检索       |
+
+### 规划策略
+
+#### 层次化任务分解
 
 ```
-After completing a task:
-1. Was the result correct?
-2. Was the approach efficient?
-3. What could be improved?
-4. Should any memory be updated?
+1. 将高层目标拆分为子目标
+2. 为每个子目标识别所需操作
+3. 按依赖关系排序操作
+4. 执行并在各阶段间设置检查点
+5. 若中间结果改变方法则重新规划
 ```
 
-## Phase 3: Evaluation and Safety
-
-1. Build evaluation harness with test scenarios
-2. Measure accuracy, efficiency, and safety metrics
-3. Test edge cases and adversarial inputs
-4. Add monitoring and logging
-5. Implement circuit breakers for runaway behavior
-
-**STOP — All safety guardrails must be tested before deployment.**
-
-### Multi-Agent Coordination
-
-#### Coordination Pattern Decision Table
-
-| Pattern | Description | Use When |
-|---|---|---|
-| Orchestrator | Central agent delegates to specialists | Clear task hierarchy |
-| Pipeline | Agents process in sequence | Linear workflows |
-| Debate | Agents propose and critique | Need diverse perspectives |
-| Voting | Multiple agents, majority wins | Uncertainty in approach |
-| Supervisor | One agent monitors others | Safety-critical tasks |
-
-#### Communication Protocol
+#### ReAct 模式（推理 + 行动）
 
 ```
-Agent-to-Agent message:
+思考：我需要查找用户的近期订单来回答他们的问题。
+行动：search_orders(user_id="123", limit=5)
+观察：找到 5 个订单，最近的是昨天的 #456。
+思考：用户询问的是订单 #456。我现在有详细信息了。
+行动：回复订单详情
+```
+
+#### 规划-执行模式
+
+```
+1. 在执行任何操作前制定完整计划
+2. 执行每一步，检查前置条件
+3. 每步之后验证结果
+4. 若某步失败，从当前状态重新规划
+5. 切勿在步骤中途修改计划（先完成或中止）
+```
+
+#### 反思模式
+
+```
+任务完成后：
+1. 结果是否正确？
+2. 方法是否高效？
+3. 哪些地方可以改进？
+4. 是否需要更新任何记忆？
+```
+
+## 阶段三：评估与安全
+
+1. 构建包含测试场景的评估框架
+2. 衡量准确性、效率与安全指标
+3. 测试边界情况与对抗性输入
+4. 添加监控与日志记录
+5. 为失控行为实现熔断机制
+
+**暂停 — 所有安全防护机制必须在部署前经过测试。**
+
+### 多智能体协作
+
+#### 协作模式决策表
+
+| 模式   | 描述                           | 适用场景         |
+| ------ | ------------------------------ | ---------------- |
+| 协调器 | 中心智能体向专家智能体分发任务 | 清晰的任务层级   |
+| 流水线 | 智能体按顺序处理               | 线性工作流       |
+| 辩论   | 智能体提出方案并相互批判       | 需要多元视角     |
+| 投票   | 多个智能体，多数决             | 方法存在不确定性 |
+| 监督者 | 一个智能体监控其他智能体       | 安全关键型任务   |
+
+#### 通信协议
+
+```
+智能体间消息：
 {
   "from": "planner",
   "to": "executor",
@@ -189,35 +189,35 @@ Agent-to-Agent message:
 }
 ```
 
-#### Coordination Rules
+#### 协作规则
 
-- Define clear ownership boundaries
-- Use structured messages between agents
-- Implement deadlock detection
-- Set timeouts for inter-agent communication
-- Log all inter-agent messages for debugging
+- 定义清晰的职责边界
+- 智能体间使用结构化消息
+- 实现死锁检测
+- 为智能体间通信设置超时
+- 记录所有智能体间消息以便调试
 
-### Evaluation Framework
+### 评估框架
 
-#### Metrics Decision Table
+#### 指标决策表
 
-| Metric | What It Measures | How to Measure | Target |
-|---|---|---|---|
-| Task Success Rate | Correct completions / total | Automated + human eval | > 90% |
-| Efficiency | Steps vs optimal path | Step count comparison | < 2x optimal |
-| Tool Accuracy | Correct tool calls / total | Log analysis | > 95% |
-| Safety | Violations / total interactions | Guardrail checks | 0 violations |
-| Latency | Time to complete task | Wall clock | < SLA |
-| Cost | Token usage per task | API usage tracking | Within budget |
+| 指标       | 衡量内容               | 测量方法          | 目标       |
+| ---------- | ---------------------- | ----------------- | ---------- |
+| 任务成功率 | 正确完成数 / 总数      | 自动化 + 人工评估 | > 90%      |
+| 效率       | 实际步骤数 vs 最优路径 | 步骤数对比        | < 2 倍最优 |
+| 工具准确率 | 正确工具调用 / 总调用  | 日志分析          | > 95%      |
+| 安全性     | 违规次数 / 总交互      | 防护机制检查      | 0 违规     |
+| 延迟       | 任务完成时间           | 墙钟时间          | < SLA      |
+| 成本       | 每任务 Token 用量      | API 使用追踪      | 预算内     |
 
-#### Evaluation Dataset Structure
+#### 评估数据集结构
 
 ```json
 {
   "test_cases": [
     {
       "id": "tc_001",
-      "input": "Find all orders over $100 from last week",
+      "input": "查找上周所有超过 100 美元的订单",
       "expected_tools": ["search_orders"],
       "expected_output_contains": ["order_id", "amount"],
       "category": "retrieval",
@@ -227,86 +227,86 @@ Agent-to-Agent message:
 }
 ```
 
-### Safety Guardrails
+### 安全防护机制
 
-#### Input Guardrails
+#### 输入防护
 
-- Detect and reject prompt injection attempts
-- Validate all user inputs before processing
-- Rate limit requests per user/session
-- Content filtering for harmful requests
+- 检测并拒绝提示词注入攻击
+- 处理前验证所有用户输入
+- 按用户/会话限制请求速率
+- 对有害请求进行内容过滤
 
-#### Output Guardrails
+#### 输出防护
 
-- Validate tool call arguments before execution
-- Check outputs for sensitive information (PII, secrets)
-- Enforce response format constraints
-- Prevent infinite tool call loops
+- 执行前验证工具调用参数
+- 检查输出是否包含敏感信息（个人身份信息、密钥）
+- 强制执行响应格式约束
+- 防止无限工具调用循环
 
-#### Operational Guardrails
+#### 运行防护
 
-- Maximum tool calls per task (circuit breaker)
-- Maximum tokens per response
-- Timeout for total task duration
-- Escalation to human when confidence is low
-- Audit logging for all actions
+- 每任务最大工具调用次数（熔断器）
+- 每响应最大 Token 数
+- 任务总时长超时限制
+- 置信度低时升级至人工处理
+- 所有操作的审计日志
 
-#### Circuit Breaker Thresholds
+#### 熔断器阈值
 
-| Condition | Threshold | Action |
-|---|---|---|
-| Max tool calls per task | 20 | Stop execution, return error |
-| Max consecutive errors | 3 | Stop, log, return graceful error |
-| Max task duration | 5 minutes | Timeout, return partial result |
-| Max tokens generated | 10,000 | Stop generation |
-| Pattern repeats | 5 identical errors | Open circuit, alert operator |
+| 条件               | 阈值         | 操作                     |
+| ------------------ | ------------ | ------------------------ |
+| 每任务最大工具调用 | 20           | 停止执行，返回错误       |
+| 最大连续错误       | 3            | 停止、记录、返回友好错误 |
+| 最大任务时长       | 5 分钟       | 超时，返回部分结果       |
+| 最大生成 Token 数  | 10,000       | 停止生成                 |
+| 模式重复           | 5 次相同错误 | 打开熔断，告警操作员     |
 
-### Prompt Engineering for Agents
+### 智能体提示词工程
 
-#### System Prompt Structure
+#### 系统提示词结构
 
 ```
-1. Identity and purpose (who the agent is)
-2. Available tools (what it can do)
-3. Constraints (what it must not do)
-4. Output format (how to respond)
-5. Examples (few-shot demonstrations)
-6. Error handling (what to do when stuck)
+1. 身份与目标（智能体是谁）
+2. 可用工具（能做什么）
+3. 约束条件（禁止做什么）
+4. 输出格式（如何响应）
+5. 示例（少样本演示）
+6. 错误处理（卡住时怎么办）
 ```
 
-#### Key Prompt Patterns
+#### 关键提示词模式
 
-- **Scratchpad**: encourage step-by-step reasoning before action
-- **Self-correction**: "If your first approach fails, try..."
-- **Confidence calibration**: "Only proceed if you are confident"
-- **Graceful degradation**: "If you cannot complete the task, explain why"
+- **草稿纸**：鼓励在行动前逐步推理
+- **自我纠正**："如果首次方法失败，请尝试..."
+- **置信度校准**："仅在确信时继续"
+- **优雅降级**："若无法完成任务，请解释原因"
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | What to Do Instead |
-|---|---|---|
-| Calling tools without reasoning | Wastes calls, misses context | Use ReAct pattern (think first) |
-| No max iteration limit | Infinite loops, runaway costs | Set circuit breaker thresholds |
-| Trusting all tool outputs | Corrupted data propagates | Validate tool results |
-| Hardcoded tool sequences | No adaptability to failures | Dynamic tool selection based on state |
-| No error recovery strategy | Agent gets stuck on first failure | Implement retry with alternatives |
-| Apologizing instead of acting | Wastes user time | Take corrective action, then report |
-| Over-reliance on single tool | Fragile if that tool fails | Provide fallback tools |
-| No evaluation framework | Shipping blind, no quality signal | Build eval harness before deployment |
-| Unlimited context growth | Context overflow, degraded quality | Implement memory management |
+| 反模式           | 错误原因             | 正确做法                  |
+| ---------------- | -------------------- | ------------------------- |
+| 未推理即调用工具 | 浪费调用，忽略上下文 | 使用 ReAct 模式（先思考） |
+| 无最大迭代限制   | 无限循环，成本失控   | 设置熔断器阈值            |
+| 信任所有工具输出 | 错误数据传播         | 验证工具结果              |
+| 硬编码工具序列   | 无法适应失败情况     | 基于状态动态选择工具      |
+| 无错误恢复策略   | 首次失败即卡住       | 实现带替代方案的重试      |
+| 道歉而非行动     | 浪费用户时间         | 先采取纠正措施，再报告    |
+| 过度依赖单一工具 | 该工具失败则系统脆弱 | 提供备用工具              |
+| 无评估框架       | 盲目上线，无质量信号 | 部署前构建评估框架        |
+| 上下文无限增长   | 上下文溢出，质量下降 | 实现记忆管理              |
 
-## Integration Points
+## 集成点
 
-| Skill | Integration |
-|---|---|
-| `mcp-builder` | MCP servers provide tools for agents |
-| `planning` | Agent planning uses structured plan generation |
-| `autonomous-loop` | Ralph-style loops are a specialized agent pattern |
-| `dispatching-parallel-agents` | Multi-agent coordination pattern |
-| `circuit-breaker` | Operational safety for agent loops |
-| `verification-before-completion` | Agent output validation |
-| `test-driven-development` | TDD for agent tool implementations |
+| 技能                             | 集成方式                       |
+| -------------------------------- | ------------------------------ |
+| `mcp-builder`                    | MCP 服务器为智能体提供工具     |
+| `planning`                       | 智能体规划使用结构化计划生成   |
+| `autonomous-loop`                | Ralph 风格循环是专用智能体模式 |
+| `dispatching-parallel-agents`    | 多智能体协作模式               |
+| `circuit-breaker`                | 智能体循环的运行安全           |
+| `verification-before-completion` | 智能体输出验证                 |
+| `test-driven-development`        | 智能体工具实现的测试驱动开发   |
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt the agent architecture, memory strategy, and coordination patterns to the specific use case. Safety guardrails and evaluation frameworks are strongly recommended for all production agents.
+**灵活** — 根据具体用例调整智能体架构、记忆策略与协作模式。强烈建议所有生产环境智能体均采用安全防护机制与评估框架。

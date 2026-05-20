@@ -1,61 +1,61 @@
 ---
 name: testing-strategy
-description: "Use when choosing a testing approach for a project — selecting frameworks, defining coverage thresholds, setting up test infrastructure, and establishing testing patterns. Triggers: new project setup, CI/CD pipeline design, coverage audit, test framework migration, quality standard definition."
+description: "在为项目选择测试方案时使用——包括选择框架、定义覆盖率阈值、搭建测试基础设施以及确立测试规范。触发条件：新项目初始化、CI/CD 流水线设计、覆盖率审计、测试框架迁移、质量标准制定。"
 ---
 
-# Testing Strategy
+# 测试策略
 
-## Overview
+## 概述
 
-Analyze the project context and recommend a comprehensive testing strategy. This skill selects appropriate frameworks, defines the testing pyramid, establishes coverage thresholds, and generates test configuration files. The goal is a repeatable, measurable testing foundation that the team can maintain.
+分析项目背景并推荐全面的测试策略。本技能负责选择合适的框架、定义测试金字塔、设定覆盖率阈值并生成测试配置文件。目标是建立一个可重复、可衡量且团队易于维护的测试基础。
 
-**Announce at start:** "I'm using the testing-strategy skill to define the testing approach."
+**开始时声明：**“我正在使用 testing-strategy 技能来定义测试方案。”
 
 ---
 
-## Phase 1: Analyze Project
+## 阶段 1：分析项目
 
-**Goal:** Understand the current stack, existing tests, and CI setup before recommending anything.
+**目标：**在提出任何建议之前，了解当前的技术栈、现有测试以及 CI 设置。
 
-### Actions
+### 行动步骤
 
-1. Identify the tech stack (language, framework, runtime)
-2. Survey existing tests (what testing exists already?)
-3. Review CI/CD pipeline (how do tests run?)
-4. Measure current coverage levels
-5. Map external dependencies (services, databases, APIs)
+1. 识别技术栈（语言、框架、运行时）
+2. 盘点现有测试（目前已有哪些测试？）
+3. 审查 CI/CD 流水线（测试是如何运行的？）
+4. 评估当前覆盖率水平
+5. 梳理外部依赖（服务、数据库、API）
 
-### Discovery Commands
+### 探索命令
 
 ```bash
-# Identify test files
+# 识别测试文件
 find . -name "*.test.*" -o -name "*.spec.*" | head -30
 
-# Check for test config
+# 检查测试配置
 ls vitest.config.* jest.config.* pytest.ini pyproject.toml .mocharc.* 2>/dev/null
 
-# Check current coverage
-cat coverage/coverage-summary.json 2>/dev/null || echo "No coverage report found"
+# 检查当前覆盖率
+cat coverage/coverage-summary.json 2>/dev/null || echo "未找到覆盖率报告"
 
-# Check CI config
+# 检查 CI 配置
 cat .github/workflows/*.yml 2>/dev/null | head -50
 ```
 
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] Tech stack is identified
-- [ ] Existing test infrastructure is mapped
-- [ ] CI pipeline status is known
-- [ ] External dependencies are listed
+### 停止 — 在完成以下项之前，请勿进入阶段 2：
+- [ ] 已识别技术栈
+- [ ] 已梳理现有测试基础设施
+- [ ] 已知 CI 流水线状态
+- [ ] 已列出外部依赖
 
 ---
 
-## Phase 2: Recommend Testing Pyramid
+## 阶段 2：推荐测试金字塔
 
-**Goal:** Select frameworks and define the pyramid ratios.
+**目标：**选择框架并定义金字塔比例。
 
-### Framework Selection Table
+### 框架选择表
 
-| Stack | Unit | Integration | E2E |
+| 技术栈 | 单元测试 | 集成测试 | E2E 测试 |
 |-------|------|-------------|-----|
 | **Node.js/TS** | Vitest | Vitest + Supertest | Playwright |
 | **React/Next.js** | Vitest + Testing Library | Vitest + MSW | Playwright/Cypress |
@@ -64,76 +64,76 @@ cat .github/workflows/*.yml 2>/dev/null | head -50
 | **Rust** | cargo test | cargo test + testcontainers | - |
 | **PHP/Laravel** | Pest/PHPUnit | Pest + HTTP tests | Playwright/Dusk |
 
-### Testing Pyramid Ratios
+### 测试金字塔比例
 
 ```
         /\
-       /  \     E2E Tests (10%)
-      /    \    Critical user journeys only
+       /  \     E2E 测试 (10%)
+      /    \    仅包含关键用户旅程
      /------\
-    /        \   Integration Tests (30%)
-   /          \  API endpoints, DB queries, service interactions
+    /        \   集成测试 (30%)
+   /          \  API 端点、数据库查询、服务间交互
   /------------\
- /              \ Unit Tests (60%)
-/                \ Pure functions, business logic, utilities
+ /              \ 单元测试 (60%)
+/                \ 纯函数、业务逻辑、工具函数
 ```
 
-### What to Test at Each Level
+### 各层级的测试内容
 
-| Level | Test These | Do NOT Test These |
+| 层级 | 测试内容 | 不测试内容 |
 |-------|-----------|------------------|
-| **Unit (60%)** | Pure functions, business logic, data transformations, validations, state management | Framework internals, third-party libraries |
-| **Integration (30%)** | API endpoints, database queries, service-to-service calls, auth flows | Individual functions in isolation |
-| **E2E (10%)** | Critical user journeys (signup, purchase), cross-browser, accessibility | Edge cases (handle at unit level) |
+| **单元测试 (60%)** | 纯函数、业务逻辑、数据转换、验证逻辑、状态管理 | 框架内部实现、第三方库 |
+| **集成测试 (30%)** | API 端点、数据库查询、服务间调用、认证流程 | 孤立测试单个函数 |
+| **E2E 测试 (10%)** | 关键用户旅程（注册、购买）、跨浏览器兼容性、可访问性 | 边缘情况（应在单元测试层面处理） |
 
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] Framework selection matches the tech stack
-- [ ] Pyramid ratios are defined
-- [ ] Testing scope at each level is documented
+### 停止 — 在完成以下项之前，请勿进入阶段 3：
+- [ ] 框架选择与技术栈匹配
+- [ ] 已定义金字塔比例
+- [ ] 已记录各层级的测试范围
 
 ---
 
-## Phase 3: Define Coverage Thresholds
+## 阶段 3：定义覆盖率阈值
 
-**Goal:** Set realistic, enforceable coverage targets.
+**目标：**设定切实可行且可强制执行的覆盖率目标。
 
-### Coverage Threshold Table
+### 覆盖率阈值表
 
-| Category | Minimum | Target | Notes |
+| 类别 | 最低要求 | 目标值 | 备注 |
 |----------|---------|--------|-------|
-| Overall | 70% | 85% | Lines covered |
-| Critical paths | 90% | 95% | Auth, payments, data access |
-| New code (PRs) | 80% | 90% | Enforced in CI |
-| Utilities | 95% | 100% | Pure functions are easy to test |
+| 整体 | 70% | 85% | 代码行覆盖率 |
+| 关键路径 | 90% | 95% | 认证、支付、数据访问 |
+| 新增代码（PR） | 80% | 90% | 在 CI 中强制执行 |
+| 工具函数 | 95% | 100% | 纯函数易于测试 |
 
-### Threshold Selection Decision Table
+### 阈值选择决策表
 
-| Project Maturity | Overall Minimum | New Code Minimum | Rationale |
+| 项目成熟度 | 整体最低要求 | 新增代码最低要求 | 依据/理由 |
 |-----------------|----------------|-------------------|-----------|
-| Greenfield | 80% | 90% | Start high, maintain standard |
-| Active (good coverage) | 70% | 85% | Maintain and improve |
-| Legacy (low coverage) | 50% | 80% | Raise floor gradually |
-| Prototype/MVP | 60% | 70% | Cover critical paths, accept gaps |
+| 全新项目 (Greenfield) | 80% | 90% | 起点设高，维持高标准 |
+| 活跃期（覆盖率良好） | 70% | 85% | 保持并持续改进 |
+| 遗留项目（覆盖率低） | 50% | 80% | 逐步提高底线 |
+| 原型/MVP | 60% | 70% | 覆盖关键路径，接受部分缺口 |
 
-### STOP — Do NOT proceed to Phase 4 until:
-- [ ] Coverage thresholds are realistic for the project maturity
-- [ ] Critical path coverage targets are defined
-- [ ] CI enforcement strategy is decided
+### 停止 — 在完成以下项之前，请勿进入阶段 4：
+- [ ] 覆盖率阈值符合项目当前成熟度
+- [ ] 已定义关键路径覆盖率目标
+- [ ] 已确定 CI 强制执行策略
 
 ---
 
-## Phase 4: Generate Configuration
+## 阶段 4：生成配置
 
-**Goal:** Produce working test configuration files and CI integration.
+**目标：**产出可用的测试配置文件及 CI 集成方案。
 
-### Actions
+### 行动步骤
 
-1. Generate test runner config (`vitest.config.ts`, `jest.config.js`, `pytest.ini`)
-2. Configure coverage with thresholds
-3. Add test commands to CI workflow
-4. Set up test environment (`.env.test`, test databases)
+1. 生成测试运行器配置（`vitest.config.ts`、`jest.config.js`、`pytest.ini`）
+2. 配置带阈值的覆盖率检查
+3. 将测试命令添加至 CI 工作流
+4. 搭建测试环境（`.env.test`、测试数据库）
 
-### Example: Vitest Config
+### 示例：Vitest 配置
 
 ```typescript
 import { defineConfig } from 'vitest/config';
@@ -157,86 +157,86 @@ export default defineConfig({
 });
 ```
 
-### STOP — Do NOT proceed to Phase 5 until:
-- [ ] Config files are syntactically valid
-- [ ] Coverage thresholds match Phase 3 decisions
-- [ ] CI integration commands are defined
+### 停止 — 在完成以下项之前，请勿进入阶段 5：
+- [ ] 配置文件语法有效
+- [ ] 覆盖率阈值与阶段 3 的决策一致
+- [ ] 已定义 CI 集成命令
 
 ---
 
-## Phase 5: Create Test Templates
+## 阶段 5：创建测试模板
 
-**Goal:** Provide example test files demonstrating project conventions.
+**目标：**提供示例测试文件，以展示项目规范。
 
-### Actions
+### 行动步骤
 
-1. Create a unit test example with Arrange-Act-Assert
-2. Create an integration test with setup/teardown
-3. Create mock/stub patterns for external dependencies
-4. Create test data factories/fixtures
-5. Create a snapshot test example (when appropriate)
+1. 创建基于 Arrange-Act-Assert（准备-执行-断言）模式的单元测试示例
+2. 创建包含 setup/teardown（初始化/清理）的集成测试
+3. 创建针对外部依赖的 mock/stub（模拟/桩）模式
+4. 创建测试数据工厂/夹具（fixtures）
+5. 创建快照测试示例（视情况而定）
 
-### STOP — Verification Gate before claiming complete:
-- [ ] Framework selection matches tech stack
-- [ ] Coverage thresholds are realistic
-- [ ] Test configuration files are valid
-- [ ] Example tests actually run
-- [ ] CI integration is configured
+### 停止 — 在标记完成前的验证关卡：
+- [ ] 框架选择与技术栈匹配
+- [ ] 覆盖率阈值切实可行
+- [ ] 测试配置文件有效
+- [ ] 示例测试可实际运行
+- [ ] CI 集成已配置
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
+| 反模式 | 为何错误 | 正确做法 |
 |-------------|----------------|-----------------|
-| Testing implementation details | Breaks on every refactor, provides false confidence | Test behavior and outcomes |
-| Excessive mocking | Tests nothing real, mocks mask real failures | Mock at boundaries only |
-| Brittle CSS selectors in E2E | Break with styling changes | Use data-testid or accessible roles |
-| Test interdependence | Ordering failures, flaky in CI | Each test must run independently |
-| Slow tests blocking CI | Developers skip running tests | Parallelize, use test databases, mock external APIs |
-| Snapshot overuse | Snapshots approved without reading, stale baselines | Use for stable output only |
-| No coverage enforcement in CI | Coverage degrades over time | Enforce thresholds in CI pipeline |
-| Same coverage target everywhere | Utilities and critical paths differ | Use per-category thresholds |
+| 测试实现细节 | 每次重构都会断裂，提供虚假的安全感 | 测试行为与结果 |
+| 过度使用 Mock | 未测试真实逻辑，Mock 掩盖了真实故障 | 仅在边界处使用 Mock |
+| E2E 中使用脆弱的 CSS 选择器 | 样式变更会导致测试断裂 | 使用 `data-testid` 或无障碍角色 (ARIA roles) |
+| 测试相互依赖 | 顺序执行失败，在 CI 中不稳定 | 每个测试必须能独立运行 |
+| 测试过慢阻塞 CI | 开发人员会跳过运行测试 | 并行执行、使用测试数据库、Mock 外部 API |
+| 滥用快照测试 | 未经审查即批准快照，基线陈旧 | 仅用于稳定的输出 |
+| CI 中未强制覆盖率检查 | 覆盖率会随时间退化 | 在 CI 流水线中强制执行阈值 |
+| 所有地方使用相同的覆盖率目标 | 工具函数与关键路径重要性不同 | 按类别使用不同的阈值 |
 
 ---
 
-## Decision Table: Mock Strategy
+## 决策表：Mock 策略
 
-| Dependency Type | Mock Strategy | Example |
+| 依赖类型 | Mock 策略 | 示例 |
 |----------------|--------------|---------|
-| External API | MSW / nock / responses | Third-party payment API |
-| Database | Test database or in-memory | PostgreSQL test container |
-| File system | Virtual FS or temp directory | File upload processing |
-| Time/Date | Fake timers | Expiration logic |
-| Environment vars | Override in test setup | Feature flags |
-| Random/UUID | Seed or stub | ID generation |
+| 外部 API | MSW / nock / responses | 第三方支付 API |
+| 数据库 | 测试数据库或内存数据库 | PostgreSQL 测试容器 |
+| 文件系统 | 虚拟文件系统或临时目录 | 文件上传处理 |
+| 时间/日期 | 模拟计时器 (Fake timers) | 过期逻辑 |
+| 环境变量 | 在测试设置中覆盖 | 功能开关 (Feature flags) |
+| 随机数/UUID | 固定种子或 Stub | ID 生成 |
 
 ---
 
-## Integration Points
+## 技能集成点
 
-| Skill | Relationship |
+| 技能 | 关联关系 |
 |-------|-------------|
-| `test-driven-development` | Strategy defines frameworks; TDD defines the cycle |
-| `acceptance-testing` | Strategy includes acceptance test infrastructure |
-| `code-review` | Review checks that tests follow the defined strategy |
-| `senior-frontend` | Frontend testing uses strategy-selected frameworks |
-| `senior-backend` | Backend testing uses strategy-selected frameworks |
-| `performance-optimization` | Load tests are part of the overall testing strategy |
-| `webapp-testing` | Playwright E2E tests follow strategy pyramid |
+| `test-driven-development` | 策略定义框架；TDD 定义开发周期 |
+| `acceptance-testing` | 策略包含验收测试基础设施 |
+| `code-review` | 代码审查检查测试是否遵循既定策略 |
+| `senior-frontend` | 前端测试使用策略选定的框架 |
+| `senior-backend` | 后端测试使用策略选定的框架 |
+| `performance-optimization` | 负载测试是整体测试策略的一部分 |
+| `webapp-testing` | Playwright E2E 测试遵循策略金字塔 |
 
 ---
 
-## Key Principles
+## 核心原则
 
-- **Test behavior, not implementation** — what it does, not how
-- **Fast feedback** — unit tests should run in seconds
-- **Deterministic** — no flaky tests, no time-dependent logic
-- **Readable** — tests are documentation; make them clear
-- **Maintainable** — tests should help refactoring, not block it
+- **测试行为，而非实现** — 关注它做什么，而不是怎么做
+- **快速反馈** — 单元测试应在数秒内完成
+- **确定性** — 无不稳定测试，无依赖时间的逻辑
+- **可读性** — 测试即文档；务必清晰明了
+- **可维护性** — 测试应助力重构，而非阻碍它
 
 ---
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt framework selection and coverage thresholds to the project context. The five-phase process and testing pyramid structure are strongly recommended but can be scaled to project size.
+**灵活型 (FLEXIBLE)** — 根据项目背景调整框架选择和覆盖率阈值。强烈建议遵循五阶段流程和测试金字塔结构，但可根据项目规模进行裁剪。

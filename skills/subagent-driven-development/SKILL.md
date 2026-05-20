@@ -1,364 +1,364 @@
 ---
 name: subagent-driven-development
-description: "Use when executing multi-task plans where each task can be implemented independently by a subagent. Triggers when a plan has 3+ independent tasks, when speed of execution is important, when tasks have clear acceptance criteria suitable for delegation, or when two-stage review gates (spec compliance and code quality) are needed for iterative fix cycles."
+description: "在执行多任务计划时使用，其中每个任务可由子代理独立实现。当计划包含 3 个及以上独立任务、执行速度至关重要、任务具有清晰且适合委托的验收标准，或需要两阶段审查门（规范合规性和代码质量）以支持迭代修复周期时触发。"
 ---
 
-# Subagent-Driven Development
+# 子代理驱动开发
 
-## Overview
+## 概述
 
-This skill orchestrates implementation through dedicated subagents with built-in quality gates. Each task is implemented by an implementer subagent, then reviewed by two specialized reviewer agents (spec compliance and code quality) before acceptance. Failed reviews trigger iterative fix cycles with a maximum of 3 retries before escalation. This ensures consistent quality at scale while maximizing parallel throughput.
+本技能通过专用子代理协调实现流程，并内置质量门控。每个任务由实现子代理完成，随后由两名专业审查代理（规范合规性审查和代码质量审查）进行审核，通过后方可验收。审查失败将触发迭代修复周期，最多重试 3 次，之后升级处理。这确保在规模化扩展时保持一致的质量，同时最大化并行吞吐量。
 
-**Announce at start:** "I'm using the subagent-driven-development skill to dispatch implementation tasks with two-stage review gates."
+**开始时宣布：** "我正在使用子代理驱动开发技能，通过两阶段审查门控分发实现任务。"
 
-## Trigger Conditions
+## 触发条件
 
-- Plan has 3+ tasks that can be implemented independently
-- Tasks have well-specified acceptance criteria suitable for delegation
-- Speed of execution is a priority
-- Tasks have few interdependencies
-- Quality gates are needed for delegated work
+- 计划包含 3 个及以上可独立实现的任务
+- 任务具有明确、适合委托的验收标准
+- 执行速度是优先考量
+- 任务间依赖关系较少
+- 委托工作需要质量门控
 
 ---
 
-## Phase 1: Task Preparation
+## 阶段 1：任务准备
 
-**Goal:** Ensure every task is fully specified before dispatching to any subagent.
+**目标：** 确保每个任务在分发给任何子代理之前都已完全明确。
 
-### Task Specification Requirements (7 Sections)
+### 任务规范需求（7 个部分）
 
-Every task dispatched to a subagent MUST include ALL of these:
+分发给子代理的每个任务**必须**包含以下全部内容：
 
-| Section | Content | Example |
+| 部分 | 内容 | 示例 |
 |---------|---------|---------|
-| 1. Task description | Clear, unambiguous statement | "Implement JWT token generation with RS256 signing" |
-| 2. Files to create/modify | Explicit list | `src/auth/jwt.ts`, `tests/auth/jwt.test.ts` |
-| 3. Acceptance criteria | Specific, testable conditions | "Tokens expire after 1 hour", "Invalid keys throw AuthError" |
-| 4. TDD requirements | Tests to write, behaviors to cover | "Test: valid token generation, expired token rejection, invalid key handling" |
-| 5. Quality standards | Code style, patterns, conventions | "Follow existing service pattern in src/services/, use Result type for errors" |
-| 6. Context | Relevant code, interfaces, deps | "Logger API: logger.info(msg, meta). Import from ../utils/logger" |
-| 7. Constraints | What NOT to do | "Do NOT modify existing auth middleware. Do NOT add new dependencies." |
+| 1. 任务描述 | 清晰、无歧义的陈述 | "实现带有 RS256 签名的 JWT 令牌生成" |
+| 2. 需创建/修改的文件 | 明确列表 | `src/auth/jwt.ts`, `tests/auth/jwt.test.ts` |
+| 3. 验收标准 | 具体、可测试的条件 | "令牌 1 小时后过期", "无效密钥抛出 AuthError" |
+| 4. TDD 要求 | 需编写的测试、需覆盖的行为 | "测试：有效令牌生成、过期令牌拒绝、无效密钥处理" |
+| 5. 质量标准 | 代码风格、模式、约定 | "遵循 src/services/ 中现有服务模式，错误使用 Result 类型" |
+| 6. 上下文 | 相关代码、接口、依赖 | "Logger API: logger.info(msg, meta)。从 ../utils/logger 导入" |
+| 7. 约束条件 | 禁止事项 | "不得修改现有认证中间件。不得添加新依赖。" |
 
-### Pre-Dispatch Checklist
+### 分发前检查清单
 
-- [ ] Task spec has all 7 sections filled
-- [ ] Task is independent (no unresolved dependencies on in-progress tasks)
-- [ ] Acceptance criteria are specific and testable
-- [ ] Files to modify are identified and accessible
-- [ ] Relevant context has been gathered and included in the spec
+- [ ] 任务规范已填写全部 7 个部分
+- [ ] 任务独立（无未解决的、对进行中任务的依赖）
+- [ ] 验收标准具体且可测试
+- [ ] 需修改的文件已明确且可访问
+- [ ] 相关上下文已收集并包含在规范中
 
-### Task Independence Decision Table
+### 任务独立性决策表
 
-| Dependency Type | Can Dispatch? | Action |
+| 依赖类型 | 可否分发？ | 操作 |
 |----------------|--------------|--------|
-| No dependencies | Yes | Dispatch immediately |
-| Depends on completed task | Yes | Include completed task's output as context |
-| Depends on in-progress task | No | Wait for dependency to complete |
-| Shared file with another task | No | Serialize — one task at a time for that file |
-| Shared interface only | Yes | Include interface definition as context |
+| 无依赖 | 是 | 立即分发 |
+| 依赖已完成任务 | 是 | 将已完成任务的输出作为上下文包含 |
+| 依赖进行中任务 | 否 | 等待依赖完成 |
+| 与另一任务共享文件 | 否 | 串行化 — 该文件一次仅处理一个任务 |
+| 仅共享接口 | 是 | 将接口定义作为上下文包含 |
 
-**STOP — Do NOT dispatch until:**
-- [ ] All 7 spec sections are complete
-- [ ] Independence is verified
-- [ ] Acceptance criteria are testable
+**停止 — 在以下条件满足前不得分发：**
+- [ ] 所有 7 个规范部分已完成
+- [ ] 独立性已验证
+- [ ] 验收标准可测试
 
 ---
 
-## Phase 2: Implementation Dispatch
+## 阶段 2：实现分发
 
-**Goal:** Send the task to an implementer subagent with full context.
+**目标：** 将任务连同完整上下文发送给实现子代理。
 
-1. Prepare the implementer prompt using `implementer-prompt.md` template
-2. Include the full task specification (all 7 sections)
-3. Include relevant code context (existing files, interfaces, types)
-4. Dispatch the implementer subagent
-5. Collect the implementation output
+1. 使用 `implementer-prompt.md` 模板准备实现者提示
+2. 包含完整任务规范（全部 7 个部分）
+3. 包含相关代码上下文（现有文件、接口、类型）
+4. 分发实现子代理
+5. 收集实现输出
 
-> **Dispatch mechanism:** Use the `Agent` tool with `subagent_type="general-purpose"` and include the implementer prompt (from `implementer-prompt.md`) in the `prompt` parameter. Set `description` to a short task label.
+> **分发机制：** 使用 `Agent` 工具，设置 `subagent_type="general-purpose"`，并在 `prompt` 参数中包含实现者提示（来自 `implementer-prompt.md`）。将 `description` 设置为简短的任务标签。
 
-### Implementer Expectations
+### 实现者期望
 
-The implementer subagent MUST:
-- Follow the TDD cycle (RED-GREEN-REFACTOR)
-- Write tests before production code
-- Only modify files listed in the task spec
-- Follow the quality standards specified
-- Report any questions or blockers encountered
-- Document all assumptions made
+实现子代理**必须**：
+- 遵循 TDD 周期（红 - 绿 - 重构）
+- 先写测试，再写生产代码
+- 仅修改任务规范中列出的文件
+- 遵循指定的质量标准
+- 报告遇到的任何问题或阻碍
+- 记录所有做出的假设
 
-### Question Handling Protocol
+### 问题处理协议
 
-| Question Type | During Implementation | Action |
+| 问题类型 | 实现过程中 | 操作 |
 |--------------|----------------------|--------|
-| Non-blocking | Can proceed with reasonable assumption | Note assumption, continue, flag in output |
-| Blocking | Cannot proceed without answer | STOP immediately, escalate to orchestrator |
-| Scope question | Asks about work outside assigned task | Report it, do NOT fix it |
+| 非阻塞 | 可基于合理假设继续 | 记录假设，继续执行，在输出中标记 |
+| 阻塞 | 无答案无法继续 | 立即停止，升级至协调器 |
+| 范围问题 | 询问分配任务之外的工作 | 报告该问题，**不得**自行修复 |
 
-**STOP — Do NOT proceed to review until:**
-- [ ] Implementer has returned complete output
-- [ ] All listed files have been created/modified
-- [ ] Tests exist for every acceptance criterion
-- [ ] Any assumptions are documented
+**停止 — 在以下条件满足前不得进入审查阶段：**
+- [ ] 实现者已返回完整输出
+- [ ] 所有列出的文件已创建/修改
+- [ ] 每个验收标准都有对应测试
+- [ ] 任何假设均已记录
 
 ---
 
-## Phase 3: Spec Review Gate
+## 阶段 3：规范审查门
 
-**Goal:** Verify the implementation matches the original task specification.
+**目标：** 验证实现是否与原始任务规范一致。
 
-1. Prepare the spec reviewer prompt using `spec-reviewer-prompt.md` template
-2. Provide the original task specification AND the implementer's output
-3. Dispatch the spec-reviewer subagent
-4. Collect the review result
+1. 使用 `spec-reviewer-prompt.md` 模板准备规范审查提示
+2. 提供原始任务规范**和**实现者的输出
+3. 分发规范审查子代理
+4. 收集审查结果
 
-> **Dispatch mechanism:** Use the `Agent` tool with the spec-reviewer prompt (from `spec-reviewer-prompt.md`) in the `prompt` parameter.
+> **分发机制：** 使用 `Agent` 工具，在 `prompt` 参数中包含规范审查提示（来自 `spec-reviewer-prompt.md`）。
 
-### Spec Review Criteria
+### 规范审查标准
 
-| Criterion | Assessment | What to Check |
+| 标准 | 评估 | 检查内容 |
 |-----------|-----------|---------------|
-| All acceptance criteria met | PASS / FAIL per criterion | Each criterion individually verified |
-| Tests cover specified behaviors | PASS / FAIL | Test file contains tests for all behaviors |
-| Files modified match spec | PASS / FAIL | No unauthorized file modifications |
-| No out-of-scope changes | PASS / FAIL | Only listed files touched |
-| Implementation matches intent | PASS / FAIL | Behavior is correct, not just syntactically valid |
-| All constraints respected | PASS / FAIL | None of the "do NOT" items violated |
+| 所有验收标准已满足 | 每项标准：通过/失败 | 逐项验证每个标准 |
+| 测试覆盖指定行为 | 通过/失败 | 测试文件包含所有行为的测试 |
+| 修改的文件与规范一致 | 通过/失败 | 无未经授权的文件修改 |
+| 无超出范围的变更 | 通过/失败 | 仅触及列出的文件 |
+| 实现符合意图 | 通过/失败 | 行为正确，不仅是语法有效 |
+| 所有约束条件得到遵守 | 通过/失败 | 未违反任何"禁止"事项 |
 
-### Gate Decision
+### 门控决策
 
-| Result | Action |
+| 结果 | 操作 |
 |--------|--------|
-| All PASS | Proceed to Phase 4 (quality review) |
-| Any FAIL | Return to implementer with specific failure details |
+| 全部通过 | 进入阶段 4（质量审查） |
+| 任意失败 | 将具体失败详情返回给实现者 |
 
-**STOP — Do NOT proceed to quality review if any spec criterion fails.**
+**停止 — 若任何规范标准失败，不得进入质量审查。**
 
 ---
 
-## Phase 4: Quality Review Gate
+## 阶段 4：质量审查门
 
-**Goal:** Verify code meets quality standards independent of spec compliance.
+**目标：** 独立于规范合规性，验证代码是否符合质量标准。
 
-1. Prepare the quality reviewer prompt using `code-quality-reviewer-prompt.md` template
-2. Provide the implementation code, test code, and project quality standards
-3. Dispatch the quality-reviewer subagent
-4. Collect the review result
+1. 使用 `code-quality-reviewer-prompt.md` 模板准备质量审查提示
+2. 提供实现代码、测试代码及项目质量标准
+3. 分发质量审查子代理
+4. 收集审查结果
 
-> **Dispatch mechanism:** Use the `Agent` tool with the quality-reviewer prompt (from `code-quality-reviewer-prompt.md`) in the `prompt` parameter.
+> **分发机制：** 使用 `Agent` 工具，在 `prompt` 参数中包含质量审查提示（来自 `code-quality-reviewer-prompt.md`）。
 
-### Quality Review Areas
+### 质量审查领域
 
-| Area | What to Check |
+| 领域 | 检查内容 |
 |------|--------------|
-| Code quality | Readability, naming, structure, complexity |
-| Pattern compliance | Follows project patterns and conventions |
-| Security | No injection vulnerabilities, proper validation, safe defaults |
-| Performance | No unnecessary allocations, efficient algorithms, no N+1 queries |
-| Error handling | All error paths handled, meaningful error messages |
-| Test quality | Tests are meaningful, not testing implementation details |
+| 代码质量 | 可读性、命名、结构、复杂度 |
+| 模式合规性 | 遵循项目模式和约定 |
+| 安全性 | 无注入漏洞、适当验证、安全默认值 |
+| 性能 | 无不必要的分配、高效算法、无 N+1 查询 |
+| 错误处理 | 所有错误路径已处理、错误信息有意义 |
+| 测试质量 | 测试有意义，不测试实现细节 |
 
-### Issue Severity Classification
+### 问题严重程度分类
 
-| Severity | Definition | Action Required |
+| 严重程度 | 定义 | 所需操作 |
 |----------|-----------|----------------|
-| **Critical** | Security vulnerability, data loss risk, incorrect behavior | MUST fix before acceptance |
-| **Important** | Performance issue, maintainability concern, missing error handling | SHOULD fix (escalate to user for decision) |
-| **Suggestion** | Style improvement, alternative approach, documentation | MAY fix, at developer's discretion |
+| **严重** | 安全漏洞、数据丢失风险、行为错误 | 验收前**必须**修复 |
+| **重要** | 性能问题、可维护性顾虑、缺少错误处理 | **应当**修复（升级至用户决策） |
+| **建议** | 风格改进、替代方案、文档补充 | **可以**修复，由开发者酌情决定 |
 
-### Gate Decision
+### 门控决策
 
-| Result | Action |
+| 结果 | 操作 |
 |--------|--------|
-| No Critical or Important issues | PASS — proceed to acceptance |
-| Any Critical issues | FAIL — must fix and re-review |
-| Only Important issues | Conditional — escalate to user for decision |
+| 无严重或重要问题 | 通过 — 进入验收 |
+| 存在任何严重问题 | 失败 — 必须修复并重新审查 |
+| 仅有重要问题 | 条件性通过 — 升级至用户决策 |
 
 ---
 
-## Phase 5: Fix and Re-Review Cycle
+## 阶段 5：修复与重新审查周期
 
-**Goal:** Iteratively fix review failures with a bounded retry limit.
+**目标：** 在有限重试次数内迭代修复审查失败。
 
-### Fix Cycle Process
+### 修复周期流程
 
 ```
-1. Collect all failure details from the failing review gate
-2. Send failures back to implementer subagent with specific instructions
-3. Implementer fixes the specific issues (not a full rewrite)
-4. Re-run ONLY the failing review gate
-5. If still failing: repeat (max 3 cycles)
-6. After 3 failed cycles: escalate to user
+1. 收集失败审查门的所有失败详情
+2. 将失败详情连同具体指令发送回实现子代理
+3. 实现者修复具体问题（非完全重写）
+4. 仅重新运行失败的审查门
+5. 若仍失败：重复（最多 3 个周期）
+6. 3 次失败周期后：升级至用户
 ```
 
-### Retry Decision Table
+### 重试决策表
 
-| Attempt | Spec Review | Quality Review | Action |
+| 尝试次数 | 规范审查 | 质量审查 | 操作 |
 |---------|------------|---------------|--------|
-| 1 | FAIL | — | Return to implementer with failure details |
-| 2 | FAIL | — | Return with additional context/examples |
-| 3 | FAIL | — | Escalate to user |
-| 1 | PASS | FAIL | Return to implementer with quality issues |
-| 2 | PASS | FAIL | Return with project patterns as reference |
-| 3 | PASS | FAIL | Escalate to user |
+| 1 | 失败 | — | 将失败详情返回实现者 |
+| 2 | 失败 | — | 返回时附加上下文/示例 |
+| 3 | 失败 | — | 升级至用户 |
+| 1 | 通过 | 失败 | 将质量问题返回实现者 |
+| 2 | 通过 | 失败 | 返回时附带项目模式作为参考 |
+| 3 | 通过 | 失败 | 升级至用户 |
 
-### Escalation Report Format
+### 升级报告格式
 
 ```
-ESCALATION: REPEATED REVIEW FAILURE
+升级：重复审查失败
 ====================================
-Task: [task description]
-Review Gate: [spec / quality]
-Attempts: 3
+任务：[任务描述]
+审查门：[规范 / 质量]
+尝试次数：3
 
-Failure Pattern:
-  Attempt 1: [what failed and why]
-  Attempt 2: [what failed and why]
-  Attempt 3: [what failed and why]
+失败模式：
+  尝试 1：[失败内容及原因]
+  尝试 2：[失败内容及原因]
+  尝试 3：[失败内容及原因]
 
-Root Cause Assessment: [why the implementer cannot resolve this]
+根本原因评估：[为何实现者无法解决此问题]
 
-Options:
-  A. Simplify the task specification
-  B. Provide additional context/examples
-  C. Break into smaller sub-tasks
-  D. Implement manually (skip subagent)
+可选方案：
+  A. 简化任务规范
+  B. 提供额外上下文/示例
+  C. 拆分为更小的子任务
+  D. 手动实现（跳过子代理）
 
-Awaiting direction.
+等待指示。
 ```
 
 ---
 
-## Phase 6: Acceptance and Integration
+## 阶段 6：验收与集成
 
-**Goal:** After both gates pass, integrate the work and verify no regressions.
+**目标：** 两个门控均通过后，集成工作并验证无回归。
 
-1. Run the full project test suite (not just the new tests)
-2. Run all verification commands (lint, type-check, build)
-3. Confirm no regressions were introduced
-4. Mark the task as complete
-5. Proceed to next task or report completion
+1. 运行完整项目测试套件（不仅是新测试）
+2. 运行所有验证命令（lint、类型检查、构建）
+3. 确认未引入回归
+4. 标记任务为完成
+5. 继续下一任务或报告完成
 
-### Multi-Task Orchestration
+### 多任务协调
 
 ```
-1. Identify independent tasks (no dependencies on each other)
-2. For each independent task: run Phases 2-6
-3. After all independent tasks complete:
-   a. Run full test suite
-   b. Run all verification commands
-   c. Checkpoint review
-4. Identify next set of tasks (now that dependencies are met)
-5. Repeat until all tasks complete
+1. 识别独立任务（彼此无依赖）
+2. 对每个独立任务：运行阶段 2-6
+3. 所有独立任务完成后：
+   a. 运行完整测试套件
+   b. 运行所有验证命令
+   c. 检查点审查
+4. 识别下一组任务（依赖已满足）
+5. 重复直至所有任务完成
 ```
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Fails | Correct Approach |
+| 反模式 | 失败原因 | 正确做法 |
 |-------------|-------------|-----------------|
-| Dispatching without complete task spec | Implementer makes wrong assumptions | Fill out all 7 spec sections first |
-| Skipping spec review ("code looks right") | Spec deviations accumulate | Always run both review gates |
-| Accepting despite Critical issues | Security/correctness compromised | Critical issues must be fixed |
-| Letting implementer review its own code | Bias, blind spots | Separate agents for implementation and review |
-| Dispatching dependent tasks in parallel | Race conditions, integration failures | Only parallelize independent tasks |
-| Ignoring questions from implementer | Wrong assumptions baked into code | Address all questions before proceeding |
-| More than 3 fix cycles without escalating | Diminishing returns, same mistakes | Escalate to user for direction |
-| Skipping verification after acceptance | Regressions go unnoticed | Always run full verification |
-| Vague acceptance criteria | Reviewer cannot assess objectively | Specific, testable criteria only |
-| Not including constraints | Implementer touches files it should not | Explicit "do NOT" list in every spec |
+| 未填写完整任务规范即分发 | 实现者做出错误假设 | 先填写全部 7 个规范部分 |
+| 跳过规范审查（"代码看起来没问题"） | 规范偏离累积 | 始终运行两个审查门 |
+| 存在严重问题仍验收 | 安全性/正确性受损 | 严重问题必须修复 |
+| 让实现者审查自己的代码 | 偏见、盲点 | 实现与审查使用独立代理 |
+| 并行分发有依赖的任务 | 竞态条件、集成失败 | 仅并行化独立任务 |
+| 忽略实现者提出的问题 | 错误假设被写入代码 | 继续前解决所有问题 |
+| 超过 3 次修复周期仍未升级 | 收益递减、重复犯错 | 升级至用户获取指导 |
+| 验收后跳过验证 | 回归未被发现 | 始终运行完整验证 |
+| 验收标准模糊 | 审查者无法客观评估 | 仅使用具体、可测试的标准 |
+| 未包含约束条件 | 实现者触及不应修改的文件 | 每个规范中明确列出"禁止"事项 |
 
 ---
 
-## Anti-Rationalization Guards
+## 反合理化防护
 
 <HARD-GATE>
-Do NOT skip either review gate. Do NOT accept implementations with Critical issues. Do NOT dispatch tasks without complete specifications. Both review gates must PASS before any task is marked complete.
+不得跳过任一审查门。不得接受存在严重问题的实现。不得在未填写完整规范的情况下分发任务。任何任务标记完成前，两个审查门必须**全部通过**。
 </HARD-GATE>
 
-If you catch yourself thinking:
-- "The implementation looks good enough..." — Run both review gates. Always.
-- "The spec review is just a formality..." — Spec deviations cause integration failures. Run it.
-- "Three retries is too many, just accept it..." — If it fails 3 times, escalate. Do not lower the bar.
+如果你发现自己这样想：
+- "实现看起来已经够好了..." — 始终运行两个审查门。
+- "规范审查只是走个形式..." — 规范偏离会导致集成失败。务必运行。
+- "三次重试太多了，直接接受吧..." — 若失败 3 次，请升级。不要降低标准。
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship | When |
+| 技能 | 关系 | 使用时机 |
 |-------|-------------|------|
-| `planning` | Upstream — provides approved plan with tasks | Task source |
-| `executing-plans` | Upstream — may delegate to this skill | For independent tasks in plan |
-| `test-driven-development` | Per-task — implementer follows TDD | Phase 2 implementation |
-| `verification-before-completion` | Post-acceptance — final verification | Phase 6 integration |
-| `code-review` | Complementary — quality review gate | Phase 4 quality review |
-| `dispatching-parallel-agents` | Complementary — parallelization strategy | When dispatching independent tasks |
-| `resilient-execution` | On failure — retry strategies | When fix cycles exhaust |
-| `task-management` | Tracking — task status management | Progress tracking |
-| `Agent` tool | Dispatch mechanism for all subagent phases |
+| `planning` | 上游 — 提供已批准的任务计划 | 任务来源 |
+| `executing-plans` | 上游 — 可能委托至此技能 | 处理计划中的独立任务 |
+| `test-driven-development` | 每任务 — 实现者遵循 TDD | 阶段 2 实现 |
+| `verification-before-completion` | 验收后 — 最终验证 | 阶段 6 集成 |
+| `code-review` | 互补 — 质量审查门 | 阶段 4 质量审查 |
+| `dispatching-parallel-agents` | 互补 — 并行化策略 | 分发独立任务时 |
+| `resilient-execution` | 失败时 — 重试策略 | 修复周期耗尽时 |
+| `task-management` | 跟踪 — 任务状态管理 | 进度跟踪 |
+| `Agent` 工具 | 所有子代理阶段的分发机制 |
 
 ---
 
-## Concrete Examples
+## 具体示例
 
-### Example: Task Spec for Subagent
+### 示例：子代理任务规范
 
 ```
-TASK SPECIFICATION
+任务规范
 ==================
-1. Description: Implement user registration endpoint with email validation
+1. 描述：实现带有邮箱验证的用户注册端点
 
-2. Files:
-   - Create: src/routes/auth/register.ts
-   - Create: tests/routes/auth/register.test.ts
-   - Modify: src/routes/index.ts (add route import)
+2. 文件：
+   - 创建：src/routes/auth/register.ts
+   - 创建：tests/routes/auth/register.test.ts
+   - 修改：src/routes/index.ts（添加路由导入）
 
-3. Acceptance Criteria:
-   - POST /api/auth/register accepts { email, password, name }
-   - Returns 201 with user object (no password) on success
-   - Returns 400 if email format is invalid
-   - Returns 409 if email already exists
-   - Password is hashed before storage
+3. 验收标准：
+   - POST /api/auth/register 接受 { email, password, name }
+   - 成功时返回 201 及用户对象（不含密码）
+   - 邮箱格式无效时返回 400
+   - 邮箱已存在时返回 409
+   - 密码存储前需哈希
 
-4. TDD Requirements:
-   - Test: valid registration returns 201
-   - Test: invalid email returns 400
-   - Test: duplicate email returns 409
-   - Test: password is not in response body
-   - Test: password is hashed in database
+4. TDD 要求：
+   - 测试：有效注册返回 201
+   - 测试：无效邮箱返回 400
+   - 测试：重复邮箱返回 409
+   - 测试：响应体中不包含密码
+   - 测试：数据库中密码已哈希
 
-5. Quality Standards:
-   - Follow route pattern in src/routes/auth/login.ts
-   - Use Zod for input validation (existing pattern)
-   - Use Result<T, E> type for service errors
+5. 质量标准：
+   - 遵循 src/routes/auth/login.ts 中的路由模式
+   - 使用 Zod 进行输入验证（现有模式）
+   - 服务错误使用 Result<T, E> 类型
 
-6. Context:
-   - Auth service: src/services/auth.ts (has hashPassword method)
-   - Route pattern: see src/routes/auth/login.ts
-   - Zod schemas: see src/schemas/auth.ts
+6. 上下文：
+   - 认证服务：src/services/auth.ts（含 hashPassword 方法）
+   - 路由模式：参见 src/routes/auth/login.ts
+   - Zod 模式：参见 src/schemas/auth.ts
 
-7. Constraints:
-   - Do NOT modify auth service
-   - Do NOT add new dependencies
-   - Do NOT create migration files
+7. 约束条件：
+   - 不得修改认证服务
+   - 不得添加新依赖
+   - 不得创建迁移文件
 ```
 
 ---
 
-## Prompt Templates
+## 提示模板
 
-This skill uses three prompt templates:
+本技能使用三个提示模板：
 
-| Template | Purpose | File |
+| 模板 | 用途 | 文件 |
 |----------|---------|------|
-| Implementer Prompt | Dispatches implementation work | `implementer-prompt.md` |
-| Spec Reviewer Prompt | Reviews against task specification | `spec-reviewer-prompt.md` |
-| Quality Reviewer Prompt | Reviews code quality | `code-quality-reviewer-prompt.md` |
+| 实现者提示 | 分发实现工作 | `implementer-prompt.md` |
+| 规范审查提示 | 对照任务规范审查 | `spec-reviewer-prompt.md` |
+| 质量审查提示 | 审查代码质量 | `code-quality-reviewer-prompt.md` |
 
-Each template provides a structured format for the subagent interaction. See the individual files for details.
+每个模板为子代理交互提供结构化格式。详见各独立文件。
 
 ---
 
-## Skill Type
+## 技能类型
 
-**RIGID** — Follow this process exactly. All 7 spec sections are mandatory. Both review gates are mandatory. The 3-retry escalation limit is mandatory. No shortcuts.
+**严格模式** — 请严格按此流程执行。全部 7 个规范部分为必填项。两个审查门均为必填项。3 次重试升级限制为强制要求。不得走捷径。

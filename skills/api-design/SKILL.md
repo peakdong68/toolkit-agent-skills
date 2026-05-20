@@ -1,77 +1,80 @@
 ---
 name: api-design
-description: "Use when designing API endpoints, defining request/response schemas, generating OpenAPI specifications, choosing between REST/GraphQL/tRPC, or establishing API conventions for a project"
+description: '当设计 API 端点、定义请求/响应模式、生成 OpenAPI 规范、在 REST/GraphQL/tRPC 之间做选择，或为项目建立 API 约定时使用'
 ---
 
-# API Design
+# API 设计
 
-## Overview
+## 概述
 
-Structured API endpoint design through guided discovery. Produces consistent, well-documented API designs with OpenAPI/Swagger specifications. Covers resource modeling, authentication, pagination, error handling, and versioning — ensuring consumer-centric design before any implementation begins.
+通过引导式探索进行结构化的 API 端点设计。产出一致、文档完善的 API 设计，包含 OpenAPI/Swagger 规范。涵盖资源建模、认证、分页、错误处理和版本控制——确保在开始任何实现之前就采用以消费者为中心的设计。
 
-**Announce at start:** "I'm using the api-design skill to design the API."
+**开始时声明：** "我正在使用 api-design 技能来设计 API。"
 
-## Phase 1: Discovery
+## 第一阶段：探索
 
-Ask these questions ONE AT A TIME:
+一次问一个问题：
 
-### Resource Questions
+### 资源相关问题
 
-| # | Question | What It Determines |
-|---|----------|-------------------|
-| 1 | What entities/resources does this API manage? | Resource naming |
-| 2 | What are the relationships between them? | Nested routes, includes |
-| 3 | What operations are needed for each? (CRUD, search, batch) | HTTP methods, endpoints |
+| #   | 问题                                       | 决定内容           |
+| --- | ------------------------------------------ | ------------------ |
+| 1   | 此 API 管理哪些实体/资源？                 | 资源命名           |
+| 2   | 它们之间的关系是什么？                     | 嵌套路由、包含关系 |
+| 3   | 每个资源需要哪些操作？（CRUD、搜索、批量） | HTTP 方法、端点    |
 
-### Consumer Questions
+### 消费者相关问题
 
-| # | Question | What It Determines |
-|---|----------|-------------------|
-| 4 | Who will consume this API? (frontend, mobile, third-party, internal) | Response shape, auth model |
-| 5 | What authentication/authorization is needed? | Security scheme |
-| 6 | What rate limits or quotas apply? | Rate limiting headers |
+| #   | 问题                                           | 决定内容           |
+| --- | ---------------------------------------------- | ------------------ |
+| 4   | 谁将使用此 API？（前端、移动端、第三方、内部） | 响应结构、认证模型 |
+| 5   | 需要哪些认证/授权？                            | 安全方案           |
+| 6   | 适用哪些速率限制或配额？                       | 速率限制头信息     |
 
-### Constraint Questions
+### 约束条件相关问题
 
-| # | Question | What It Determines |
-|---|----------|-------------------|
-| 7 | REST, GraphQL, or tRPC? | API paradigm |
-| 8 | Versioning strategy? (URL path, header, query param) | URL structure |
-| 9 | Pagination approach? (cursor, offset, keyset) | List response shape |
-| 10 | Existing API conventions in the codebase? | Consistency constraints |
+| #   | 问题                                         | 决定内容     |
+| --- | -------------------------------------------- | ------------ |
+| 7   | REST、GraphQL 还是 tRPC？                    | API 范式     |
+| 8   | 版本控制策略？（URL 路径、请求头、查询参数） | URL 结构     |
+| 9   | 分页方法？（游标、偏移量、键集）             | 列表响应结构 |
+| 10  | 代码库中现有的 API 约定？                    | 一致性约束   |
 
-### API Paradigm Decision Table
+### API 范式决策表
 
-| Factor | Choose REST | Choose GraphQL | Choose tRPC |
-|--------|------------|---------------|-------------|
-| Consumers | Multiple, diverse | Frontend-heavy, flexible queries | TypeScript monorepo |
-| Caching needs | Strong (HTTP caching) | Moderate (client-side) | Low (internal only) |
-| Data shape | Predictable, resource-oriented | Nested, variable-shape | Type-safe RPC |
-| Team familiarity | Universal | Requires schema knowledge | Requires TypeScript |
-| Real-time needs | WebSocket addon | Subscriptions built-in | Subscription support |
+| 因素       | 选择 REST          | 选择 GraphQL       | 选择 tRPC         |
+| ---------- | ------------------ | ------------------ | ----------------- |
+| 消费者     | 多个、多样化       | 前端为主、灵活查询 | TypeScript 单仓库 |
+| 缓存需求   | 强（HTTP 缓存）    | 中等（客户端）     | 低（仅内部）      |
+| 数据结构   | 可预测、面向资源   | 嵌套、可变结构     | 类型安全的 RPC    |
+| 团队熟悉度 | 通用               | 需要掌握模式知识   | 需要 TypeScript   |
+| 实时需求   | WebSocket 附加组件 | 内置订阅功能       | 支持订阅          |
 
-STOP after discovery — present a summary of resources, operations, and constraints. Get confirmation before designing endpoints.
+探索阶段结束后停止——呈现资源、操作和约束条件的摘要。在设计端点之前获取确认。
 
-## Phase 2: Design Endpoints
+## 第二阶段：设计端点
 
-For each endpoint, define:
+对于每个端点，定义：
 
-```markdown
+````markdown
 ### [METHOD] /api/v1/[resource]
 
-**Purpose:** [what this endpoint does]
+**目的：** [此端点的功能]
 
-**Request:**
-- Headers: `Authorization: Bearer <token>`
-- Query params: `?page=1&limit=20&sort=created_at:desc`
-- Body:
+**请求：**
+
+- 请求头：`Authorization: Bearer <token>`
+- 查询参数：`?page=1&limit=20&sort=created_at:desc`
+- 请求体：
   ```json
   {
-    "field": "type — description"
+    "field": "类型 — 描述"
   }
   ```
+````
 
-**Response (200):**
+**响应（200）：**
+
 ```json
 {
   "data": [...],
@@ -79,95 +82,96 @@ For each endpoint, define:
 }
 ```
 
-**Error Responses:**
-| Status | Code | Description |
+**错误响应：**
+| 状态码 | 代码 | 描述 |
 |--------|------|-------------|
-| 400 | VALIDATION_ERROR | Invalid request body |
-| 401 | UNAUTHORIZED | Missing or invalid token |
-| 404 | NOT_FOUND | Resource doesn't exist |
-| 409 | CONFLICT | Resource already exists |
+| 400 | VALIDATION_ERROR | 请求体无效 |
+| 401 | UNAUTHORIZED | 令牌缺失或无效 |
+| 404 | NOT_FOUND | 资源不存在 |
+| 409 | CONFLICT | 资源已存在 |
 
-**Authorization:** [who can access this]
-```
+**授权：** [谁可以访问此端点]
 
-### HTTP Method Decision Table
+````
 
-| Operation | Method | Status (success) | Idempotent |
+### HTTP 方法决策表
+
+| 操作 | 方法 | 状态码（成功） | 幂等 |
 |-----------|--------|-----------------|------------|
-| List resources | GET | 200 | Yes |
-| Get single resource | GET | 200 | Yes |
-| Create resource | POST | 201 | No |
-| Full replace | PUT | 200 | Yes |
-| Partial update | PATCH | 200 | No |
-| Delete resource | DELETE | 204 | Yes |
-| Bulk create | POST | 201 | No |
-| Search (complex) | POST | 200 | Yes (safe) |
+| 列出资源 | GET | 200 | 是 |
+| 获取单个资源 | GET | 200 | 是 |
+| 创建资源 | POST | 201 | 否 |
+| 完全替换 | PUT | 200 | 是 |
+| 部分更新 | PATCH | 200 | 否 |
+| 删除资源 | DELETE | 204 | 是 |
+| 批量创建 | POST | 201 | 否 |
+| 搜索（复杂） | POST | 200 | 是（安全） |
 
-### Pagination Decision Table
+### 分页决策表
 
-| Approach | When to Use | Pros | Cons |
+| 方法 | 适用场景 | 优点 | 缺点 |
 |----------|------------|------|------|
-| **Cursor** | Real-time feeds, large datasets | Consistent, no skipping | Cannot jump to page N |
-| **Offset** | Small datasets, admin panels | Simple, jumpable | Skips/duplicates on insert |
-| **Keyset** | Time-series, logs | Efficient on large tables | Requires sortable key |
+| **游标** | 实时数据流、大型数据集 | 一致性好、不会跳过数据 | 无法跳转到第 N 页 |
+| **偏移量** | 小型数据集、管理面板 | 简单、可跳转 | 插入数据时会跳过/重复 |
+| **键集** | 时间序列、日志 | 大表效率高 | 需要可排序的键 |
 
-### Error Response Format
+### 错误响应格式
 
-All endpoints must use a consistent error shape:
+所有端点必须使用一致的错误结构：
 
 ```json
 {
   "error": {
     "code": "VALIDATION_ERROR",
-    "message": "Human-readable description",
+    "message": "人类可读的描述",
     "details": [
-      { "field": "email", "message": "Invalid email format" }
+      { "field": "email", "message": "邮箱格式无效" }
     ]
   }
 }
-```
+````
 
-### Status Code Reference
+### 状态码参考
 
-| Code | Meaning | When to Use |
-|------|---------|-------------|
-| 200 | OK | Successful GET, PUT, PATCH |
-| 201 | Created | Successful POST that creates |
-| 204 | No Content | Successful DELETE |
-| 400 | Bad Request | Validation failure |
-| 401 | Unauthorized | Missing or invalid credentials |
-| 403 | Forbidden | Valid credentials, insufficient permissions |
-| 404 | Not Found | Resource does not exist |
-| 409 | Conflict | Duplicate or state conflict |
-| 422 | Unprocessable Entity | Valid JSON but semantic error |
-| 429 | Too Many Requests | Rate limit exceeded |
-| 500 | Internal Server Error | Unexpected server failure |
+| 代码 | 含义                  | 使用场景                |
+| ---- | --------------------- | ----------------------- |
+| 200  | OK                    | 成功的 GET、PUT、PATCH  |
+| 201  | Created               | 成功创建资源的 POST     |
+| 204  | No Content            | 成功的 DELETE           |
+| 400  | Bad Request           | 验证失败                |
+| 401  | Unauthorized          | 凭证缺失或无效          |
+| 403  | Forbidden             | 凭证有效但权限不足      |
+| 404  | Not Found             | 资源不存在              |
+| 409  | Conflict              | 重复或状态冲突          |
+| 422  | Unprocessable Entity  | JSON 有效但存在语义错误 |
+| 429  | Too Many Requests     | 超出速率限制            |
+| 500  | Internal Server Error | 意外的服务器故障        |
 
-STOP after endpoint design — present each endpoint for review and approval.
+端点设计完成后停止——呈现每个端点供审查和批准。
 
-## Phase 3: Generate OpenAPI Spec
+## 第三阶段：生成 OpenAPI 规范
 
 ```yaml
 openapi: 3.1.0
 info:
-  title: [API Name]
+  title: [API 名称]
   version: 1.0.0
-  description: [API description]
+  description: [API 描述]
 
 servers:
   - url: http://localhost:3000/api/v1
-    description: Development
+    description: 开发环境
   - url: https://api.example.com/v1
-    description: Production
+    description: 生产环境
 
 paths:
   /resource:
     get:
-      summary: List resources
+      summary: 列出资源
       parameters: [...]
       responses: [...]
     post:
-      summary: Create resource
+      summary: 创建资源
       requestBody: [...]
       responses: [...]
 
@@ -176,84 +180,84 @@ components:
   securitySchemes: [...]
 ```
 
-STOP after spec generation — validate the YAML and present for final approval.
+规范生成完成后停止——验证 YAML 并呈现以供最终批准。
 
-## Phase 4: Save and Transition
+## 第四阶段：保存与过渡
 
-After explicit approval:
+获得明确批准后：
 
-1. Save OpenAPI spec to `docs/api/YYYY-MM-DD-<api-name>.yaml`
-2. Commit with message: `docs(api): add OpenAPI spec for <api-name>`
-3. Determine next step based on user intent
+1. 将 OpenAPI 规范保存到 `docs/api/YYYY-MM-DD-<api-name>.yaml`
+2. 提交消息：`docs(api): add OpenAPI spec for <api-name>`
+3. 根据用户意图确定下一步
 
-### Transition Decision Table
+### 过渡决策表
 
-| User Intent | Next Skill | Rationale |
-|-------------|-----------|-----------|
-| "Let's implement this" | `planning` | Create implementation plan from API spec |
-| "Write specs for this" | `spec-writing` | Behavioral specs for each endpoint |
-| "Generate client SDK" | Manual | Use OpenAPI codegen tools |
-| "Just save the design" | None | API design is the deliverable |
-| "Add tests" | `testing-strategy` | Define API test approach |
+| 用户意图         | 下一技能           | 理由                      |
+| ---------------- | ------------------ | ------------------------- |
+| "我们来实现这个" | `planning`         | 根据 API 规范创建实现计划 |
+| "为此编写规范"   | `spec-writing`     | 为每个端点编写行为规范    |
+| "生成客户端 SDK" | 手动               | 使用 OpenAPI 代码生成工具 |
+| "只需保存设计"   | 无                 | API 设计即为交付物        |
+| "添加测试"       | `testing-strategy` | 定义 API 测试方法         |
 
-## Design Principles
+## 设计原则
 
-| Principle | Rule |
-|-----------|------|
-| Consistent naming | Plural nouns for collections (`/users`, not `/user`) |
-| Proper HTTP methods | GET reads, POST creates, PUT replaces, PATCH updates, DELETE removes |
-| Proper status codes | Use the right code for the right situation (see table above) |
-| Consistent error format | Same error shape across all endpoints |
-| Pagination by default | All list endpoints paginated |
-| Filtering and sorting | Query params for list endpoints |
-| Idempotency | PUT and DELETE are always idempotent |
-| HATEOAS | Include links for discoverability (when appropriate) |
+| 原则             | 规则                                                   |
+| ---------------- | ------------------------------------------------------ |
+| 命名一致         | 集合使用复数名词（`/users`，而非 `/user`）             |
+| 正确的 HTTP 方法 | GET 读取，POST 创建，PUT 替换，PATCH 更新，DELETE 删除 |
+| 正确的状态码     | 为正确的场景使用正确的状态码（见上表）                 |
+| 一致的错误格式   | 所有端点使用相同的错误结构                             |
+| 默认分页         | 所有列表端点都应分页                                   |
+| 过滤和排序       | 列表端点使用查询参数                                   |
+| 幂等性           | PUT 和 DELETE 始终是幂等的                             |
+| HATEOAS          | 包含用于可发现性的链接（适当时）                       |
 
-## Anti-Patterns / Common Mistakes
+## 反模式/常见错误
 
-| Mistake | Why It Is Wrong | What To Do Instead |
-|---------|----------------|-------------------|
-| Verb-based URLs (`/getUsers`) | Not RESTful, breaks conventions | Use nouns: `GET /users` |
-| Inconsistent plural/singular | Confuses consumers | Always plural for collections |
-| Returning 200 for errors | Hides failures from clients | Use proper status codes |
-| No pagination on list endpoints | Performance bomb on large datasets | Always paginate |
-| Different error formats per endpoint | Clients can't build generic error handling | One error shape for all |
-| Exposing internal IDs in URLs | Security and coupling risk | Use UUIDs or slugs |
-| No versioning strategy | Breaking changes break clients | Version from day one |
-| Designing without knowing consumers | API serves no one well | Discovery phase first |
+| 错误                          | 为何错误                   | 正确做法                   |
+| ----------------------------- | -------------------------- | -------------------------- |
+| 基于动词的 URL（`/getUsers`） | 不符合 RESTful，违反约定   | 使用名词：`GET /users`     |
+| 复数/单数不一致               | 使消费者困惑               | 集合始终使用复数           |
+| 错误时返回 200                | 向客户端隐藏失败           | 使用正确的状态码           |
+| 列表端点不分页                | 大数据集时的性能灾难       | 始终分页                   |
+| 不同端点使用不同错误格式      | 客户端无法构建通用错误处理 | 所有端点使用统一的错误结构 |
+| 在 URL 中暴露内部 ID          | 安全和耦合风险             | 使用 UUID 或短链接         |
+| 无版本控制策略                | 破坏性变更会破坏客户端     | 从第一天起就进行版本控制   |
+| 不了解消费者就进行设计        | API 无法很好地服务于任何人 | 先进行探索阶段             |
 
-## Anti-Rationalization Guards
+## 反合理化防护
 
-- **Do NOT** skip the discovery phase — understand consumers and constraints first
-- **Do NOT** design endpoints without defining error responses
-- **Do NOT** skip pagination for any list endpoint
-- **Do NOT** use inconsistent naming across endpoints
-- **Do NOT** generate the OpenAPI spec without user approval of endpoint designs
-- **Do NOT** mix API paradigms (REST + GraphQL) without explicit justification
+- **不要**跳过探索阶段——首先了解消费者和约束条件
+- **不要**在未定义错误响应的情况下设计端点
+- **不要**为任何列表端点跳过分页
+- **不要**在不同端点之间使用不一致的命名
+- **不要**在用户批准端点设计之前生成 OpenAPI 规范
+- **不要**在没有明确理由的情况下混合使用 API 范式（REST + GraphQL）
 
-## Integration Points
+## 集成点
 
-| Skill | Relationship |
-|-------|-------------|
-| `spec-writing` | Downstream: API design informs behavioral specifications |
-| `planning` | Downstream: API endpoints become implementation tasks |
-| `tech-docs-generator` | Downstream: OpenAPI spec feeds API reference docs |
-| `testing-strategy` | Downstream: API design informs integration test strategy |
-| `security-review` | Downstream: auth/authz model reviewed for vulnerabilities |
-| `database-schema-design` | Upstream: data model informs resource design |
-| `prd-generation` | Upstream: PRD requirements drive API resource identification |
+| 技能                     | 关系                                    |
+| ------------------------ | --------------------------------------- |
+| `spec-writing`           | 下游：API 设计为行为规范提供依据        |
+| `planning`               | 下游：API 端点成为实现任务              |
+| `tech-docs-generator`    | 下游：OpenAPI 规范用于生成 API 参考文档 |
+| `testing-strategy`       | 下游：API 设计为集成测试策略提供依据    |
+| `security-review`        | 下游：认证/授权模型需审查是否存在漏洞   |
+| `database-schema-design` | 上游：数据模型影响资源设计              |
+| `prd-generation`         | 上游：PRD 需求驱动 API 资源识别         |
 
-## Verification Gate
+## 验证关卡
 
-Before claiming the API design is complete:
+在声明 API 设计完成之前：
 
-1. VERIFY all endpoints have request/response schemas
-2. VERIFY all error responses are documented with consistent format
-3. VERIFY authentication is specified for each endpoint
-4. VERIFY pagination is defined for all list endpoints
-5. VERIFY the OpenAPI spec is valid YAML
-6. VERIFY user has approved each endpoint individually
+1. 验证所有端点都有请求/响应模式
+2. 验证所有错误响应都已记录且格式一致
+3. 验证每个端点都指定了认证方式
+4. 验证所有列表端点都定义了分页
+5. 验证 OpenAPI 规范是有效的 YAML
+6. 验证用户已单独批准每个端点
 
-## Skill Type
+## 技能类型
 
-**Flexible** — Adapt API paradigm, pagination style, and auth model to project needs while preserving the discovery-first approach, consistent error handling, and consumer-centric design principles.
+**灵活** — 根据项目需求调整 API 范式、分页风格和认证模型，同时保持先探索后设计的方法、一致的错误处理以及以消费者为中心的设计原则。

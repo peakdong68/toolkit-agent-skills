@@ -1,67 +1,67 @@
 ---
 name: frontend-ui-design
-description: "Use when designing UI components, creating component architectures, implementing responsive layouts, setting up design systems, or selecting state management solutions for frontend applications"
+description: '用于设计 UI 组件、创建组件架构、实现响应式布局、构建设计系统或为前端应用选择状态管理方案时使用'
 ---
 
-# Frontend UI Design
+# 前端 UI 设计
 
-## Overview
+## 概述
 
-Guide the design and implementation of frontend user interfaces with consistent architecture, accessibility, responsive behavior, and performance. This skill covers component patterns, design system integration, state management selection, and WCAG compliance — producing components that are testable, accessible, and performant.
+指导前端用户界面的设计与实现，确保架构一致、具备可访问性、响应式行为良好且性能优异。本技能涵盖组件模式、设计系统集成、状态管理选型以及 WCAG 合规性——旨在产出可测试、可访问且高性能的组件。
 
-**Announce at start:** "I'm using the frontend-ui-design skill to design the UI."
+**开始时声明：** “我正在使用 frontend-ui-design 技能来设计 UI。”
 
-## Phase 1: Discovery
+## 第一阶段：需求探索
 
-Ask these questions to understand the UI requirements:
+提出以下问题以了解 UI 需求：
 
-| # | Question | What It Determines |
-|---|----------|-------------------|
-| 1 | What component or page are we building? | Scope and complexity |
-| 2 | What framework/library? (React, Vue, Svelte, etc.) | Code patterns |
-| 3 | Is there an existing design system or component library? | Constraints |
-| 4 | What devices must be supported? (mobile, tablet, desktop) | Responsive strategy |
-| 5 | Accessibility requirements? (WCAG level) | A11y standards |
-| 6 | What data does this component need? | State management approach |
+| #   | 问题                                       | 确定内容     |
+| --- | ------------------------------------------ | ------------ |
+| 1   | 我们要构建什么组件或页面？                 | 范围与复杂度 |
+| 2   | 使用什么框架/库？（React、Vue、Svelte 等） | 代码模式     |
+| 3   | 是否有现有的设计系统或组件库？             | 约束条件     |
+| 4   | 必须支持哪些设备？（移动端、平板、桌面端） | 响应式策略   |
+| 5   | 可访问性要求？（WCAG 等级）                | 无障碍标准   |
+| 6   | 该组件需要处理什么数据？                   | 状态管理方案 |
 
-STOP after discovery — present a summary of constraints and approach before designing.
+在探索阶段结束后停止——在开始设计之前，先总结约束条件和实施方案。
 
-## Phase 2: Component Architecture Selection
+## 第二阶段：组件架构选型
 
-### Architecture Pattern Decision Table
+### 架构模式决策表
 
-| Pattern | When to Use | When NOT to Use |
-|---------|------------|-----------------|
-| **Atomic Design** | Building a component library from scratch | Adding one component to existing system |
-| **Compound Components** | Multi-part component needing layout flexibility | Simple single-purpose component |
-| **Hooks Pattern** | Same logic reused across different UIs | Logic tied to one specific component |
-| **Container/Presenter** | Components need isolated testing or multiple data sources | Simple components with minimal logic |
+| 模式              | 何时使用                     | 何时不使用               |
+| ----------------- | ---------------------------- | ------------------------ |
+| **原子化设计**    | 从零开始构建组件库           | 在现有系统中添加单个组件 |
+| **复合组件**      | 需要布局灵活性的多部分组件   | 简单的单一用途组件       |
+| **Hooks 模式**    | 在不同 UI 间复用相同逻辑     | 逻辑与特定单一组件强绑定 |
+| **容器/展示组件** | 组件需要隔离测试或多个数据源 | 逻辑极少的简单组件       |
 
-### Atomic Design Levels
+### 原子化设计层级
 
-| Level | Description | Examples |
-|-------|-------------|----------|
-| **Atoms** | Smallest building blocks, single purpose | Button, Input, Label, Icon |
-| **Molecules** | Groups of atoms functioning together | SearchBar (Input + Button), FormField (Label + Input + Error) |
-| **Organisms** | Complex sections composed of molecules | Header (Logo + Nav + SearchBar), ProductCard |
-| **Templates** | Page layouts with placeholder content | DashboardLayout, AuthLayout |
-| **Pages** | Templates populated with real data | HomePage, SettingsPage |
+| 层级       | 描述                   | 示例                                                            |
+| ---------- | ---------------------- | --------------------------------------------------------------- |
+| **原子**   | 最小构建块，单一职责   | Button、Input、Label、Icon                                      |
+| **分子**   | 协同工作的原子组合     | SearchBar（Input + Button）、FormField（Label + Input + Error） |
+| **有机体** | 由分子组成的复杂区块   | Header（Logo + Nav + SearchBar）、ProductCard                   |
+| **模板**   | 带有占位内容的页面布局 | DashboardLayout、AuthLayout                                     |
+| **页面**   | 填入真实数据的模板     | HomePage、SettingsPage                                          |
 
-### Compound Components Example
+### 复合组件示例
 
 ```tsx
 <Select value={selected} onChange={setSelected}>
   <Select.Trigger />
   <Select.Options>
-    <Select.Option value="a">Option A</Select.Option>
-    <Select.Option value="b">Option B</Select.Option>
+    <Select.Option value='a'>Option A</Select.Option>
+    <Select.Option value='b'>Option B</Select.Option>
   </Select.Options>
 </Select>
 ```
 
-Use when: a component has multiple sub-parts that must coordinate but consumers need layout flexibility.
+使用场景：组件包含多个必须协调的子部分，但使用者需要布局灵活性。
 
-### Hooks Pattern Example
+### Hooks 模式示例
 
 ```tsx
 function useDialog() {
@@ -72,191 +72,199 @@ function useDialog() {
 }
 ```
 
-Use when: the same logic is needed across multiple components with different UI.
+使用场景：多个具有不同 UI 的组件需要相同的逻辑。
 
-STOP after architecture selection — confirm the pattern choice before proceeding.
+在架构选型后停止——在继续之前确认模式选择。
 
-## Phase 3: Responsive Design
+## 第三阶段：响应式设计
 
-### Mobile-First Breakpoints
+### 移动端优先断点
 
-| Breakpoint | Target | Min-Width |
-|------------|--------|-----------|
-| sm | Mobile landscape | 640px |
-| md | Tablet | 768px |
-| lg | Desktop | 1024px |
-| xl | Large desktop | 1280px |
-| 2xl | Wide desktop | 1536px |
+| 断点 | 目标       | 最小宽度 |
+| ---- | ---------- | -------- |
+| sm   | 移动端横屏 | 640px    |
+| md   | 平板       | 768px    |
+| lg   | 桌面端     | 1024px   |
+| xl   | 大桌面端   | 1280px   |
+| 2xl  | 超宽桌面端 | 1536px   |
 
-### Responsive Strategy Decision Table
+### 响应式策略决策表
 
-| Need | Use | Not |
-|------|-----|-----|
-| Layout changes based on viewport size | Media queries | Container queries |
-| Component adapts to parent container size | Container queries | Media queries |
-| Text scales smoothly between breakpoints | `clamp()` fluid typography | Fixed font sizes |
-| Images adapt to viewport | `srcset` + `sizes` | Single fixed image |
+| 需求                 | 使用               | 不使用       |
+| -------------------- | ------------------ | ------------ |
+| 布局随视口大小变化   | 媒体查询           | 容器查询     |
+| 组件随父容器大小调整 | 容器查询           | 媒体查询     |
+| 文本在断点间平滑缩放 | `clamp()` 流体排版 | 固定字体大小 |
+| 图片适应视口         | `srcset` + `sizes` | 单一固定图片 |
 
-### Fluid Typography
+### 流体排版
 
 ```css
 font-size: clamp(1rem, 0.5rem + 1.5vw, 1.5rem);
 ```
 
-## Phase 4: Accessibility (WCAG 2.1 AA)
+## 第四阶段：可访问性 (WCAG 2.1 AA)
 
-### Semantic HTML Decision Table
+### 语义化 HTML 决策表
 
-| Need | Use | NOT |
-|------|-----|-----|
-| Navigation | `<nav>` | `<div class="nav">` |
-| Button action | `<button>` | `<div onClick>` |
-| Page sections | `<main>`, `<section>`, `<aside>` | `<div>` |
-| Headings | `<h1>`-`<h6>` in order | `<div class="heading">` |
-| List of items | `<ul>`, `<ol>` | Nested `<div>`s |
-| Form labels | `<label for="...">` | Placeholder text only |
+| 需求     | 使用                             | 不使用                  |
+| -------- | -------------------------------- | ----------------------- |
+| 导航     | `<nav>`                          | `<div class="nav">`     |
+| 按钮操作 | `<button>`                       | `<div onClick>`         |
+| 页面区块 | `<main>`、`<section>`、`<aside>` | `<div>`                 |
+| 标题     | 按顺序使用 `<h1>`-`<h6>`         | `<div class="heading">` |
+| 项目列表 | `<ul>`、`<ol>`                   | 嵌套的 `<div>`          |
+| 表单标签 | `<label for="...">`              | 仅使用占位符文本        |
 
-### ARIA Usage Rules
+### ARIA 使用规则
 
-| Rule | When |
-|------|------|
-| Use semantic HTML first | Always — ARIA is a fallback |
-| `aria-label` | Labels for elements without visible text |
-| `aria-describedby` | Associates descriptive text with an element |
-| `aria-live` | Announces dynamic content changes |
-| `aria-expanded` | Toggleable sections (accordions, menus) |
-| `role` | Only when no semantic element exists |
+| 规则                | 何时使用                          |
+| ------------------- | --------------------------------- |
+| 优先使用语义化 HTML | 始终如此——ARIA 仅作为备用方案     |
+| `aria-label`        | 为没有可见文本的元素提供标签      |
+| `aria-describedby`  | 将描述性文本与元素关联            |
+| `aria-live`         | 播报动态内容变化                  |
+| `aria-expanded`     | 可折叠/展开的区块（手风琴、菜单） |
+| `role`              | 仅在不存在对应语义化元素时使用    |
 
-### Keyboard Navigation Requirements
+### 键盘导航要求
 
-- All interactive elements focusable (naturally or `tabindex="0"`)
-- Operable via keyboard (Enter, Space, Escape, Arrow keys)
-- Visible focus indicator (never `outline: none` without replacement)
-- Logical tab order matching visual order
-- Focus traps for modals and dialogs
+- 所有交互元素必须可聚焦（原生支持或 `tabindex="0"`）
+- 支持键盘操作（Enter、Space、Escape、方向键）
+- 可见的焦点指示器（绝不能使用 `outline: none` 而不提供替代样式）
+- 符合视觉顺序的逻辑 Tab 键顺序
+- 为模态框和对话框设置焦点陷阱
 
-### Color Contrast Requirements
+### 颜色对比度要求
 
-| Element | Minimum Ratio |
-|---------|--------------|
-| Normal text | 4.5:1 |
-| Large text (18px+ or 14px+ bold) | 3:1 |
-| UI components | 3:1 against adjacent colors |
-| Information conveyed by color | Must also use icons, patterns, or text |
+| 元素                            | 最低比率                     |
+| ------------------------------- | ---------------------------- |
+| 普通文本                        | 4.5:1                        |
+| 大号文本（18px+ 或 14px+ 粗体） | 3:1                          |
+| UI 组件                         | 与相邻颜色对比 3:1           |
+| 仅靠颜色传递的信息              | 必须同时使用图标、图案或文本 |
 
-### Screen Reader Testing
+### 屏幕阅读器测试
 
-Test with at least one screen reader:
-- macOS: VoiceOver (built-in)
-- Windows: NVDA (free) or JAWS
-- Verify: content announced in logical order, form errors associated with inputs, dynamic updates announced
+至少使用一种屏幕阅读器进行测试：
 
-## Phase 5: State Management & Performance
+- macOS：VoiceOver（内置）
+- Windows：NVDA（免费）或 JAWS
+- 验证：内容按逻辑顺序播报、表单错误与输入框关联、动态更新被播报
 
-### State Management Decision Table
+## 第五阶段：状态管理与性能
 
-| State Type | Solution | When |
-|------------|----------|------|
-| **Local** | `useState`, `useReducer` | State used by one component or direct children |
-| **Shared** | Context, Zustand, Jotai | State shared across multiple unrelated components |
-| **Server** | TanStack Query, SWR | Data fetched from API, needs caching/revalidation |
-| **Form** | React Hook Form, Formik | Complex forms with validation and submission |
-| **URL** | Search params, router state | State that should be bookmarkable/shareable |
+### 状态管理决策表
 
-### Selection Heuristic
+| 状态类型       | 解决方案                 | 何时使用                             |
+| -------------- | ------------------------ | ------------------------------------ |
+| **局部状态**   | `useState`、`useReducer` | 仅由单个组件或其直接子组件使用的状态 |
+| **共享状态**   | Context、Zustand、Jotai  | 在多个无直接关联的组件间共享的状态   |
+| **服务端状态** | TanStack Query、SWR      | 从 API 获取的数据，需要缓存/重新验证 |
+| **表单状态**   | React Hook Form、Formik  | 带有验证和提交逻辑的复杂表单         |
+| **URL 状态**   | 搜索参数、路由状态       | 需要可被书签保存/分享的状态          |
 
-1. Start with `useState` — only escalate when you hit a real limitation
-2. If prop drilling exceeds 2 levels, consider Context or state library
-3. If caching API responses, use a server state library (not Redux for server state)
-4. For forms with >3 fields and validation, use a form library
+### 选型启发式原则
 
-### Performance Optimization Checklist
+1. 从 `useState` 开始——仅在遇到实际限制时才升级方案
+2. 如果 Props 透传超过 2 层，考虑使用 Context 或状态库
+3. 如果需要缓存 API 响应，使用服务端状态库（不要用 Redux 管理服务端状态）
+4. 对于字段数大于 3 且需要验证的表单，使用表单库
 
-| Technique | When to Apply |
-|-----------|--------------|
-| `React.lazy()` + `Suspense` | Route-level code splitting |
-| `loading="lazy"` on images | Below-the-fold images |
-| Virtualization | Lists with >50 items |
-| `useMemo` | Expensive computations |
-| `useCallback` | Callbacks passed to memoized children |
-| Dynamic `import()` | Conditionally loaded heavy libraries |
-| WebP/AVIF images | All image assets |
-| Explicit `width`/`height` on images | Prevent layout shift |
+### 性能优化检查清单
 
-### Design System Integration
+| 技术                          | 应用时机                                 |
+| ----------------------------- | ---------------------------------------- |
+| `React.lazy()` + `Suspense`   | 路由级代码分割                           |
+| 图片使用 `loading="lazy"`     | 首屏以下的图片                           |
+| 虚拟化                        | 列表项超过 50 个时                       |
+| `useMemo`                     | 计算开销大的场景                         |
+| `useCallback`                 | 传递给已记忆 (memoized) 子组件的回调函数 |
+| 动态 `import()`               | 按需加载的大型库                         |
+| WebP/AVIF 图片格式            | 所有图片资源                             |
+| 图片明确设置 `width`/`height` | 防止布局偏移 (CLS)                       |
 
-**Design Tokens** — define foundational values, not hard-coded:
+### 设计系统集成
+
+**设计令牌** —— 定义基础值，避免硬编码：
 
 ```ts
 const tokens = {
   color: { primary: '#2563eb', secondary: '#64748b', error: '#dc2626' },
-  spacing: { xs: '0.25rem', sm: '0.5rem', md: '1rem', lg: '1.5rem', xl: '2rem' },
+  spacing: {
+    xs: '0.25rem',
+    sm: '0.5rem',
+    md: '1rem',
+    lg: '1.5rem',
+    xl: '2rem',
+  },
   typography: { fontFamily: { sans: 'Inter, system-ui, sans-serif' } },
 };
 ```
 
-**Component Variants** — consistent variant API:
+**组件变体** —— 统一的变体 API：
 
 ```tsx
 <Button variant="primary" size="md">Save</Button>
 <Button variant="outline" size="sm">Cancel</Button>
 ```
 
-**Theme Support:**
-- CSS custom properties for runtime theme switching
-- Support light + dark themes at minimum
-- Respect `prefers-color-scheme` as default
-- Allow user override stored in localStorage
+**主题支持：**
 
-STOP after design — present the full component specification for review.
+- 使用 CSS 自定义属性实现运行时主题切换
+- 至少支持浅色和深色主题
+- 默认遵循 `prefers-color-scheme` 系统偏好
+- 允许用户覆盖并存储在 localStorage 中
 
-## Anti-Patterns / Common Mistakes
+在设计完成后停止——提交完整的组件规范以供评审。
 
-| Mistake | Why It Is Wrong | What To Do Instead |
-|---------|----------------|-------------------|
-| `<div onClick>` instead of `<button>` | Not keyboard accessible, no screen reader semantics | Use semantic HTML elements |
-| `outline: none` without replacement | Keyboard users cannot see focus | Replace with visible focus style |
-| Fixed font sizes (px) | Cannot scale with user preferences | Use `rem` and `clamp()` |
-| Prop drilling through 4+ levels | Maintenance nightmare | Use Context or state library |
-| Fetching in useEffect + useState | No caching, no dedup, race conditions | Use TanStack Query or SWR |
-| Premature memoization | Adds complexity without measured benefit | Profile first, optimize measured bottlenecks |
-| Desktop-first responsive design | Mobile experience is an afterthought | Start mobile-first, add complexity up |
-| Color as sole information carrier | Inaccessible to colorblind users | Add icons, patterns, or text labels |
-| No loading/error states | Users see blank screens or cryptic errors | Design loading, error, and empty states |
+## 反模式 / 常见错误
 
-## Anti-Rationalization Guards
+| 错误做法                               | 为何错误                         | 正确做法                           |
+| -------------------------------------- | -------------------------------- | ---------------------------------- |
+| 使用 `<div onClick>` 代替 `<button>`   | 不支持键盘访问，无屏幕阅读器语义 | 使用语义化 HTML 元素               |
+| 使用 `outline: none` 而无替代样式      | 键盘用户无法看到焦点位置         | 替换为可见的焦点样式               |
+| 固定字体大小 (px)                      | 无法随用户偏好缩放               | 使用 `rem` 和 `clamp()`            |
+| Props 透传超过 4 层                    | 维护噩梦                         | 使用 Context 或状态库              |
+| 在 `useEffect` + `useState` 中获取数据 | 无缓存、无去重、竞态条件         | 使用 TanStack Query 或 SWR         |
+| 过早使用记忆化                         | 增加复杂度且无实测收益           | 先进行性能剖析，再优化已确认的瓶颈 |
+| 桌面端优先的响应式设计                 | 移动端体验沦为事后补救           | 从移动端优先开始，逐步增加复杂度   |
+| 仅依靠颜色传递信息                     | 对色盲用户不友好                 | 额外添加图标、图案或文本标签       |
+| 无加载/错误状态                        | 用户会看到空白屏幕或晦涩的错误   | 设计加载、错误和空状态             |
 
-- **Do NOT** skip accessibility — WCAG 2.1 AA is the minimum, not optional
-- **Do NOT** use `<div>` with onClick instead of semantic elements
-- **Do NOT** skip keyboard navigation testing
-- **Do NOT** choose state management before understanding the actual need
-- **Do NOT** skip the discovery phase — understand constraints first
-- **Do NOT** optimize performance without measuring first
+## 防合理化护栏
 
-## Integration Points
+- **切勿** 跳过可访问性——WCAG 2.1 AA 是最低标准，而非可选项
+- **切勿** 使用带 `onClick` 的 `<div>` 代替语义化元素
+- **切勿** 跳过键盘导航测试
+- **切勿** 在了解实际需求前就选择状态管理方案
+- **切勿** 跳过探索阶段——先理清约束条件
+- **切勿** 在性能实测前进行优化
 
-| Skill | Relationship |
-|-------|-------------|
-| `api-design` | Upstream: API response shapes inform component data needs |
-| `spec-writing` | Upstream: specs define component behavioral requirements |
-| `planning` | Downstream: component designs become implementation tasks |
-| `test-driven-development` | Downstream: component spec drives test-first implementation |
-| `senior-frontend` | Parallel: specialist knowledge for React/Next.js specifics |
-| `ui-ux-pro-max` | Upstream: UX design informs component requirements |
-| `ui-design-system` | Parallel: design system tokens feed component styling |
-| `performance-optimization` | Downstream: profile and optimize after implementation |
+## 集成点
 
-## Verification Gate
+| 技能                       | 关系                                    |
+| -------------------------- | --------------------------------------- |
+| `api-design`               | 上游：API 响应结构决定组件的数据需求    |
+| `spec-writing`             | 上游：规范定义组件的行为需求            |
+| `planning`                 | 下游：组件设计转化为实现任务            |
+| `test-driven-development`  | 下游：组件规范驱动测试先行实现          |
+| `senior-frontend`          | 并行：提供 React/Next.js 特定的专家知识 |
+| `ui-ux-pro-max`            | 上游：UX 设计指导组件需求               |
+| `ui-design-system`         | 并行：设计系统令牌为组件样式提供输入    |
+| `performance-optimization` | 下游：实现后进行性能剖析与优化          |
 
-Before claiming the UI design is complete:
+## 验证关卡
 
-1. VERIFY component architecture pattern is explicitly chosen with rationale
-2. VERIFY responsive behavior is defined for all target breakpoints
-3. VERIFY accessibility requirements are specified (WCAG level, keyboard, color contrast)
-4. VERIFY state management approach is selected based on actual needs
-5. VERIFY loading, error, and empty states are designed
-6. VERIFY the user has approved the component specification
+在声明 UI 设计完成之前：
 
-## Skill Type
+1. 验证已明确选择组件架构模式并附带理由
+2. 验证已定义所有目标断点的响应式行为
+3. 验证已指定可访问性要求（WCAG 等级、键盘操作、颜色对比度）
+4. 验证已根据实际需求选择状态管理方案
+5. 验证已设计加载、错误和空状态
+6. 验证用户已批准组件规范
 
-**Flexible** — Adapt component patterns, responsive strategy, and state management to project framework and constraints while preserving accessibility requirements and the discovery-first approach.
+## 技能类型
+
+**灵活型** —— 根据项目框架和约束条件调整组件模式、响应式策略和状态管理，同时严格遵守可访问性要求与“探索优先”的原则。

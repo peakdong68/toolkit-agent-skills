@@ -1,395 +1,391 @@
-# Agent Operating Manual
+# @pixelandprocess/superkit-agents — 智能体操作手册
 
-> See `using-toolkit` skill for identity, hard-gates, workflow state machines, and full command reference.
-
----
-
-## 1 SKILL CATALOG (64 Skills)
-
-**Core (6):** `using-toolkit`, `self-learning` `/learn`, `resilient-execution`, `circuit-breaker`, `auto-improvement`, `verification-before-completion` `/verify`
-
-**Process (9):** `planning` `/plan`, `brainstorming` `/brainstorm`, `task-management`, `executing-plans` `/execute`, `subagent-driven-development`, `dispatching-parallel-agents`, `autonomous-loop` `/ralph` `/loop`, `ralph-status`, `task-decomposition` `/decompose`
-
-**QA (17):** `code-review` `/review`, `test-driven-development` `/tdd`, `testing-strategy`, `systematic-debugging` `/debug`, `security-review`, `performance-optimization`, `acceptance-testing`, `llm-as-judge`, `senior-frontend` `/frontend`, `senior-backend` `/backend`, `senior-architect` `/architect`, `senior-fullstack` `/fullstack`, `clean-code` `/clean`, `react-best-practices`, `webapp-testing`, `senior-prompt-engineer`, `senior-data-scientist`
-
-**Docs (5):** `prd-generation` `/prd`, `tech-docs-generator` `/docs`, `writing-skills`, `spec-writing` `/specs`, `reverse-engineering-specs`
-
-**Design (3):** `api-design`, `frontend-ui-design`, `database-schema-design`
-
-**Ops (7):** `deployment`, `using-git-worktrees` `/worktree`, `finishing-a-development-branch`, `git-commit-helper` `/commit`, `senior-devops` `/devops`, `mcp-builder` `/mcp`, `agent-development` `/agent`
-
-**Creative (6):** `ui-ux-pro-max` `/ui-ux`, `ui-design-system` `/design-system`, `canvas-design`, `mobile-design` `/mobile`, `ux-researcher-designer`, `artifacts-builder`
-
-**Business (3):** `seo-optimizer` `/seo`, `content-research-writer`, `content-creator`
-
-**Doc Processing (3):** `docx-processing`, `pdf-processing`, `xlsx-processing`
-
-**Productivity (1):** `file-organizer`
-
-**Communication (1):** `email-composer` `/email`
-
-**Frameworks (3):** `laravel-specialist` `/laravel`, `php-specialist` `/php`, `laravel-boost`
-
-**Rigid skills:** Follow exactly. **Flexible skills:** Adapt to context.
+> 请参阅 `using-toolkit` 技能以了解身份定义、硬性限制（hard-gates）、工作流状态机及完整命令参考。
 
 ---
 
-## 2 AGENT DISPATCH TABLE (20 Agents)
+## 1 技能目录（64 项技能）
 
+**核心（6）：** `using-toolkit`、`self-learning` `/learn`、`resilient-execution`、`circuit-breaker`、`auto-improvement`、`verification-before-completion` `/verify`
 
-| Agent                | Purpose                                                 | When to Dispatch                             | Expected Output                                                |
+**流程（9）：** `planning` `/plan`、`brainstorming` `/brainstorm`、`task-management`、`executing-plans` `/execute`、`subagent-driven-development`、`dispatching-parallel-agents`、`autonomous-loop` `/ralph` `/loop`、`ralph-status`、`task-decomposition` `/decompose`
+
+**质量保证/测试（17）：** `code-review` `/review`、`test-driven-development` `/tdd`、`testing-strategy`、`systematic-debugging` `/debug`、`security-review`、`performance-optimization`、`acceptance-testing`、`llm-as-judge`、`senior-frontend` `/frontend`、`senior-backend` `/backend`、`senior-architect` `/architect`、`senior-fullstack` `/fullstack`、`clean-code` `/clean`、`react-best-practices`、`webapp-testing`、`senior-prompt-engineer`、`senior-data-scientist`
+
+**文档（5）：** `prd-generation` `/prd`、`tech-docs-generator` `/docs`、`writing-skills`、`spec-writing` `/specs`、`reverse-engineering-specs`
+
+**设计（3）：** `api-design`、`frontend-ui-design`、`database-schema-design`
+
+**运维（7）：** `deployment`、`using-git-worktrees` `/worktree`、`finishing-a-development-branch`、`git-commit-helper` `/commit`、`senior-devops` `/devops`、`mcp-builder` `/mcp`、`agent-development` `/agent`
+
+**创意（6）：** `ui-ux-pro-max` `/ui-ux`、`ui-design-system` `/design-system`、`canvas-design`、`mobile-design` `/mobile`、`ux-researcher-designer`、`artifacts-builder`
+
+**商业（3）：** `seo-optimizer` `/seo`、`content-research-writer`、`content-creator`
+
+**文档处理（3）：** `docx-processing`、`pdf-processing`、`xlsx-processing`
+
+**生产力（1）：** `file-organizer`
+
+**沟通（1）：** `email-composer` `/email`
+
+**框架（3）：** `laravel-specialist` `/laravel`、`php-specialist` `/php`、`laravel-boost`
+
+**刚性技能：** 严格遵循。**弹性技能：** 根据上下文灵活调整。
+
+---
+
+## 2 智能体调度表（20 个智能体）
+
+| 智能体                | 用途                                                 | 调度时机                             | 预期输出                                                |
 | -------------------- | ------------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------- |
-| `planner`            | Create implementation plans                             | Before any multi-step feature work           | Prioritized task list with file paths and TDD steps            |
-| `code-reviewer`      | Review code quality                                     | After task completion, before merge          | Categorized issues (Critical/Important/Suggestions) with fixes |
-| `prd-writer`         | Generate PRDs                                           | When product requirements need documentation | Structured PRD with user stories, requirements (P0/P1/P2)      |
-| `doc-generator`      | Generate technical docs                                 | When code needs documentation                | API references, architecture overviews, getting-started guides |
-| `spec-reviewer`      | Verify spec compliance                                  | After implementation, before review          | Compliance report with gaps and violations                     |
-| `quality-reviewer`   | Assess code quality                                     | During review phase                          | Quality assessment covering patterns, performance, security    |
-| `loop-orchestrator`  | Manage autonomous loops                                 | During Ralph-style iterative development     | RALPH_STATUS blocks, task selection, exit evaluation           |
-| `spec-writer`        | Write specifications                                    | When features need behavioral specs          | JTBD specs with Given/When/Then acceptance criteria            |
-| `acceptance-judge`   | Evaluate subjective quality                             | When objective tests aren't sufficient       | Scored rubric with pass/fail and improvement suggestions       |
-| `frontend-developer` | Three-phase frontend dev with context discovery         | Frontend feature work                        | Component code with tests                                      |
-| `ui-ux-designer`     | Design system generation, component specs               | Design system creation                       | Style guides, component specs                                  |
-| `backend-architect`  | Service boundaries, contract-first API                  | Service architecture                         | API contracts, scaling plan                                    |
-| `context-manager`    | Project context tracking, dependency mapping            | Context discovery                            | Dependency map, tech stack summary                             |
-| `database-architect` | Multi-DB strategy, event sourcing                       | Database design                              | Schema, migrations, indexes                                    |
-| `architect-reviewer` | Architecture review, tech debt assessment               | Architecture decisions                       | ADR, scalability assessment                                    |
-| `typescript-pro`     | Advanced type patterns, branded types                   | TypeScript type design                       | Type definitions, utility types                                |
-| `task-decomposer`    | Hierarchical task breakdown                             | Task planning                                | Task tree, dependency graph                                    |
-| `mobile-developer`   | Cross-platform mobile patterns                          | Mobile development                           | Platform-specific code                                         |
-| `laravel-developer`  | Laravel specialist with Eloquent, Blade, Livewire, Pest | Laravel project work                         | Laravel-specific code                                          |
-| `php-developer`      | Modern PHP 8.x with PSR compliance, static analysis     | PHP project work                             | PHP-specific code                                              |
+| `planner`            | 制定实现计划                             | 在任何多步骤功能开发前           | 包含文件路径和 TDD 步骤的优先级任务列表            |
+| `code-reviewer`      | 审查代码质量                                     | 任务完成后、合并前          | 分类问题（严重/重要/建议）及修复方案 |
+| `prd-writer`         | 生成产品需求文档（PRD）                                           | 当产品需求需要文档化时 | 结构化的 PRD，包含用户故事、需求（P0/P1/P2）      |
+| `doc-generator`      | 生成技术文档                                 | 当代码需要文档时                | API 参考、架构概述、入门指南 |
+| `spec-reviewer`      | 验证规范符合度                                  | 实现完成后、审查前          | 合规报告，包含缺口与违规项                     |
+| `quality-reviewer`   | 评估代码质量                                     | 审查阶段期间                          | 涵盖模式、性能、安全的质量评估    |
+| `loop-orchestrator`  | 管理自主循环                                 | Ralph 风格迭代开发期间     | RALPH_STATUS 区块、任务选择、退出评估           |
+| `spec-writer`        | 编写规范                                    | 当功能需要行为规范时          | 包含 Given/When/Then 验收标准的 JTBD 规范            |
+| `acceptance-judge`   | 评估主观质量                             | 当客观测试不足时       | 带通过/失败评分及改进建议的评分表       |
+| `frontend-developer` | 结合上下文发现的三阶段前端开发         | 前端功能开发                        | 带测试的组件代码                                      |
+| `ui-ux-designer`     | 设计系统生成、组件规范               | 设计系统创建                       | 样式指南、组件规范                                  |
+| `backend-architect`  | 服务边界、契约优先 API                  | 服务架构                         | API 契约、扩展方案                                    |
+| `context-manager`    | 项目上下文跟踪、依赖映射            | 上下文发现                            | 依赖图、技术栈摘要                             |
+| `database-architect` | 多数据库策略、事件溯源                       | 数据库设计                              | 架构、迁移脚本、索引                                    |
+| `architect-reviewer` | 架构审查、技术债务评估               | 架构决策                       | 架构决策记录（ADR）、可扩展性评估                              |
+| `typescript-pro`     | 高级类型模式、品牌类型                   | TypeScript 类型设计                       | 类型定义、工具类型                                |
+| `task-decomposer`    | 层级任务拆解                             | 任务规划                                | 任务树、依赖图                                    |
+| `mobile-developer`   | 跨平台移动开发模式                          | 移动开发                           | 平台特定代码                                         |
+| `laravel-developer`  | Laravel 专家（含 Eloquent、Blade、Livewire、Pest） | Laravel 项目开发                         | Laravel 特定代码                                          |
+| `php-developer`      | 现代 PHP 8.x（符合 PSR 规范、静态分析）     | PHP 项目开发                             | PHP 特定代码                                              |
 
 
 ---
 
-## 3 RALPH AUTONOMOUS LOOP PROTOCOL
+## 3 命令参考
 
-### Architecture
-
-The Ralph loop is an iterative development cycle inspired by Geoffrey Huntley's technique. Each iteration loads identical context, executes one focused task, and persists state to disk.
-
-### "ONE Task Per Loop" Principle
-
-Each iteration selects and completes exactly ONE task from `IMPLEMENTATION_PLAN.md`. This reduces context switching and enables clear progress measurement.
-
-### Context Efficiency
+请参阅 `using-toolkit` 技能获取完整命令列表（31 条命令）。
 
 
-| Resource            | Budget             | Strategy                                  |
+---
+
+## 4 RALPH 自主循环协议
+
+### 架构
+
+Ralph 循环是一种受 Geoffrey Huntley 技术启发的迭代开发周期。每次迭代加载相同的上下文，执行一个聚焦的任务，并将状态持久化到磁盘。
+
+### “每次循环仅一个任务”原则
+
+每次迭代从 `IMPLEMENTATION_PLAN.md` 中选取并完成恰好一个任务。这减少了上下文切换，并支持清晰的进度衡量。
+
+### 上下文效率
+
+| 资源            | 预算             | 策略                                  |
 | ------------------- | ------------------ | ----------------------------------------- |
-| Main context window | 40-60% utilization | The "smart zone" — enough room to think   |
-| Read subagents      | Up to 500 parallel | Via `Agent` tool with `subagent_type="Explore"` |
-| Build subagents     | 1 at a time        | Via `Agent` tool with `subagent_type="general-purpose"` |
-| Token format        | Prefer Markdown    | ~30% more efficient than JSON             |
+| 主上下文窗口 | 40-60% 占用率 | “智能区”——留有充足的思考空间   |
+| 读取型子智能体      | 最多 500 个并行 | 通过 `Agent` 工具使用 `subagent_type="Explore"` |
+| 构建型子智能体     | 每次 1 个        | 通过 `Agent` 工具使用 `subagent_type="general-purpose"` |
+| Token 格式        | 优先使用 Markdown    | 比 JSON 效率高约 30%             |
 
 
-### Steering Mechanisms
+### 引导机制
 
-**Upstream Steering (shaping inputs):**
+**上游引导（塑造输入）：**
 
-- Detailed specs loaded first (~5,000 tokens)
-- Identical PROMPT + AGENTS files each iteration
-- Existing code patterns guide new generation
+- 优先加载详细规范（约 5,000 tokens）
+- 每次迭代使用相同的 PROMPT + AGENTS 文件
+- 现有代码模式指导新代码生成
 
-**Downstream Steering (validation gates):**
+**下游引导（验证门槛）：**
 
-- Tests → reject invalid implementations
-- Builds → catch compilation errors
-- Linters → enforce style consistency
-- Typecheckers → verify contracts
-- LLM-as-judge → evaluate subjective criteria
+- 测试 → 拒绝无效实现
+- 构建 → 捕获编译错误
+- Linter → 强制执行代码风格一致性
+- 类型检查器 → 验证契约
+- LLM-as-judge → 评估主观标准
 
-### RALPH_STATUS Block
+### RALPH_STATUS 区块
 
-**[HARD-GATE:STATUS]** Every loop iteration ends with:
+**[HARD-GATE:STATUS]** 每次循环迭代结束时必须包含：
 
 ```
 ---RALPH_STATUS---
 STATUS: [IN_PROGRESS | COMPLETE | BLOCKED]
-TASKS_COMPLETED_THIS_LOOP: [number]
-FILES_MODIFIED: [number]
+TASKS_COMPLETED_THIS_LOOP: [数量]
+FILES_MODIFIED: [数量]
 TESTS_STATUS: [PASSING | FAILING | NOT_RUN]
 WORK_TYPE: [IMPLEMENTATION | TESTING | DOCUMENTATION | REFACTORING]
 EXIT_SIGNAL: [false | true]
-RECOMMENDATION: [one-line next action or completion summary]
+RECOMMENDATION: [单行下一步行动或完成总结]
 ---END_RALPH_STATUS---
 ```
 
-### Dual-Condition Exit Gate
+### 双条件退出门槛
 
-**[HARD-GATE:EXIT]** Both must be true to exit:
+**[HARD-GATE:EXIT]** 必须同时满足以下两项条件方可退出：
 
-1. **Completion indicators** — "done" language appears >= 2 times in recent output
-2. **Explicit EXIT_SIGNAL** — `EXIT_SIGNAL: true` in status block
+1. **完成指标** — 近期输出中“完成/done”类表述出现 >= 2 次
+2. **明确的 EXIT_SIGNAL** — 状态区块中 `EXIT_SIGNAL: true`
 
-EXIT_SIGNAL is true ONLY when: no remaining tasks, all tests pass, no errors, no meaningful work left.
+仅当无剩余任务、所有测试通过、无错误且无有意义的工作可做时，EXIT_SIGNAL 才为 true。
 
-### Circuit Breaker Thresholds
+### 熔断器阈值
 
-
-| Condition        | Threshold                              | Action                  |
+| 条件        | 阈值                              | 动作                  |
 | ---------------- | -------------------------------------- | ----------------------- |
-| No progress      | 3 consecutive loops, 0 tasks completed | OPEN circuit            |
-| Identical errors | 5 consecutive identical errors         | OPEN circuit            |
-| Output decline   | 70% decline in output volume           | OPEN circuit            |
-| Cooldown         | 30 minutes                             | Before retry after OPEN |
+| 无进展      | 连续 3 次循环，0 个任务完成 | 触发熔断（OPEN circuit）            |
+| 相同错误 | 连续 5 次出现完全相同的错误         | 触发熔断（OPEN circuit）            |
+| 输出量下降   | 输出量下降 70%           | 触发熔断（OPEN circuit）            |
+| 冷却期         | 30 分钟                             | 熔断后重试前的等待时间 |
 
 
-### File Protection
+### 文件保护
 
-**[HARD-GATE:PROTECT]** These paths must NEVER be deleted during autonomous operations:
+**[HARD-GATE:PROTECT]** 自主操作期间，以下路径绝对禁止删除：
 
-- `.ralph/`, `.ralphrc`, `IMPLEMENTATION_PLAN.md`, `AGENTS.md`
-- `.claude/`, `CLAUDE.md`, `specs/`
+- `.ralph/`、`.ralphrc`、`IMPLEMENTATION_PLAN.md`、`AGENTS.md`
+- `.claude/`、`CLAUDE.md`、`specs/`
 
 ---
 
-## 4 SPECIFICATION METHODOLOGY
+## 5 规范制定方法论
 
-### JTBD → Topics → Specs → Story Map
+### JTBD → 主题 → 规范 → 故事地图
 
-1. **Identify Jobs:** "When [situation], I want to [motivation], so I can [outcome]."
-2. **Break into Topics:** Apply "One Sentence Without 'And'" test
-3. **Write Specs:** Given/When/Then acceptance criteria, no implementation details
-4. **Organize:** Story map with capabilities × release slices
+1. **识别任务（Jobs）：** “当 [情境] 时，我想 [动机]，以便 [结果]。”
+2. **拆解为主题：** 应用“单句不含‘和/并且’”测试
+3. **编写规范：** 使用 Given/When/Then 验收标准，不包含实现细节
+4. **组织：** 以能力 × 发布切片构建故事地图
 
-### The Cardinal Rule
+### 核心准则
 
-**[HARD-GATE:SPEC]** Specs must NEVER contain implementation details:
+**[HARD-GATE:SPEC]** 规范中绝不能包含实现细节：
 
-
-| Forbidden                   | Allowed                                  |
+| 禁止项                   | 允许项                                  |
 | --------------------------- | ---------------------------------------- |
-| Code blocks, function names | Behavioral descriptions                  |
-| Technology choices          | Capability requirements                  |
-| Algorithm suggestions       | Success criteria with measurable targets |
+| 代码块、函数名 | 行为描述                  |
+| 技术选型          | 能力要求                  |
+| 算法建议       | 带有可衡量目标的成功标准 |
 
 
-### Acceptance Criteria Format
+### 验收标准格式
 
 ```markdown
-### [Criterion Name]
-- Given [precondition]
-- When [action]
-- Then [observable behavioral outcome]
+### [标准名称]
+- Given [前置条件]
+- When [操作]
+- Then [可观察的行为结果]
 ```
 
-### SLC Release Criteria
+### SLC 发布标准
 
-
-| Criterion    | Question                             |
+| 标准    | 问题                             |
 | ------------ | ------------------------------------ |
-| **Simple**   | Can it ship fast with narrow scope?  |
-| **Lovable**  | Will people actually want to use it? |
-| **Complete** | Does it fully accomplish a job?      |
+| **简单（Simple）**   | 能否以极窄的范围快速发布？  |
+| **令人喜爱（Lovable）**  | 用户是否真的愿意使用它？ |
+| **完整（Complete）** | 是否完整达成了一项任务？      |
 
+发布必须同时满足以上三项标准。
 
-All three must be satisfied for a release.
+### 逆向工程（现有项目/棕地）
 
-### Reverse Engineering (Brownfield)
+针对无规范的现有代码库：
 
-For existing codebases without specs:
-
-1. Exhaustively trace every code path, data flow, state mutation
-2. Produce specs stripped of implementation details
-3. Document actual behavior (bugs = "documented features")
-4. Run completeness checklist (all entry points, branches, errors documented)
+1. 详尽追踪每条代码路径、数据流、状态变更
+2. 生成剥离实现细节的规范
+3. 记录实际行为（缺陷 = “已记录的特性”）
+4. 运行完整性检查清单（所有入口点、分支、错误均已记录）
 
 ---
 
-## 5 QUALITY & VALIDATION PROTOCOL
+## 6 质量与验证协议
 
-### The Backpressure Chain
+### 背压链
 
 ```
-SPECS ──derives──▶ TESTS ──validates──▶ CODE
+SPECS ──推导──▶ TESTS ──验证──▶ CODE
   ▲                                       │
-  └──────── backpressure ─────────────────┘
-  (if tests fail, fix code — not specs or tests)
+  └──────── 背压反馈 ─────────────────┘
+  （若测试失败，修复代码——不得修改规范或测试）
 ```
 
-### Validation Gates (all must pass before completion)
+### 验证门槛（完成前必须全部通过）
 
-
-| Gate              | Tool                       | Required                |
+| 门槛              | 工具                       | 要求                |
 | ----------------- | -------------------------- | ----------------------- |
-| Unit tests        | Test runner                | Always                  |
-| Integration tests | Test runner                | When applicable         |
-| Acceptance tests  | Test runner (from spec AC) | Always                  |
-| Build             | Build tool                 | Always                  |
-| Lint              | Linter                     | Always                  |
-| Typecheck         | Type checker               | When applicable         |
-| LLM-as-judge      | Subagent evaluation        | For subjective criteria |
-| Code review       | code-reviewer agent        | Before merge            |
+| 单元测试        | 测试运行器                | 始终必需                  |
+| 集成测试 | 测试运行器                | 适用时必需         |
+| 验收测试  | 测试运行器（基于规范验收标准） | 始终必需                  |
+| 构建             | 构建工具                 | 始终必需                  |
+| Lint              | Linter                     | 始终必需                  |
+| 类型检查         | 类型检查器               | 适用时必需         |
+| LLM-as-judge      | 子智能体评估        | 主观标准必需 |
+| 代码审查       | code-reviewer 智能体        | 合并前必需            |
 
 
-### TDD RED-GREEN-REFACTOR
+### TDD 红-绿-重构
 
-1. **RED:** Write a failing test that defines desired behavior
-2. **GREEN:** Write minimal code to make test pass
-3. **REFACTOR:** Clean up while keeping tests green
+1. **红（RED）：** 编写定义期望行为的失败测试
+2. **绿（GREEN）：** 编写最少量的代码使测试通过
+3. **重构（REFACTOR）：** 清理代码，同时保持测试通过
 
-**[HARD-GATE:TDD]** No production code without a failing test first.
+**[HARD-GATE:TDD]** 未先编写失败测试，禁止编写生产代码。
 
-### LLM-as-Judge Pattern
+### LLM-as-judge 模式
 
-For subjective criteria (tone, aesthetics, UX, readability):
+针对主观标准（语气、美学、UX、可读性）：
 
-1. Define rubric dimensions with weights (sum to 1.0)
-2. Set anchor points (1=worst, 5=adequate, 10=best)
-3. Set passing threshold (5.0 minimum viable, 7.0 production, 8.5 excellence)
-4. Evaluate artifact against rubric
-5. Score, reason, suggest improvements
-6. Pass/fail against threshold
+1. 定义评分维度及权重（总和为 1.0）
+2. 设定锚点（1=最差，5=合格，10=最佳）
+3. 设定通过阈值（5.0 最低可行，7.0 生产标准，8.5 卓越标准）
+4. 对照评分表评估产出物
+5. 打分、说明理由、提出改进建议
+6. 对照阈值判定通过/失败
 
-### Code Review Checklist
+### 代码审查清单
 
-1. **Plan alignment** — Does code match the approved plan?
-2. **Code quality** — Clean, readable, maintainable?
-3. **Architecture** — Consistent with existing patterns?
-4. **Tests** — Adequate coverage? Acceptance tests present?
-5. **Documentation** — Updated where needed?
+1. **计划对齐** — 代码是否匹配已批准的计划？
+2. **代码质量** — 是否整洁、易读、可维护？
+3. **架构** — 是否与现有模式一致？
+4. **测试** — 覆盖率是否充足？是否包含验收测试？
+5. **文档** — 是否在需要时已更新？
 
-Issue categorization: **Critical** (must fix) | **Important** (should fix) | **Suggestions** (consider)
-
----
-
-## 6 MEMORY MANAGEMENT PROTOCOL
-
-### Memory Files
-
-
-| File                  | Purpose                                | Updated By                     |
-| --------------------- | -------------------------------------- | ------------------------------ |
-| `project-context.md`  | Tech stack, architecture, dependencies | `self-learning`, manual        |
-| `learned-patterns.md` | Coding conventions and patterns        | `self-learning`, `code-review` |
-| `user-preferences.md` | Communication and workflow preferences | `self-learning`, manual        |
-| `decisions-log.md`    | Architectural decisions with rationale | `planning`, `brainstorming`    |
-
-
-### Auto-Loading
-
-Memory files are loaded on every session start via the session-start hook. They persist across conversations.
-
-### Update Triggers
-
-- `**/learn`** — Full project scan, populate all memory files
-- **User correction** — Update `learned-patterns.md` or `user-preferences.md`
-- **Architectural decision** — Update `decisions-log.md`
-- **New discovery** — Update `project-context.md`
-
-### Decay Rules
-
-- Review memory files periodically for outdated information
-- Remove patterns that no longer match the codebase
-- Update tech stack info when dependencies change
-- Decisions log is append-only (historical record)
+问题分类：**严重（必须修复）** | **重要（应当修复）** | **建议（可考虑）**
 
 ---
 
-## 7 ERROR HANDLING & RECOVERY
+## 7 内存管理协议
 
-### Error Classification
+### 记忆文件
+
+| 文件                    | 用途        | 更新来源                                     |
+| --------------------- | --------- | ---------------------------------------- |
+| `project-context.md`  | 技术栈、架构、依赖 | `self-learning`、手动                       |
+| `learned-patterns.md` | 编码规范与模式   | `self-learning`、`code-review`            |
+| `user-preferences.md` | 沟通与工作流偏好  | `self-learning`、手动                       |
+| `decisions-log.md`    | 架构决策及理由   | `planning`、`brainstorming`、`code-review` |
 
 
-| Type          | Example                       | Strategy                        |
+### 自动加载
+
+会话启动时，通过会话启动钩子自动加载记忆文件。它们在不同对话间持久化保存。
+
+### 更新触发条件
+
+- `**/learn`** — 完整项目扫描，填充所有记忆文件
+- **用户纠正** — 更新 `learned-patterns.md` 或 `user-preferences.md`
+- **架构决策** — 更新 `decisions-log.md`
+- **新发现** — 更新 `project-context.md`
+
+### 衰减/清理规则
+
+- 定期审查记忆文件，剔除过时信息
+- 移除不再匹配代码库的模式
+- 依赖变更时更新技术栈信息
+- 决策日志仅追加（作为历史记录）
+
+---
+
+## 8 错误处理与恢复
+
+### 错误分类
+
+| 类型          | 示例                       | 策略                        |
 | ------------- | ----------------------------- | ------------------------------- |
-| **Transient** | Network timeout, rate limit   | Retry with backoff              |
-| **Permanent** | Missing dependency, wrong API | Change approach                 |
-| **Unknown**   | Unexpected error format       | Investigate, classify, then act |
+| **瞬时/临时** | 网络超时、速率限制   | 指数退避重试              |
+| **永久** | 缺失依赖、错误 API | 更换方法                 |
+| **未知**   | 意外错误格式       | 调查、分类，再采取行动 |
 
 
-### Retry Strategy (resilient-execution)
+### 重试策略（resilient-execution）
 
-**[HARD-GATE:RETRY]** Try at least 3 different approaches before escalating:
+**[HARD-GATE:RETRY]** 在升级上报前，至少尝试 3 种不同方法：
 
-1. **Approach 1:** Direct solution (most obvious fix)
-2. **Approach 2:** Alternative method (different technique)
-3. **Approach 3:** Workaround (solve the underlying problem differently)
-4. **Escalate:** Report with full context — what was tried, what failed, why
+1. **方法 1：** 直接解决（最明显的修复）
+2. **方法 2：** 替代方法（不同技术）
+3. **方法 3：** 迂回方案（以不同方式解决底层问题）
+4. **升级上报：** 完整汇报上下文——尝试了什么、为何失败
 
-### Circuit Breaker Recovery
+### 熔断器恢复
 
-When circuit opens:
+熔断触发后：
 
-1. Regenerate plan (fresh PLANNING iteration)
-2. Change approach (try alternative strategy)
-3. Reduce scope (break stuck task into subtasks)
-4. Escalate (report blockage for human review)
+1. 重新生成计划（全新 PLANNING 迭代）
+2. 更换方法（尝试替代策略）
+3. 缩小范围（将卡住的任务拆分为子任务）
+4. 升级上报（报告阻塞供人工审查）
 
-### File Protection During Cleanup
+### 清理期间的文件保护
 
-Before any destructive operation (`rm`, `git clean`, `git checkout .`):
+在任何破坏性操作（`rm`、`git clean`、`git checkout .`）前：
 
-1. Check if operation targets protected files
-2. If yes: ABORT and report
-3. If no: Proceed with caution
-4. After operation: Verify protected files still exist
+1. 检查操作是否针对受保护文件
+2. 若是：立即中止并上报
+3. 若否：谨慎继续
+4. 操作后：验证受保护文件仍然存在
 
 ---
 
-## 8 SUBAGENT DISPATCH RULES
+## 9 子智能体调度规则
 
-### How to Dispatch Subagents
+### 如何调度子智能体
 
-All subagent dispatch uses the **`Agent` tool**. To run multiple agents in parallel, invoke multiple `Agent` tool calls in a **single message**.
+所有子智能体调度均使用 **`Agent` 工具**。要并行运行多个智能体，需在**单条消息**中多次调用 `Agent` 工具。
 
-**Key parameters:**
+**关键参数：**
 
-| Parameter | Description |
+| 参数 | 描述 |
 |---|---|
-| `prompt` | Detailed task description with all necessary context |
-| `description` | Short label (3-5 words) |
-| `subagent_type` | `"Explore"` (fast codebase search), `"Plan"` (architecture), `"general-purpose"` (default) |
-| `run_in_background` | `true` for async — you'll be notified on completion |
-| `model` | Optional override: `"sonnet"`, `"opus"`, `"haiku"` |
+| `prompt` | 包含所有必要上下文的详细任务描述 |
+| `description` | 简短标签（3-5 个词） |
+| `subagent_type` | `"Explore"`（快速搜索代码库）、`"Plan"`（架构规划）、`"general-purpose"`（默认） |
+| `run_in_background` | `true` 表示异步——完成时将收到通知 |
+| `model` | 可选覆写：`"sonnet"`、`"opus"`、`"haiku"` |
 
-### When to Dispatch vs Do Inline
+### 何时调度 vs 内联执行
 
-
-| Scenario                                  | Action                          |
+| 场景                                  | 动作                          |
 | ----------------------------------------- | ------------------------------- |
-| 2+ independent tasks with no shared state | `Agent` tool — multiple parallel calls in one message |
-| Single focused task                       | Do inline                       |
-| Heavy reading/searching across codebase   | `Agent` tool with `subagent_type="Explore"` |
-| Build or test execution                   | `Agent` tool — 1 at a time only |
-| Code review                               | `Agent` tool dispatching `code-reviewer` agent |
-| Quality evaluation                        | `Agent` tool dispatching `acceptance-judge` agent |
+| 2 个以上独立任务且无共享状态 | `Agent` 工具 — 单条消息中多次并行调用 |
+| 单一聚焦任务                       | 内联执行                       |
+| 跨代码库大量读取/搜索   | `Agent` 工具配合 `subagent_type="Explore"` |
+| 构建或测试执行                   | `Agent` 工具 — 仅限每次 1 个 |
+| 代码审查                               | `Agent` 工具调度 `code-reviewer` 智能体 |
+| 质量评估                        | `Agent` 工具调度 `acceptance-judge` 智能体 |
 
 
-### Parallelism Limits
+### 并行限制
 
-
-| Operation              | Max Parallel | Rationale                         |
+| 操作              | 最大并行数 | 原理                         |
 | ---------------------- | ------------ | --------------------------------- |
-| File reading/searching | 500          | I/O bound, safe to parallelize    |
-| Spec auditing/updating | 100          | Independent file operations       |
-| Building/testing       | 1            | Must serialize to detect failures |
-| Code review            | 1            | Needs holistic view of changes    |
+| 文件读取/搜索 | 500          | I/O 密集型，可安全并行    |
+| 规范审计/更新 | 100          | 独立文件操作       |
+| 构建/测试       | 1            | 必须串行以准确捕获失败 |
+| 代码审查            | 1            | 需要变更的整体视图    |
 
 
-### Two-Stage Review Gates (subagent-driven-development)
+### 两阶段审查门槛（subagent-driven-development）
 
-1. **Stage 1: Spec Review** — Does implementation match specification?
-2. **Stage 2: Quality Review** — Does code meet quality standards?
+1. **阶段 1：规范审查** — 实现是否匹配规范？
+2. **阶段 2：质量审查** — 代码是否符合质量标准？
 
-Both gates must pass before task is marked complete.
+任务标记完成前，两项门槛必须全部通过。
 
-### Result Aggregation
+### 结果聚合
 
-When parallel `Agent` tool calls return:
+当并行 `Agent` 工具调用返回时：
 
-1. Collect all results
-2. Check for conflicts or contradictions
-3. Synthesize into unified view
-4. Report any disagreements for human review
+1. 收集所有结果
+2. 检查冲突或矛盾
+3. 综合为统一视图
+4. 上报任何分歧供人工审查
 
 ---
 
-## 9 GIT & BRANCH PROTOCOLS
+## 10 Git 与分支协议
 
-### Conventional Commits
+### 约定式提交（Conventional Commits）
 
 ```
 <type>(<scope>): <description>
@@ -397,101 +393,100 @@ When parallel `Agent` tool calls return:
 Types: feat, fix, docs, test, refactor, chore, style, perf, ci, build
 ```
 
-Examples:
+示例：
 
 - `feat(auth): add OAuth2 login flow`
 - `fix(api): handle null response from payment gateway`
 - `test(user): add acceptance tests for registration`
 - `docs(readme): update installation instructions`
 
-### Ralph-Friendly Work Branches
+### 适配 Ralph 的工作分支
 
-Scope autonomous work to feature branches:
+将自主工作限制在功能分支内：
 
 ```
 git checkout -b ralph/<scope>
 ```
 
-Each branch gets its own `IMPLEMENTATION_PLAN.md`. Only tasks for that scope are included.
+每个分支拥有独立的 `IMPLEMENTATION_PLAN.md`。仅包含该范围内的任务。
 
-### Branch Completion
+### 分支完结
 
-Use `finishing-a-development-branch` skill for structured options:
+使用 `finishing-a-development-branch` 技能进行结构化处理：
 
-- Merge to main/develop
-- Create pull request
-- Cleanup and archive
+- 合并至 main/develop
+- 创建拉取请求（PR）
+- 清理并归档
 
-### Safety Rules
+### 安全规则
 
-- **Never** skip hooks (`--no-verify`)
-- **Never** force-push without explicit user confirmation
-- **Never** amend published commits without confirmation
-- **Always** use conventional commit format
-- **Always** include rationale in commit messages
+- **绝不**跳过钩子（`--no-verify`）
+- **绝不**在未获用户明确确认时强制推送
+- **绝不**在未获确认时修改已发布的提交
+- **始终**使用约定式提交格式
+- **始终**在提交信息中包含理由
 
 ---
 
-## 10 ANTI-PATTERNS & RATIONALIZATION PREVENTION
+## 11 反模式与预防自我合理化
 
-These thoughts mean STOP — you are rationalizing:
+出现以下想法意味着**立即停止**——你正在找借口（自我合理化）：
 
-
-| Red-Flag Thought                            | Correct Response                                                              |
+| 危险信号想法                            | 正确应对                                                              |
 | ------------------------------------------- | ----------------------------------------------------------------------------- |
-| "This is just a simple question"            | Questions are tasks. Check for skills.                                        |
-| "I need more context first"                 | Skill check comes BEFORE clarifying questions.                                |
-| "Let me explore the codebase first"         | Skills tell you HOW to explore. Check first.                                  |
-| "This doesn't need a formal skill"          | If a skill exists, use it. No exceptions.                                     |
-| "I remember this skill"                     | Skills evolve. Read current version via Skill tool.                           |
-| "The skill is overkill"                     | Simple things become complex. Use it.                                         |
-| "I'll just do this one thing first"         | Check for skills BEFORE doing anything.                                       |
-| "Tests aren't needed for this"              | [HARD-GATE:TDD] TDD is not optional. Write the test first.                    |
-| "I'll review later"                         | [HARD-GATE:REVIEW] Review NOW. No merge without review.                       |
-| "I can skip verification"                   | [HARD-GATE:VERIFY] Verification is mandatory.                                 |
-| "The loop is stuck, let me skip ahead"      | Circuit breaker protocol. Don't skip — diagnose.                              |
-| "The spec is obvious, I'll skip writing it" | [HARD-GATE:SPEC] Write it. JTBD methodology.                                  |
-| "I can eyeball the quality"                 | Use deterministic tests or LLM-as-judge. Never eyeball.                       |
-| "Let me just push this quick fix"           | Plan → TDD → Review → Verify. Even for "quick" fixes.                         |
-| "The acceptance criteria are implicit"      | Make them explicit. Given/When/Then. Always.                                  |
-| "I'll add tests after"                      | RED comes before GREEN. Tests first. Always.                                  |
-| "This refactor doesn't need tests"          | If behavior changes, tests change. If it doesn't, existing tests protect you. |
+| “这只是个简单问题”            | 问题即任务。检查可用技能。                                        |
+| “我需要先获取更多上下文”                 | 技能检查优先于澄清问题。                                |
+| “让我先探索一下代码库”         | 技能会告诉你如何探索。先检查技能。                                  |
+| “这不需要正式技能”          | 只要存在对应技能，就必须使用。无例外。                                     |
+| “我记得这个技能”                     | 技能会迭代更新。通过 Skill 工具读取最新版本。                           |
+| “这个技能小题大做”                     | 简单的事会变复杂。直接使用技能。                                         |
+| “我先随便做一件事再说”         | 在执行任何操作前，先检查技能。                                       |
+| “这个不需要测试”              | [HARD-GATE:TDD] TDD 不是可选项。先写测试。                    |
+| “我稍后再审查”                         | [HARD-GATE:REVIEW] 立即审查。未经审查绝不合并。                       |
+| “我可以跳过验证”                   | [HARD-GATE:VERIFY] 验证是强制性的。                                 |
+| “循环卡住了，让我跳过这一步”      | 遵循熔断器协议。不要跳过——进行诊断。                              |
+| “规范显而易见，我懒得写了” | [HARD-GATE:SPEC] 必须写。遵循 JTBD 方法论。                                  |
+| “我肉眼看看质量就行”                 | 使用确定性测试或 LLM-as-judge。绝不凭肉眼主观判断。                       |
+| “让我赶紧推送这个快速修复”           | 规划 → TDD → 审查 → 验证。即使是“快速”修复也必须遵循。                         |
+| “验收标准是隐含的”      | 将其明确化。使用 Given/When/Then。始终如此。                                  |
+| “我写完代码再补测试”                      | RED 必须在 GREEN 之前。始终先写测试。                                          |
+| “这个重构不需要测试”          | 若行为改变，测试必须变。若行为不变，现有测试会保护你。 |
 
 
 ---
 
-## 11 FIND-SKILLS INTEGRATION
+## 12 FIND-SKILLS 集成
 
-When toolkit skills don't cover a specific need:
+当工具包技能无法覆盖特定需求时：
 
-### Discovery
+### 发现
 
 ```bash
-npx skills find [query]       # Search the skills ecosystem
+npx skills find [query]       # 搜索技能生态
 ```
 
-### Quality Verification
+### 质量验证
 
-
-| Criterion         | Minimum                                   |
+| 标准         | 最低要求                                   |
 | ----------------- | ----------------------------------------- |
-| Weekly installs   | 1,000+ preferred                          |
-| Source reputation | Prefer vercel-labs, anthropics, microsoft |
-| GitHub stars      | Consider as secondary signal              |
+| 周安装量   | 推荐 1,000+                          |
+| 来源信誉 | 优先选择 vercel-labs、anthropics、microsoft |
+| GitHub 星标      | 仅作参考辅助信号              |
 
 
-### Installation
+### 安装
 
 ```bash
-npx skills add <owner/repo@skill> -g -y    # Install globally
-npx skills check                            # Check for updates
-npx skills update                           # Update all
+npx skills add <owner/repo@skill> -g -y    # 全局安装
+npx skills check                            # 检查更新
+npx skills update                           # 更新全部
 ```
 
-### When to Search
+### 何时搜索
 
-- Task requires domain-specific knowledge not covered by 64 toolkit skills
-- User asks about capabilities the toolkit doesn't have
-- A specialized framework or technology needs dedicated guidance
+- 任务需要 64 项工具包技能未涵盖的领域专业知识
+- 用户询问工具包不具备的能力
+- 需要专用框架或技术提供针对性指导
 
 ---
+

@@ -1,285 +1,282 @@
 ---
 name: ux-researcher-designer
 description: >
-  Use when the user needs user research methodologies, persona development, journey mapping,
-  usability testing plans, or information architecture analysis. Triggers: user says "user research",
-  "persona", "journey map", "usability test", "card sort", "heuristic evaluation", "information architecture",
-  "user interview", understanding user behavior.
+  当用户需要用户研究方法、人物角色开发、旅程地图、可用性测试计划或信息架构分析时使用。触发词：用户提到"用户研究"、"人物角色"、"旅程地图"、"可用性测试"、"卡片分类"、"启发式评估"、"信息架构"、"用户访谈"、理解用户行为。
 ---
 
-# UX Researcher & Designer
+# UX 研究员与设计师
 
-## Overview
+## 概述
 
-Apply systematic UX research and design methods to understand users, validate assumptions, and create evidence-based designs. This skill covers the full research-to-design pipeline: discovery research, persona creation, journey mapping, information architecture, usability testing, and heuristic evaluation.
+应用系统化的 UX 研究与设计方法来理解用户、验证假设并创建基于证据的设计。本技能涵盖从研究到设计的完整流程：探索性研究、人物角色创建、旅程地图绘制、信息架构、可用性测试和启发式评估。
 
-## Phase 1: Discovery Research
+## 阶段 1：探索性研究
 
-1. Define research objectives and questions
-2. Select appropriate research methods
-3. Recruit participants (5-8 per segment for qualitative)
-4. Conduct research sessions
-5. Synthesize findings using affinity mapping
+1. 定义研究目标和问题
+2. 选择合适的研究方法
+3. 招募参与者（定性研究每个细分群体 5-8 人）
+4. 开展研究会话
+5. 使用亲和图法综合研究发现
 
-**STOP — Present research plan with objectives and methods for user approval.**
+**停止 — 提交包含目标和方法的研究计划供用户审批。**
 
-### Research Method Selection Decision Table
+### 研究方法选择决策表
 
-#### Generative (Discovery) Methods
+#### 生成式（探索性）方法
 
-| Method | When to Use | Participants | Duration | Cost |
+| 方法 | 适用场景 | 参与者 | 时长 | 成本 |
 |---|---|---|---|---|
-| User Interviews | Understanding motivations, behaviors, pain points | 5-8 per segment | 45-60 min each | Medium |
-| Contextual Inquiry | Observing users in their natural environment | 4-6 | 1-2 hours each | High |
-| Diary Studies | Longitudinal behavior patterns | 10-15 | 1-4 weeks | Medium |
-| Surveys | Quantitative validation of qualitative findings | 100+ | 5-10 min | Low |
-| Focus Groups | Exploring attitudes and preferences | 6-10 per group | 60-90 min | Medium |
+| 用户访谈 | 理解动机、行为、痛点 | 每个细分群体 5-8 人 | 每人 45-60 分钟 | 中等 |
+| 情境访谈 | 在自然环境中观察用户 | 4-6 人 | 每人 1-2 小时 | 高 |
+| 日记研究 | 纵向行为模式研究 | 10-15 人 | 1-4 周 | 中等 |
+| 问卷调查 | 对定性发现进行定量验证 | 100+ 人 | 5-10 分钟 | 低 |
+| 焦点小组 | 探索态度和偏好 | 每组 6-10 人 | 60-90 分钟 | 中等 |
 
-#### Evaluative Methods
+#### 评估式方法
 
-| Method | When to Use | Participants | Duration | Cost |
+| 方法 | 适用场景 | 参与者 | 时长 | 成本 |
 |---|---|---|---|---|
-| Usability Testing | Validating designs against tasks | 5-8 | 30-60 min each | Medium |
-| A/B Testing | Comparing two design variants | 1000+ per variant | 1-4 weeks | Low |
-| Card Sorting | Organizing information architecture | 15-30 | 20-30 min | Low |
-| Tree Testing | Validating navigation structure | 50+ | 10-15 min | Low |
-| First Click Testing | Evaluating initial user instincts | 30+ | 5-10 min | Low |
-| Heuristic Evaluation | Expert review without users | 3-5 evaluators | 1-2 hours | Low |
+| 可用性测试 | 针对任务验证设计 | 5-8 人 | 每人 30-60 分钟 | 中等 |
+| A/B 测试 | 比较两种设计变体 | 每种变体 1000+ 人 | 1-4 周 | 低 |
+| 卡片分类 | 组织信息架构 | 15-30 人 | 20-30 分钟 | 低 |
+| 树测试 | 验证导航结构 | 50+ 人 | 10-15 分钟 | 低 |
+| 首点击测试 | 评估用户初始直觉 | 30+ 人 | 5-10 分钟 | 低 |
+| 启发式评估 | 专家评审，无需用户参与 | 3-5 名评估者 | 1-2 小时 | 低 |
 
-#### Method Selection Decision Table
+#### 方法选择决策表
 
-| Situation | Recommended Method | Why |
+| 情境 | 推荐方法 | 原因 |
 |---|---|---|
-| No idea who users are | Interviews + contextual inquiry | Deep understanding needed |
-| Have assumptions to validate | Surveys + usability testing | Quantitative confirmation |
-| Redesigning navigation | Card sorting + tree testing | Structure-focused |
-| Evaluating existing product | Heuristic evaluation + usability test | Find problems fast |
-| Comparing two designs | A/B testing | Statistical comparison |
-| Limited budget/time | Heuristic evaluation | No participants needed |
-| Long-term behavior understanding | Diary study | Captures patterns over time |
+| 完全不了解用户是谁 | 访谈 + 情境访谈 | 需要深度理解 |
+| 有需要验证的假设 | 问卷调查 + 可用性测试 | 定量确认 |
+| 重新设计导航 | 卡片分类 + 树测试 | 聚焦结构 |
+| 评估现有产品 | 启发式评估 + 可用性测试 | 快速发现问题 |
+| 比较两种设计 | A/B 测试 | 统计对比 |
+| 预算/时间有限 | 启发式评估 | 无需招募参与者 |
+| 理解长期行为 | 日记研究 | 捕捉时间维度上的模式 |
 
-### Interview Guide Template
+### 访谈指南模板
 
 ```
-1. Introduction (5 min)
-   - Thank participant, explain purpose
-   - Get consent for recording
-   - "There are no wrong answers"
+1. 介绍（5 分钟）
+   - 感谢参与者，说明目的
+   - 获取录音同意
+   - "没有错误答案"
 
-2. Warm-up (5 min)
-   - Background questions about role/context
-   - Current tools and workflows
+2. 热身（5 分钟）
+   - 关于角色/背景的背景问题
+   - 当前使用的工具和工作流程
 
-3. Core Questions (30 min)
-   - Open-ended questions about behaviors
-   - Follow-up probes: "Tell me more about..."
-   - Critical incident: "Describe a time when..."
-   - Avoid leading questions
+3. 核心问题（30 分钟）
+   - 关于行为的开放式问题
+   - 跟进追问："能多讲讲关于..."
+   - 关键事件："描述一次当...的时候"
+   - 避免引导性问题
 
-4. Wrap-up (5 min)
-   - "Is there anything I didn't ask that you think is important?"
-   - Thank and explain next steps
+4. 总结（5 分钟）
+   - "还有什么我没问到但您认为重要的内容吗？"
+   - 感谢并说明后续步骤
 ```
 
-## Phase 2: Analysis and Modeling
+## 阶段 2：分析与建模
 
-1. Create user personas from research data
-2. Map user journey for key scenarios
-3. Define information architecture
-4. Identify pain points and opportunities
-5. Prioritize using impact/effort matrix
+1. 根据研究数据创建用户人物角色
+2. 绘制关键场景的用户旅程地图
+3. 定义信息架构
+4. 识别痛点和机会点
+5. 使用影响/努力矩阵进行优先级排序
 
-**STOP — Present personas and journey map for review before design validation.**
+**停止 — 在设计验证前，提交人物角色和旅程地图供评审。**
 
-### Persona Template
+### 人物角色模板
 
 ```markdown
-# [Persona Name]
+# [人物角色名称]
 
-## Demographics
-- Age: [range]
-- Occupation: [role]
-- Technical proficiency: [low/medium/high]
-- Usage frequency: [daily/weekly/monthly]
+## 人口统计信息
+- 年龄：[范围]
+- 职业：[角色]
+- 技术熟练度：[低/中/高]
+- 使用频率：[每日/每周/每月]
 
-## Goals
-1. Primary goal: [what they are trying to achieve]
-2. Secondary goal: [supporting objective]
-3. Tertiary goal: [nice-to-have]
+## 目标
+1. 主要目标：[他们试图达成的目标]
+2. 次要目标：[支持性目标]
+3. 三级目标：[锦上添花的需求]
 
-## Pain Points
-1. [Frustration with current process]
-2. [Unmet need]
-3. [Workaround they have created]
+## 痛点
+1. [对当前流程的挫败感]
+2. [未被满足的需求]
+3. [他们已创建的变通方案]
 
-## Behaviors
-- [How they currently solve the problem]
-- [Tools and methods they use]
-- [Decision-making patterns]
+## 行为
+- [他们目前如何解决问题]
+- [他们使用的工具和方法]
+- [决策模式]
 
-## Quotes (from research)
-- "[Verbatim quote that captures their perspective]"
-- "[Another representative quote]"
+## 引言（来自研究）
+- "[直接引用能体现其观点的原话]"
+- "[另一条代表性引言]"
 
-## Scenario
-[A paragraph describing a typical day/task where they would use the product]
+## 场景
+[一段描述他们使用产品的典型日常/任务的段落]
 ```
 
-### Persona Quality Decision Table
+### 人物角色质量决策表
 
-| Check | Pass | Fail |
+| 检查项 | 通过 | 失败 |
 |---|---|---|
-| Based on real research data | Quotes and behaviors from interviews | Invented or assumed behaviors |
-| Actionable for design | Specific goals and pain points | Vague "wants to be productive" |
-| Distinct from other personas | Different goals, behaviors, constraints | Overlapping with another persona |
-| Number of personas | 2-4 primary | More than 5 (too many to design for) |
+| 基于真实研究数据 | 引言和行为来自访谈 | 虚构或假设的行为 |
+| 对设计具有可操作性 | 具体的目标和痛点 | 模糊的"想要提高效率" |
+| 与其他人物角色区分明显 | 不同的目标、行为、约束条件 | 与另一个人物角色重叠 |
+| 人物角色数量 | 2-4 个主要角色 | 超过 5 个（难以针对所有人设计） |
 
-### Journey Map Structure
+### 旅程地图结构
 
 ```
-Stages:     Awareness -> Consideration -> Onboarding -> Usage -> Advocacy
+阶段：     认知 -> 考虑 -> 上手 -> 使用 -> 推荐
                 |              |             |          |          |
-Actions:   [What they do at each stage]
+行为：   [他们在每个阶段做什么]
                 |              |             |          |          |
-Thoughts:  [What they are thinking]
+想法：  [他们在想什么]
                 |              |             |          |          |
-Emotions:  [Frustration/neutral/delight mapped to each stage]
+情绪：  [挫败/中性/愉悦，映射到每个阶段]
                 |              |             |          |          |
-Pain Points: [Friction and frustration points]
+痛点： [摩擦和挫败点]
                 |              |             |          |          |
-Opportunities: [Design opportunities to improve]
+机会点： [改进的设计机会]
                 |              |             |          |          |
-Touchpoints: [Channels and interfaces involved]
+触点： [涉及的渠道和界面]
 ```
 
-### Journey Map Elements
+### 旅程地图要素
 
-- **Moments of Truth**: Critical points where users form lasting impressions
-- **Service Blueprints**: Front-stage actions mapped to back-stage processes
-- **Emotion Curve**: Visual line showing emotional highs and lows
-- **Gap Analysis**: Difference between current and desired experience
+- **关键时刻**：用户形成持久印象的关键节点
+- **服务蓝图**：前台行为与后台流程的映射
+- **情绪曲线**：显示情绪高低的可视化线条
+- **差距分析**：当前体验与期望体验之间的差异
 
-### Heuristic Evaluation (Nielsen's 10)
+### 启发式评估（尼尔森 10 原则）
 
-| # | Heuristic | What to Look For |
+| 序号 | 启发式原则 | 检查要点 |
 |---|---|---|
-| 1 | Visibility of system status | Loading indicators, progress bars, save confirmations |
-| 2 | Match with real world | Natural language, familiar metaphors, logical order |
-| 3 | User control and freedom | Undo, cancel, back, escape hatches |
-| 4 | Consistency and standards | Same action = same result, platform conventions |
-| 5 | Error prevention | Confirmation dialogs, constraints, smart defaults |
-| 6 | Recognition over recall | Visible options, contextual help, recent history |
-| 7 | Flexibility and efficiency | Shortcuts, customization, bulk actions |
-| 8 | Aesthetic and minimalist design | No unnecessary information, clear hierarchy |
-| 9 | Help users with errors | Plain language errors, specific cause, suggest fix |
-| 10 | Help and documentation | Searchable, task-oriented, concise |
+| 1 | 系统状态可见性 | 加载指示器、进度条、保存确认 |
+| 2 | 系统与现实世界匹配 | 自然语言、熟悉的隐喻、逻辑顺序 |
+| 3 | 用户控制与自由 | 撤销、取消、返回、退出机制 |
+| 4 | 一致性与标准 | 相同操作=相同结果，遵循平台惯例 |
+| 5 | 错误预防 | 确认对话框、约束条件、智能默认值 |
+| 6 | 识别优于回忆 | 可见选项、上下文帮助、最近历史 |
+| 7 | 灵活性与效率 | 快捷键、自定义、批量操作 |
+| 8 | 美观与简约设计 | 无冗余信息、清晰的层级结构 |
+| 9 | 帮助用户识别、诊断和修复错误 | 通俗语言错误提示、具体原因、建议修复方案 |
+| 10 | 帮助与文档 | 可搜索、任务导向、简洁明了 |
 
-### Severity Rating Scale
+### 严重程度评级标准
 
-| Rating | Description | Action |
+| 评级 | 描述 | 处理措施 |
 |---|---|---|
-| 0 | Not a usability problem | No action |
-| 1 | Cosmetic only | Fix if time allows |
-| 2 | Minor problem | Low priority fix |
-| 3 | Major problem | High priority, fix before launch |
-| 4 | Usability catastrophe | Must fix immediately |
+| 0 | 非可用性问题 | 无需处理 |
+| 1 | 仅外观问题 | 时间允许时修复 |
+| 2 | 轻微问题 | 低优先级修复 |
+| 3 | 严重问题 | 高优先级，发布前修复 |
+| 4 | 可用性灾难 | 必须立即修复 |
 
-## Phase 3: Design Validation
+## 阶段 3：设计验证
 
-1. Create testable prototypes (low or high fidelity)
-2. Plan usability testing sessions
-3. Conduct tests with 5+ participants
-4. Analyze results and iterate
-5. Document findings and recommendations
+1. 创建可测试的原型（低保真或高保真）
+2. 规划可用性测试会话
+3. 与 5+ 名参与者开展测试
+4. 分析结果并迭代优化
+5. 记录发现和建议
 
-**STOP — Present usability test results and recommendations for review.**
+**停止 — 提交可用性测试结果和建议供评审。**
 
-### Prototype Fidelity Decision Table
+### 原型保真度决策表
 
-| Situation | Fidelity | Tool | Why |
+| 情境 | 保真度 | 工具 | 原因 |
 |---|---|---|---|
-| Early concept validation | Low (paper/wireframe) | Balsamiq, paper | Fast iteration, low commitment |
-| Navigation testing | Medium (clickable) | Figma prototype | Test flow without visual polish |
-| Visual design validation | High (pixel-perfect) | Figma, coded prototype | Test actual look and feel |
-| Interaction validation | High (coded) | HTML/CSS/JS prototype | Test real interactions |
+| 早期概念验证 | 低（纸面/线框图） | Balsamiq、纸面 | 快速迭代，低投入 |
+| 导航测试 | 中（可点击） | Figma 原型 | 测试流程，无需视觉细节 |
+| 视觉设计验证 | 高（像素级精确） | Figma、代码原型 | 测试实际外观和感受 |
+| 交互验证 | 高（代码实现） | HTML/CSS/JS 原型 | 测试真实交互 |
 
-### A/B Testing Methodology
+### A/B 测试方法论
 
-| Step | Details |
+| 步骤 | 详情 |
 |---|---|
-| Hypothesis | "Changing [X] will [improve/decrease] [metric] because [reason]" |
-| Sample size | Power analysis (95% confidence, 80% power) |
-| Duration | Minimum 2 full business cycles (2+ weeks) |
-| Variable control | Test one change at a time |
-| Analysis | Statistical significance (p < 0.05) |
+| 假设 | "改变 [X] 将 [提升/降低] [指标]，因为 [原因]" |
+| 样本量 | 功效分析（95% 置信度，80% 功效） |
+| 持续时间 | 至少 2 个完整业务周期（2+ 周） |
+| 变量控制 | 一次仅测试一个变更 |
+| 分析 | 统计显著性（p < 0.05） |
 
-### Common UX Metrics
+### 常见 UX 指标
 
-| Metric | What It Measures | Benchmark |
+| 指标 | 衡量内容 | 基准参考 |
 |---|---|---|
-| Task success rate | % completing target task | > 78% (acceptable) |
-| Time on task | Duration to complete action | Varies by task |
-| Error rate | Mistakes per task | < 10% |
-| System Usability Scale (SUS) | Overall usability score | 68 = average |
-| Net Promoter Score (NPS) | Likelihood to recommend | > 0 = good, > 50 = excellent |
-| Customer Effort Score (CES) | Ease of experience | > 5/7 |
+| 任务成功率 | 完成目标任务的百分比 | > 78%（可接受） |
+| 任务耗时 | 完成操作所需时长 | 因任务而异 |
+| 错误率 | 每个任务的错误次数 | < 10% |
+| 系统可用性量表 (SUS) | 整体可用性得分 | 68 = 平均水平 |
+| 净推荐值 (NPS) | 推荐可能性 | > 0 = 良好，> 50 = 优秀 |
+| 客户费力指数 (CES) | 体验便捷程度 | > 5/7 |
 
-### Information Architecture
+### 信息架构
 
-#### Card Sort Analysis Decision Table
+#### 卡片分类分析决策表
 
-| Sort Type | When to Use | Analysis Method |
+| 分类类型 | 适用场景 | 分析方法 |
 |---|---|---|
-| Open sort | Discovery — users create categories | Similarity matrix, dendrogram |
-| Closed sort | Validation — sort into predefined categories | Category agreement percentage |
-| Hybrid sort | Both — predefined with ability to add new | Combined analysis |
+| 开放分类 | 探索阶段 — 用户创建类别 | 相似性矩阵、树状图 |
+| 封闭分类 | 验证阶段 — 按预定义类别分类 | 类别一致性百分比 |
+| 混合分类 | 两者结合 — 预定义类别 + 可新增 | 组合分析 |
 
-#### Navigation Patterns
+#### 导航模式
 
-| Pattern | Use Case |
+| 模式 | 适用场景 |
 |---|---|
-| Global navigation | Persistent across all pages |
-| Local navigation | Within a section |
-| Contextual navigation | Related content links |
-| Utility navigation | Settings, account, help |
-| Breadcrumbs | Location within hierarchy |
+| 全局导航 | 所有页面持续显示 |
+| 局部导航 | 某个版块内部 |
+| 上下文导航 | 相关内容链接 |
+| 功能导航 | 设置、账户、帮助 |
+| 面包屑导航 | 显示在层级结构中的位置 |
 
-## Deliverables Checklist
+## 交付物清单
 
-- [ ] Research plan with objectives and methods
-- [ ] Participant recruitment screener
-- [ ] Interview/test script
-- [ ] Affinity map of findings
-- [ ] Personas (2-4 primary)
-- [ ] Journey map for key scenario
-- [ ] Information architecture diagram
-- [ ] Usability test report with severity ratings
-- [ ] Prioritized recommendations with evidence
+- [ ] 包含目标和方法的研究计划
+- [ ] 参与者招募筛选问卷
+- [ ] 访谈/测试脚本
+- [ ] 研究发现的亲和图
+- [ ] 人物角色（2-4 个主要角色）
+- [ ] 关键场景的旅程地图
+- [ ] 信息架构图
+- [ ] 包含严重程度评级的可用性测试报告
+- [ ] 附带证据的优先级建议列表
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | What to Do Instead |
+| 反模式 | 错误原因 | 正确做法 |
 |---|---|---|
-| Designing without research | Assumptions lead to wrong designs | Start with discovery research |
-| Testing with colleagues | Biased, know too much about product | Recruit external participants |
-| Asking users what they want | Users cannot predict behavior | Observe what they do instead |
-| Confirmation bias | Only seeing what supports beliefs | Use structured analysis, multiple evaluators |
-| Too many personas (5+) | Cannot design for everyone | Keep to 2-4 primary personas |
-| Skipping synthesis | Raw data is not insights | Always do affinity mapping |
-| Underpowered A/B tests | Results are meaningless noise | Calculate sample size before starting |
-| Presenting findings without recommendations | Research without action is wasted | Always include prioritized next steps |
+| 无研究直接设计 | 假设导致错误设计 | 从探索性研究开始 |
+| 与同事进行测试 | 存在偏见，对产品了解过多 | 招募外部参与者 |
+| 询问用户想要什么 | 用户无法预测自身行为 | 观察他们实际做什么 |
+| 确认偏误 | 只看到支持自己观点的内容 | 使用结构化分析、多名评估者 |
+| 人物角色过多（5+） | 无法为所有人设计 | 保持 2-4 个主要人物角色 |
+| 跳过综合整理 | 原始数据不等于洞察 | 始终进行亲和图分析 |
+| A/B 测试样本量不足 | 结果是无意义的噪音 | 开始前计算样本量 |
+| 仅呈现发现而无建议 | 无行动的研究是浪费 | 始终包含优先级明确的下一步建议 |
 
-## Integration Points
+## 集成点
 
-| Skill | Integration |
+| 技能 | 集成方式 |
 |---|---|
-| `ui-ux-pro-max` | UX guidelines and design patterns |
-| `mobile-design` | Mobile usability testing patterns |
-| `planning` | Research plan is part of the implementation plan |
-| `spec-writing` | User research informs JTBD specifications |
-| `prd-generation` | Personas and journey maps feed into PRDs |
-| `llm-as-judge` | Evaluate design quality with rubrics |
+| `ui-ux-pro-max` | UX 指南和设计模式 |
+| `mobile-design` | 移动端可用性测试模式 |
+| `planning` | 研究计划是实施计划的一部分 |
+| `spec-writing` | 用户研究为 JTBD 规范提供依据 |
+| `prd-generation` | 人物角色和旅程地图输入到 PRD |
+| `llm-as-judge` | 使用评分标准评估设计质量 |
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Select and combine research methods based on project constraints (budget, timeline, access to users). Lightweight methods (heuristic evaluation, guerrilla testing) are acceptable when full research is impractical.
+**灵活型** — 根据项目约束条件（预算、时间线、用户可及性）选择并组合研究方法。当完整研究不可行时，轻量级方法（启发式评估、游击测试）是可接受的。

@@ -1,4 +1,4 @@
-# toolkit-agents
+# superkit-agents
 
 ## Quick Start
 
@@ -19,351 +19,349 @@ git clone https://github.com/peakdong68/toolkit-agent-skills.git
 claude --plugin-dir /path/to/toolkit-agent-skills
 
 ```
+## 您将获得什么
 
-## What You Get
-
-| 64 Skills | 20 Agents | 31 Commands | Hooks | Memory System |
+| 64 项技能 | 20 个代理 | 31 条命令 | 钩子 | 记忆系统 |
 |:---------:|:--------:|:-----------:|:-----:|:-------------:|
-| Structured workflows for every phase of development | Specialized sub-agents for parallel work | Slash commands that trigger skills | Session-start context injection | Persistent project knowledge |
+| 覆盖开发各阶段的结构化工作流 | 用于并行工作的专业化子代理 | 触发技能的斜杠命令 | 会话启动时的上下文注入 | 持久化的项目知识库 |
 
 
 ---
+# 工作流示例
 
-
-##  WORKFLOW EXAMPLES
-
-### New Feature (Full Lifecycle)
+## 新功能（完整生命周期）
 
 ```
-1. /brainstorm     → Explore the idea, create design doc
-2. /specs          → Write specifications with JTBD methodology
-3. /plan           → Create implementation plan with bite-sized tasks
-4. /execute        → Execute plan with TDD and tracked progress
-5. /review         → Verify against plan and standards
-6. /verify         → Confirm everything works with fresh evidence
-7. finish-branch   → Merge, PR, or cleanup
+1. /brainstorm     → 探索想法，创建设计文档 （调用技能brainstorming）
+2. /specs          → 使用 JTBD 方法论编写规范 （调用技能spec-writing）
+3. /plan           → 创建包含细粒度任务的实现计划 （调用技能planning）
+4. /execute        → 执行计划，遵循 TDD 并跟踪进度 （调用技能executing-plans）
+5. /review         → 对照计划与标准进行验证 （调用技能code-review）
+6. /verify         → 使用全新证据确认一切正常 （调用技能verification-before-completion）
+7. finish-branch   → 合并、创建 PR 或清理
 ```
 
-### Bug Fix
+## 缺陷修复
 
 ```
-1. /debug          → Systematic 4-phase debugging methodology
-2. /tdd            → Write test that reproduces bug, then fix
-3. /review         → Verify the fix
-4. /verify         → Confirm fix with fresh evidence
+1. /debug          → 系统化的四阶段调试方法论
+2. /tdd            → 编写复现缺陷的测试，然后修复
+3. /review         → 验证修复
+4. /verify         → 使用全新证据确认修复生效
 ```
 
-### Ralph Autonomous Session
+## Ralph 自主会话
 
 ```
-1. /specs          → Write or audit specifications
-2. /ralph          → Start autonomous loop
-   → PLANNING MODE: analyze specs, generate IMPLEMENTATION_PLAN.md
-   → BUILDING MODE: select task, implement, test, commit
-   → STATUS CHECK: produce RALPH_STATUS, evaluate exit gate
-   → LOOP until dual-condition exit gate passes
-3. /review         → Final code review
-4. /verify         → Verify all acceptance tests pass
+1. /specs          → 编写或审计规范
+2. /ralph          → 启动自主循环
+   → 规划模式：分析规范，生成 IMPLEMENTATION_PLAN.md
+   → 构建模式：选择任务、实现、测试、提交
+   → 状态检查：生成 RALPH_STATUS，评估退出门槛
+   → 循环直至双条件退出门槛满足
+3. /review         → 最终代码审查
+4. /verify         → 验证所有验收测试通过
 ```
 
-### Legacy Codebase Onboarding
+## 遗留代码库接入
 
 ```
-1. /learn          → Scan and discover project context
-2. reverse-engineering-specs → Generate specs from existing code
-3. /specs          → Audit and refine generated specs
-4. /plan           → Plan improvements or new features
-5. /execute        → Implement with full test coverage
+1. /learn          → 扫描并发现项目上下文
+2. reverse-engineering-specs → 从现有代码生成规范
+3. /specs          → 审计并优化生成的规范
+4. /plan           → 规划改进或新功能
+5. /execute        → 在完整测试覆盖下实现
 ```
 
-### API Design & Implementation
+## API 设计与实现
 
 ```
-1. api-design      → Design endpoints, generate OpenAPI spec
-2. /specs          → Write behavioral specifications
-3. /plan           → Create implementation plan
-4. testing-strategy → Define test approach
-5. /tdd            → Implement with tests
-6. security-review → Check for vulnerabilities
+1. api-design      → 设计端点，生成 OpenAPI 规范
+2. /specs          → 编写行为规格
+3. /plan           → 创建实现计划
+4. testing-strategy → 定义测试策略
+5. /tdd            → 带测试实现
+6. security-review → 检查漏洞
 ```
 
-### Frontend Component Development
+## 前端组件开发
 
 ```
-1. frontend-ui-design → Component architecture, a11y, responsive design
-2. /plan              → Create implementation plan
-3. /tdd               → Implement with tests
-4. performance-opt    → Check bundle size, Web Vitals
-5. /review            → Code review
+1. frontend-ui-design → 组件架构、无障碍访问（a11y）、响应式设计
+2. /plan              → 创建实现计划
+3. /tdd               → 带测试实现
+4. performance-opt    → 检查打包体积、Web Vitals 指标
+5. /review            → 代码审查
 ```
 
-### Database Schema Change
+## 数据库架构变更
 
 ```
-1. database-schema-design → Model data, plan migrations, indexing
-2. /plan                  → Create implementation plan
-3. /tdd                   → Implement with migration tests
-4. /verify                → Verify migrations work both directions
-```
-## Create Product Requirements PRD
-
-```
-1. /prd            → Create Product Requirements Document
-2. /brainstorm     → Explore approaches first, then plan
-3. /specs          → PRD provides high-level requirements; specs refine them using JTBD
-4. /plan           → Planning references PRD requirements to break down tasks
-5. /execute        → Execute the plan, follow TDD and track progress
+1. database-schema-design → 数据建模、规划迁移、索引
+2. /plan                  → 创建实现计划
+3. /tdd                   → 带迁移测试实现
+4. /verify                → 验证迁移双向均可正常运行
 ```
 
-### Documentation Generation
+## 创建产品需求 PRD
 
 ```
-1. /docs           → Generate technical documentation from code 
-3. llm-as-judge    → Evaluate documentation quality
+1. /prd            → 创建产品需求文档
+2. /brainstorm     → 先探索方法再规划
+3. /specs          → PRD 提供高层级需求；规格说明用 JTBD 细化它们
+4. /plan           → 规划参考 PRD 需求进行任务拆解
+5. /execute        → 执行计划，遵循 TDD 并跟踪进度
 ```
 
-### Security Audit
+## 文档生成
 
 ```
-1. security-review → OWASP Top 10, auth patterns, input validation
-2. /plan           → Plan remediation
-3. /tdd            → Fix vulnerabilities with regression tests
-4. /verify         → Confirm all issues resolved
+1. /docs           → 从代码生成技术文档
+3. llm-as-judge    → 评估文档质量
 ```
 
-### Performance Optimization
+## 安全审计
 
 ```
-1. performance-optimization → Profile, identify bottlenecks
-2. /plan                    → Plan optimization approach
-3. /tdd                     → Implement with benchmark tests
-4. /verify                  → Confirm performance targets met
+1. security-review → OWASP Top 10、认证模式、输入验证
+2. /plan           → 规划修复方案
+3. /tdd            → 带回归测试修复漏洞
+4. /verify         → 确认所有问题已解决
+```
+
+## 性能优化
+
+```
+1. performance-optimization → 性能分析，识别瓶颈
+2. /plan                    → 规划优化方案
+3. /tdd                     → 带基准测试实现
+4. /verify                  → 确认达到性能目标
 ```
 
 ---
 
-## Skills Overview
+## 技能概览
 
 <details>
-<summary><strong>Core (6)</strong> — Foundation skills always recommended</summary>
+<summary><strong>核心（6 项）</strong> — 始终推荐的基础技能</summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `using-toolkit` | Master skill — establishes how to find and use all toolkit skills |
-| `self-learning` | Auto-discover and remember project context |
-| `resilient-execution` | Never fail — retry with alternative approaches |
-| `circuit-breaker` | Loop stagnation detection, rate limiting, and recovery patterns |
-| `auto-improvement` | Self-improving system, tracks effectiveness, learns from errors |
-| `verification-before-completion` | 5-step verification gate before any completion claim |
+| `using-toolkit` | 主技能 — 确立如何查找和使用所有工具包技能 |
+| `self-learning` | 自动发现并记忆项目上下文 |
+| `resilient-execution` | 永不失败 — 使用替代方法重试 |
+| `circuit-breaker` | 循环停滞检测、速率限制和恢复模式 |
+| `auto-improvement` | 自我改进系统，跟踪有效性，从错误中学习 |
+| `verification-before-completion` | 在任何完成声明之前进行 5 步验证门控 |
 
 </details>
 
 <details>
-<summary><strong>Process & Workflow (9)</strong> — Planning, execution, and autonomous loops</summary>
+<summary><strong>流程与工作流（9 项）</strong> — 规划、执行和自主循环</summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `brainstorming` | Creative exploration and design before planning |
-| `planning` | Structured planning before any implementation work |
-| `task-management` | Break work into discrete tracked steps |
-| `executing-plans` | Step-by-step execution of approved plan documents |
-| `subagent-driven-development` | Same-session execution with two-stage review gates |
-| `dispatching-parallel-agents` | Coordinate multiple independent agents in parallel |
-| `autonomous-loop` | Ralph-style iterative development with autonomous planning and building loops |
-| `ralph-status` | Structured status reporting with exit signal protocol |
-| `task-decomposition` | Hierarchical breakdown, dependency mapping, parallelization |
+| `brainstorming` | 规划前的创意探索与设计 |
+| `planning` | 任何实现工作前的结构化规划 |
+| `task-management` | 将工作分解为离散的跟踪步骤 |
+| `executing-plans` | 逐步执行已批准的计划文档 |
+| `subagent-driven-development` | 同一会话内执行，带有两阶段评审门控 |
+| `dispatching-parallel-agents` | 协调多个独立代理并行工作 |
+| `autonomous-loop` | Ralph 风格的迭代开发，带有自主规划和构建循环 |
+| `ralph-status` | 带有退出信号协议的结构化状态报告 |
+| `task-decomposition` | 层次化分解、依赖映射、并行化 |
 
 </details>
 
 <details>
-<summary><strong>Quality Assurance (17)</strong> — Testing, review, debugging, and specialist roles</summary>
+<summary><strong>质量保证（17 项）</strong> — 测试、评审、调试和专业角色</summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `code-review` | Quality verification against plan and standards |
-| `test-driven-development` | TDD workflow with RED-GREEN-REFACTOR cycle |
-| `testing-strategy` | Choose testing approach based on project context |
-| `systematic-debugging` | 4-phase debugging methodology with root cause analysis |
-| `security-review` | OWASP Top 10, auth patterns, input validation, secrets |
-| `performance-optimization` | Profiling, caching, bundle optimization, Web Vitals |
-| `acceptance-testing` | Acceptance-driven backpressure with behavioral validation gates |
-| `llm-as-judge` | Non-deterministic validation for subjective quality criteria |
-| `senior-frontend` | React/Next.js/TypeScript specialist, >85% test coverage |
-| `senior-backend` | API design, microservices, event-driven architecture |
-| `senior-architect` | System design, scalability, trade-off analysis, ADRs |
-| `senior-fullstack` | End-to-end development across the full stack |
-| `clean-code` | SOLID, DRY, code smells, refactoring patterns |
-| `react-best-practices` | React hooks, context, suspense, server components |
-| `webapp-testing` | Playwright-based web testing, screenshots, browser logs |
-| `senior-prompt-engineer` | Prompt design, optimization, chain-of-thought |
-| `senior-data-scientist` | ML pipelines, statistical analysis, experiment design |
+| `code-review` | 针对计划和标准进行质量验证 |
+| `test-driven-development` | 采用 RED-GREEN-REFACTOR 循环的 TDD 工作流 |
+| `testing-strategy` | 根据项目上下文选择测试方法 |
+| `systematic-debugging` | 带有根本原因分析的 4 阶段调试方法 |
+| `security-review` | OWASP Top 10、认证模式、输入验证、密钥管理 |
+| `performance-optimization` | 性能分析、缓存、打包优化、Web Vitals |
+| `acceptance-testing` | 验收驱动的背压机制，带有行为验证门控 |
+| `llm-as-judge` | 针对主观质量标准的非确定性验证 |
+| `senior-frontend` | React/Next.js/TypeScript 专家，测试覆盖率 >85% |
+| `senior-backend` | API 设计、微服务、事件驱动架构 |
+| `senior-architect` | 系统设计、可扩展性、权衡分析、ADR |
+| `senior-fullstack` | 全栈端到端开发 |
+| `clean-code` | SOLID、DRY、代码异味、重构模式 |
+| `react-best-practices` | React hooks、context、suspense、服务器组件 |
+| `webapp-testing` | 基于 Playwright 的 Web 测试、截图、浏览器日志 |
+| `senior-prompt-engineer` | 提示词设计、优化、思维链 |
+| `senior-data-scientist` | ML 流水线、统计分析、实验设计 |
 
 </details>
 
 <details>
-<summary><strong>Design (3)</strong> — API, UI, and database design</summary>
+<summary><strong>设计（3 项）</strong> — API、UI 和数据库设计</summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `api-design` | Structured API endpoint design with OpenAPI spec |
-| `frontend-ui-design` | Component architecture, responsive design, accessibility |
-| `database-schema-design` | Data modeling, migrations, indexing, query optimization |
+| `api-design` | 带有 OpenAPI 规范的结构化 API 端点设计 |
+| `frontend-ui-design` | 组件架构、响应式设计、可访问性 |
+| `database-schema-design` | 数据建模、迁移、索引、查询优化 |
 
 </details>
 
 <details>
-<summary><strong>Documentation (5)</strong> — PRDs, specs, and technical docs</summary>
+<summary><strong>文档（5 项）</strong> — PRD、规范和技术文档</summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `prd-generation` | Generate Product Requirements Documents |
-| `tech-docs-generator` | Generate technical documentation from code |
-| `writing-skills` | Create new skills with TDD and best practices |
-| `spec-writing` | JTBD-based specification writing with acceptance criteria |
-| `reverse-engineering-specs` | Generate implementation-free specs from existing codebases |
+| `prd-generation` | 生成产品需求文档 |
+| `tech-docs-generator` | 从代码生成技术文档 |
+| `writing-skills` | 使用 TDD 和最佳实践创建新技能 |
+| `spec-writing` | 基于 JTBD 的规范编写，带有验收标准 |
+| `reverse-engineering-specs` | 从现有代码库生成无实现细节的规范 |
 
 </details>
 
 <details>
-<summary><strong>Operations (7)</strong> — Git, CI/CD, DevOps, and MCP</summary>
+<summary><strong>运维（7 项）</strong> — Git、CI/CD、DevOps 和 MCP</summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `deployment` | CI/CD pipeline generation and deploy checklists |
-| `using-git-worktrees` | Isolated development environments with git worktrees |
-| `finishing-a-development-branch` | Structured branch completion with merge options |
-| `git-commit-helper` | Conventional commits, semantic versioning, changelogs |
-| `senior-devops` | CI/CD, Docker, Kubernetes, infrastructure-as-code |
-| `mcp-builder` | MCP server development, tools, resources, transport layers |
-| `agent-development` | Building AI agents, tool use, memory, planning |
+| `deployment` | CI/CD 流水线生成和部署检查清单 |
+| `using-git-worktrees` | 使用 git worktrees 的隔离开发环境 |
+| `finishing-a-development-branch` | 带有合并选项的结构化分支完成流程 |
+| `git-commit-helper` | 约定式提交、语义版本控制、变更日志 |
+| `senior-devops` | CI/CD、Docker、Kubernetes、基础设施即代码 |
+| `mcp-builder` | MCP 服务器开发、工具、资源、传输层 |
+| `agent-development` | 构建 AI 代理、工具使用、记忆、规划 |
 
 </details>
 
 <details>
-<summary><strong>Creative (6)</strong> — UI/UX, design systems, mobile, and canvas</summary>
+<summary><strong>创意（6 项）</strong> — UI/UX、设计系统、移动端和画布</summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `ui-ux-pro-max` | Full UI/UX design intelligence with 67 styles, 161 palettes, 57 fonts |
-| `ui-design-system` | Design tokens, component libraries, Tailwind CSS, responsive patterns |
-| `canvas-design` | HTML Canvas, SVG, data visualization, generative art |
-| `mobile-design` | React Native, Flutter, SwiftUI, platform HIG compliance |
-| `ux-researcher-designer` | User research, personas, journey maps, usability testing |
-| `artifacts-builder` | Generate standalone artifacts, interactive demos, prototypes |
+| `ui-ux-pro-max` | 完整 UI/UX 设计智能，含 67 种风格、161 种配色、57 种字体 |
+| `ui-design-system` | 设计令牌、组件库、Tailwind CSS、响应式模式 |
+| `canvas-design` | HTML Canvas、SVG、数据可视化、生成艺术 |
+| `mobile-design` | React Native、Flutter、SwiftUI、平台 HIG 合规性 |
+| `ux-researcher-designer` | 用户研究、人物画像、旅程地图、可用性测试 |
+| `artifacts-builder` | 生成独立工件、交互式演示、原型 |
 
 </details>
 
 <details>
-<summary><strong>Business (3)</strong> — SEO, content, and marketing</summary>
+<summary><strong>商业（3 项）</strong> — SEO、内容和营销</summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `seo-optimizer` | Technical SEO, meta tags, structured data, Core Web Vitals |
-| `content-research-writer` | Research methodology, long-form content, citations |
-| `content-creator` | Marketing copy, social media, brand voice |
+| `seo-optimizer` | 技术 SEO、元标签、结构化数据、Core Web Vitals |
+| `content-research-writer` | 研究方法、长篇内容、引用 |
+| `content-creator` | 营销文案、社交媒体、品牌语调 |
 
 </details>
 
 <details>
-<summary><strong>Document Processing (3)</strong> — Word, PDF, and Excel</summary>
+<summary><strong>文档处理（3 项）</strong> — Word、PDF 和 Excel</summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `docx-processing` | Word document generation, template filling |
-| `pdf-processing` | PDF generation, form filling, OCR, merge/split |
-| `xlsx-processing` | Excel manipulation, formulas, charts |
+| `docx-processing` | Word 文档生成、模板填充 |
+| `pdf-processing` | PDF 生成、表单填充、OCR、合并/拆分 |
+| `xlsx-processing` | Excel 操作、公式、图表 |
 
 </details>
 
 <details>
-<summary><strong>Productivity & Communication (2)</strong></summary>
+<summary><strong>生产力与沟通（2 项）</strong></summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `file-organizer` | Project structure, file naming, directory architecture |
-| `email-composer` | Professional email drafting, tone adjustment |
+| `file-organizer` | 项目结构、文件命名、目录架构 |
+| `email-composer` | 专业邮件撰写、语调调整 |
 
 </details>
 
 <details>
-<summary><strong>Frameworks & Languages (3)</strong> — Laravel and PHP</summary>
+<summary><strong>框架与语言（3 项）</strong> — Laravel 和 PHP</summary>
 
-| Skill | Description |
+| 技能 | 描述 |
 |-------|-------------|
-| `laravel-specialist` | Laravel development — Eloquent, Blade, Livewire, queues, Pest testing |
-| `php-specialist` | Modern PHP 8.x — enums, fibers, readonly, PSR standards, static analysis |
-| `laravel-boost` | Laravel Boost performance optimization — caching, database, Octane |
+| `laravel-specialist` | Laravel 开发 — Eloquent、Blade、Livewire、队列、Pest 测试 |
+| `php-specialist` | 现代 PHP 8.x — 枚举、纤程、readonly、PSR 标准、静态分析 |
+| `laravel-boost` | Laravel Boost 性能优化 — 缓存、数据库、Octane |
 
 </details>
 
 ---
 
-## Agents & Commands
+## 代理与命令
 
 <details>
-<summary><strong>20 Agents</strong> — Specialized sub-agents for parallel work</summary>
+<summary><strong>20 个代理</strong> — 用于并行工作的专业化子代理</summary>
 
-| Agent | Description |
+| 代理 | 描述 |
 |-------|-------------|
-| `planner` | Senior architect creating implementation plans |
-| `code-reviewer` | Reviews code against plan and standards |
-| `prd-writer` | Generates PRD from collected requirements |
-| `doc-generator` | Generates technical documentation from code |
-| `spec-reviewer` | Reviews implementation against spec compliance |
-| `quality-reviewer` | Reviews code quality, patterns, performance, security |
-| `loop-orchestrator` | Manages autonomous development loop iterations |
-| `spec-writer` | Generates JTBD specifications with acceptance criteria |
-| `acceptance-judge` | Evaluates subjective quality via LLM-as-judge pattern |
-| `frontend-developer` | Three-phase frontend dev with context discovery, development, handoff |
-| `ui-ux-designer` | Design system generation, component specs, style guides |
-| `backend-architect` | Service boundaries, contract-first API, scaling |
-| `context-manager` | Project context tracking, dependency mapping |
-| `database-architect` | Multi-DB strategy, domain-driven design, event sourcing |
-| `architect-reviewer` | Architecture review, scalability assessment, tech debt |
-| `typescript-pro` | Advanced type patterns, conditional types, branded types |
-| `task-decomposer` | Hierarchical task breakdown, parallelization strategy |
-| `mobile-developer` | Cross-platform mobile, platform-specific patterns |
-| `laravel-developer` | Laravel specialist with Eloquent, Blade, Livewire, and Pest expertise |
-| `php-developer` | Modern PHP 8.x development with PSR compliance and static analysis |
+| `planner` | 创建实现计划的高级架构师 |
+| `code-reviewer` | 针对计划和标准审查代码 |
+| `prd-writer` | 根据收集的需求生成 PRD |
+| `doc-generator` | 从代码生成技术文档 |
+| `spec-reviewer` | 针对规范合规性审查实现 |
+| `quality-reviewer` | 审查代码质量、模式、性能、安全性 |
+| `loop-orchestrator` | 管理自主开发循环迭代 |
+| `spec-writer` | 生成带有验收标准的 JTBD 规范 |
+| `acceptance-judge` | 通过 LLM-as-judge 模式评估主观质量 |
+| `frontend-developer` | 三阶段前端开发：上下文发现、开发、交接 |
+| `ui-ux-designer` | 设计系统生成、组件规范、风格指南 |
+| `backend-architect` | 服务边界、契约优先 API、扩展性 |
+| `context-manager` | 项目上下文跟踪、依赖映射 |
+| `database-architect` | 多数据库策略、领域驱动设计、事件溯源 |
+| `architect-reviewer` | 架构评审、可扩展性评估、技术债务 |
+| `typescript-pro` | 高级类型模式、条件类型、品牌类型 |
+| `task-decomposer` | 层次化任务分解、并行化策略 |
+| `mobile-developer` | 跨平台移动开发、平台特定模式 |
+| `laravel-developer` | Laravel 专家，具备 Eloquent、Blade、Livewire 和 Pest 专业知识 |
+| `php-developer` | 现代 PHP 8.x 开发，符合 PSR 标准并支持静态分析 |
 
 </details>
 
 <details>
-<summary><strong>31 Slash Commands</strong> — Trigger skills directly in Claude Code</summary>
+<summary><strong>31 条斜杠命令</strong> — 在 Claude Code 中直接触发技能</summary>
 
-| Command | Description |
+| 命令 | 描述 |
 |---------|-------------|
-| `/plan` | Start structured planning |
-| `/brainstorm` | Start brainstorming session |
-| `/execute` | Execute an approved plan |
-| `/tdd` | Start TDD workflow |
-| `/debug` | Start debugging methodology |
-| `/review` | Request code review |
-| `/verify` | Verify completion claim |
-| `/prd` | Generate a PRD |
-| `/learn` | Scan and learn project context |
-| `/docs` | Generate technical docs |
-| `/worktree` | Set up git worktree |
-| `/ralph` | Start Ralph autonomous development loop |
-| `/specs` | Write or audit specifications |
-| `/loop` | Start autonomous loop iteration |
-| `/frontend` | Senior frontend development |
-| `/backend` | Senior backend development |
-| `/architect` | Architecture design and review |
-| `/fullstack` | Full-stack development |
-| `/design-system` | Design system generation |
-| `/ui-ux` | UI/UX design intelligence |
-| `/mobile` | Mobile design patterns |
-| `/clean` | Clean code review |
-| `/devops` | DevOps and infrastructure |
-| `/agent` | AI agent development |
-| `/seo` | SEO optimization |
-| `/email` | Email composition |
-| `/mcp` | MCP server development |
-| `/commit` | Git commit helper |
-| `/decompose` | Task decomposition |
-| `/laravel` | Laravel development |
-| `/php` | Modern PHP development |
+| `/plan` | 启动结构化规划 |
+| `/brainstorm` | 启动头脑风暴会话 |
+| `/execute` | 执行已批准的计划 |
+| `/tdd` | 启动 TDD 工作流 |
+| `/debug` | 启动调试方法 |
+| `/review` | 请求代码评审 |
+| `/verify` | 验证完成声明 |
+| `/prd` | 生成 PRD |
+| `/learn` | 扫描并学习项目上下文 |
+| `/docs` | 生成技术文档 |
+| `/worktree` | 设置 git worktree |
+| `/ralph` | 启动 Ralph 自主开发循环 |
+| `/specs` | 编写或审计规范 |
+| `/loop` | 启动自主循环迭代 |
+| `/frontend` | 高级前端开发 |
+| `/backend` | 高级后端开发 |
+| `/architect` | 架构设计与评审 |
+| `/fullstack` | 全栈开发 |
+| `/design-system` | 设计系统生成 |
+| `/ui-ux` | UI/UX 设计智能 |
+| `/mobile` | 移动端设计模式 |
+| `/clean` | 整洁代码评审 |
+| `/devops` | DevOps 与基础设施 |
+| `/agent` | AI 代理开发 |
+| `/seo` | SEO 优化 |
+| `/email` | 邮件撰写 |
+| `/mcp` | MCP 服务器开发 |
+| `/commit` | Git 提交助手 |
+| `/decompose` | 任务分解 |
+| `/laravel` | Laravel 开发 |
+| `/php` | 现代 PHP 开发 |
 
 </details>
 
@@ -372,47 +370,48 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 ---
 
 <details>
-<summary><strong>Ralph Integration</strong> — Autonomous iterative development loops</summary>
+<summary><strong>Ralph 集成</strong> — 自主迭代开发循环</summary>
 
-The toolkit integrates key concepts from [Ralph](https://github.com/frankbria/ralph-claude-code) and the [Ralph Playbook](https://github.com/ClaytonFarr/ralph-playbook) — an autonomous AI development methodology by Geoffrey Huntley.
+本工具包整合了 [Ralph](https://github.com/frankbria/ralph-claude-code) 和 [Ralph Playbook](https://github.com/ClaytonFarr/ralph-playbook) 的关键概念 — 这是 Geoffrey Huntley 提出的一种自主 AI 开发方法论。
 
-### Autonomous Loop (`/ralph` or `/loop`)
+### 自主循环（`/ralph` 或 `/loop`）
 
-Iterative development cycle: **PLANNING** → **BUILDING** → **STATUS CHECK** → repeat until done.
+迭代开发周期：**规划** → **构建** → **状态检查** → 重复直至完成。
 
-- **ONE task per loop** — each iteration selects and completes exactly one task
-- **Context efficiency** — main context at 40-60% utilization, up to 500 parallel read subagents
-- **Upstream/downstream steering** — specs shape inputs, tests/builds/lints create backpressure
-- **Dual-condition exit gate** — requires both completion language AND explicit `EXIT_SIGNAL: true`
+- **每个循环仅处理一个任务** — 每次迭代选择并完成恰好一个任务
+- **上下文效率** — 主上下文利用率保持在 40-60%，最多支持 500 个并行读取子代理
+- **上游/下游引导** — 规范塑造输入，测试/构建/代码检查创建背压
+- **双重条件退出门控** — 需要同时满足完成语言表述和显式的 `EXIT_SIGNAL: true`
 
-### Circuit Breaker
+### 熔断器
 
-Safety mechanism preventing infinite loops and resource exhaustion:
+防止无限循环和资源耗尽的安全机制：
 
-- Opens after 3 loops with no progress, 5 identical errors, or 70% output decline
-- 30-minute cooldown before retry
-- Rate limiting (configurable calls per hour)
-- File protection prevents accidental config deletion
+- 3 次循环无进展、5 次相同错误或输出下降 70% 后触发熔断
+- 重试前有 30 分钟冷却期
+- 速率限制（可配置每小时调用次数）
+- 文件保护防止意外删除配置
 
-### JTBD Specifications (`/specs`)
+### JTBD 规范（`/specs`）
 
-Jobs to Be Done methodology for writing implementation-free specs:
+用于编写无实现细节规范的"待办事项"（Jobs to Be Done）方法论：
 
-- Break requirements into topics of concern
-- "One Sentence Without 'And'" test for proper scoping
-- Acceptance criteria in Given/When/Then format
-- SLC (Simple/Lovable/Complete) release planning
+- 将需求分解为关注主题
+- "一句话不含'和'"测试以确保适当范围界定
+- 采用 Given/When/Then 格式的验收标准
+- SLC（简单/可爱/完整）发布规划
 
-### Acceptance Testing & LLM-as-Judge
+### 验收测试与 LLM-as-Judge
 
-- **Acceptance testing** — backpressure chain: specs → tests → code (fix code, not specs)
-- **LLM-as-judge** — structured rubric evaluation for subjective criteria (tone, UX, readability)
+- **验收测试** — 背压链：规范 → 测试 → 代码（修复代码，而非规范）
+- **LLM-as-judge** — 针对主观标准（语调、用户体验、可读性）的结构化评分评估
 
 </details>
 
-
 ---
 
-## License
+
+
+## 许可证
 
 [MIT](LICENSE)

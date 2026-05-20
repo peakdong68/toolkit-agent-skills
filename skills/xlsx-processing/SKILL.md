@@ -1,67 +1,67 @@
 ---
 name: xlsx-processing
 description: >
-  Use when the user needs Excel file manipulation — reading, writing, formulas, charts,
-  conditional formatting, data validation, pivot tables, or large file handling.
-  Trigger conditions: create Excel reports programmatically, read spreadsheet data,
-  add formulas or charts, apply conditional formatting, perform data validation,
-  generate pivot tables, handle CSV import/export, process large datasets in Excel format.
+  当用户需要处理 Excel 文件时使用 — 包括读取、写入、公式、图表、
+  条件格式、数据验证、数据透视表或大文件处理。
+  触发条件：程序化生成 Excel 报表、读取电子表格数据、
+  添加公式或图表、应用条件格式、执行数据验证、
+  生成数据透视表、处理 CSV 导入/导出、处理 Excel 格式的大数据集。
 ---
 
-# XLSX Processing
+# XLSX 处理
 
-## Overview
+## 概述
 
-Manipulate Excel files programmatically using openpyxl for rich formatting and pandas for data analysis. This skill covers reading/writing spreadsheets, formulas, charts, conditional formatting, data validation, pivot table generation, CSV import/export, and strategies for handling large files.
+使用 openpyxl 进行富格式处理，使用 pandas 进行数据分析，以编程方式操作 Excel 文件。本技能涵盖读取/写入电子表格、公式、图表、条件格式、数据验证、数据透视表生成、CSV 导入/导出以及处理大文件的策略。
 
-Apply this skill whenever Excel files need to be created, read, transformed, or enriched through code rather than manual editing.
+当需要通过代码而非手动编辑来创建、读取、转换或丰富 Excel 文件时，应用本技能。
 
-## Multi-Phase Process
+## 多阶段流程
 
-### Phase 1: Requirements
+### 阶段 1：需求分析
 
-1. Determine operation (read, write, transform, report)
-2. Identify data sources and volume
-3. Define formatting and formula requirements
-4. Plan sheet structure and naming
-5. Assess performance needs (row count, file size)
+1. 确定操作类型（读取、写入、转换、生成报表）
+2. 识别数据源和数据量
+3. 定义格式和公式要求
+4. 规划工作表结构和命名
+5. 评估性能需求（行数、文件大小）
 
-> **STOP — Do NOT begin implementation until you know the row count and whether formatting is needed (this determines library choice).**
+> **停止 — 在知道行数以及是否需要格式之前，不要开始实现（这决定了库的选择）。**
 
-### Phase 2: Implementation
+### 阶段 2：实现
 
-1. Select library (see decision table)
-2. Implement data loading and transformation
-3. Apply formatting, formulas, and validation
-4. Add charts and conditional formatting
-5. Optimize for file size and memory
+1. 选择库（参见决策表）
+2. 实现数据加载和转换
+3. 应用格式、公式和验证
+4. 添加图表和条件格式
+5. 优化文件大小和内存使用
 
-> **STOP — Do NOT skip memory optimization for files exceeding 10,000 rows.**
+> **停止 — 对于超过 10,000 行的文件，不要跳过内存优化。**
 
-### Phase 3: Validation
+### 阶段 3：验证
 
-1. Open in Excel, LibreOffice, and Google Sheets
-2. Verify formulas calculate correctly
-3. Check formatting renders consistently
-4. Test with edge cases (empty data, max rows)
-5. Validate data accuracy
+1. 在 Excel、LibreOffice 和 Google Sheets 中打开
+2. 验证公式计算正确
+3. 检查格式渲染一致
+4. 用边界情况测试（空数据、最大行数）
+5. 验证数据准确性
 
-## Library Decision Table
+## 库选择决策表
 
-| Scenario | Library | Why |
+| 场景 | 推荐库 | 原因 |
 |---|---|---|
-| Rich formatting (colors, borders, fonts) | openpyxl | Full formatting API |
-| Data analysis, aggregation, pivots | pandas | DataFrame operations |
-| Formatted report from data analysis | pandas + openpyxl | Combine strengths |
-| Reading data only, no formatting needed | pandas | Simplest API |
-| Large file (> 10K rows), write-heavy | openpyxl write_only | Streaming writes, low memory |
-| Large file (> 10K rows), read-heavy | openpyxl read_only | Streaming reads, low memory |
-| CSV to/from Excel conversion | pandas | One-liner operations |
-| Charts in spreadsheet | openpyxl | Chart API with full control |
+| 富格式（颜色、边框、字体） | openpyxl | 完整的格式 API |
+| 数据分析、聚合、数据透视 | pandas | DataFrame 操作 |
+| 基于数据分析生成带格式报表 | pandas + openpyxl | 结合两者优势 |
+| 仅读取数据，无需格式 | pandas | 最简单的 API |
+| 大文件（> 1 万行），写密集 | openpyxl write_only | 流式写入，低内存 |
+| 大文件（> 1 万行），读密集 | openpyxl read_only | 流式读取，低内存 |
+| CSV 与 Excel 互转 | pandas | 单行操作 |
+| 电子表格中的图表 | openpyxl | 完全控制的图表 API |
 
-## openpyxl Patterns
+## openpyxl 模式
 
-### Creating a Workbook
+### 创建工作簿
 ```python
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -71,7 +71,7 @@ wb = Workbook()
 ws = wb.active
 ws.title = "Report"
 
-# Header row
+# 表头行
 headers = ['Name', 'Department', 'Revenue', 'Target', 'Achievement']
 header_font = Font(name='Calibri', size=11, bold=True, color='FFFFFF')
 header_fill = PatternFill(start_color='2F5496', end_color='2F5496', fill_type='solid')
@@ -90,13 +90,13 @@ for col, header in enumerate(headers, 1):
     cell.alignment = header_alignment
     cell.border = thin_border
 
-# Data rows
+# 数据行
 for row_idx, row_data in enumerate(data, 2):
     for col_idx, value in enumerate(row_data, 1):
         cell = ws.cell(row=row_idx, column=col_idx, value=value)
         cell.border = thin_border
 
-# Auto-fit column widths
+# 自动调整列宽
 for col in range(1, len(headers) + 1):
     max_length = max(
         len(str(ws.cell(row=row, column=col).value or ''))
@@ -104,43 +104,43 @@ for col in range(1, len(headers) + 1):
     )
     ws.column_dimensions[get_column_letter(col)].width = min(max_length + 2, 50)
 
-# Freeze header row
+# 冻结表头行
 ws.freeze_panes = 'A2'
 
 wb.save('report.xlsx')
 ```
 
-### Formulas
+### 公式
 ```python
-# Basic formulas
-ws['E2'] = '=C2/D2'                    # Division
-ws['F2'] = '=SUM(C2:C100)'             # Sum
-ws['G2'] = '=AVERAGE(C2:C100)'         # Average
-ws['H2'] = '=COUNTIF(E2:E100,">1")'   # Count if
-ws['I2'] = '=IF(E2>=1,"Met","Below")'  # Conditional
-ws['J2'] = '=VLOOKUP(A2,Sheet2!A:B,2,FALSE)'  # Lookup
+# 基本公式
+ws['E2'] = '=C2/D2'                    # 除法
+ws['F2'] = '=SUM(C2:C100)'             # 求和
+ws['G2'] = '=AVERAGE(C2:C100)'         # 平均值
+ws['H2'] = '=COUNTIF(E2:E100,">1")'   # 条件计数
+ws['I2'] = '=IF(E2>=1,"Met","Below")'  # 条件判断
+ws['J2'] = '=VLOOKUP(A2,Sheet2!A:B,2,FALSE)'  # 查找
 
-# Array formula (Excel 365 dynamic array)
+# 数组公式（Excel 365 动态数组）
 ws['K2'] = '=UNIQUE(A2:A100)'
 
-# Named range
+# 命名区域
 from openpyxl.workbook.defined_name import DefinedName
 ref = f"Report!$C$2:$C${len(data)+1}"
 defn = DefinedName('RevenueRange', attr_text=ref)
 wb.defined_names.add(defn)
 ```
 
-### Charts
+### 图表
 ```python
 from openpyxl.chart import BarChart, LineChart, PieChart, Reference
 
-# Bar chart
+# 柱状图
 chart = BarChart()
 chart.type = 'col'
 chart.title = 'Revenue by Department'
 chart.y_axis.title = 'Revenue ($)'
 chart.x_axis.title = 'Department'
-chart.style = 10  # Built-in style
+chart.style = 10  # 内置样式
 
 data_ref = Reference(ws, min_col=3, min_row=1, max_row=ws.max_row)
 cats_ref = Reference(ws, min_col=2, min_row=2, max_row=ws.max_row)
@@ -151,7 +151,7 @@ chart.height = 12
 
 ws.add_chart(chart, 'G2')
 
-# Line chart with multiple series
+# 折线图（多系列）
 line = LineChart()
 line.title = 'Monthly Trends'
 for col in range(3, 6):
@@ -162,18 +162,18 @@ line.set_categories(cats)
 ws.add_chart(line, 'G20')
 ```
 
-### Conditional Formatting
+### 条件格式
 ```python
 from openpyxl.formatting.rule import CellIsRule, ColorScaleRule, DataBarRule
 
-# Highlight cells above threshold
+# 高亮超过阈值的单元格
 ws.conditional_formatting.add(
     'C2:C100',
     CellIsRule(operator='greaterThan', formula=['100000'],
               fill=PatternFill(bgColor='C6EFCE'))
 )
 
-# Red for below target
+# 低于目标值标红
 ws.conditional_formatting.add(
     'E2:E100',
     CellIsRule(operator='lessThan', formula=['1'],
@@ -181,7 +181,7 @@ ws.conditional_formatting.add(
               font=Font(color='9C0006'))
 )
 
-# Color scale (green to red)
+# 色阶（绿到红）
 ws.conditional_formatting.add(
     'E2:E100',
     ColorScaleRule(
@@ -191,46 +191,46 @@ ws.conditional_formatting.add(
     )
 )
 
-# Data bars
+# 数据条
 ws.conditional_formatting.add(
     'C2:C100',
     DataBarRule(start_type='min', end_type='max', color='638EC6')
 )
 ```
 
-### Data Validation
+### 数据验证
 ```python
 from openpyxl.worksheet.datavalidation import DataValidation
 
-# Dropdown list
+# 下拉列表
 dv = DataValidation(type='list', formula1='"Active,Inactive,Pending"', allow_blank=True)
 dv.error = 'Please select a valid status'
 dv.errorTitle = 'Invalid Entry'
 ws.add_data_validation(dv)
 dv.add('D2:D100')
 
-# Number range
+# 数值范围
 nv = DataValidation(type='whole', operator='between', formula1=0, formula2=100)
 nv.error = 'Value must be between 0 and 100'
 ws.add_data_validation(nv)
 nv.add('F2:F100')
 
-# Date validation
+# 日期验证
 dv_date = DataValidation(type='date', operator='greaterThan', formula1='2025-01-01')
 ws.add_data_validation(dv_date)
 dv_date.add('G2:G100')
 ```
 
-## pandas Patterns
+## pandas 模式
 
-### Reading Excel
+### 读取 Excel
 ```python
 import pandas as pd
 
-# Read single sheet
+# 读取单个工作表
 df = pd.read_excel('data.xlsx', sheet_name='Sheet1')
 
-# Read with options
+# 带选项读取
 df = pd.read_excel('data.xlsx',
     sheet_name='Sales',
     header=0,
@@ -240,25 +240,25 @@ df = pd.read_excel('data.xlsx',
     na_values=['N/A', 'null', ''],
 )
 
-# Read all sheets
-sheets = pd.read_excel('data.xlsx', sheet_name=None)  # Dict of DataFrames
+# 读取所有工作表
+sheets = pd.read_excel('data.xlsx', sheet_name=None)  # DataFrame 字典
 ```
 
-### Writing Excel with pandas + openpyxl
+### 使用 pandas + openpyxl 写入 Excel
 ```python
 with pd.ExcelWriter('output.xlsx', engine='openpyxl') as writer:
     df_summary.to_excel(writer, sheet_name='Summary', index=False)
     df_detail.to_excel(writer, sheet_name='Detail', index=False)
 
-    # Access openpyxl workbook for formatting
+    # 访问 openpyxl 工作簿进行格式设置
     wb = writer.book
     ws = wb['Summary']
-    # Apply formatting...
+    # 应用格式...
 ```
 
-### Pivot Tables
+### 数据透视表
 ```python
-# Create pivot table
+# 创建数据透视表
 pivot = pd.pivot_table(
     df,
     values='Revenue',
@@ -269,30 +269,30 @@ pivot = pd.pivot_table(
     margins_name='Total'
 )
 
-# Write to Excel with formatting
+# 写入 Excel 并设置格式
 pivot.to_excel(writer, sheet_name='Pivot')
 ```
 
-## CSV Import/Export
+## CSV 导入/导出
 
 ```python
-# CSV to XLSX
+# CSV 转 XLSX
 df = pd.read_csv('data.csv', encoding='utf-8-sig')
 df.to_excel('output.xlsx', index=False)
 
-# XLSX to CSV
+# XLSX 转 CSV
 df = pd.read_excel('data.xlsx')
 df.to_csv('output.csv', index=False, encoding='utf-8-sig')
 
-# Handle encoding issues
-df = pd.read_csv('data.csv', encoding='latin-1')  # or 'cp1252'
+# 处理编码问题
+df = pd.read_csv('data.csv', encoding='latin-1')  # 或 'cp1252'
 ```
 
-## Large File Handling
+## 大文件处理
 
-### Memory-Efficient Reading
+### 内存高效读取
 ```python
-# openpyxl read-only mode
+# openpyxl 只读模式
 from openpyxl import load_workbook
 
 wb = load_workbook('large_file.xlsx', read_only=True)
@@ -304,19 +304,19 @@ for row in ws.iter_rows(min_row=2, values_only=True):
 wb.close()
 ```
 
-### Chunked Writing
+### 分块写入
 ```python
-# Write large datasets in chunks
+# 分块写入大数据集
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 
 wb = Workbook(write_only=True)
 ws = wb.create_sheet()
 
-# Write header
+# 写入表头
 ws.append(headers)
 
-# Write in chunks
+# 分块写入
 chunk_size = 10000
 for chunk in pd.read_csv('large.csv', chunksize=chunk_size):
     for row in dataframe_to_rows(chunk, index=False, header=False):
@@ -325,48 +325,48 @@ for chunk in pd.read_csv('large.csv', chunksize=chunk_size):
 wb.save('output.xlsx')
 ```
 
-### Performance Decision Table
+### 性能决策表
 
-| Rows | Strategy | Notes |
+| 行数 | 策略 | 说明 |
 |---|---|---|
-| < 10,000 | Standard openpyxl or pandas | Full formatting available |
-| 10K - 100K | write_only / read_only mode, chunked | Limited formatting in write_only |
-| 100K - 1M | write_only mode, consider CSV instead | Near Excel row limit |
-| > 1M | Use CSV or Parquet, not XLSX | Excel limit: 1,048,576 rows |
+| < 10,000 | 标准 openpyxl 或 pandas | 可使用完整格式 |
+| 1 万 - 10 万 | write_only / read_only 模式，分块处理 | write_only 模式下格式有限 |
+| 10 万 - 100 万 | write_only 模式，考虑改用 CSV | 接近 Excel 行数限制 |
+| > 100 万 | 使用 CSV 或 Parquet，不用 XLSX | Excel 限制：1,048,576 行 |
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
+| 反模式 | 失败原因 | 正确做法 |
 |---|---|---|
-| openpyxl for pure data analysis | Verbose and slow for analytics | Use pandas for data operations |
-| Loading large files into memory | Memory exhaustion, crashes | Use read_only / write_only modes |
-| Hardcoding row/column numbers | Breaks when data shape changes | Calculate from data length |
-| Inconsistent date formats | Dates render as numbers or strings | Set number_format explicitly |
-| Not closing read_only workbooks | Resource leaks | Always call `wb.close()` or use context manager |
-| Using .xls format | Legacy, limited, security risks | Always use .xlsx |
-| Formatting cells one by one | Extremely slow for large ranges | Apply styles to ranges or use named styles |
-| Not testing in actual Excel | Features render differently | Test in Excel, LibreOffice, and Google Sheets |
-| Forgetting to freeze header row | Poor UX when scrolling large data | Always freeze panes for data sheets |
+| 用 openpyxl 做纯数据分析 | 分析操作冗长且慢 | 使用 pandas 做数据操作 |
+| 将大文件加载到内存 | 内存耗尽、崩溃 | 使用 read_only / write_only 模式 |
+| 硬编码行号/列号 | 数据形状变化时代码失效 | 根据数据长度计算 |
+| 日期格式不一致 | 日期显示为数字或字符串 | 显式设置 number_format |
+| 不关闭 read_only 工作簿 | 资源泄漏 | 始终调用 `wb.close()` 或使用上下文管理器 |
+| 使用 .xls 格式 | 过时、有限制、有安全风险 | 始终使用 .xlsx |
+| 逐个单元格设置格式 | 大范围时极慢 | 对区域应用样式或使用命名样式 |
+| 未在实际 Excel 中测试 | 功能渲染效果不同 | 在 Excel、LibreOffice 和 Google Sheets 中测试 |
+| 忘记冻结表头行 | 滚动大数据时用户体验差 | 数据工作表始终冻结窗格 |
 
-## Anti-Rationalization Guards
+## 反合理化防护
 
-- Do NOT use openpyxl for data analysis that pandas handles in one line.
-- Do NOT skip the row count assessment -- it determines your entire approach.
-- Do NOT assume standard mode works for files over 10K rows -- use streaming modes.
-- Do NOT test only in one spreadsheet application -- formatting varies.
-- Do NOT forget to close workbooks opened in read_only mode.
+- 不要用 openpyxl 做 pandas 一行就能完成的数据分析。
+- 不要跳过行数评估 — 它决定了你的整个方案。
+- 不要以为标准模式能处理超过 1 万行的文件 — 使用流式模式。
+- 不要只在一个电子表格应用中测试 — 格式渲染有差异。
+- 不要忘记关闭以 read_only 模式打开的工作簿。
 
-## Integration Points
+## 集成点
 
-| Skill | How It Connects |
+| 技能 | 连接方式 |
 |---|---|
-| `pdf-processing` | Excel data feeds into PDF report generation |
-| `docx-processing` | Excel data populates Word document tables |
-| `email-composer` | Generated spreadsheets attach to professional emails |
-| `file-organizer` | Output file naming and directory structure conventions |
-| `database-schema-design` | Database exports to Excel for reporting |
-| `deployment` | Automated report generation in CI/CD pipelines |
+| `pdf-processing` | Excel 数据输入到 PDF 报表生成 |
+| `docx-processing` | Excel 数据填充 Word 文档表格 |
+| `email-composer` | 生成的电子表格附加到专业邮件 |
+| `file-organizer` | 输出文件命名和目录结构规范 |
+| `database-schema-design` | 数据库导出到 Excel 用于报表 |
+| `deployment` | CI/CD 流水线中自动生成报表 |
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Choose openpyxl for rich formatting and pandas for data analysis. Combine both when you need formatted reports from data analysis. Adapt file handling strategy to data volume.
+**灵活（FLEXIBLE）** — 富格式使用 openpyxl，数据分析使用 pandas。当需要基于数据分析生成带格式报表时，结合两者。根据数据量调整文件处理策略。

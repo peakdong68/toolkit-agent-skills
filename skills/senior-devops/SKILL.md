@@ -1,68 +1,68 @@
 ---
 name: senior-devops
 description: >
-  Use when the user needs CI/CD pipelines, Docker configuration, Kubernetes deployment,
-  infrastructure-as-code, monitoring, or zero-downtime deployment strategies. Triggers: user says
-  "devops", "docker", "kubernetes", "CI/CD", "infrastructure", "monitoring", "deploy to production",
-  "container", "terraform", "observability".
+  当用户需要 CI/CD 流水线、Docker 配置、Kubernetes 部署、
+  基础设施即代码、监控或零停机部署策略时使用。触发词：用户提到
+  "devops"、"docker"、"kubernetes"、"CI/CD"、"infrastructure"、"monitoring"、"deploy to production"、
+  "container"、"terraform"、"observability"。
 ---
 
-# Senior DevOps Engineer
+# 高级 DevOps 工程师
 
-## Overview
+## 概述
 
-Design, build, and maintain production infrastructure and deployment pipelines. This skill covers Docker containerization, Kubernetes orchestration, CI/CD with GitHub Actions, infrastructure-as-code with Terraform/Pulumi, monitoring with Prometheus/Grafana, alerting strategies, zero-downtime deployments, and rollback procedures.
+设计、构建并维护生产环境基础设施与部署流水线。本技能涵盖 Docker 容器化、Kubernetes 编排、基于 GitHub Actions 的 CI/CD、使用 Terraform/Pulumi 的基础设施即代码、Prometheus/Grafana 监控、告警策略、零停机部署以及回滚流程。
 
-## Phase 1: Infrastructure Design
+## 阶段一：基础设施设计
 
-1. Define deployment topology (single server, cluster, multi-region)
-2. Choose containerization strategy (Docker, Buildpacks)
-3. Select orchestration platform (Kubernetes, ECS, Cloud Run)
-4. Plan networking (load balancers, DNS, TLS)
-5. Design secret management approach
+1. 定义部署拓扑（单服务器、集群、多区域）
+2. 选择容器化策略（Docker、Buildpacks）
+3. 选择编排平台（Kubernetes、ECS、Cloud Run）
+4. 规划网络（负载均衡器、DNS、TLS）
+5. 设计密钥管理方案
 
-**STOP — Present infrastructure design to user for approval before implementation.**
+**停止 — 在实施前向用户展示基础设施设计方案以获得批准。**
 
-### Infrastructure Decision Table
+### 基础设施决策表
 
-| Scale | Topology | Orchestration | Recommended |
+| 规模 | 拓扑 | 编排 | 推荐方案 |
 |---|---|---|---|
-| Hobby / MVP | Single server | Docker Compose | Railway, Fly.io |
-| Startup (< 100k users) | Small cluster | ECS, Cloud Run | AWS ECS, GCP Cloud Run |
-| Growth (100k - 1M users) | Multi-AZ cluster | Kubernetes | EKS, GKE |
-| Enterprise (1M+ users) | Multi-region | Kubernetes + service mesh | EKS/GKE + Istio |
-| Compliance-heavy | Dedicated/private cloud | Kubernetes | Self-managed K8s |
+| 个人项目 / MVP | 单服务器 | Docker Compose | Railway, Fly.io |
+| 初创公司 (< 10 万用户) | 小型集群 | ECS, Cloud Run | AWS ECS, GCP Cloud Run |
+| 成长期 (10 万 - 100 万用户) | 多可用区集群 | Kubernetes | EKS, GKE |
+| 企业级 (100 万+ 用户) | 多区域 | Kubernetes + 服务网格 | EKS/GKE + Istio |
+| 合规要求高 | 专有/私有云 | Kubernetes | 自托管 K8s |
 
-## Phase 2: Pipeline Implementation
+## 阶段二：流水线实现
 
-1. Build CI pipeline (lint, test, build, security scan)
-2. Build CD pipeline (deploy to staging, production)
-3. Configure environment-specific settings
-4. Set up artifact registry (container images, packages)
-5. Implement deployment strategy (blue-green, canary, rolling)
+1. 构建 CI 流水线（代码检查、测试、构建、安全扫描）
+2. 构建 CD 流水线（部署到预发布、生产环境）
+3. 配置环境特定设置
+4. 设置制品仓库（容器镜像、软件包）
+5. 实施部署策略（蓝绿部署、金丝雀发布、滚动更新）
 
-**STOP — Validate pipeline config syntax and present for review.**
+**停止 — 验证流水线配置语法并提交审查。**
 
-## Phase 3: Observability
+## 阶段三：可观测性
 
-1. Deploy monitoring stack (Prometheus, Grafana)
-2. Configure alerting rules and escalation
-3. Set up log aggregation
-4. Implement distributed tracing
-5. Create runbooks for common incidents
+1. 部署监控栈（Prometheus、Grafana）
+2. 配置告警规则与升级流程
+3. 设置日志聚合
+4. 实现分布式追踪
+5. 为常见事件创建操作手册
 
-**STOP — Verify monitoring covers all critical services before declaring complete.**
+**停止 — 在宣告完成前，验证监控是否覆盖所有关键服务。**
 
-## Dockerfile Best Practices
+## Dockerfile 最佳实践
 
 ```dockerfile
-# 1. Use specific version tags (not :latest)
+# 1. 使用具体版本标签（而非 :latest）
 FROM node:20-alpine AS base
 
-# 2. Set working directory
+# 2. 设置工作目录
 WORKDIR /app
 
-# 3. Install dependencies in separate layer (cache optimization)
+# 3. 在独立层安装依赖（缓存优化）
 FROM base AS deps
 COPY package.json pnpm-lock.yaml ./
 RUN corepack enable && pnpm install --frozen-lockfile --prod
@@ -71,46 +71,46 @@ FROM base AS build-deps
 COPY package.json pnpm-lock.yaml ./
 RUN corepack enable && pnpm install --frozen-lockfile
 
-# 4. Build in separate stage
+# 4. 在独立阶段构建
 FROM build-deps AS builder
 COPY . .
 RUN pnpm build
 
-# 5. Production image — minimal size
+# 5. 生产镜像 — 最小化体积
 FROM base AS runner
 ENV NODE_ENV=production
 
-# 6. Don't run as root
+# 6. 不以 root 用户运行
 RUN addgroup --system --gid 1001 app && \
     adduser --system --uid 1001 app
 USER app
 
-# 7. Copy only what's needed
+# 7. 仅复制所需内容
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
-# 8. Health check
+# 8. 健康检查
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s \
   CMD wget -qO- http://localhost:3000/health || exit 1
 
-# 9. Expose port and set entrypoint
+# 9. 暴露端口并设置入口点
 EXPOSE 3000
 CMD ["node", "dist/server.js"]
 ```
 
-### Key Dockerfile Rules
+### 关键 Dockerfile 规则
 
-| Rule | Why |
+| 规则 | 原因 |
 |---|---|
-| Multi-stage builds | Minimize image size |
-| `.dockerignore` file | Exclude node_modules, .git, tests |
-| Non-root user | Security hardening |
-| Specific base image versions | Reproducible builds |
-| Layer ordering (deps before src) | Cache efficiency |
-| HEALTHCHECK instruction | Container health monitoring |
-| No secrets in build args/layers | Prevent credential leaks |
+| 多阶段构建 | 最小化镜像体积 |
+| `.dockerignore` 文件 | 排除 node_modules、.git、测试文件 |
+| 非 root 用户 | 安全加固 |
+| 指定基础镜像版本 | 构建可复现 |
+| 层顺序（依赖在前，源码在后） | 缓存效率 |
+| HEALTHCHECK 指令 | 容器健康监控 |
+| 构建参数/层中不包含密钥 | 防止凭据泄露 |
 
-## Docker Compose Patterns
+## Docker Compose 模式
 
 ```yaml
 services:
@@ -159,7 +159,7 @@ volumes:
   redis_data:
 ```
 
-## GitHub Actions Workflow
+## GitHub Actions 工作流
 
 ```yaml
 name: CI/CD
@@ -226,9 +226,9 @@ jobs:
         run: echo "Deploying ${{ github.sha }}"
 ```
 
-## Terraform / Pulumi Patterns
+## Terraform / Pulumi 模式
 
-### Terraform Structure
+### Terraform 结构
 
 ```
 modules/
@@ -243,36 +243,36 @@ environments/
     main.tf, terraform.tfvars
 ```
 
-### Key IaC Rules
+### 关键 IaC 规则
 
-| Rule | Why |
+| 规则 | 原因 |
 |---|---|
-| Remote state backend (S3 + DynamoDB) | Shared state, locking |
-| State locking | Prevent concurrent modifications |
-| Environment-specific variable files | Separation of concerns |
-| Module versioning | Reproducible shared infra |
-| `terraform plan` in CI | Catch issues before apply |
-| Drift detection on schedule | Detect manual changes |
-| Tag all resources | Ownership, cost allocation |
+| 远程状态后端（S3 + DynamoDB） | 共享状态、锁定机制 |
+| 状态锁定 | 防止并发修改 |
+| 环境特定变量文件 | 关注点分离 |
+| 模块版本控制 | 可复现的共享基础设施 |
+| CI 中执行 `terraform plan` | 应用前发现问题 |
+| 定期漂移检测 | 检测手动变更 |
+| 为所有资源打标签 | 归属权、成本分配 |
 
-## Monitoring (Prometheus + Grafana)
+## 监控（Prometheus + Grafana）
 
-### USE Method (Resources)
+### USE 方法（资源维度）
 
-| Resource | Utilization | Saturation | Errors |
+| 资源 | 利用率 | 饱和度 | 错误 |
 |---|---|---|---|
 | CPU | cpu_usage_percent | cpu_throttled | — |
-| Memory | memory_usage_bytes | oom_kills | — |
-| Disk | disk_usage_percent | io_wait | disk_errors |
-| Network | bytes_total | queue_length | errors_total |
+| 内存 | memory_usage_bytes | oom_kills | — |
+| 磁盘 | disk_usage_percent | io_wait | disk_errors |
+| 网络 | bytes_total | queue_length | errors_total |
 
-### RED Method (Services)
+### RED 方法（服务维度）
 
-- **Rate**: requests per second
-- **Errors**: error rate per second
-- **Duration**: latency distribution (p50, p95, p99)
+- **速率（Rate）**：每秒请求数
+- **错误（Errors）**：每秒错误率
+- **持续时间（Duration）**：延迟分布（p50、p95、p99）
 
-### Alerting Rules
+### 告警规则
 
 ```yaml
 groups:
@@ -290,85 +290,85 @@ groups:
           severity: warning
 ```
 
-### Alerting Best Practices
+### 告警最佳实践
 
-| Practice | Why |
+| 实践 | 原因 |
 |---|---|
-| Alert on symptoms, not causes | Reduces noise, focuses on impact |
-| Every alert has a runbook link | Enables fast response |
-| Tiered severity | critical=page, warning=ticket, info=log |
-| Aggregate before alerting | Avoid flapping |
-| Review and prune quarterly | Prevent alert fatigue |
+| 基于症状告警，而非原因 | 减少噪音，聚焦影响 |
+| 每条告警附带操作手册链接 | 支持快速响应 |
+| 分级严重程度 | critical=电话通知，warning=工单，info=日志 |
+| 告警前聚合 | 避免抖动 |
+| 每季度审查并精简 | 防止告警疲劳 |
 
-## Zero-Downtime Deployment Strategies
+## 零停机部署策略
 
-| Strategy | How It Works | Risk | Rollback Speed |
+| 策略 | 工作原理 | 风险 | 回滚速度 |
 |---|---|---|---|
-| Rolling | Replace instances one at a time | Low | Medium |
-| Blue-Green | Switch traffic between two environments | Low | Instant |
-| Canary | Route small % to new version, gradually increase | Very Low | Instant |
-| Feature Flags | Deploy code dark, enable via flag | Very Low | Instant |
+| 滚动更新 | 逐个替换实例 | 低 | 中等 |
+| 蓝绿部署 | 在两个环境间切换流量 | 低 | 即时 |
+| 金丝雀发布 | 将小部分流量路由至新版本，逐步增加 | 非常低 | 即时 |
+| 功能开关 | 部署代码但默认关闭，通过开关启用 | 非常低 | 即时 |
 
-### Rollback Procedures
+### 回滚流程
 
-1. **Automated**: health check fails -> automatic rollback
-2. **Manual**: `kubectl rollout undo deployment/app`
-3. **Database**: forward-only migrations with backward compatibility
-4. **Config**: revert via secret manager version
+1. **自动化**：健康检查失败 -> 自动回滚
+2. **手动**：`kubectl rollout undo deployment/app`
+3. **数据库**：仅向前迁移，保持向后兼容
+4. **配置**：通过密钥管理器版本回退
 
-### Database Migration Safety
+### 数据库迁移安全
 
-| Rule | Rationale |
+| 规则 | 理由 |
 |---|---|
-| Migrations must be backward compatible | Old code + new schema must work |
-| Never rename/drop columns in same deploy | Two-phase change required |
-| Two-phase: add column -> deploy -> remove old | Zero-downtime schema evolution |
-| Always test rollback of each migration | Ensure reversibility |
+| 迁移必须向后兼容 | 旧代码 + 新架构必须能协同工作 |
+| 同一部署中永不重命名/删除列 | 需要两阶段变更 |
+| 两阶段：添加列 -> 部署 -> 移除旧列 | 零停机架构演进 |
+| 始终测试每个迁移的回滚 | 确保可逆性 |
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | What to Do Instead |
+| 反模式 | 为何错误 | 正确做法 |
 |---|---|---|
-| Manual production deployments | No audit trail, error-prone | Automate via CI/CD |
-| Shared or hardcoded secrets | Security breach risk | Use secrets manager |
-| No rollback plan before deploying | Stuck if deploy fails | Document rollback before every deploy |
-| `latest` tag for production images | Non-reproducible | Pin specific version tags |
-| Running containers as root | Security vulnerability | Use non-root user in Dockerfile |
-| Alert fatigue from non-actionable alerts | Real issues get missed | Alert on symptoms, tune thresholds |
-| Skipping staging environment | Bugs found in production | Always deploy to staging first |
-| Snowflake servers with manual config | Cannot reproduce, cannot scale | Infrastructure as code |
-| Monitoring without alerting | Nobody notices problems | Wire alerts to monitoring |
+| 手动生产环境部署 | 无审计轨迹，易出错 | 通过 CI/CD 自动化 |
+| 共享或硬编码密钥 | 安全风险 | 使用密钥管理器 |
+| 部署前无回滚计划 | 部署失败时陷入困境 | 每次部署前文档化回滚方案 |
+| 生产环境使用 `latest` 标签镜像 | 不可复现 | 固定具体版本标签 |
+| 以 root 用户运行容器 | 安全漏洞 | Dockerfile 中使用非 root 用户 |
+| 因不可操作告警导致告警疲劳 | 真实问题被忽略 | 基于症状告警，调优阈值 |
+| 跳过预发布环境 | 在生产环境发现缺陷 | 始终先部署到预发布环境 |
+| 手动配置的独特服务器（"雪花服务器"） | 无法复现，无法扩展 | 基础设施即代码 |
+| 有监控无告警 | 无人发现问题 | 将告警接入监控系统 |
 
-## Key Principles
+## 核心原则
 
-- Infrastructure as code — no manual changes to production
-- Immutable infrastructure — replace, do not patch
-- Cattle, not pets — servers are disposable
-- Shift left security — scan early in pipeline
-- Least privilege — minimal permissions everywhere
-- Automate everything that runs more than twice
-- Test the disaster recovery plan regularly
+- 基础设施即代码 — 生产环境无手动变更
+- 不可变基础设施 — 替换而非修补
+- 牛群而非宠物 — 服务器可随意丢弃
+- 安全左移 — 在流水线早期进行扫描
+- 最小权限 — 处处使用最小权限
+- 自动化所有运行超过两次的操作
+- 定期测试灾难恢复计划
 
-## Documentation Lookup (Context7)
+## 文档查阅（Context7）
 
-Use `mcp__context7__resolve-library-id` then `mcp__context7__query-docs` for up-to-date docs. Returned docs override memorized knowledge.
-- `docker` — for Dockerfile syntax, compose configuration, or multi-stage builds
-- `kubernetes` — for resource manifests, kubectl commands, or Helm charts
-- `terraform` — for provider configuration, resource blocks, or state management
+使用 `mcp__context7__resolve-library-id` 然后 `mcp__context7__query-docs` 获取最新文档。返回的文档将覆盖记忆中的知识。
+- `docker` — 用于 Dockerfile 语法、compose 配置或多阶段构建
+- `kubernetes` — 用于资源清单、kubectl 命令或 Helm charts
+- `terraform` — 用于提供程序配置、资源块或状态管理
 
 ---
 
-## Integration Points
+## 集成点
 
-| Skill | Integration |
+| 技能 | 集成方式 |
 |---|---|
-| `deployment` | Provides higher-level deploy pipeline orchestration |
-| `security-review` | Security scan stage in CI pipeline |
-| `planning` | Infrastructure changes are planned like features |
-| `verification-before-completion` | Post-deploy verification gate |
-| `finishing-a-development-branch` | Merge triggers deployment pipeline |
-| `mcp-builder` | MCP servers need containerization and deployment |
+| `deployment` | 提供更高阶的部署流水线编排 |
+| `security-review` | CI 流水线中的安全扫描阶段 |
+| `planning` | 基础设施变更像功能一样进行规划 |
+| `verification-before-completion` | 部署后验证关卡 |
+| `finishing-a-development-branch` | 合并触发部署流水线 |
+| `mcp-builder` | MCP 服务器需要容器化与部署 |
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Adapt tooling and patterns to the project's cloud provider, team size, and operational maturity. The principles (IaC, immutability, observability) are constant; the specific tools are interchangeable.
+**灵活（FLEXIBLE）** — 根据项目的云提供商、团队规模与运维成熟度调整工具与模式。核心原则（基础设施即代码、不可变性、可观测性）保持不变；具体工具可互换。

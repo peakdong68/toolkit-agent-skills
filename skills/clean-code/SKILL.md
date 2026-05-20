@@ -1,179 +1,182 @@
 ---
 name: clean-code
-description: "Use when the user needs code quality review, refactoring guidance, SOLID principles application, or help identifying and fixing code smells. Triggers: code smell detection, refactoring planning, naming convention review, complexity reduction, DRY analysis, error handling improvement."
+description: '当用户需要代码质量审查、重构指导、SOLID 原则应用，或帮助识别和修复代码异味时使用。触发条件：代码异味检测、重构规划、命名规范审查、复杂度降低、DRY 分析、错误处理改进。'
 ---
 
-# Clean Code
+# 整洁代码
 
-## Overview
+## 概述
 
-Apply clean code principles to produce readable, maintainable, and testable software. This skill covers SOLID principles, DRY application, code smell identification, refactoring patterns, naming conventions, error handling, and complexity management. Based on the works of Robert C. Martin, Martin Fowler, and Kent Beck.
+应用整洁代码原则，以产出可读、可维护、可测试的软件。本技能涵盖 SOLID 原则、DRY 应用、代码异味识别、重构模式、命名规范、错误处理和复杂度管理。基于 Robert C. Martin、Martin Fowler 和 Kent Beck 的著作。
 
-**Announce at start:** "I'm using the clean-code skill to improve code quality."
-
----
-
-## Phase 1: Analyze Current Code
-
-**Goal:** Read and understand the code in full context before changing anything.
-
-### Actions
-
-1. Read the code in its full context (not just the snippet)
-2. Identify the code's responsibility and purpose
-3. Measure cyclomatic complexity
-4. Map coupling and dependencies
-5. Note any existing tests
-
-### STOP — Do NOT proceed to Phase 2 until:
-- [ ] Code is read in full context
-- [ ] Purpose and responsibility are understood
-- [ ] Complexity hotspots are identified
-- [ ] Existing test coverage is known
+**开始时声明：** "我正在使用 clean-code 技能来提升代码质量。"
 
 ---
 
-## Phase 2: Identify Code Smells
+## 阶段 1：分析当前代码
 
-**Goal:** Catalog all code smells using the reference tables below.
+**目标：** 在修改任何内容之前，完整阅读并理解代码的上下文。
 
-### Bloaters
+### 操作
 
-| Smell | Detection | Refactoring |
-|-------|-----------|------------|
-| Long Method | > 30 lines | Extract Method |
-| Large Class | > 300 lines or > 5 responsibilities | Extract Class |
-| Long Parameter List | > 3 parameters | Introduce Parameter Object |
-| Data Clumps | Same params appear together | Extract Class |
-| Primitive Obsession | Primitives instead of small objects | Replace with Value Object |
+1. 在完整上下文中阅读代码（不仅仅是代码片段）
+2. 识别代码的职责和目的
+3. 测量圈复杂度
+4. 映射耦合关系和依赖
+5. 记录任何现有的测试
 
-### Object-Orientation Abusers
+### 停止 — 在满足以下条件之前，不要进入阶段 2：
 
-| Smell | Detection | Refactoring |
-|-------|-----------|------------|
-| Switch Statements | Switch on type | Replace with Polymorphism |
-| Parallel Inheritance | Every subclass requires parallel subclass | Merge hierarchies |
-| Refused Bequest | Subclass ignores inherited methods | Replace Inheritance with Delegation |
-
-### Change Preventers
-
-| Smell | Detection | Refactoring |
-|-------|-----------|------------|
-| Divergent Change | One class changed for multiple reasons | Extract Class (SRP) |
-| Shotgun Surgery | One change touches many classes | Move Method, Inline Class |
-
-### Dispensables
-
-| Smell | Detection | Refactoring |
-|-------|-----------|------------|
-| Dead Code | Unreachable or unused | Remove |
-| Speculative Generality | Unused abstractions "just in case" | Collapse Hierarchy, Remove |
-| Comments explaining bad code | Comments compensating for unclear code | Rename, Extract Method |
-
-### STOP — Do NOT proceed to Phase 3 until:
-- [ ] All code smells are cataloged
-- [ ] Each smell has a priority (high/medium/low)
-- [ ] Refactoring approach is identified for each
+- [ ] 代码已在完整上下文中阅读
+- [ ] 目的和职责已理解
+- [ ] 复杂度热点已识别
+- [ ] 现有测试覆盖率已知
 
 ---
 
-## Phase 3: Apply Refactoring
+## 阶段 2：识别代码异味
 
-**Goal:** Apply refactoring patterns one at a time, verifying tests after each.
+**目标：** 使用下方的参考表对所有代码异味进行分类编目。
 
-### Actions
+### 膨胀类（Bloaters）
 
-1. Apply ONE refactoring at a time
-2. Run tests after each change
-3. If any test fails, revert immediately
-4. Continue until code is clean
-5. Review naming, structure, and documentation
+| 异味         | 检测方式                 | 重构方法                                   |
+| ------------ | ------------------------ | ------------------------------------------ |
+| 长方法       | > 30 行                  | 提取方法（Extract Method）                 |
+| 大类         | > 300 行或 > 5 项职责    | 提取类（Extract Class）                    |
+| 长参数列表   | > 3 个参数               | 引入参数对象（Introduce Parameter Object） |
+| 数据簇       | 相同参数成组出现         | 提取类（Extract Class）                    |
+| 基本类型偏好 | 使用基本类型而非小型对象 | 替换为值对象（Replace with Value Object）  |
 
-### STOP — Refactoring complete when:
-- [ ] All high-priority smells are resolved
-- [ ] All tests pass after each change
-- [ ] No behavior was changed during refactoring
-- [ ] Code is readable to a new team member
+### 面向对象滥用者（Object-Orientation Abusers）
 
----
+| 异味         | 检测方式                     | 重构方法                                              |
+| ------------ | ---------------------------- | ----------------------------------------------------- |
+| Switch 语句  | 基于类型进行 switch 判断     | 用多态替换（Replace with Polymorphism）               |
+| 平行继承层次 | 每个子类都需要对应的平行子类 | 合并层次结构                                          |
+| 拒绝继承     | 子类忽略继承的方法           | 用委托替换继承（Replace Inheritance with Delegation） |
 
-## SOLID Principles
+### 变更阻碍者（Change Preventers）
 
-### S — Single Responsibility Principle
+| 异味       | 检测方式                   | 重构方法                   |
+| ---------- | -------------------------- | -------------------------- |
+| 发散式变化 | 一个类因多个不同原因被修改 | 提取类（单一职责原则 SRP） |
+| 散弹式修改 | 一处修改涉及多个类         | 移动方法、内联类           |
 
-A class/module should have one, and only one, reason to change.
+### 可移除项（Dispensables）
 
-**Smell:** A class that changes for multiple unrelated reasons.
-**Fix:** Extract responsibilities into separate classes.
+| 异味               | 检测方式                 | 重构方法           |
+| ------------------ | ------------------------ | ------------------ |
+| 死代码             | 不可达或未使用的代码     | 移除               |
+| 推测性通用性       | "以防万一"的未使用抽象   | 折叠层次结构、移除 |
+| 为坏代码辩护的注释 | 注释用于弥补不清晰的代码 | 重命名、提取方法   |
 
-### O — Open/Closed Principle
+### 停止 — 在满足以下条件之前，不要进入阶段 3：
 
-Open for extension, closed for modification.
-
-**Smell:** Switch statements that grow with new types.
-**Fix:** Polymorphism, strategy pattern, or plugin architecture.
-
-### L — Liskov Substitution Principle
-
-Subtypes must be substitutable for their base types.
-
-**Smell:** Subclass overrides method to throw "not supported."
-**Fix:** Restructure hierarchy; prefer composition over inheritance.
-
-### I — Interface Segregation Principle
-
-No client should depend on methods it does not use.
-
-**Smell:** Interfaces with many methods; implementors leave some as no-ops.
-**Fix:** Split into smaller, focused interfaces.
-
-### D — Dependency Inversion Principle
-
-Depend on abstractions, not concretions.
-
-**Smell:** High-level modules importing low-level modules directly.
-**Fix:** Inject dependencies via interfaces/abstract classes.
+- [ ] 所有代码异味已编目
+- [ ] 每个异味已标注优先级（高/中/低）
+- [ ] 每个异味已确定重构方法
 
 ---
 
-## Naming Conventions
+## 阶段 3：应用重构
 
-### Rules
+**目标：** 一次应用一个重构模式，每次变更后验证测试。
 
-| Element | Convention | Example |
-|---------|-----------|---------|
-| Variables | Nouns describing what they hold | `userCount`, not `n` |
-| Booleans | Prefixed with is/has/can/should | `isActive`, `hasPermission` |
-| Functions | Verbs describing what they do | `calculateTotal`, `fetchUsers` |
-| Constants | UPPER_SNAKE_CASE | `MAX_RETRY_COUNT` |
-| Classes | PascalCase nouns | `UserRepository`, `PaymentService` |
-| Interfaces | Describe capability | `Serializable`, `Cacheable` |
+### 操作
 
-### Name Length Guidelines
+1. 一次只应用一个重构
+2. 每次变更后运行测试
+3. 如果任何测试失败，立即回滚
+4. 持续进行直到代码整洁
+5. 审查命名、结构和文档
 
-| Scope | Length | Example |
-|-------|--------|---------|
-| Loop counters | 1-2 chars | `i`, `j` (tiny loops only) |
-| Lambda params | 1-3 chars when context clear | `users.filter(u => u.active)` |
-| Local variables | Short but descriptive | `total`, `result` |
-| Function names | Medium, descriptive | `calculateMonthlyRevenue` |
-| Class names | As long as needed | `AuthenticationTokenValidator` |
+### 停止 — 重构完成条件：
+
+- [ ] 所有高优先级异味已解决
+- [ ] 每次变更后所有测试通过
+- [ ] 重构过程中未改变行为
+- [ ] 新团队成员能够读懂代码
 
 ---
 
-## Function Guidelines
+## SOLID 原则
 
-### Size and Structure
+### S — 单一职责原则（Single Responsibility Principle）
 
-- Functions should do one thing
-- Ideal: 5-15 lines (excluding boilerplate)
-- Maximum: 30 lines (beyond this, extract)
-- Maximum parameters: 3 (beyond this, use options object)
+一个类/模块应该只有一个，且仅有一个引起它变化的原因。
 
-### Guard Clauses (Early Return)
+**异味：** 一个类因多个不相关的原因而被修改。
+**修复：** 将职责提取到单独的类中。
+
+### O — 开闭原则（Open/Closed Principle）
+
+对扩展开放，对修改关闭。
+
+**异味：** 随着新类型增加而不断膨胀的 switch 语句。
+**修复：** 使用多态、策略模式或插件架构。
+
+### L — 里氏替换原则（Liskov Substitution Principle）
+
+子类型必须能够替换它们的基类型。
+
+**异味：** 子类重写方法以抛出"不支持"异常。
+**修复：** 重构层次结构；优先使用组合而非继承。
+
+### I — 接口隔离原则（Interface Segregation Principle）
+
+客户端不应依赖它不使用的方法。
+
+**异味：** 包含许多方法的接口；实现者将某些方法留空作为无操作。
+**修复：** 拆分为更小、更专注的接口。
+
+### D — 依赖倒置原则（Dependency Inversion Principle）
+
+依赖抽象，而非具体实现。
+
+**异味：** 高层模块直接导入低层模块。
+**修复：** 通过接口/抽象类注入依赖。
+
+---
+
+## 命名规范
+
+### 规则
+
+| 元素   | 规范                               | 示例                               |
+| ------ | ---------------------------------- | ---------------------------------- |
+| 变量   | 描述其持有内容的名词               | `userCount`，而非 `n`              |
+| 布尔值 | 以 is/has/can/should 为前缀        | `isActive`、`hasPermission`        |
+| 函数   | 描述其行为的动词                   | `calculateTotal`、`fetchUsers`     |
+| 常量   | 大写蛇形命名法（UPPER_SNAKE_CASE） | `MAX_RETRY_COUNT`                  |
+| 类     | PascalCase 名词                    | `UserRepository`、`PaymentService` |
+| 接口   | 描述能力                           | `Serializable`、`Cacheable`        |
+
+### 名称长度指南
+
+| 作用域      | 长度                    | 示例                           |
+| ----------- | ----------------------- | ------------------------------ |
+| 循环计数器  | 1-2 个字符              | `i`、`j`（仅用于极小循环）     |
+| Lambda 参数 | 上下文清晰时 1-3 个字符 | `users.filter(u => u.active)`  |
+| 局部变量    | 简短但具有描述性        | `total`、`result`              |
+| 函数名      | 中等长度，具有描述性    | `calculateMonthlyRevenue`      |
+| 类名        | 按需决定长度            | `AuthenticationTokenValidator` |
+
+---
+
+## 函数指南
+
+### 大小和结构
+
+- 函数应该只做一件事
+- 理想长度：5-15 行（不包括样板代码）
+- 最大长度：30 行（超过此长度应提取）
+- 最大参数数量：3 个（超过此数量应使用选项对象）
+
+### 卫语句（提前返回）
 
 ```typescript
-// Bad: nested conditions
+// 不良：嵌套条件
 function getDiscount(user) {
   if (user) {
     if (user.isPremium) {
@@ -185,7 +188,7 @@ function getDiscount(user) {
   return 0;
 }
 
-// Good: guard clauses
+// 良好：卫语句
 function getDiscount(user) {
   if (!user) return 0;
   if (!user.isPremium) return 0;
@@ -196,18 +199,18 @@ function getDiscount(user) {
 
 ---
 
-## Error Handling Patterns
+## 错误处理模式
 
-### Decision Table
+### 决策表
 
-| Approach | Use When | Example |
-|----------|----------|---------|
-| Result type | Functional style, expected failures | `Result<T, E>` return type |
-| Specific exceptions | OOP style, exceptional cases | `throw new ValidationError(...)` |
-| Error codes | C-style APIs, cross-language | Return code + message |
-| Option/Maybe | Value may or may not exist | `Option<User>` |
+| 方法         | 适用场景               | 示例                             |
+| ------------ | ---------------------- | -------------------------------- |
+| Result 类型  | 函数式风格，预期失败   | `Result<T, E>` 返回类型          |
+| 特定异常     | OOP 风格，异常情况     | `throw new ValidationError(...)` |
+| 错误码       | C 风格 API，跨语言     | 返回码 + 消息                    |
+| Option/Maybe | 值可能存在也可能不存在 | `Option<User>`                   |
 
-### Result Type Pattern
+### Result 类型模式
 
 ```typescript
 type Result<T, E = Error> =
@@ -218,7 +221,10 @@ function parseConfig(raw: string): Result<Config, ParseError> {
   try {
     const config = JSON.parse(raw);
     if (!isValidConfig(config)) {
-      return { success: false, error: new ParseError('Invalid config structure') };
+      return {
+        success: false,
+        error: new ParseError('Invalid config structure'),
+      };
     }
     return { success: true, data: config };
   } catch {
@@ -227,106 +233,106 @@ function parseConfig(raw: string): Result<Config, ParseError> {
 }
 ```
 
-### Error Handling Never List
+### 错误处理禁忌列表
 
-- Never catch and swallow errors silently
-- Never use exceptions for control flow
-- Never return null to indicate an error
-- Never log and rethrow without adding context
-
----
-
-## Complexity Metrics
-
-| Range | Risk Level | Action |
-|-------|-----------|--------|
-| 1-5 | Low | No action needed |
-| 6-10 | Moderate | Consider refactoring |
-| 11-20 | High | Should refactor |
-| 21+ | Critical | Must refactor |
-
-### Reducing Complexity
-
-1. Extract complex conditions into named booleans
-2. Replace nested conditionals with guard clauses
-3. Use polymorphism instead of type checking
-4. Decompose into smaller functions
-5. Use lookup tables instead of switch/if chains
+- 切勿捕获并静默吞掉错误
+- 切勿使用异常进行控制流
+- 切勿返回 null 来表示错误
+- 切勿在未添加上下文的情况下记录日志并重新抛出
 
 ---
 
-## DRY Application Decision Table
+## 复杂度指标
 
-| Situation | Apply DRY? | Rationale |
-|-----------|-----------|-----------|
-| Exact duplication of logic | Yes | Same logic should live in one place |
-| Three or more occurrences | Yes | Rule of Three confirms the pattern |
-| Two occurrences only | Wait | May be coincidental similarity |
-| Similar structure, different purpose | No | Different reasons to change |
-| Abstracting adds more complexity | No | Clarity over DRY |
+| 范围  | 风险等级 | 操作     |
+| ----- | -------- | -------- |
+| 1-5   | 低       | 无需操作 |
+| 6-10  | 中等     | 考虑重构 |
+| 11-20 | 高       | 应该重构 |
+| 21+   | 严重     | 必须重构 |
 
----
+### 降低复杂度
 
-## Comment Philosophy
-
-### Good Comments
-
-| Type | Example |
-|------|---------|
-| Why (reasoning) | `// Use binary search because list is pre-sorted and >10K items` |
-| Legal | Copyright, license headers |
-| TODO with ticket | `// TODO(PROJ-123): Add rate limiting` |
-| Warning | `// WARNING: This is not thread-safe` |
-| Public API docs | JSDoc/TSDoc for public interfaces |
-
-### Bad Comments (remove and fix code instead)
-
-| Type | Example |
-|------|---------|
-| Restating code | `// increment counter` before `counter++` |
-| Commented-out code | Use version control instead |
-| Journal comments | Use git log instead |
-| Closing brace comments | `} // end if` |
+1. 将复杂条件提取为命名的布尔变量
+2. 用卫语句替换嵌套条件
+3. 使用多态替代类型检查
+4. 分解为更小的函数
+5. 使用查找表替代 switch/if 链
 
 ---
 
-## Anti-Patterns / Common Mistakes
+## DRY 应用决策表
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
-|-------------|----------------|-----------------|
-| Premature abstraction | DRYing code that differs in intent | Wait for Rule of Three |
-| God classes | Know everything, do everything | Split by responsibility (SRP) |
-| Feature envy | Method uses another class's data more than its own | Move method to the data owner |
-| Stringly typed data | Strings where enums/types belong | Define proper types |
-| Magic numbers | Unclear meaning, error-prone | Named constants |
-| Boolean trap | Function with boolean params that change behavior | Use named options or separate functions |
-| Over-engineering | Abstractions for problems that do not exist | YAGNI — You Ain't Gonna Need It |
+| 情况                   | 应用 DRY？ | 理由                       |
+| ---------------------- | ---------- | -------------------------- |
+| 逻辑完全重复           | 是         | 相同逻辑应只存在于一个地方 |
+| 出现三次或更多         | 是         | 三次法则确认该模式         |
+| 仅出现两次             | 等待       | 可能是偶然的相似性         |
+| 结构相似但目的不同     | 否         | 有不同的变更原因           |
+| 抽象化会增加更多复杂度 | 否         | 清晰度优于 DRY             |
 
 ---
 
-## Integration Points
+## 注释哲学
 
-| Skill | Relationship |
-|-------|-------------|
-| `code-review` | Review identifies code smells for clean-code to resolve |
-| `test-driven-development` | TDD ensures behavior preservation during refactoring |
-| `senior-frontend` | Frontend components follow clean code principles |
-| `senior-backend` | Backend services follow SOLID and clean architecture |
-| `performance-optimization` | Clean code enables easier performance optimization |
-| `systematic-debugging` | Clean code is easier to debug |
+### 好的注释
+
+| 类型               | 示例                                           |
+| ------------------ | ---------------------------------------------- |
+| 为什么（原因说明） | `// 使用二分查找因为列表已预排序且超过 1 万项` |
+| 法律相关           | 版权、许可证头                                 |
+| 附带工单号的 TODO  | `// TODO(PROJ-123): 添加速率限制`              |
+| 警告               | `// 警告：此代码非线程安全`                    |
+| 公共 API 文档      | 公共接口的 JSDoc/TSDoc                         |
+
+### 坏的注释（应移除并修复代码）
+
+| 类型           | 示例                             |
+| -------------- | -------------------------------- |
+| 复述代码       | `counter++` 前的 `// 递增计数器` |
+| 被注释掉的代码 | 应使用版本控制替代               |
+| 日志式注释     | 应使用 git log 替代              |
+| 闭合括号注释   | `} // end if`                    |
 
 ---
 
-## Immutability Preferences
+## 反模式 / 常见错误
 
-- Default to `const` (JavaScript/TypeScript)
-- Use `readonly` properties and `ReadonlyArray`
-- Prefer spread/destructuring over mutation
-- Use immutable update patterns for state
-- Only mutate when performance profiling demands it
+| 反模式         | 错误原因                          | 正确方法                   |
+| -------------- | --------------------------------- | -------------------------- |
+| 过早抽象       | 对意图不同的代码应用 DRY          | 等待三次法则               |
+| 上帝类         | 知晓一切、包办一切                | 按职责拆分（单一职责原则） |
+| 特性依恋       | 方法使用其他类的数据多于自己的    | 将方法移动到数据所有者类   |
+| 字符串类型数据 | 应使用枚举/类型的地方使用了字符串 | 定义适当的类型             |
+| 魔法数字       | 含义不明确，易出错                | 使用命名常量               |
+| 布尔陷阱       | 函数带有改变行为的布尔参数        | 使用命名选项或分离函数     |
+| 过度工程       | 为不存在的问题创建抽象            | YAGNI — 你不会需要它       |
 
 ---
 
-## Skill Type
+## 集成点
 
-**FLEXIBLE** — Apply principles based on context. Not every function needs to be 5 lines; not every pattern needs to be SOLID. Use judgment and optimize for team readability over theoretical purity.
+| 技能                       | 关系                                     |
+| -------------------------- | ---------------------------------------- |
+| `code-review`              | 代码审查识别代码异味，由 clean-code 解决 |
+| `test-driven-development`  | TDD 确保重构过程中行为保持一致           |
+| `senior-frontend`          | 前端组件遵循整洁代码原则                 |
+| `senior-backend`           | 后端服务遵循 SOLID 和整洁架构            |
+| `performance-optimization` | 整洁代码使性能优化更容易                 |
+| `systematic-debugging`     | 整洁代码更易于调试                       |
+
+---
+
+## 不可变性偏好
+
+- 默认使用 `const`（JavaScript/TypeScript）
+- 使用 `readonly` 属性和 `ReadonlyArray`
+- 优先使用展开/解构而非变异
+- 状态更新使用不可变模式
+- 仅在性能分析要求时才进行变异
+
+---
+
+## 技能类型
+
+**灵活（FLEXIBLE）** — 根据上下文应用原则。并非每个函数都需要是 5 行；并非每个模式都需要符合 SOLID。运用判断力，优先考虑团队可读性而非理论上的纯粹性。

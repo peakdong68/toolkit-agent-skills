@@ -1,147 +1,147 @@
 ---
 name: ui-ux-pro-max
 description: >
-  Use when the user needs full UI/UX design intelligence — styles, palettes, fonts, UX guidelines,
-  chart selection, and accessible, performant implementation across any supported stack. Triggers:
-  user says "design", "UI", "UX", "color palette", "typography", "accessibility", "responsive design",
-  "chart type", "style guide", building any user-facing interface.
+  当用户需要全面的 UI/UX 设计智能时使用——涵盖样式、调色板、字体、UX 指南、
+  图表选择，以及在任何支持的框架中实现可访问、高性能的界面。触发条件：
+  用户提及“设计”、“UI”、“UX”、“调色板”、“排版”、“可访问性”、“响应式设计”、
+  “图表类型”、“样式指南”，或构建任何面向用户的界面。
 ---
 
 # UI/UX Pro Max
 
-## Overview
+## 概述
 
-A comprehensive UI/UX design intelligence system that combines visual design expertise with engineering rigor. This skill provides opinionated, production-ready guidance covering style selection, color palettes, typography, UX heuristics, data visualization, and multi-stack implementation. Every recommendation is filtered through a strict priority hierarchy that ensures accessibility and performance are never sacrificed for aesthetics.
+一个全面的 UI/UX 设计智能系统，将视觉设计专业知识与工程严谨性相结合。该技能提供明确、可直接投入生产环境的指导，涵盖样式选择、调色板、排版、UX 启发式原则、数据可视化以及多框架实现。每一项建议都经过严格的优先级层级过滤，确保可访问性和性能绝不会为美观而妥协。
 
-## Phase 1: Requirements Gathering
+## 第一阶段：需求收集
 
-1. Identify the product type and target audience
-2. Determine platform(s) (web, mobile, desktop)
-3. Assess existing brand guidelines or design system
-4. Define accessibility requirements
-5. Set performance budgets
+1. 确定产品类型与目标受众
+2. 确定目标平台（Web、移动端、桌面端）
+3. 评估现有品牌指南或设计系统
+4. 明确可访问性要求
+5. 设定性能预算
 
-**STOP — Confirm requirements with user before making design recommendations.**
+**暂停 — 在提出设计建议前，先与用户确认需求。**
 
-### Priority Hierarchy (Non-Negotiable Order)
+### 优先级层级（不可更改的顺序）
 
-Do NOT skip or reorder these priorities. Accessibility always comes first.
+请勿跳过或重新排列这些优先级。可访问性始终排在第一位。
 
-1. **Accessibility** — WCAG 2.1 AA minimum, AAA preferred
-   - Contrast ratio: 4.5:1 for normal text, 3:1 for large text
-   - Keyboard navigation: all interactive elements focusable, visible focus ring
-   - ARIA labels on all non-text controls
-   - Screen reader announcements for dynamic content
-   - Reduced motion: respect `prefers-reduced-motion`
-2. **Touch Targets** — 44x44px minimum (Apple HIG / WCAG 2.5.5)
-   - Spacing between targets: minimum 8px
-   - Clickable area may exceed visual bounds via padding
-3. **Performance**
-   - Images: WebP with AVIF fallback, lazy loading below fold
-   - CLS < 0.1, LCP < 2.5s, FID < 100ms
-   - Font loading: `font-display: swap`, preload critical fonts
-   - Bundle: code-split routes, tree-shake unused components
-4. **Style** — Applied only after 1-3 are satisfied
-5. **Layout** — Composition and spacing applied last
+1. **可访问性** — 最低 WCAG 2.1 AA，推荐 AAA
+   - 对比度：普通文本 4.5:1，大文本 3:1
+   - 键盘导航：所有交互元素可聚焦，可见聚焦环
+   - 所有非文本控件添加 ARIA 标签
+   - 动态内容需提供屏幕阅读器播报
+   - 减少动画：尊重 `prefers-reduced-motion` 设置
+2. **触控目标** — 最小 44x44px（Apple HIG / WCAG 2.5.5）
+   - 目标间距：至少 8px
+   - 可通过 padding 使可点击区域超出视觉边界
+3. **性能**
+   - 图片：WebP 格式，AVIF 作为降级方案，首屏以下图片延迟加载
+   - CLS < 0.1，LCP < 2.5s，FID < 100ms
+   - 字体加载：`font-display: swap`，预加载关键字体
+   - 打包：路由代码分割，摇树优化未使用的组件
+4. **样式** — 仅在满足 1-3 后应用
+5. **布局** — 组合与间距最后应用
 
-## Phase 2: Style Selection
+## 第二阶段：样式选择
 
-**STOP — Present style recommendation with rationale before proceeding to implementation.**
+**暂停 — 在继续实现前，先展示样式建议并说明理由。**
 
-### Style Selection Decision Table
+### 样式选择决策表
 
-| Context | Recommended Styles | Why |
+| 上下文 | 推荐样式 | 原因 |
 |---|---|---|
-| SaaS Dashboard | Minimalism, Swiss, Material 3 | Clean, data-focused, professional |
-| Portfolio | Brutalism, Maximalism, Glassmorphism | Expressive, memorable |
-| E-commerce | Clean, Material 3, Swiss | Trust, clarity, conversion |
-| Mobile App | Material 3, Neumorphism, Minimalism | Native feel, thumb-friendly |
-| Landing Page | Glassmorphism, Neo-Brutalism, Japandi | Visual impact, hero focus |
-| Enterprise/B2B | Swiss Design, Minimalism | Authority, information density |
-| Creative Agency | Maximalism, Brutalism, Cyberpunk | Uniqueness, portfolio showcase |
-| Health/Wellness | Japandi, Minimalism | Calming, trustworthy |
-| Finance | Swiss, Material 3 | Conservative, professional |
-| Kids/Family | Claymorphism, Maximalism | Playful, engaging |
+| SaaS 仪表盘 | 极简主义、瑞士风格、Material 3 | 干净、数据驱动、专业 |
+| 作品集 | 粗野主义、极繁主义、玻璃拟态 | 富有表现力、令人难忘 |
+| 电子商务 | 干净风格、Material 3、瑞士风格 | 信任、清晰、促进转化 |
+| 移动应用 | Material 3、新拟态、极简主义 | 原生体验、拇指友好 |
+| 落地页 | 玻璃拟态、新粗野主义、日式北欧风 | 视觉冲击力、突出核心内容 |
+| 企业/B2B | 瑞士设计、极简主义 | 权威感、高信息密度 |
+| 创意机构 | 极繁主义、粗野主义、赛博朋克 | 独特性、作品展示 |
+| 健康/养生 | 日式北欧风、极简主义 | 舒缓、可信赖 |
+| 金融 | 瑞士风格、Material 3 | 保守、专业 |
+| 儿童/家庭 | 黏土拟态、极繁主义 | 趣味、互动性强 |
 
-### Style Reference (Key Categories)
+### 样式参考（主要类别）
 
-**Glass and Transparency:**
-- Glassmorphism: `backdrop-filter: blur(10px)`, semi-transparent backgrounds, subtle border
-- Frosted Glass: heavier blur (20px+), lower opacity, works on busy backgrounds
-- Acrylic (Fluent Design): noise texture overlay + blur
+**玻璃与透明效果：**
+- 玻璃拟态 (Glassmorphism)：`backdrop-filter: blur(10px)`，半透明背景，细微边框
+- 磨砂玻璃：更强的模糊效果（20px+），更低透明度，适用于复杂背景
+- Acrylic (Fluent Design)：噪点纹理叠加 + 模糊效果
 
-**Minimal and Clean:**
-- Minimalism: maximum whitespace, single accent color, limited element count
-- Swiss Design: grid-based, Helvetica/Grotesk, asymmetric balance
-- Japandi: warm neutrals, organic shapes, hidden complexity
+**极简与干净：**
+- 极简主义：大量留白，单一强调色，元素数量受限
+- 瑞士设计：基于网格，Helvetica/Grotesk 字体，非对称平衡
+- 日式北欧风 (Japandi)：温暖中性色，有机形状，隐藏复杂性
 
-**Bold and Expressive:**
-- Brutalism: raw, exposed structure, system fonts, harsh borders, no border-radius
-- Neo-Brutalism: brutalism + bright accent colors + drop shadows
-- Maximalism: layered textures, mixed fonts, dense information
+**大胆与表现力：**
+- 粗野主义 (Brutalism)：原始结构外露，系统字体，生硬边框，无圆角
+- 新粗野主义 (Neo-Brutalism)：粗野主义 + 明亮强调色 + 投影
+- 极繁主义：多层纹理，混合字体，高密度信息
 
-**Depth and Dimension:**
-- Neumorphism: soft inner/outer shadows on same-color backgrounds
-- Material Design 3: elevation tokens, tonal surfaces, dynamic color
-- Claymorphism: inflated 3D look, pastel colors, inner shadows
+**深度与维度：**
+- 新拟态 (Neumorphism)：同色背景上的柔和内/外阴影
+- Material Design 3：高程令牌，色调表面，动态色彩
+- 黏土拟态 (Claymorphism)：膨胀 3D 外观，柔和色彩，内阴影
 
-**Dark and Moody:**
-- Dark Mode: OLED-safe (#000 backgrounds), muted primaries, reduced brightness
-- Cyberpunk: neon on dark, glitch effects, monospace accents
-- Noir: high contrast, grayscale with single accent
+**暗黑与情绪化：**
+- 暗黑模式：OLED 安全背景（#000），低饱和度主色，降低亮度
+- 赛博朋克：霓虹暗色，故障效果，等宽字体点缀
+- 黑色电影风格 (Noir)：高对比度，灰度搭配单一强调色
 
-## Phase 3: Color and Typography
+## 第三阶段：色彩与排版
 
-**STOP — Present palette and font pairing for approval before building components.**
+**暂停 — 在构建组件前，先展示调色板与字体搭配供审批。**
 
-### Color Palette Selection Rules
+### 调色板选择规则
 
-| Palette Category | Product Types | Characteristics |
+| 调色板类别 | 产品类型 | 特征 |
 |---|---|---|
-| SaaS/B2B (24 palettes) | Dashboards, admin tools | Professional blues, teals, slates |
-| E-commerce (20 palettes) | Shops, marketplaces | Warm, trust-building ambers, greens |
-| Health/Wellness (18 palettes) | Health apps, meditation | Calming greens, soft blues, lavender |
-| Finance (15 palettes) | Banking, trading | Deep blues, golds, conservative neutrals |
-| Creative (22 palettes) | Portfolios, agencies | Bold, saturated, unexpected combos |
-| Social (16 palettes) | Communities, social apps | Vibrant, energetic, gradient-friendly |
-| Education (14 palettes) | Learning, courses | Friendly, approachable, moderate saturation |
-| Enterprise (12 palettes) | Corporate tools | Muted, authoritative, high-contrast |
-| Kids/Family (10 palettes) | Children's apps | Bright primaries, rounded, playful |
-| Luxury (10 palettes) | Premium brands | Black, gold, minimal, high whitespace |
+| SaaS/B2B（24 种） | 仪表盘、管理工具 | 专业蓝、青蓝、石板灰 |
+| 电子商务（20 种） | 商店、市场 | 温暖、建立信任的琥珀色、绿色 |
+| 健康/养生（18 种） | 健康应用、冥想 | 舒缓的绿色、柔和蓝、薰衣草色 |
+| 金融（15 种） | 银行、交易 | 深蓝、金色、保守中性色 |
+| 创意（22 种） | 作品集、机构 | 大胆、高饱和、非常规组合 |
+| 社交（16 种） | 社区、社交应用 | 鲜艳、充满活力、适合渐变 |
+| 教育（14 种） | 学习、课程 | 友好、亲和、中等饱和度 |
+| 企业（12 种） | 企业工具 | 低调、权威、高对比度 |
+| 儿童/家庭（10 种） | 儿童应用 | 明亮原色、圆润、趣味 |
+| 奢侈品（10 种） | 高端品牌 | 黑金搭配、极简、大量留白 |
 
-### Color Token Rules
+### 色彩令牌规则
 
-- Primary: brand identity color, used for CTAs and key actions
-- Secondary: complementary, used for secondary actions and accents
-- Neutral: gray scale for text, borders, backgrounds (minimum 9 shades)
-- Semantic: success (#22C55E), warning (#F59E0B), error (#EF4444), info (#3B82F6)
-- Always define as semantic tokens: `--color-action-primary`, not `--color-blue-500`
+- Primary（主色）：品牌标识色，用于 CTA 和关键操作
+- Secondary（辅助色）：互补色，用于次要操作和点缀
+- Neutral（中性色）：用于文本、边框、背景的灰色阶（至少 9 个色阶）
+- Semantic（语义色）：成功 (#22C55E)、警告 (#F59E0B)、错误 (#EF4444)、信息 (#3B82F6)
+- 始终定义为语义令牌：`--color-action-primary`，而非 `--color-blue-500`
 
-### Dark Mode Palette Rules
+### 暗黑模式调色板规则
 
-| Rule | Implementation |
+| 规则 | 实现方式 |
 |---|---|
-| Do NOT invert colors | Remap to dark-appropriate equivalents |
-| Reduce saturation 10-20% | Prevent eye strain on dark backgrounds |
-| Elevation = lighter surface | Not shadow-based like light mode |
-| Text hierarchy | #E2E8F0 (primary), #94A3B8 (secondary), #64748B (tertiary) |
+| 切勿反转颜色 | 重新映射为适合暗色的等效色 |
+| 饱和度降低 10-20% | 防止暗色背景下视觉疲劳 |
+| 高程 = 更亮的表面 | 而非亮色模式中的投影 |
+| 文本层级 | #E2E8F0（主要）、#94A3B8（次要）、#64748B（第三级） |
 
-### Font Pairings (Top 10)
+### 字体搭配（Top 10）
 
-| Pairing | Best For |
+| 搭配 | 最佳适用场景 |
 |---|---|
-| Inter + Source Serif 4 | SaaS, dashboards |
-| Geist + Geist Mono | Developer tools, technical |
-| DM Sans + DM Serif Display | Marketing, editorial |
-| Plus Jakarta Sans + Lora | Modern professional |
-| Outfit + Newsreader | Creative agencies |
-| Manrope + Bitter | Enterprise applications |
-| Space Grotesk + Space Mono | Tech startups |
-| Satoshi + Erode | Premium/luxury |
-| General Sans + Gambetta | Editorial/publishing |
-| Cabinet Grotesk + Zodiak | Bold branding |
+| Inter + Source Serif 4 | SaaS、仪表盘 |
+| Geist + Geist Mono | 开发者工具、技术类 |
+| DM Sans + DM Serif Display | 营销、编辑出版 |
+| Plus Jakarta Sans + Lora | 现代专业场景 |
+| Outfit + Newsreader | 创意机构 |
+| Manrope + Bitter | 企业级应用 |
+| Space Grotesk + Space Mono | 科技初创公司 |
+| Satoshi + Erode | 高端/奢侈品牌 |
+| General Sans + Gambetta | 编辑/出版 |
+| Cabinet Grotesk + Zodiak | 大胆品牌设计 |
 
-### Typography Scale (Default)
+### 排版比例尺（默认）
 
 ```
 --text-xs: 0.75rem / 1rem
@@ -154,131 +154,131 @@ Do NOT skip or reorder these priorities. Accessibility always comes first.
 --text-4xl: 2.25rem / 2.5rem
 ```
 
-## Phase 4: UX Guidelines Application
+## 第四阶段：UX 指南应用
 
-### Navigation Rules
+### 导航规则
 
-1. Primary navigation: maximum 7 items (Miller's Law)
-2. Current location always indicated (breadcrumb or active state)
-3. Back button must always work as expected
-4. Search available on every page for content-heavy apps
+1. 主导航：最多 7 项（米勒定律）
+2. 始终指示当前位置（面包屑或激活状态）
+3. 返回按钮必须始终按预期工作
+4. 内容密集型应用的每个页面都应提供搜索功能
 
-### Form Rules
+### 表单规则
 
-5. Labels above inputs, never placeholder-only
-6. Inline validation on blur, not on keystroke
-7. Error messages: specific, actionable, adjacent to field
-8. Auto-focus first field on page load
-9. Submit button disabled until form valid (with explanation)
-10. Progress indicator for multi-step forms
+5. 标签位于输入框上方，切勿仅使用占位符
+6. 失焦时进行内联验证，而非按键时
+7. 错误提示：具体、可操作、紧邻字段
+8. 页面加载时自动聚焦第一个字段
+9. 提交按钮在表单验证通过前禁用（并附带说明）
+10. 多步表单需提供进度指示器
 
-### Feedback Rules
+### 反馈规则
 
-11. Loading states for any action > 300ms
-12. Skeleton screens over spinners for content loading
-13. Toast notifications: auto-dismiss success (3s), persist errors
-14. Tap feedback: 80-150ms response time
-15. Optimistic UI for low-risk actions
+11. 任何耗时超过 300ms 的操作都需提供加载状态
+12. 内容加载时使用骨架屏而非旋转加载器
+13. Toast 通知：成功提示自动消失（3秒），错误提示持续显示
+14. 点击反馈：80-150ms 响应时间
+15. 低风险操作采用乐观 UI 更新
 
-### Content Layout Rules
+### 内容布局规则
 
-16. F-pattern for text-heavy pages
-17. Z-pattern for landing pages
-18. Above-the-fold: value proposition + primary CTA
-19. One primary CTA per viewport
+16. 文本密集型页面采用 F 型布局
+17. 落地页采用 Z 型布局
+18. 首屏：价值主张 + 主 CTA
+19. 每个视口仅保留一个主 CTA
 
-### Mobile Rules
+### 移动端规则
 
-20. Bottom navigation for primary actions (thumb zone)
-21. Pull-to-refresh for feed content
-22. Swipe gestures with visual affordance
+20. 主操作采用底部导航（拇指热区）
+21. 信息流内容支持下拉刷新
+22. 滑动操作需提供视觉提示
 
-## Phase 5: Implementation
+## 第五阶段：实现
 
-### Chart Type Selection Decision Table
+### 图表类型选择决策表
 
-| Data Relationship | Chart Types |
+| 数据关系 | 图表类型 |
 |---|---|
-| Comparison | Bar, Grouped Bar, Lollipop, Dot Plot |
-| Trend over Time | Line, Area, Sparkline, Step |
-| Part-to-Whole | Pie (max 5 slices), Donut, Treemap, Stacked Bar |
-| Distribution | Histogram, Box Plot, Violin, Density |
-| Correlation | Scatter, Bubble, Heatmap |
-| Flow/Process | Sankey, Funnel, Waterfall |
-| Geographic | Choropleth, Dot Map, Cartogram |
-| Hierarchical | Sunburst, Icicle |
+| 对比 | 柱状图、分组柱状图、棒棒糖图、点阵图 |
+| 时间趋势 | 折线图、面积图、迷你图、阶梯图 |
+| 部分与整体 | 饼图（最多 5 块）、环形图、树状图、堆叠柱状图 |
+| 分布 | 直方图、箱线图、小提琴图、密度图 |
+| 相关性 | 散点图、气泡图、热力图 |
+| 流程/过程 | 桑基图、漏斗图、瀑布图 |
+| 地理信息 | 等值区域图、点分布图、变形地图 |
+| 层级关系 | 旭日图、冰柱图 |
 
-### Supported Stacks
+### 支持的框架/技术栈
 
-| Stack | Key Patterns |
+| 技术栈 | 关键模式 |
 |---|---|
-| React | JSX components, hooks, CSS Modules / Tailwind |
-| Next.js | App Router, Server Components, Image optimization |
-| Vue | Composition API, `<script setup>`, Pinia |
-| Svelte | Reactive declarations, transitions, SvelteKit |
-| SwiftUI | Declarative views, ViewModifiers, @State/@Binding |
-| React Native | Flexbox, Platform.select, SafeAreaView |
-| Flutter | Widgets, Material/Cupertino, MediaQuery |
-| Tailwind CSS | Utility-first, @apply sparingly, design tokens via config |
-| shadcn/ui | Radix primitives, Tailwind variants, cn() utility |
-| HTML/CSS | Semantic HTML5, CSS Grid/Flexbox, custom properties |
+| React | JSX 组件、Hooks、CSS Modules / Tailwind |
+| Next.js | App Router、服务器组件、图像优化 |
+| Vue | 组合式 API、`<script setup>`、Pinia |
+| Svelte | 响应式声明、过渡动画、SvelteKit |
+| SwiftUI | 声明式视图、ViewModifiers、@State/@Binding |
+| React Native | Flexbox、Platform.select、SafeAreaView |
+| Flutter | Widgets、Material/Cupertino、MediaQuery |
+| Tailwind CSS | 原子类优先、谨慎使用 `@apply`、通过配置使用设计令牌 |
+| shadcn/ui | Radix 基础组件、Tailwind 变体、`cn()` 工具函数 |
+| HTML/CSS | 语义化 HTML5、CSS Grid/Flexbox、自定义属性 |
 
-### Design Token Architecture
+### 设计令牌架构
 
 ```
-master.tokens.json    -> Primitive values (colors, spacing, fonts)
-semantic.tokens.json  -> Mapped meanings (action-primary, surface-elevated)
-component.tokens.json -> Component-specific (button-padding, card-radius)
+master.tokens.json    -> 原始值（颜色、间距、字体）
+semantic.tokens.json  -> 映射语义（action-primary、surface-elevated）
+component.tokens.json -> 组件专用（button-padding、card-radius）
 overrides/
-  brand-a.tokens.json -> Brand-specific overrides
-  dark.tokens.json    -> Dark mode overrides
+  brand-a.tokens.json -> 品牌专属覆盖
+  dark.tokens.json    -> 暗黑模式覆盖
 ```
 
-- Master tokens are read-only defaults
-- Overrides are shallow-merged at runtime
-- Component tokens reference semantic tokens only
-- Never reference primitive tokens in components
+- 主令牌为只读默认值
+- 覆盖配置在运行时进行浅层合并
+- 组件令牌仅引用语义令牌
+- 组件中切勿直接引用原始令牌
 
-## Quick Wins Checklist
+## 快速优化清单
 
-- [ ] No emoji as icons — use Lucide React or Heroicons
-- [ ] Tap feedback delay: 80-150ms
-- [ ] Semantic color tokens (not raw hex values)
-- [ ] 8dp spacing rhythm (4, 8, 12, 16, 24, 32, 48, 64)
-- [ ] `prefers-color-scheme` media query for dark mode
-- [ ] `prefers-reduced-motion` for animations
-- [ ] `:focus-visible` instead of `:focus` for keyboard-only focus
-- [ ] Image aspect ratios set to prevent CLS
-- [ ] Font preloading for above-the-fold text
-- [ ] `loading="lazy"` on below-fold images
+- [ ] 不使用 Emoji 作为图标 — 使用 Lucide React 或 Heroicons
+- [ ] 点击反馈延迟：80-150ms
+- [ ] 语义化色彩令牌（而非原始十六进制值）
+- [ ] 8dp 间距节奏（4, 8, 12, 16, 24, 32, 48, 64）
+- [ ] 使用 `prefers-color-scheme` 媒体查询适配暗黑模式
+- [ ] 使用 `prefers-reduced-motion` 控制动画
+- [ ] 键盘焦点使用 `:focus-visible` 替代 `:focus`
+- [ ] 设置图片宽高比以防止 CLS
+- [ ] 预加载首屏文本字体
+- [ ] 首屏以下图片使用 `loading="lazy"`
 
-## Anti-Patterns / Common Mistakes
+## 反模式 / 常见错误
 
-| Anti-Pattern | Why It Is Wrong | What to Do Instead |
+| 反模式 | 为何错误 | 正确做法 |
 |---|---|---|
-| `opacity` for disabled text | Kills readability | Use distinct disabled color token |
-| Fixed pixel breakpoints only | Ignores component context | Use container queries for components |
-| Hamburger menus on desktop | Hides primary navigation | Visible nav bar on desktop |
-| Carousel for critical content | Most users see only first slide | Use static layout or accordion |
-| Infinite scroll without URL persistence | Cannot share or return to position | Persist scroll position in URL |
-| Modal on modal | Confusing, accessibility nightmare | Redesign to avoid nested modals |
-| Auto-playing media | Annoying, accessibility violation | Require user interaction to play |
-| Color as only differentiator | Color-blind users excluded | Add shape/pattern/text labels |
-| Placeholder-only labels | Disappear on input, accessibility issue | Use visible labels above inputs |
-| Raw hex values in components | Impossible to theme | Use semantic design tokens |
+| 使用 `opacity` 处理禁用文本 | 严重降低可读性 | 使用专用的禁用状态色彩令牌 |
+| 仅使用固定像素断点 | 忽略组件上下文 | 组件使用容器查询 (container queries) |
+| 桌面端使用汉堡菜单 | 隐藏了主导航 | 桌面端显示可见导航栏 |
+| 关键内容使用轮播图 | 大多数用户只看第一张 | 使用静态布局或手风琴组件 |
+| 无 URL 持久化的无限滚动 | 无法分享或返回特定位置 | 将滚动位置持久化到 URL |
+| 模态框嵌套模态框 | 混乱、可访问性灾难 | 重新设计以避免嵌套 |
+| 自动播放媒体 | 令人反感、违反可访问性 | 要求用户交互后才播放 |
+| 仅用颜色区分元素 | 排除色盲用户 | 增加形状/图案/文字标签 |
+| 仅使用占位符作为标签 | 输入时消失、存在可访问性问题 | 在输入框上方使用可见标签 |
+| 组件中使用原始十六进制值 | 无法进行主题切换 | 使用语义化设计令牌 |
 
-## Integration Points
+## 集成点
 
-| Skill | Integration |
+| 技能 | 集成方式 |
 |---|---|
-| `ui-design-system` | Token architecture and component library |
-| `canvas-design` | Data visualization and charts |
-| `mobile-design` | Mobile-specific design patterns |
-| `ux-researcher-designer` | User research informs design decisions |
-| `artifacts-builder` | Standalone prototypes and demos |
-| `senior-frontend` | Implementation of UI components |
-| `accessibility` | WCAG compliance validation |
+| `ui-design-system` | 令牌架构与组件库 |
+| `canvas-design` | 数据可视化与图表 |
+| `mobile-design` | 移动端专属设计模式 |
+| `ux-researcher-designer` | 用户研究指导设计决策 |
+| `artifacts-builder` | 独立原型与演示 |
+| `senior-frontend` | UI 组件实现 |
+| `accessibility` | WCAG 合规性验证 |
 
-## Skill Type
+## 技能类型
 
-**FLEXIBLE** — Follow the priority hierarchy (accessibility > touch > performance > style > layout). Style recommendations adapt to context. Accessibility and performance rules are strongly recommended and should not be deprioritized.
+**灵活 (FLEXIBLE)** — 遵循优先级层级（可访问性 > 触控 > 性能 > 样式 > 布局）。样式建议需根据上下文调整。可访问性与性能规则为强烈建议，不应被降低优先级。
