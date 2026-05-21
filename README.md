@@ -331,39 +331,39 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 <details>
 <summary><strong>31 Slash Commands</strong> — Trigger skills directly in Claude Code</summary>
 
-| Command | Description |
-|---------|-------------|
-| `/plan` | Start structured planning |
-| `/brainstorm` | Start brainstorming session |
-| `/execute` | Execute an approved plan |
-| `/tdd` | Start TDD workflow |
-| `/debug` | Start debugging methodology |
-| `/review` | Request code review |
-| `/verify` | Verify completion claim |
-| `/prd` | Generate a PRD |
-| `/learn` | Scan and learn project context |
-| `/docs` | Generate technical docs |
-| `/worktree` | Set up git worktree |
-| `/ralph` | Start Ralph autonomous development loop |
-| `/specs` | Write or audit specifications |
-| `/loop` | Start autonomous loop iteration |
-| `/frontend` | Senior frontend development |
-| `/backend` | Senior backend development |
-| `/architect` | Architecture design and review |
-| `/fullstack` | Full-stack development |
-| `/design-system` | Design system generation |
-| `/ui-ux` | UI/UX design intelligence |
-| `/mobile` | Mobile design patterns |
-| `/clean` | Clean code review |
-| `/devops` | DevOps and infrastructure |
-| `/agent` | AI agent development |
-| `/seo` | SEO optimization |
-| `/email` | Email composition |
-| `/mcp` | MCP server development |
-| `/commit` | Git commit helper |
-| `/decompose` | Task decomposition |
-| `/laravel` | Laravel development |
-| `/php` | Modern PHP development |
+| Command | Description | Skill |
+|---------|-------------|-------|
+| `/plan` | Start structured planning | `planning` |
+| `/brainstorm` | Start brainstorming session | `brainstorming` |
+| `/execute` | Execute an approved plan | `executing-plans` |
+| `/tdd` | Start TDD workflow | `test-driven-development` |
+| `/debug` | Start debugging methodology | `systematic-debugging` |
+| `/review` | Request code review | `code-review` |
+| `/verify` | Verify completion claim | `verification-before-completion` |
+| `/prd` | Generate a PRD | `prd-generation` |
+| `/learn` | Scan and learn project context | `self-learning` |
+| `/docs` | Generate technical docs | `tech-docs-generator` |
+| `/worktree` | Set up git worktree | `using-git-worktrees` |
+| `/ralph` | Start Ralph autonomous development loop | `autonomous-loop` |
+| `/specs` | Write or audit specifications | `spec-writing` |
+| `/loop` | Start autonomous loop iteration | `autonomous-loop` |
+| `/frontend` | Senior frontend development | `senior-frontend` |
+| `/backend` | Senior backend development | `senior-backend` |
+| `/architect` | Architecture design and review | `senior-architect` |
+| `/fullstack` | Full-stack development | `senior-fullstack` |
+| `/design-system` | Design system generation | `ui-design-system` |
+| `/ui-ux` | UI/UX design intelligence | `ui-ux-pro-max` |
+| `/mobile` | Mobile design patterns | `mobile-design` |
+| `/clean` | Clean code review | `clean-code` |
+| `/devops` | DevOps and infrastructure | `senior-devops` |
+| `/agent` | AI agent development | `agent-development` |
+| `/seo` | SEO optimization | `seo-optimizer` |
+| `/email` | Email composition | `email-composer` |
+| `/mcp` | MCP server development | `mcp-builder` |
+| `/commit` | Git commit helper | `git-commit-helper` |
+| `/decompose` | Task decomposition | `task-decomposition` |
+| `/laravel` | Laravel development | `laravel-specialist` |
+| `/php` | Modern PHP development | `php-specialist` |
 
 </details>
 
