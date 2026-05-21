@@ -329,39 +329,39 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 <details>
 <summary><strong>31 条斜杠命令</strong> — 在 Claude Code 中直接触发技能</summary>
 
-| 命令 | 描述 |
-|---------|-------------|
-| `/plan` | 启动结构化规划 |
-| `/brainstorm` | 启动头脑风暴会话 |
-| `/execute` | 执行已批准的计划 |
-| `/tdd` | 启动 TDD 工作流 |
-| `/debug` | 启动调试方法 |
-| `/review` | 请求代码评审 |
-| `/verify` | 验证完成声明 |
-| `/prd` | 生成 PRD |
-| `/learn` | 扫描并学习项目上下文 |
-| `/docs` | 生成技术文档 |
-| `/worktree` | 设置 git worktree |
-| `/ralph` | 启动 Ralph 自主开发循环 |
-| `/specs` | 编写或审计规范 |
-| `/loop` | 启动自主循环迭代 |
-| `/frontend` | 高级前端开发 |
-| `/backend` | 高级后端开发 |
-| `/architect` | 架构设计与评审 |
-| `/fullstack` | 全栈开发 |
-| `/design-system` | 设计系统生成 |
-| `/ui-ux` | UI/UX 设计智能 |
-| `/mobile` | 移动端设计模式 |
-| `/clean` | 整洁代码评审 |
-| `/devops` | DevOps 与基础设施 |
-| `/agent` | AI 代理开发 |
-| `/seo` | SEO 优化 |
-| `/email` | 邮件撰写 |
-| `/mcp` | MCP 服务器开发 |
-| `/commit` | Git 提交助手 |
-| `/decompose` | 任务分解 |
-| `/laravel` | Laravel 开发 |
-| `/php` | 现代 PHP 开发 |
+| 命令 | 描述 | 调用技能 |
+|---------|-------------|----------|
+| `/plan` | 启动结构化规划 | `planning` |
+| `/brainstorm` | 启动头脑风暴会话 | `brainstorming` |
+| `/execute` | 执行已批准的计划 | `executing-plans` |
+| `/tdd` | 启动 TDD 工作流 | `test-driven-development` |
+| `/debug` | 启动调试方法 | `systematic-debugging` |
+| `/review` | 请求代码评审 | `code-review` |
+| `/verify` | 验证完成声明 | `verification-before-completion` |
+| `/prd` | 生成 PRD | `prd-generation` |
+| `/learn` | 扫描并学习项目上下文 | `self-learning` |
+| `/docs` | 生成技术文档 | `tech-docs-generator` |
+| `/worktree` | 设置 git worktree | `using-git-worktrees` |
+| `/ralph` | 启动 Ralph 自主开发循环 | `autonomous-loop` |
+| `/specs` | 编写或审计规范 | `spec-writing` |
+| `/loop` | 启动自主循环迭代 | `autonomous-loop` |
+| `/frontend` | 高级前端开发 | `senior-frontend` |
+| `/backend` | 高级后端开发 | `senior-backend` |
+| `/architect` | 架构设计与评审 | `senior-architect` |
+| `/fullstack` | 全栈开发 | `senior-fullstack` |
+| `/design-system` | 设计系统生成 | `ui-design-system` |
+| `/ui-ux` | UI/UX 设计智能 | `ui-ux-pro-max` |
+| `/mobile` | 移动端设计模式 | `mobile-design` |
+| `/clean` | 整洁代码评审 | `clean-code` |
+| `/devops` | DevOps 与基础设施 | `senior-devops` |
+| `/agent` | AI 代理开发 | `agent-development` |
+| `/seo` | SEO 优化 | `seo-optimizer` |
+| `/email` | 邮件撰写 | `email-composer` |
+| `/mcp` | MCP 服务器开发 | `mcp-builder` |
+| `/commit` | Git 提交助手 | `git-commit-helper` |
+| `/decompose` | 任务分解 | `task-decomposition` |
+| `/laravel` | Laravel 开发 | `laravel-specialist` |
+| `/php` | 现代 PHP 开发 | `php-specialist` |
 
 </details>
 
