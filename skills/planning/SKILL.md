@@ -28,15 +28,17 @@ Structured planning converts vague requirements into approved, documented implem
 
 1. Read relevant files, docs, recent commits, and CLAUDE.md
 2. Check memory files for known project context, stack, and conventions
-3. Review existing plans in `docs/plans/` for related work
-4. Identify existing patterns the new work should follow
-5. Note technical constraints discovered during exploration
+3. **Check for existing specs in `docs/specs/`** — if a spec file exists for this feature, load its acceptance criteria, data contracts, and edge cases; these become the authoritative source for task definition in Phase 4
+4. Review existing plans in `docs/plans/` for related or dependent work
+5. Identify existing patterns the new work should follow
+6. Note technical constraints discovered during exploration
 
 **STOP — Do NOT proceed to Phase 2 until:**
 
 - [ ] You have explored the relevant parts of the codebase
 - [ ] You understand the existing architecture and patterns
 - [ ] You have checked memory files for prior decisions
+- [ ] You have loaded any relevant specs from `docs/specs/` and extracted their acceptance criteria
 
 ---
 
@@ -124,10 +126,13 @@ For each approach, include:
 **Goal:** [One sentence]
 **Architecture:** [2-3 sentences]
 **Approach:** [Which approach was chosen and why]
+**Spec Reference:** [Path to spec file, e.g., `docs/specs/YYYY-MM-DD-<topic>/`]
 
 ---
 
 ### Task N: [Component Name]
+
+**Spec AC:** [Which acceptance criteria from the spec this task satisfies]
 
 **Files:**
 
@@ -137,7 +142,7 @@ For each approach, include:
 
 **Steps:**
 
-1. Write the failing test
+1. Write the failing test (aligned to spec acceptance criteria above)
 2. Run test to verify it fails
 3. Write minimal implementation
 4. Run test to verify it passes
@@ -148,13 +153,14 @@ For each approach, include:
 
 ### Plan Quality Checklist
 
-| Criterion                             | Check                           |
-| ------------------------------------- | ------------------------------- |
-| Every task has exact file paths       | No "somewhere in src/"          |
-| Every task has a verification command | No "eyeball it"                 |
-| Tasks are ordered by dependency       | No forward references           |
-| Tasks are 2-5 minutes each            | No "implement the whole module" |
-| TDD steps are explicit                | RED-GREEN-REFACTOR per task     |
+| Criterion                               | Check                                 |
+| --------------------------------------- | ------------------------------------- |
+| Every task has exact file paths         | No "somewhere in src/"                |
+| Every task has a verification command   | No "eyeball it"                       |
+| Tasks reference spec AC when applicable | No orphan tasks without a spec anchor |
+| Tasks are ordered by dependency         | No forward references                 |
+| Tasks are 2-5 minutes each              | No "implement the whole module"       |
+| TDD steps are explicit                  | RED-GREEN-REFACTOR per task           |
 
 Save the plan to `docs/plans/<date>_<topic>/plan.md`.
 
@@ -235,16 +241,17 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 
 ## Integration Points
 
-| Skill                            | Relationship                                     | When                                   |
-| -------------------------------- | ------------------------------------------------ | -------------------------------------- |
-| `brainstorming`                  | Upstream — provides design context               | Planning follows brainstorming         |
-| `task-management`                | Downstream — receives approved plan              | Standard execution path                |
-| `executing-plans`                | Downstream — executes plan directly              | Single-task execution                  |
-| `subagent-driven-development`    | Downstream — parallel execution                  | Large independent task sets            |
-| `autonomous-loop`                | Downstream — iterative execution                 | Ralph-style sessions                   |
-| `self-learning`                  | Bidirectional — informs and learns from planning | Context loading and pattern storage    |
-| `verification-before-completion` | Downstream — verifies plan completeness          | Before claiming plan is done           |
-| `task-decomposition`             | Complementary — provides WBS for complex plans   | When plan needs hierarchical breakdown |
+| Skill                            | Relationship                                                | When                                           |
+| -------------------------------- | ----------------------------------------------------------- | ---------------------------------------------- |
+| `brainstorming`                  | Upstream — provides design context                          | Planning follows brainstorming                 |
+| `spec-writing`                   | Upstream — provides acceptance criteria for task definition | When specs exist for the feature being planned |
+| `task-management`                | Downstream — receives approved plan                         | Standard execution path                        |
+| `executing-plans`                | Downstream — executes plan directly                         | Single-task execution                          |
+| `subagent-driven-development`    | Downstream — parallel execution                             | Large independent task sets                    |
+| `autonomous-loop`                | Downstream — iterative execution                            | Ralph-style sessions                           |
+| `self-learning`                  | Bidirectional — informs and learns from planning            | Context loading and pattern storage            |
+| `verification-before-completion` | Downstream — verifies plan completeness                     | Before claiming plan is done                   |
+| `task-decomposition`             | Complementary — provides WBS for complex plans              | When plan needs hierarchical breakdown         |
 
 ---
 
@@ -290,8 +297,9 @@ Before claiming the plan is complete, verify:
 1. IDENTIFY: Plan document exists at `docs/plans/`
 2. RUN: Review plan for completeness against quality checklist
 3. READ: Verify all sections are filled with specific details
-4. VERIFY: User has explicitly approved
-5. CLAIM: Only then transition to implementation
+4. SPEC-CHECK: If a spec exists in `docs/specs/`, verify every task references at least one acceptance criterion
+5. VERIFY: User has explicitly approved
+6. CLAIM: Only then transition to implementation
 
 ---
 
