@@ -30,16 +30,22 @@ git log --oneline HEAD~N..HEAD # what was done
 ls docs/plans/*.md | tail -1
 ```
 
-3. Load project conventions from `memory/learned-patterns.md`
+3. **Check for existing specs in `docs/specs/`** — if a spec directory exists for this feature, load its acceptance criteria, data contracts, and edge cases; these are the authoritative behavioral expectations the implementation must satisfy
+```bash
+ls docs/specs/
+```
 
-4. Identify:
+4. Load project conventions from `memory/learned-patterns.md`
+
+5. Identify:
    - What files were changed
    - What the plan/spec required
    - What conventions apply
 
 ### STOP — Do NOT proceed to Phase 2 until:
 - [ ] All changed files are identified
-- [ ] The plan or spec requirements are loaded
+- [ ] The plan document is loaded (when applicable)
+- [ ] The spec acceptance criteria are loaded (when specs exist)
 - [ ] Relevant conventions from memory are loaded
 - [ ] You can state what was supposed to be built
 
@@ -54,18 +60,20 @@ ls docs/plans/*.md | tail -1
 ```
 Review the following changes against:
 1. Plan: [plan document or requirements]
-2. Conventions: [learned patterns from memory]
-3. Standards: [CLAUDE.md rules]
+2. Spec: [spec file path, e.g., `docs/specs/YYYY-MM-DD-<topic>/` — acceptance criteria, data contracts, edge cases]
+3. Conventions: [learned patterns from memory]
+4. Standards: [CLAUDE.md rules]
 
 Changes:
 [git diff output or file list]
 
 Check for:
+- Spec compliance (does the implementation satisfy every acceptance criterion?)
 - Plan alignment (did we build what was specified?)
 - Code quality (DRY, YAGNI, naming, structure)
 - Error handling (edge cases, failure modes)
 - Security (injection, XSS, auth issues)
-- Test coverage (are changes tested?)
+- Test coverage (are changes tested? do tests map to spec ACs?)
 - Performance (obvious bottlenecks)
 - Documentation (are public APIs documented?)
 ```
@@ -84,7 +92,7 @@ Check for:
 
 | Category | Definition | Action Required |
 |----------|-----------|-----------------|
-| **Critical** | Bugs, security issues, data loss risk, plan violations | Must fix before merge |
+| **Critical** | Bugs, security issues, data loss risk, plan violations, spec non-compliance | Must fix before merge |
 | **Important** | Code quality, missing tests, convention violations | Should fix before merge |
 | **Suggestions** | Style, naming, minor improvements | Nice to have, fix if time allows |
 
@@ -122,6 +130,7 @@ For Critical and Important issues:
 
 **Scope:** [files/components reviewed]
 **Plan alignment:** [aligned / minor deviations / major deviations]
+**Spec compliance:** [compliant / partial / non-compliant — per acceptance criteria]
 
 ### Critical Issues (N)
 1. **[Issue title]** — `file:line`
@@ -132,6 +141,11 @@ For Critical and Important issues:
 1. **[Issue title]** — `file:line`
    Problem: [description]
    Fix: [specific recommendation]
+
+### Spec Acceptance Criteria Coverage
+| AC # | Description | Covered By | Status |
+|------|-------------|------------|--------|
+| 1    | [AC summary] | [test or code reference] | [covered / missing / partial] |
 
 ### Suggestions (N)
 1. **[Suggestion]** — `file:line`
@@ -146,7 +160,7 @@ For Critical and Important issues:
 
 | Change Type | Review Depth | Reviewer |
 |-------------|-------------|----------|
-| New feature (>100 lines) | Full review: plan alignment + quality + security + tests | code-reviewer agent |
+| New feature (>100 lines) | Full review: spec compliance + plan alignment + quality + security + tests | code-reviewer agent |
 | Bug fix (<50 lines) | Focused review: regression test + root cause + fix correctness | code-reviewer agent |
 | Refactor (no behavior change) | Behavior preservation: all tests pass + no regressions | code-reviewer agent |
 | Config/infra change | Security + correctness: no secrets exposed, valid syntax | code-reviewer agent |
@@ -159,11 +173,12 @@ For Critical and Important issues:
 | Anti-Pattern | Why It Is Wrong | Correct Approach |
 |-------------|----------------|-----------------|
 | Skipping review for "small fixes" | Small changes cause production outages | Review everything |
-| Reviewing without the plan | Cannot verify correctness without requirements | Always load the plan first |
+| Reviewing without the plan or spec | Cannot verify correctness without requirements | Always load plan AND spec first |
 | Fixing issues without re-running tests | Fixes can introduce new bugs | Run full test suite after every fix |
 | Generic feedback ("looks good") | Not actionable, misses real issues | Cite specific code lines with fix recommendations |
 | Reviewing your own code alone | Author blindness misses defects | Always dispatch code-reviewer agent |
 | Deferring Critical issues | Critical issues become production incidents | Must fix before merge, no exceptions |
+| Ignoring spec acceptance criteria | Implementation may miss required behaviors | Check every AC explicitly in review |
 
 ---
 
@@ -197,6 +212,7 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 
 | Skill | Relationship |
 |-------|-------------|
+| `spec-writing` | Review verifies implementation against spec acceptance criteria |
 | `planning` | Review checks implementation against the approved plan |
 | `test-driven-development` | Review verifies test coverage and TDD compliance |
 | `verification-before-completion` | Review is a prerequisite for verification |

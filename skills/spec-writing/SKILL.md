@@ -216,6 +216,7 @@ Deploy up to 5 parallel subagents via the `Agent` tool (with `subagent_type="Exp
 | `reverse-engineering-specs` | Generates specs from existing code (brownfield)              |
 | `prd-generation`            | PRD provides high-level requirements; specs detail them      |
 | `planning`                  | Plans reference spec acceptance criteria for task definition |
+| `code-review`               | Review verifies implementation against spec acceptance criteria |
 | `test-driven-development`   | Red phase writes tests matching spec acceptance criteria     |
 | `writing-skills`            | Skills can be specified using this methodology               |
 
