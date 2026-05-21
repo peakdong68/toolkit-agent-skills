@@ -115,7 +115,7 @@ ls docs/archive/plans/<date>_<topic>/           # plan files (plan.md, design.md
 2. **Append archive row to `## Completed Features` table** — insert at the top:
 
 ```
-| [<directory-name>](../archive/specs/<directory-name>/) | <one-line summary> | <domain> | <today-ISO-date> |
+| [<directory-name>](../archive/plans/<directory-name>/) | <one-line summary> | <domain> | <today-ISO-date> |
 ```
 
 - **Summary:** Extract from `design.md` title/overview or `plan.md` goal field — one sentence max.

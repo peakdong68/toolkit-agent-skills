@@ -92,7 +92,7 @@ docs/
 
 | 功能 | 摘要 | 领域 | 归档日期 |
 |------|------|------|---------|
-| [color-extraction](../archive/specs/2026-05-10-color-extraction/) | 图片上传自动提取主导颜色 | image-processing | 2026-05-21 |
+| [color-extraction](../archive/plans/2026-05-10_color-extraction/) | 图片上传自动提取主导颜色 | image-processing | 2026-05-21 |
 
 ## 领域索引
 
