@@ -175,7 +175,7 @@ STOP after story map — get user confirmation on release slicing before finaliz
 
 When auditing existing specs (rather than writing new ones):
 
-1. Read all spec files in `docs/specs/`
+1. Read all spec files in `docs/specs/YYYY-MM-DD-<topic>/`
 2. Check each against the Cardinal Rule (no code, no implementation details)
 3. Verify "One Sentence Without 'And'" test
 4. Ensure consistent naming convention
