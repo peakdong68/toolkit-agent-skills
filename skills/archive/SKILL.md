@@ -20,6 +20,7 @@ Archive completed feature directories from `docs/specs/` and `docs/plans/` to `d
 ### Actions
 
 1. Scan `docs/specs/` and `docs/plans/` for feature directories:
+
 ```bash
 ls docs/specs/
 ls docs/plans/
@@ -30,22 +31,25 @@ ls docs/plans/
    - Identify directories where ALL tasks are marked `[x]`
 
 3. Cross-reference with git history:
+
 ```bash
 git log --oneline -20          # recent commits
 git diff --stat HEAD~N..HEAD   # files changed in recent work
 ```
-   Match commit messages to task descriptions to confirm completion is genuine (not just checkboxes ticked).
+
+Match commit messages to task descriptions to confirm completion is genuine (not just checkboxes ticked).
 
 ### Decision Table: Completion Confidence
 
-| Sign | Confidence | Action |
-|------|-----------|--------|
-| All `[x]` + matching git commits | High | Proceed to archive |
-| All `[x]` but no matching git history | Low | Flag for manual review, do NOT archive |
-| Mixed `[ ]` still open | Incomplete | Skip — feature is not done |
-| No plan.md found | Unknown | Skip — no checklist to verify |
+| Sign                                  | Confidence | Action                                 |
+| ------------------------------------- | ---------- | -------------------------------------- |
+| All `[x]` + matching git commits      | High       | Proceed to archive                     |
+| All `[x]` but no matching git history | Low        | Flag for manual review, do NOT archive |
+| Mixed `[ ]` still open                | Incomplete | Skip — feature is not done             |
+| No plan.md found                      | Unknown    | Skip — no checklist to verify          |
 
 ### STOP — Do NOT proceed to Phase 2 until:
+
 - [ ] Candidate feature directories are identified
 - [ ] Git history confirms task completion for each candidate
 - [ ] Low-confidence features are flagged for manual review
@@ -59,6 +63,7 @@ git diff --stat HEAD~N..HEAD   # files changed in recent work
 ### Actions
 
 1. List candidates with completion evidence:
+
 ```
 | Feature Directory | Tasks Done | Git Commits | Confidence |
 |-------------------|-----------|-------------|-----------|
@@ -78,6 +83,7 @@ git diff --stat HEAD~N..HEAD   # files changed in recent work
 ### Actions
 
 1. Move spec and plan directories into the archive, preserving subdirectory structure:
+
 ```bash
 mkdir -p docs/archive/specs docs/archive/plans
 # Move spec directory into archive/specs/
@@ -87,6 +93,7 @@ mv docs/plans/<date>_<topic> docs/archive/plans/
 ```
 
 2. Verify both archive locations:
+
 ```bash
 ls docs/archive/specs/<YYYY-MM-DD-<topic>>/    # spec files (01-*.md, etc.)
 ls docs/archive/plans/<date>_<topic>/           # plan files (plan.md, design.md, etc.)
@@ -97,6 +104,7 @@ ls docs/archive/plans/<date>_<topic>/           # plan files (plan.md, design.md
 4. Confirm original locations are clean (directories no longer exist in `docs/specs/` or `docs/plans/`).
 
 ### STOP — Do NOT proceed to Phase 4 until:
+
 - [ ] All confirmed directories are moved to `docs/archive/`
 - [ ] Relative path references in archived documents are checked and fixed
 - [ ] Original locations are clean (no lingering files)
@@ -115,7 +123,7 @@ ls docs/archive/plans/<date>_<topic>/           # plan files (plan.md, design.md
 2. **Append archive row to `## Completed Features` table** — insert at the top:
 
 ```
-| [<directory-name>](../archive/plans/<directory-name>/) | <one-line summary> | <domain> | <today-ISO-date> |
+| [<directory-name>](../archive/plans/2026-05-10_color-extraction/) | <one-line summary> | <domain> | <today-ISO-date> |
 ```
 
 - **Summary:** Extract from `design.md` title/overview or `plan.md` goal field — one sentence max.
@@ -138,15 +146,17 @@ ls docs/archive/plans/<date>_<topic>/           # plan files (plan.md, design.md
 ## Completed Features
 
 | Feature | Summary | Domain | Archived |
-|---------|---------|--------|----------|
+| ------- | ------- | ------ | -------- |
 
 ## Domain Index
+
 <!-- Domain-specific spec groupings -->
 
-*Last updated: YYYY-MM-DD — by archiving <directory-name>*
+_Last updated: YYYY-MM-DD — by archiving <directory-name>_
 ```
 
 ### STOP — Do NOT proceed to Phase 5 until:
+
 - [ ] `docs/global/index.md` exists and has the new archive row
 - [ ] Footer timestamp is updated to today's date
 
@@ -162,9 +172,9 @@ ls docs/archive/plans/<date>_<topic>/           # plan files (plan.md, design.md
 **Date:** [today]
 **Features archived:** [count]
 
-| Directory | Summary | Domain |
-|-----------|---------|--------|
-| [dir] | [summary] | [domain] |
+| Directory | Summary   | Domain   |
+| --------- | --------- | -------- |
+| [dir]     | [summary] | [domain] |
 
 **Global index updated:** `docs/global/index.md`
 ```
@@ -173,14 +183,14 @@ ls docs/archive/plans/<date>_<topic>/           # plan files (plan.md, design.md
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern | Why It Is Wrong | Correct Approach |
-|-------------|----------------|-----------------|
-| Archiving without git history check | Checkboxes can be ticked prematurely | Cross-reference `[x]` with `git log` |
-| Archiving features with open tasks | Incomplete work becomes invisible | Only archive when ALL `[ ]` are resolved |
-| Moving without user confirmation | Destructive — user may need those docs | Always get explicit approval in Phase 2 |
-| Skipping the global index update | Feature becomes undiscoverable | Always update `docs/global/index.md` |
-| Analyzing source code during archive | This is archive, not code review | Check only documents and git history |
-| Archiving plan but not spec (or vice versa) | Leaves orphaned half-features | Archive matching spec+plan pairs together |
+| Anti-Pattern                                | Why It Is Wrong                        | Correct Approach                          |
+| ------------------------------------------- | -------------------------------------- | ----------------------------------------- |
+| Archiving without git history check         | Checkboxes can be ticked prematurely   | Cross-reference `[x]` with `git log`      |
+| Archiving features with open tasks          | Incomplete work becomes invisible      | Only archive when ALL `[ ]` are resolved  |
+| Moving without user confirmation            | Destructive — user may need those docs | Always get explicit approval in Phase 2   |
+| Skipping the global index update            | Feature becomes undiscoverable         | Always update `docs/global/index.md`      |
+| Analyzing source code during archive        | This is archive, not code review       | Check only documents and git history      |
+| Archiving plan but not spec (or vice versa) | Leaves orphaned half-features          | Archive matching spec+plan pairs together |
 
 ---
 
@@ -197,13 +207,13 @@ ls docs/archive/plans/<date>_<topic>/           # plan files (plan.md, design.md
 
 ## Integration Points
 
-| Skill | Relationship |
-|-------|-------------|
-| `code-review` | Archive checks document completion; code review checks code quality — complementary gates |
-| `spec-writing` | Specs define features; archive retires them when done |
-| `planning` | Plans track tasks; archive verifies `[x]` before retirement |
-| `finishing-a-development-branch` | Branch cleanup often precedes archive |
-| `task-management` | Task status feeds into archive completion check |
+| Skill                            | Relationship                                                                              |
+| -------------------------------- | ----------------------------------------------------------------------------------------- |
+| `code-review`                    | Archive checks document completion; code review checks code quality — complementary gates |
+| `spec-writing`                   | Specs define features; archive retires them when done                                     |
+| `planning`                       | Plans track tasks; archive verifies `[x]` before retirement                               |
+| `finishing-a-development-branch` | Branch cleanup often precedes archive                                                     |
+| `task-management`                | Task status feeds into archive completion check                                           |
 
 ---
 
