@@ -209,15 +209,16 @@ docs/specs/YYYY-MM-DD-<topic>/
 
 ## 集成点
 
-| 技能                        | 关系                                   |
-| --------------------------- | -------------------------------------- |
-| `autonomous-loop`           | 规划模式读取规范以识别实现缺口         |
-| `acceptance-testing`        | 测试直接源自规范的验收标准             |
-| `reverse-engineering-specs` | 从现有代码生成规范（棕地项目）         |
-| `prd-generation`            | PRD 提供高层需求；规范将其细化         |
-| `planning`                  | 计划引用规范的验收标准以定义任务       |
-| `test-driven-development`   | 红绿测试阶段编写匹配规范验收标准的测试 |
-| `writing-skills`            | 可使用此方法论来编写其他技能           |
+| 技能                        | 关系                                     |
+| --------------------------- | ---------------------------------------- |
+| `autonomous-loop`           | 规划模式读取规范以识别实现缺口           |
+| `acceptance-testing`        | 测试直接源自规范的验收标准               |
+| `reverse-engineering-specs` | 从现有代码生成规范（棕地项目）           |
+| `prd-generation`            | PRD 提供高层需求；规范将其细化           |
+| `code-review`               | 评审依据规范中的验收标准对实现进行验证。 |
+| `planning`                  | 计划引用规范的验收标准以定义任务         |
+| `test-driven-development`   | 红绿测试阶段编写匹配规范验收标准的测试   |
+| `writing-skills`            | 可使用此方法论来编写其他技能             |
 
 ## 具体示例：完整规范文件
 
