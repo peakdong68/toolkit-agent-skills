@@ -21,7 +21,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 ```
 ## 您将获得什么
 
-| 64 项技能 | 20 个代理 | 31 条命令 | 钩子 | 记忆系统 |
+| 65 项技能 | 20 个代理 | 32 条命令 | 钩子 | 记忆系统 |
 |:---------:|:--------:|:-----------:|:-----:|:-------------:|
 | 覆盖开发各阶段的结构化工作流 | 用于并行工作的专业化子代理 | 触发技能的斜杠命令 | 会话启动时的上下文注入 | 持久化的项目知识库 |
 
@@ -210,7 +210,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 </details>
 
 <details>
-<summary><strong>文档（5 项）</strong> — PRD、规范和技术文档</summary>
+<summary><strong>文档（6 项）</strong> — PRD、规范和技术文档</summary>
 
 | 技能 | 描述 |
 |-------|-------------|
@@ -219,6 +219,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `writing-skills` | 使用 TDD 和最佳实践创建新技能 |
 | `spec-writing` | 基于 JTBD 的规范编写，带有验收标准 |
 | `reverse-engineering-specs` | 从现有代码库生成无实现细节的规范 |
+| `archive` | 归档已完成功能、更新规范索引、归档前验证 |
 
 </details>
 
@@ -362,6 +363,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `/decompose` | 任务分解 | `task-decomposition` |
 | `/laravel` | Laravel 开发 | `laravel-specialist` |
 | `/php` | 现代 PHP 开发 | `php-specialist` |
+| `/archive` | 归档已完成功能 | `archive` |
 
 </details>
 
