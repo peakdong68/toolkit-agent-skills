@@ -147,16 +147,29 @@ Update the following memory files (create if they do not exist, append if they d
 ```
 
 ### `memory/decisions-log.md`
+
+When persisting decisions, first check if `docs/decisions/ADR-*.md` files already exist (created by `senior-architect` skill). If so, reference them by file path — do NOT duplicate ADR content:
+
 ```markdown
 # Decisions Log
-<!-- Updated by self-learning and brainstorming skills -->
+<!-- Updated by self-learning, brainstorming, and senior-architect skills -->
 
-## YYYY-MM-DD: [Decision Title]
+## ADR Files (authoritative source)
+<!-- If docs/decisions/ADR-*.md files exist, list them here by path -->
+- [ADR-001: Use Modular Monolith](../docs/decisions/ADR-001-Modular-Monolith.md)
+- [ADR-002: PostgreSQL over MongoDB](../docs/decisions/ADR-002-PostgreSQL-over-MongoDB.md)
+
+## Informal Decisions
+<!-- Decisions without a formal ADR -->
+
+### YYYY-MM-DD: [Decision Title]
 **Decision:** [What was decided]
 **Context:** [Why this came up]
 **Rationale:** [Why this was chosen over alternatives]
 **Alternatives considered:** [What else was considered]
 ```
+
+**Priority rule:** If a formal ADR exists at `docs/decisions/ADR-<number>-<Title>.md`, always use the file path reference. The `## ADR Files` section is the authoritative index. Only use the `## Informal Decisions` section for decisions that do not warrant a full ADR.
 
 ---
 
@@ -246,6 +259,7 @@ When memory files already exist:
 | `auto-improvement` | Records discovery effectiveness metrics |
 | `resilient-execution` | Failure patterns inform future approach selection |
 | `using-git-worktrees` | Complementary — worktree directories for project learning |
+| `senior-architect` | Upstream — produces ADR files referenced in decisions-log |
 
 ---
 

@@ -282,6 +282,7 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 | `planning`                 | Architecture decisions inform implementation planning |
 | `code-review`              | Review validates architectural consistency            |
 | `acceptance-testing`       | NFRs become acceptance criteria                       |
+| `self-learning`            | Downstream — ADRs indexed in memory/decisions-log.md  |
 
 ---
 
