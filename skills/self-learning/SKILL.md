@@ -147,16 +147,29 @@ git log --diff-filter=A --name-only --pretty=format: -10 | head -30  # 最近新
 ```
 
 ### `memory/decisions-log.md`
+
+在持久化决策时，首先检查 `docs/decisions/ADR-*.md` 文件是否已存在（由 `senior-architect` 技能创建）。如果存在，使用文件路径引用——切勿重复 ADR 内容：
+
 ```markdown
 # 决策日志
-<!-- 由 self-learning、code-review 和 brainstorming 技能更新 -->
+<!-- 由 self-learning、brainstorming 和 senior-architect 技能更新 -->
 
-## YYYY-MM-DD: [决策标题]
+## ADR 文件（权威来源）
+<!-- 如果 docs/decisions/ADR-*.md 文件存在，在此按路径列出 -->
+- [ADR-001: 采用模块化单体架构](../docs/decisions/ADR-001-Modular-Monolith.md)
+- [ADR-002: PostgreSQL 优于 MongoDB](../docs/decisions/ADR-002-PostgreSQL-over-MongoDB.md)
+
+## 非正式决策
+<!-- 没有正式 ADR 的决策 -->
+
+### YYYY-MM-DD: [决策标题]
 **决策：** [决定了什么]
 **背景：** [为何出现此问题]
 **理由：** [为何选择此项而非其他替代方案]
 **考虑的替代方案：** [还考虑了哪些方案]
 ```
+
+**优先级规则：** 如果 `docs/decisions/ADR-<编号>-<标题>.md` 存在正式 ADR，始终使用文件路径引用。`## ADR 文件` 部分是权威索引。仅在决策不值得编写完整 ADR 时使用 `## 非正式决策` 部分。
 
 ---
 
@@ -246,6 +259,7 @@ git log --diff-filter=A --name-only --pretty=format: -10 | head -30  # 最近新
 | `auto-improvement` | 记录发现效果指标 |
 | `resilient-execution` | 失败模式为未来的方法选择提供依据 |
 | `using-git-worktrees` | 互补 —— 工作树目录用于项目学习 | 扫描新工作树获取上下文时 |
+| `senior-architect` | 上游 —— 产出 ADR 文件，在决策日志中引用 |
 
 ---
 

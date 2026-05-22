@@ -282,6 +282,7 @@ description: '当用户需要系统设计、架构决策记录、可扩展性分
 | `planning`                 | 架构决策指导实施计划     |
 | `code-review`              | 审查用于验证架构一致性   |
 | `acceptance-testing`       | NFR 转化为验收标准       |
+| `self-learning`            | 下游 —— ADR 编入 memory/decisions-log.md |
 
 ---
 
