@@ -232,6 +232,7 @@ ls docs/specs/
 | `acceptance-testing`             | 审查检查是否所有标准都有对应的验收测试     |
 | `systematic-debugging`           | 如果审查发现缺陷，则切换至调试技能         |
 | `security-review`                | 审查过程中的安全发现将触发更深入的安全分析 |
+| `auto-improvement` | 上游 —— 跟踪审查有效性 | 审查发现需要模式分析时 |
 
 ---
 

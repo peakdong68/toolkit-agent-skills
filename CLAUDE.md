@@ -4,7 +4,7 @@
 
 ---
 
-## 1 技能目录（64 项技能）
+## 1 技能目录（65 项技能）
 
 **核心（6）：** `using-toolkit`、`self-learning` `/learn`、`resilient-execution`、`circuit-breaker`、`auto-improvement`、`verification-before-completion` `/verify`
 
@@ -12,7 +12,7 @@
 
 **质量保证/测试（17）：** `code-review` `/review`、`test-driven-development` `/tdd`、`testing-strategy`、`systematic-debugging` `/debug`、`security-review`、`performance-optimization`、`acceptance-testing`、`llm-as-judge`、`senior-frontend` `/frontend`、`senior-backend` `/backend`、`senior-architect` `/architect`、`senior-fullstack` `/fullstack`、`clean-code` `/clean`、`react-best-practices`、`webapp-testing`、`senior-prompt-engineer`、`senior-data-scientist`
 
-**文档（5）：** `prd-generation` `/prd`、`tech-docs-generator` `/docs`、`writing-skills`、`spec-writing` `/specs`、`reverse-engineering-specs`
+**文档（6）：** `prd-generation` `/prd`、`tech-docs-generator` `/docs`、`writing-skills`、`spec-writing` `/specs`、`reverse-engineering-specs`、`archive` `/archive`
 
 **设计（3）：** `api-design`、`frontend-ui-design`、`database-schema-design`
 

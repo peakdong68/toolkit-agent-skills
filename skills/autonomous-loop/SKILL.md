@@ -304,6 +304,7 @@ IMPLEMENTATION_PLAN.md 已更新：
 | `task-management`                | 跟踪——跟踪单个任务         | 迭代内部                    |
 | `llm-as-judge`                   | 质量——评估主观标准         | 下游引导                    |
 | `verification-before-completion` | 最终门控——验证完成声明     | 设置 `EXIT_SIGNAL: true` 前 |
+| `planning` | 上游 —— 提供实施计划 | 启动自主循环执行时 |
 
 ---
 

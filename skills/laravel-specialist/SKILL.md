@@ -88,72 +88,15 @@ description: >
 
 ### 作用域
 
-```php
-// 本地作用域 — 可复用的查询约束
-public function scopeActive(Builder $query): Builder
-{
-    return $query->where('status', 'active');
-}
-
-// 用法：User::active()->where('role', 'admin')->get();
-
-// 全局作用域 — 应用于模型的所有查询
-protected static function booted(): void
-{
-    static::addGlobalScope('published', function (Builder $builder) {
-        $builder->whereNotNull('published_at');
-    });
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#scopes)。
 
 ### 访问器、修改器和类型转换
 
-```php
-// 属性访问器/修改器（Laravel 11+ 语法）
-protected function fullName(): Attribute
-{
-    return Attribute::make(
-        get: fn () => "{$this->first_name} {$this->last_name}",
-    );
-}
-
-// 自定义类型转换
-protected function casts(): array
-{
-    return [
-        'options'    => AsCollection::class,
-        'address'    => AddressCast::class,
-        'status'     => OrderStatus::class,  // 支持后端的枚举
-        'metadata'   => 'array',
-        'is_active'  => 'boolean',
-        'amount'     => MoneyCast::class,
-    ];
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#accessors-mutators-and-casts)。
 
 ### 使用预加载优化查询
 
-```php
-// 错误 — N+1 问题：1 次查询获取文章 + N 次查询获取作者
-$posts = Post::all();
-foreach ($posts as $post) {
-    echo $post->author->name;  // 每次迭代触发懒加载
-}
-
-// 正确 — 预加载：总共 2 次查询
-$posts = Post::with('author')->get();
-
-// 嵌套预加载
-$posts = Post::with(['author', 'comments.user'])->get();
-
-// 约束预加载
-$posts = Post::with(['comments' => function ($query) {
-    $query->where('approved', true)->latest()->limit(5);
-}])->get();
-
-// 在开发环境中防止懒加载
-Model::preventLazyLoading(! app()->isProduction());
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#eager-loading)。
 
 ## Blade 模板和 Livewire 组件
 
@@ -166,26 +109,7 @@ Model::preventLazyLoading(! app()->isProduction());
 
 ### Livewire 模式
 
-```php
-// 完整页面 Livewire 组件（Livewire 3+）
-#[Layout('layouts.app')]
-#[Title('Dashboard')]
-class Dashboard extends Component
-{
-    public string $search = '';
-
-    #[Computed]
-    public function users(): LengthAwarePaginator
-    {
-        return User::where('name', 'like', "%{$this->search}%")->paginate(15);
-    }
-
-    public function render(): View
-    {
-        return view('livewire.dashboard');
-    }
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#livewire-patterns)。
 
 ### 前端技术栈决策表
 
@@ -202,45 +126,11 @@ class Dashboard extends Component
 
 ### 任务设计
 
-```php
-class ProcessInvoice implements ShouldQueue
-{
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public int $tries = 3;
-    public int $backoff = 60;
-    public int $timeout = 120;
-    public string $queue = 'invoices';
-
-    public function __construct(public readonly Invoice $invoice) {}
-
-    public function handle(PdfGenerator $generator): void
-    {
-        $generator->generate($this->invoice);
-    }
-
-    public function failed(Throwable $exception): void
-    {
-        // 通知管理员，记录到错误追踪系统
-    }
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#job-design)。
 
 ### 事件 / 监听器模式
 
-```php
-// 分发事件
-OrderPlaced::dispatch($order);
-
-// 监听器（队列化）
-class SendOrderConfirmation implements ShouldQueue
-{
-    public function handle(OrderPlaced $event): void
-    {
-        Mail::to($event->order->user)->send(new OrderConfirmationMail($event->order));
-    }
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#event--listener-pattern)。
 
 ### 同步 vs 异步决策表
 
@@ -259,22 +149,7 @@ class SendOrderConfirmation implements ShouldQueue
 
 中间件顺序很重要。`bootstrap/app.php` 中的默认堆栈（Laravel 11+）：
 
-```php
-->withMiddleware(function (Middleware $middleware) {
-    $middleware->web(append: [
-        HandleInertiaRequests::class,  // 在 session 之后，响应之前
-    ]);
-
-    $middleware->api(prepend: [
-        EnsureFrontendRequestsAreStateful::class,  // Sanctum SPA 认证
-    ]);
-
-    $middleware->alias([
-        'role'     => EnsureUserHasRole::class,
-        'verified' => EnsureEmailIsVerified::class,
-    ]);
-})
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#middleware-stack)。
 
 ### 服务提供者最佳实践
 - 在 `register()` 中注册绑定，绝不要在那里从容器解析
@@ -286,165 +161,33 @@ class SendOrderConfirmation implements ShouldQueue
 
 ### 单元测试
 
-```php
-test('order total calculates tax correctly', function () {
-    $order = Order::factory()->make(['subtotal' => 10000, 'tax_rate' => 0.08]);
-
-    expect($order->total)->toBe(10800);
-});
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#pest-tests)。
 
 ### 功能测试
 
-```php
-test('authenticated user can create a post', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)
-        ->postJson('/api/posts', [
-            'title' => 'My Post',
-            'body'  => 'Content here.',
-        ]);
-
-    $response->assertCreated()
-        ->assertJsonPath('data.title', 'My Post');
-
-    $this->assertDatabaseHas('posts', [
-        'user_id' => $user->id,
-        'title'   => 'My Post',
-    ]);
-});
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#pest-tests)。
 
 ### 队列和事件模拟
 
-```php
-test('placing an order dispatches confirmation job', function () {
-    Queue::fake();
-
-    $order = Order::factory()->create();
-    PlaceOrder::dispatch($order);
-
-    Queue::assertPushed(SendOrderConfirmation::class, function ($job) use ($order) {
-        return $job->order->id === $order->id;
-    });
-});
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#pest-tests)。
 
 ### 浏览器测试（Dusk）
 
-```php
-test('user can complete checkout flow', function () {
-    $this->browse(function (Browser $browser) {
-        $browser->loginAs(User::factory()->create())
-            ->visit('/cart')
-            ->press('Checkout')
-            ->waitForText('Order Confirmed')
-            ->assertSee('Thank you');
-    });
-});
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#pest-tests)。
 
 ## Artisan 命令、迁移、种子、工厂
 
 ### 迁移约定
 
-```php
-// 始终包含 down() 以支持回滚
-public function up(): void
-{
-    Schema::create('invoices', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-        $table->string('number')->unique();
-        $table->integer('amount');          // 以分为单位存储金额
-        $table->string('currency', 3);
-        $table->string('status')->default('draft');
-        $table->timestamp('due_at')->nullable();
-        $table->timestamps();
-        $table->softDeletes();
-
-        $table->index(['user_id', 'status']);
-    });
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#migration-conventions)。
 
 ### 工厂模式
 
-```php
-class InvoiceFactory extends Factory
-{
-    public function definition(): array
-    {
-        return [
-            'user_id'  => User::factory(),
-            'number'   => $this->faker->unique()->numerify('INV-####'),
-            'amount'   => $this->faker->numberBetween(1000, 100000),
-            'currency' => 'USD',
-            'status'   => 'draft',
-            'due_at'   => now()->addDays(30),
-        ];
-    }
-
-    public function paid(): static
-    {
-        return $this->state(fn () => ['status' => 'paid']);
-    }
-
-    public function overdue(): static
-    {
-        return $this->state(fn () => [
-            'status' => 'sent',
-            'due_at' => now()->subDays(7),
-        ]);
-    }
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#factory-patterns)。
 
 ## Laravel 目录结构约定
 
-```
-app/
-├── Actions/              # 单一职责的动作类
-├── Casts/                # 自定义 Eloquent 类型转换
-├── Console/Commands/     # Artisan 命令
-├── Enums/                # PHP 支持后端的枚举
-├── Events/               # 事件类
-├── Exceptions/           # 自定义异常类
-├── Http/
-│   ├── Controllers/      # 资源型或单动作控制器
-│   ├── Middleware/        # 请求/响应中间件
-│   └── Requests/         # Form Request 验证
-├── Jobs/                 # 队列任务类
-├── Listeners/            # 事件监听器类
-├── Mail/                 # Mailable 类
-├── Models/               # Eloquent 模型
-├── Notifications/        # 通知类
-├── Observers/            # 模型观察者
-├── Policies/             # 授权策略
-├── Providers/            # 服务提供者
-├── Rules/                # 自定义验证规则
-├── Services/             # 领域服务类
-└── View/Components/      # Blade 视图组件
-database/
-├── factories/            # 模型工厂
-├── migrations/           # 结构迁移（带时间戳）
-└── seeders/              # 数据库种子
-resources/views/
-├── components/           # Blade 组件
-├── layouts/              # 布局模板
-├── livewire/             # Livewire 组件视图
-└── mail/                 # 邮件模板
-routes/
-├── api.php               # API 路由
-├── channels.php          # 广播频道
-├── console.php           # Artisan 闭包
-└── web.php               # Web 路由
-tests/
-├── Feature/              # 功能（集成）测试
-├── Unit/                 # 单元测试
-└── Browser/              # Dusk 浏览器测试
-```
+> 目录结构示例请参见 [REFERENCE.md](./REFERENCE.md#directory-structure)。
 
 ## 决策表
 

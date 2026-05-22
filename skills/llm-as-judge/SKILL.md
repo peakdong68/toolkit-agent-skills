@@ -220,6 +220,7 @@ Threshold: 7.5
 | `verification-before-completion` | 完成前的主观验证门禁 |
 | `senior-prompt-engineer` | 提示质量评估使用 LLM-as-judge |
 | `tech-docs-generator` | 文档质量评估 |
+| `autonomous-loop` | 上游 —— 使用 LLM 评判主观标准 | 自主循环质量评估期间 |
 
 ---
 

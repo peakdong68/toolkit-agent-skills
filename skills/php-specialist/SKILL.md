@@ -77,192 +77,35 @@ description: >
 
 ### Enums（PHP 8.1+）
 
-```php
-// Backed enum with methods — replaces class constants and magic strings
-enum OrderStatus: string
-{
-    case Draft     = 'draft';
-    case Pending   = 'pending';
-    case Confirmed = 'confirmed';
-    case Shipped   = 'shipped';
-    case Delivered = 'delivered';
-    case Cancelled = 'cancelled';
-
-    public function label(): string
-    {
-        return match ($this) {
-            self::Draft     => 'Draft',
-            self::Pending   => 'Pending Review',
-            self::Confirmed => 'Confirmed',
-            self::Shipped   => 'Shipped',
-            self::Delivered => 'Delivered',
-            self::Cancelled => 'Cancelled',
-        };
-    }
-
-    public function isFinal(): bool
-    {
-        return in_array($this, [self::Delivered, self::Cancelled], true);
-    }
-
-    /** @return list<self> */
-    public static function active(): array
-    {
-        return array_filter(self::cases(), fn (self $s) => ! $s->isFinal());
-    }
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#enums-php-81)。
 
 ### Readonly 属性和类（PHP 8.1/8.2）
 
-```php
-// Readonly class — all properties are implicitly readonly
-readonly class Money
-{
-    public function __construct(
-        public int    $amount,
-        public string $currency,
-    ) {}
-
-    public function add(self $other): self
-    {
-        if ($this->currency !== $other->currency) {
-            throw new CurrencyMismatchException($this->currency, $other->currency);
-        }
-
-        return new self($this->amount + $other->amount, $this->currency);
-    }
-
-    public function isPositive(): bool
-    {
-        return $this->amount > 0;
-    }
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#readonly-properties-and-classes-php-81-82)。
 
 ### 构造函数提升
 
-```php
-class CreateUserAction
-{
-    public function __construct(
-        private readonly UserRepository $users,
-        private readonly Hasher         $hasher,
-        private readonly EventDispatcher $events,
-    ) {}
-
-    public function execute(CreateUserData $data): User
-    {
-        $user = $this->users->create([
-            'name'     => $data->name,
-            'email'    => $data->email,
-            'password' => $this->hasher->make($data->password),
-        ]);
-
-        $this->events->dispatch(new UserCreated($user));
-
-        return $user;
-    }
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#constructor-promotion)。
 
 ### 命名参数
 
-```php
-// Improves readability for functions with many parameters or boolean flags
-$user = User::create(
-    name: $request->name,
-    email: $request->email,
-    isAdmin: false,
-    sendWelcomeEmail: true,
-);
-
-// Particularly valuable with optional parameters
-$response = Http::timeout(seconds: 30)
-    ->retry(times: 3, sleepMilliseconds: 500, throw: true)
-    ->get($url);
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#named-arguments)。
 
 ### match 表达式
 
-```php
-// match is strict (===), exhaustive, and returns a value
-$discount = match (true) {
-    $total >= 10000 => 0.15,
-    $total >= 5000  => 0.10,
-    $total >= 1000  => 0.05,
-    default         => 0.00,
-};
-
-// Replaces switch with no fall-through risk
-$handler = match ($event::class) {
-    OrderPlaced::class   => new HandleOrderPlaced(),
-    PaymentFailed::class => new HandlePaymentFailed(),
-    default              => throw new UnhandledEventException($event),
-};
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#match-expressions)。
 
 ### 联合类型和交叉类型
 
-```php
-// Union type — accepts either type
-function findUser(int|string $identifier): User
-{
-    return is_int($identifier)
-        ? User::findOrFail($identifier)
-        : User::where('email', $identifier)->firstOrFail();
-}
-
-// Intersection type — must satisfy all interfaces
-function processLoggableEntity(Loggable&Serializable $entity): void
-{
-    $entity->log();
-    $data = $entity->serialize();
-}
-
-// DNF types (PHP 8.2) — combine union and intersection
-function handle((Renderable&Countable)|string $content): string
-{
-    if (is_string($content)) {
-        return $content;
-    }
-
-    return $content->render();
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#union-and-intersection-types)。
 
 ### 一等可调用语法（PHP 8.1+）
 
-```php
-// Create closures from named functions
-$slugify = Str::slug(...);
-$titles  = array_map($slugify, $names);
-
-// Method references
-$validator = Validator::make(...);
-
-// Useful for pipeline / collection patterns
-$activeUsers = collect($users)
-    ->filter(UserPolicy::isActive(...))
-    ->map(UserTransformer::toArray(...))
-    ->values();
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#first-class-callable-syntax-php-81)。
 
 ### Fibers（PHP 8.1+）
 
-```php
-// Fibers enable cooperative multitasking — foundation for async frameworks
-$fiber = new Fiber(function (): void {
-    $value = Fiber::suspend('paused');
-    echo "Resumed with: {$value}";
-});
-
-$result = $fiber->start();        // Returns 'paused'
-$fiber->resume('hello world');    // Prints: "Resumed with: hello world"
-
-// Practical use: async HTTP client internals, event loops (Revolt, ReactPHP)
-// Application developers rarely use Fiber directly — frameworks abstract it
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#fibers-php-81)。
 
 ## PSR 标准
 
@@ -279,23 +122,7 @@ $fiber->resume('hello world');    // Prints: "Resumed with: hello world"
 
 ### PSR-4 自动加载
 
-```json
-{
-    "autoload": {
-        "psr-4": {
-            "App\\": "app/",
-            "Domain\\": "src/Domain/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    }
-}
-```
-
-规则：命名空间段与目录一一对应。`App\Http\Controllers\UserController` 位于 `app/Http/Controllers/UserController.php`。
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#psr-4-autoloading)。
 
 ## Composer 依赖管理
 
@@ -337,40 +164,11 @@ $fiber->resume('hello world');    // Prints: "Resumed with: hello world"
 
 ### PHPStan 配置
 
-```neon
-# phpstan.neon
-parameters:
-    level: 9
-    paths:
-        - app
-        - src
-    excludePaths:
-        - app/Console/Kernel.php
-    ignoreErrors: []
-    checkMissingIterableValueType: true
-    checkGenericClassInNonGenericObjectType: true
-
-includes:
-    - vendor/larastan/larastan/extension.neon  # Laravel-specific rules
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#phpstan-configuration)。
 
 ### PHP CS Fixer / Pint
 
-```php
-// .php-cs-fixer.php — for non-Laravel projects
-return (new PhpCsFixer\Config())
-    ->setRules([
-        '@PER-CS'            => true,
-        'strict_types'       => true,
-        'declare_strict_types' => true,
-        'ordered_imports'    => ['sort_algorithm' => 'alpha'],
-        'no_unused_imports'  => true,
-        'trailing_comma_in_multiline' => true,
-    ])
-    ->setFinder(
-        PhpCsFixer\Finder::create()->in([__DIR__ . '/src', __DIR__ . '/tests'])
-    );
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#php-cs-fixer-pint)。
 
 对于 Laravel 项目，使用带 `pint.json` 预设的 Pint — 它包装了 PHP CS Fixer 并提供了 Laravel 特定的默认值。
 
@@ -386,148 +184,27 @@ return (new PhpCsFixer\Config())
 
 ### 依赖倒置示例
 
-```php
-// Contract (abstraction)
-interface PaymentGateway
-{
-    public function charge(Money $amount, PaymentMethod $method): PaymentResult;
-}
-
-// Implementation (concretion) — can be swapped without changing consumers
-final class StripeGateway implements PaymentGateway
-{
-    public function __construct(private readonly StripeClient $client) {}
-
-    public function charge(Money $amount, PaymentMethod $method): PaymentResult
-    {
-        // Stripe-specific logic
-    }
-}
-
-// Consumer depends on abstraction only
-final class ProcessPaymentAction
-{
-    public function __construct(private readonly PaymentGateway $gateway) {}
-
-    public function execute(Order $order): PaymentResult
-    {
-        return $this->gateway->charge($order->total, $order->paymentMethod);
-    }
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#dependency-inversion-example)。
 
 ## 错误处理模式
 
 ### 自定义异常层次结构
 
-```php
-// Base domain exception
-abstract class DomainException extends \RuntimeException {}
-
-// Specific exceptions with factory methods
-final class InsufficientFundsException extends DomainException
-{
-    public static function forAccount(Account $account, Money $required): self
-    {
-        return new self(sprintf(
-            'Account %s has %d %s but %d %s is required.',
-            $account->id,
-            $account->balance->amount,
-            $account->balance->currency,
-            $required->amount,
-            $required->currency,
-        ));
-    }
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#custom-exception-hierarchy)。
 
 ### Result 模式（错误作为值）
 
-```php
-/** @template T */
-readonly class Result
-{
-    /** @param T|null $value */
-    private function __construct(
-        public bool    $ok,
-        public mixed   $value = null,
-        public ?string $error = null,
-    ) {}
-
-    /** @param T $value */
-    public static function success(mixed $value): self
-    {
-        return new self(ok: true, value: $value);
-    }
-
-    public static function failure(string $error): self
-    {
-        return new self(ok: false, error: $error);
-    }
-}
-
-// Usage — caller must handle both paths
-$result = $action->execute($data);
-if (! $result->ok) {
-    return response()->json(['error' => $result->error], 422);
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#result-pattern-error-as-value)。
 
 ## 类型安全模式
 
 ### 通过 Readonly 类实现品牌/不透明类型
 
-```php
-// Prevent accidental mixing of IDs from different entities
-readonly class UserId
-{
-    public function __construct(public int $value) {}
-
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-}
-
-readonly class OrderId
-{
-    public function __construct(public int $value) {}
-}
-
-// Compiler prevents: processOrder(new UserId(1)) when OrderId is expected
-function processOrder(OrderId $orderId): void { /* ... */ }
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#branded-opaque-types-via-readonly-classes)。
 
 ### 通过 PHPStan 注解实现泛型集合
 
-```php
-/**
- * @template T
- * @implements \IteratorAggregate<int, T>
- */
-final class TypedCollection implements \IteratorAggregate, \Countable
-{
-    /** @param list<T> $items */
-    public function __construct(private array $items = []) {}
-
-    /** @param T $item */
-    public function add(mixed $item): void
-    {
-        $this->items[] = $item;
-    }
-
-    /** @return \ArrayIterator<int, T> */
-    public function getIterator(): \ArrayIterator
-    {
-        return new \ArrayIterator($this->items);
-    }
-
-    public function count(): int
-    {
-        return count($this->items);
-    }
-}
-```
+> 代码示例请参见 [REFERENCE.md](./REFERENCE.md#generic-collections-via-phpstan-annotations)。
 
 ## 反模式 / 常见错误
 

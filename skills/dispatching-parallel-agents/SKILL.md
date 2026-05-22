@@ -315,6 +315,7 @@ description: '当任务包含多个可由独立代理并发执行的子任务时
 | `verification-before-completion` | 下游 — 验证整合结果     | 整合后             |
 | `code-review`                    | 下游 — 审查整合后的变更 | 所有代理完成后     |
 | `resilient-execution`            | 故障时 — 重试失败的代理 | 单个代理失败时     |
+| `using-git-worktrees` | 互补 —— 为并行代理提供隔离环境 | 代理需要隔离工作空间时 |
 
 ---
 

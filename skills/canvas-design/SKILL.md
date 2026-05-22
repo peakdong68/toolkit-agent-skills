@@ -288,6 +288,13 @@ function responsiveChart(container, renderFn) {
 | 不清理动画帧                     | 卸载时内存泄漏         | 清理函数中使用 `cancelAnimationFrame`    |
 | 用 D3 处理简单静态图表           | 过度设计               | 直接使用 SVG 或 Chart.js                 |
 
+## 反自我合理化防护
+
+- 切勿跳过视网膜显示屏的缩放处理——使用 devicePixelRatio。
+- 切勿忘记清理动画帧——使用 cancelAnimationFrame 防止内存泄漏。
+- 切勿使用 Canvas 处理大量文本内容——Canvas 不是文本布局引擎。
+- 切勿在不需要时重绘整个画布——只重绘变更区域。
+
 ## 集成点
 
 | 技能                       | 集成方式                      |

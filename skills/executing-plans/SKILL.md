@@ -321,6 +321,7 @@ CRITICAL BLOCKER
 | `subagent-driven-development`    | 替代方案——并行执行路径            | 用于大型独立任务集   |
 | `resilient-execution`            | 失败时——使用备选方案重试          | 任务方法失败时       |
 | `task-management`                | 补充——提供任务跟踪                | 可配合使用           |
+| `dispatching-parallel-agents` | 互补 —— 并行执行独立计划任务 | 计划包含独立子任务时 |
 
 ---
 

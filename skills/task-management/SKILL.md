@@ -241,6 +241,7 @@ pending → in_progress → completed
 | `subagent-driven-development` | 替代方案——并行执行路径（通过 `Agent` 工具） | 用于独立的任务批次 |
 | `Agent` 工具 | 所有子智能体工作的分派机制 | 并行化独立任务时 |
 | `circuit-breaker` | 安全网——检测停滞状态 | 任务反复失败时 |
+| `autonomous-loop` | 上游 —— 从实施计划生成任务列表 | 从循环规划过渡到跟踪任务时 |
 
 ---
 

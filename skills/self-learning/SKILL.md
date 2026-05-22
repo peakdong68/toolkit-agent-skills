@@ -245,6 +245,7 @@ git log --diff-filter=A --name-only --pretty=format: -10 | head -30  # 最近新
 | `code-review` | 对照已学习规范检查代码 |
 | `auto-improvement` | 记录发现效果指标 |
 | `resilient-execution` | 失败模式为未来的方法选择提供依据 |
+| `using-git-worktrees` | 互补 —— 工作树目录用于项目学习 | 扫描新工作树获取上下文时 |
 
 ---
 
