@@ -138,7 +138,15 @@ Present documentation section by section:
    ```markdown
    | `docs/<path>` | <type> | <one-line description> |
    ```
-   If the `## Documentation Index` section does not exist in CLAUDE.md, create it with the template from CLAUDE.md section 12.
+   If the `## Documentation Index` section does not exist in CLAUDE.md, create it with this template:
+   ```markdown
+   ## Documentation Index
+   
+   ### Technical Documentation
+   | Document | Type | Description |
+   |---|---|---|
+   | `docs/<path>` | <type> | <one-line description> |
+   ```
 
 ### Accuracy Verification Checklist
 
