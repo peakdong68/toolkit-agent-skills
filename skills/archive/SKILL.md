@@ -155,10 +155,16 @@ ls docs/archive/plans/<date>_<topic>/           # 计划文件（plan.md、desig
 _最后更新：YYYY-MM-DD —— 归档自 <目录名称>_
 ```
 
+4. **确保 CLAUDE.md 引用 `docs/global/index.md`** — 如果 CLAUDE.md 的 `## 文档索引` 部分中 `## 核心索引` 表格未引用 `docs/global/index.md`，添加之：
+   ```markdown
+   | `docs/global/index.md` | `archive` 技能 | 全局规范索引——已完成功能和领域规范分组 |
+   ```
+
 ### 停止 —— 在满足以下条件前，请勿进入阶段 5：
 
 - [ ] `docs/global/index.md` 存在且已添加新的归档行
 - [ ] 页脚时间戳已更新为今天的日期
+- [ ] CLAUDE.md 的 `## 文档索引` 已引用 `docs/global/index.md`
 
 ---
 

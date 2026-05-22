@@ -125,6 +125,11 @@ const result = await functionName('value', { option: true });
 3. 包含来自代码库的真实示例——绝不虚构
 4. 获得批准后，保存到 `docs/` 目录
 5. 提交信息格式：`docs(<scope>): add/update <doc-type>`
+6. **更新 CLAUDE.md 中的 `## 文档索引`** — 在 `## 技术文档` 表格中添加一行：
+   ```markdown
+   | `docs/<路径>` | <类型> | <一句话描述> |
+   ```
+   如果 CLAUDE.md 中不存在 `## 文档索引` 部分，则参考 CLAUDE.md 第 13 节的模板进行创建。
 
 ### 准确性验证清单
 
