@@ -129,7 +129,15 @@ const result = await functionName('value', { option: true });
    ```markdown
    | `docs/<路径>` | <类型> | <一句话描述> |
    ```
-   如果 CLAUDE.md 中不存在 `## 文档索引` 部分，则参考 CLAUDE.md 第 13 节的模板进行创建。
+   如果 CLAUDE.md 中不存在 `## 文档索引` 部分，使用此模板创建：
+   ```markdown
+   ## 文档索引
+   
+   ### 技术文档
+   | 文档 | 类型 | 描述 |
+   |---|---|---|
+   | `docs/<路径>` | <类型> | <一句话描述> |
+   ```
 
 ### 准确性验证清单
 
