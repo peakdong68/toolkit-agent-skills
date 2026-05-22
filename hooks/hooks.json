@@ -11,6 +11,60 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'CMD=\"$CLAUDE_TOOL_ARG_command\"; PATTERNS=\"sk-ant-|sk-proj-|sk-[a-zA-Z0-9]{20,}|AKIA[0-9A-Z]{16}|ghp_[a-zA-Z0-9]{36}|gho_[a-zA-Z0-9]{36}|glpat-[a-zA-Z0-9_-]{20,}|xoxb-|xoxp-|hooks\\.slack\\.com|-----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----|AIza[0-9A-Za-z_-]{35}|ya29\\.[0-9A-Za-z_-]+|eyJ[A-Za-z0-9_-]*\\.eyJ\"; if echo \"$CMD\" | grep -qE \"$PATTERNS\"; then echo \"{\\\"message\\\": \\\"WARNING: Possible hardcoded secret detected. Use environment variables instead.\\\", \\\"blocked\\\": true}\"; fi'",
+            "async": false
+          }
+        ]
+      },
+      {
+        "matcher": "WebSearch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'QUERY=\"$CLAUDE_TOOL_ARG_query\"; YEAR=$(date +%Y); if ! echo \"$QUERY\" | grep -qE \"20[0-9]{2}\"; then echo \"{\\\"message\\\": \\\"Consider adding $YEAR to your search for current results.\\\"}\"; fi'",
+            "async": false
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_TOOL_ARG_file_path\"; EXT=\"${FILE##*.}\"; case \"$EXT\" in js|ts|jsx|tsx) npx eslint --fix \"$FILE\" 2>/dev/null && echo \"{\\\"message\\\": \\\"Linted: $FILE\\\"}\" || echo \"{\\\"message\\\": \\\"Lint issues in: $FILE\\\"}\" ;; py) python3 -m pylint \"$FILE\" --disable=all --enable=E 2>/dev/null && echo \"{\\\"message\\\": \\\"Linted: $FILE\\\"}\" || true ;; *) echo \"{\\\"message\\\": \\\"No linter for .$EXT\\\"}\" ;; esac'",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'CHANGED=$(git diff --name-only 2>/dev/null | head -5); if [ -n \"$CHANGED\" ]; then COUNT=$(git diff --stat 2>/dev/null | tail -1 | grep -o \"[0-9]* insertion\" | grep -o \"[0-9]*\"); echo \"{\\\"message\\\": \\\"Files changed: $CHANGED. Lines: ${COUNT:-0}. Consider committing with conventional format (feat/fix/docs/refactor).\\\"}\" ; fi'",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_TOOL_ARG_file_path\"; if echo \"$FILE\" | grep -qE \"\\.(tsx|ts|jsx|js)$\"; then ISSUES=\"\"; if grep -q \"use client\" \"$FILE\" 2>/dev/null && grep -qE \"(getServerSideProps|getStaticProps)\" \"$FILE\" 2>/dev/null; then ISSUES=\"$ISSUES Server functions in client component.\"; fi; if grep -qE \"<img \" \"$FILE\" 2>/dev/null; then ISSUES=\"$ISSUES Use next/image instead of <img>.\"; fi; if grep -qE \"<a href=\" \"$FILE\" 2>/dev/null && ! grep -q \"next/link\" \"$FILE\" 2>/dev/null; then ISSUES=\"$ISSUES Use next/link instead of <a>.\"; fi; if [ -n \"$ISSUES\" ]; then echo \"{\\\"message\\\": \\\"Next.js quality:$ISSUES\\\"}\"; fi; fi'",
+            "async": true
+          }
+        ]
+      }
     ]
   }
 }

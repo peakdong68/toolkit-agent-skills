@@ -284,6 +284,14 @@ function responsiveChart(container, renderFn) {
 | Not cleaning up animation frames | Memory leaks on unmount | `cancelAnimationFrame` in cleanup |
 | Using D3 for simple static charts | Over-engineering | Use SVG directly or Chart.js |
 
+## Anti-Rationalization Guards
+
+- Do NOT skip `devicePixelRatio` scaling — renders will look blurry on Retina displays
+- Do NOT forget to clean up animation frames, observers, and event listeners on unmount
+- Do NOT use Canvas for text-heavy or accessibility-dependent content — use SVG instead
+- Do NOT redraw the full canvas when only a region changed — use dirty rectangle optimization
+- If you think "this visualization is straightforward enough to skip performance checks" — STOP. Profile first.
+
 ## Integration Points
 
 | Skill | Integration |

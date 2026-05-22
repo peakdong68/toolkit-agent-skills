@@ -316,7 +316,7 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 | `subagent-driven-development` | Alternative — parallel execution path | For large independent task sets |
 | `resilient-execution` | On failure — retry with alternatives | When task approaches fail |
 | `task-management` | Complementary — provides task tracking | Can be used together |
-
+| `dispatching-parallel-agents` | Complementary — parallel execution of independent plan tasks | When plan has independent subtasks |
 ---
 
 ## Concrete Examples

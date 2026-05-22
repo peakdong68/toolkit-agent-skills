@@ -245,6 +245,7 @@ Track these metrics across loop iterations:
 | `verification-before-completion` | Circuit-breaker ensures verification passes before closing a loop.                                                             |
 | `self-learning`                  | Stagnation patterns are persisted to memory for future avoidance.                                                              |
 | `auto-improvement`               | Circuit-breaker events feed into improvement metrics.                                                                          |
+| `task-management`                | Upstream — tracks tasks that trigger circuit breaker                                                                           |
 
 ### Scope Clarification
 

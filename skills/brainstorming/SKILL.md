@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: 'Use before any creative work - creating features, building components, adding functionality, or modifying behavior. Triggers on /brainstorm command, when exploring ideas before planning, when user describes a vague goal or feature request, or when design decisions need collaborative exploration. Explores user intent, requirements and design before implementation.'
+description: 'Use when before any creative work - creating features, building components, adding functionality, or modifying behavior. Triggers on /brainstorm command, when exploring ideas before planning, when user describes a vague goal or feature request, or when design decisions need collaborative exploration. Explores user intent, requirements and design before implementation.'
 ---
 
 # Brainstorming Ideas Into Designs

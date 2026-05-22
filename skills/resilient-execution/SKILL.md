@@ -192,6 +192,10 @@ I tried 3 different approaches to [goal]:
 | `planning` | Uses failure history to choose more robust approaches |
 | `auto-improvement` | Tracks retry success rates and approach effectiveness |
 | `verification-before-completion` | Invokes resilient-execution if verification fails |
+| `executing-plans` | Upstream — plan execution that may need retry | When plan execution fails |
+| `subagent-driven-development` | Upstream — subagent tasks that may fail | When subagent task execution fails |
+| `autonomous-loop` | Upstream — loop iterations that may fail | When autonomous loop encounters errors |
+| `systematic-debugging` | Complementary — debugging methodology for failures | When diagnosing root causes of failures |
 
 ---
 

@@ -326,6 +326,16 @@ xl         -> 1280px+  (desktop)
 | Primitive tokens directly in components | Cannot retheme without rewriting | Components reference semantic tokens only |
 | No container queries for components | Components break in different contexts | Use container queries for adaptive components |
 
+## Anti-Rationalization Guards
+
+- Do NOT skip the semantic token layer — components must reference semantic tokens, not primitive values
+- Do NOT hardcode hex values in components — they cannot theme or support dark mode
+- Do NOT create one-off components when existing components can be extended with variants
+- Do NOT mix spacing units (px, rem, em) — use rem everywhere and reference the token scale
+- Do NOT use `!important` to override cascade issues — fix the cascade or use data attributes
+- Do NOT create dark mode by inverting colors — remap tokens to dark-appropriate values
+- If you think "this is just one component, I can skip the token system" — STOP. Every component must go through primitives-to-semantics mapping.
+
 ## Integration Points
 
 | Skill | Integration |

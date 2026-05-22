@@ -231,6 +231,7 @@ This phase integrates with `test-driven-development`:
 | `autonomous-loop`                | Exit gate requires acceptance tests passing                     |
 | `code-review`                    | Review checks acceptance test coverage                          |
 | `planning`                       | Plan includes acceptance test writing as explicit tasks         |
+| `systematic-debugging`           | Complementary — debugging failed acceptance tests               |
 
 ---
 

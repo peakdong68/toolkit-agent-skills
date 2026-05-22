@@ -304,6 +304,7 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 | `task-management`                | Tracking — tracks individual tasks            | Within iterations              |
 | `llm-as-judge`                   | Quality — evaluates subjective criteria       | Downstream steering            |
 | `verification-before-completion` | Final gate — verifies completion claim        | Before EXIT_SIGNAL: true       |
+| `planning`                       | Upstream — provides implementation plan       | When starting autonomous loop execution |
 
 ---
 

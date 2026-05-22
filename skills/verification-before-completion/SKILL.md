@@ -1,6 +1,6 @@
 ---
 name: verification-before-completion
-description: Use before claiming any task is complete, any feature works, or any bug is fixed - enforces fresh verification evidence through a 5-step HARD-GATE protocol that prevents false completion claims
+description: Use when verifying that a task is complete, a feature works, or a bug is fixed - enforces fresh verification evidence through a 5-step HARD-GATE protocol that prevents false completion claims
 ---
 
 ## Overview
@@ -203,6 +203,10 @@ Completion claim: [specific claim, e.g., "Feature X is implemented and all tests
 | `resilient-execution` | Before marking any task as complete |
 | `autonomous-loop` | Before setting EXIT_SIGNAL to true |
 | `finishing-a-development-branch` | Before merge or PR creation |
+| `using-git-worktrees` | Worktree setup verification | Before verification in isolated worktrees |
+| `acceptance-testing` | Acceptance tests as verification evidence | When gathering verification evidence |
+| `auto-improvement` | Learns from verification results | When verification reveals systemic issues |
+| `deployment` | Verifies deployment readiness | Before deployment verification |
 
 ### Integration Flow
 ```

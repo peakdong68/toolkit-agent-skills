@@ -245,6 +245,7 @@ When memory files already exist:
 | `code-review` | Checks code against learned conventions |
 | `auto-improvement` | Records discovery effectiveness metrics |
 | `resilient-execution` | Failure patterns inform future approach selection |
+| `using-git-worktrees` | Complementary — worktree directories for project learning |
 
 ---
 

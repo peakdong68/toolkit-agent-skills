@@ -247,6 +247,7 @@ If you catch yourself thinking:
 | `subagent-driven-development`    | Alternative — parallel execution path (via `Agent` tool) | For independent task batches         |
 | `Agent` tool                     | Dispatch mechanism for all subagent work                 | When parallelizing independent tasks |
 | `circuit-breaker`                | Safety net — detects stagnation                          | When tasks repeatedly fail           |
+| `autonomous-loop`                | Upstream — generates task lists from implementation plans | When transitioning from loop planning to tracked tasks |
 
 ---
 

@@ -247,6 +247,15 @@ Save config to `.github/workflows/` or equivalent.
 - **Secure** — no secrets in code, use secrets management
 - **Idempotent** — deploying the same version twice produces the same result
 
+## Anti-Rationalization Guards
+
+- Do NOT deploy to production without first deploying to a matching staging environment
+- Do NOT start a deploy without a verified rollback plan
+- Do NOT hardcode secrets in source or config — use a secrets manager or environment variables
+- Do NOT skip health checks or post-deploy monitoring — verify the deploy is healthy before proceeding
+- Do NOT use `latest` tags for production images — pin specific version tags for reproducibility
+- If you think "this is just a quick patch, I can skip staging" — STOP. Follow the full pipeline.
+
 ## Integration Points
 
 | Skill | Integration |

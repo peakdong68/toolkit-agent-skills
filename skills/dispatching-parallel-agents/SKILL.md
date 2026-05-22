@@ -310,6 +310,7 @@ If you catch yourself thinking:
 | `verification-before-completion` | Downstream — verifies integrated result | After integration |
 | `code-review` | Downstream — reviews integrated changes | After all agents complete |
 | `resilient-execution` | On failure — retries failed agents | When individual agents fail |
+| `using-git-worktrees` | Complementary — provides isolation for parallel agents | When agents need isolated workspaces |
 
 ---
 

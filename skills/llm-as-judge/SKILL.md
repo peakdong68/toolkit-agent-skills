@@ -220,6 +220,7 @@ Threshold: 7.5
 | `verification-before-completion` | Subjective validation gate before completion |
 | `senior-prompt-engineer` | Prompt quality evaluation uses LLM-as-judge |
 | `tech-docs-generator` | Documentation quality evaluation |
+| `autonomous-loop` | Upstream — uses LLM judging for subjective criteria | During autonomous loop quality evaluation |
 
 ---
 

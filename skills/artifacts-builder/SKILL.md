@@ -277,6 +277,14 @@ function syncStateWithURL(store) {
 | No IIFE wrapper for script | Global scope pollution | Wrap in `(function() { ... })()` |
 | Hardcoded colors without tokens | Cannot switch themes | Use CSS custom properties |
 
+## Anti-Rationalization Guards
+
+- Do NOT start coding before selecting the right tech (vanilla JS, Alpine, etc.) for the artifact's scope
+- Do NOT skip cross-browser or mobile testing — artifacts render in varied environments
+- Do NOT ship without validating all user inputs and error paths
+- Do NOT use a heavy framework when vanilla JS or a lightweight library suffices
+- If you think "this artifact is simple enough to skip checks" — STOP. Run the full checklist.
+
 ## Integration Points
 
 | Skill | Integration |

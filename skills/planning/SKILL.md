@@ -266,6 +266,8 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 | `verification-before-completion` | Downstream — verifies plan completeness                     | Before claiming plan is done                   |
 | `task-decomposition`             | Complementary — provides WBS for complex plans              | When plan needs hierarchical breakdown         |
 | `using-git-worktrees`            | Downstream — creates isolated development environment       | Before executing multi-task plans              |
+| `code-review`                    | Downstream — reviews implementation against plan            | After plan execution completes                 |
+| `acceptance-testing`             | Downstream — validates plan execution against acceptance criteria | After implementation against spec       |
 
 ---
 

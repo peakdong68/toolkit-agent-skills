@@ -4,7 +4,7 @@
 
 ---
 
-## 1 SKILL CATALOG (64 Skills)
+## 1 SKILL CATALOG (65 Skills)
 
 **Core (6):** `using-toolkit`, `self-learning` `/learn`, `resilient-execution`, `circuit-breaker`, `auto-improvement`, `verification-before-completion` `/verify`
 
@@ -12,7 +12,7 @@
 
 **QA (17):** `code-review` `/review`, `test-driven-development` `/tdd`, `testing-strategy`, `systematic-debugging` `/debug`, `security-review`, `performance-optimization`, `acceptance-testing`, `llm-as-judge`, `senior-frontend` `/frontend`, `senior-backend` `/backend`, `senior-architect` `/architect`, `senior-fullstack` `/fullstack`, `clean-code` `/clean`, `react-best-practices`, `webapp-testing`, `senior-prompt-engineer`, `senior-data-scientist`
 
-**Docs (5):** `prd-generation` `/prd`, `tech-docs-generator` `/docs`, `writing-skills`, `spec-writing` `/specs`, `reverse-engineering-specs`
+**Docs (6):** `prd-generation` `/prd`, `tech-docs-generator` `/docs`, `writing-skills`, `spec-writing` `/specs`, `reverse-engineering-specs`, `archive` `/archive`
 
 **Design (3):** `api-design`, `frontend-ui-design`, `database-schema-design`
 

@@ -269,6 +269,17 @@ Touchpoints: [Channels and interfaces involved]
 | Underpowered A/B tests | Results are meaningless noise | Calculate sample size before starting |
 | Presenting findings without recommendations | Research without action is wasted | Always include prioritized next steps |
 
+## Anti-Rationalization Guards
+
+- Do NOT start designing without conducting discovery research first — assumptions lead to wrong solutions
+- Do NOT test designs with colleagues — they are biased and know too much about the product
+- Do NOT ask users what they want — observe what they do instead
+- Do NOT skip the synthesis step — raw data is not actionable insight
+- Do NOT create more than 4 primary personas — you cannot design for everyone
+- Do NOT present findings without prioritized recommendations — research without action is wasted
+- Do NOT run A/B tests without calculating the required sample size first
+- If you think "I already know what the user needs" — STOP. Verify with real user research.
+
 ## Integration Points
 
 | Skill | Integration |

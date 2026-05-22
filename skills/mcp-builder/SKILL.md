@@ -380,6 +380,16 @@ describe('MCP Server', () => {
 | Blocking event loop with sync ops | Server becomes unresponsive | Use async/await for all I/O |
 | No tests | Regressions go undetected | Test with InMemoryTransport |
 
+## Anti-Rationalization Guards
+
+- Do NOT skip input validation (Zod schemas) — missing validation leads to crashes and security holes
+- Do NOT ship tools without clear descriptions — clients cannot discover or use them effectively
+- Do NOT hardcode secrets in source — use environment variables for all sensitive values
+- Do NOT skip timeouts on external calls — unresponsive tools block the entire server
+- Do NOT return raw stack traces to clients — always return `isError: true` with a clean message
+- Do NOT block the event loop with synchronous operations — use async/await for all I/O
+- If you think "this is a simple tool, it doesn't need tests" — STOP. Every tool must be tested with InMemoryTransport.
+
 ## Documentation Lookup (Context7)
 
 Use `mcp__context7__resolve-library-id` then `mcp__context7__query-docs` for up-to-date docs. Returned docs override memorized knowledge.

@@ -256,6 +256,16 @@ class ResponsiveLayout extends StatelessWidget {
 | Pixel values instead of dp/pt | Different sizes on different screens | Use density-independent units |
 | Skipping haptic feedback | App feels cheap and unresponsive | Add haptics for key interactions |
 
+## Anti-Rationalization Guards
+
+- Do NOT use web patterns (hover states, fixed pixel layouts) on mobile — touch devices behave differently
+- Do NOT ship touch targets smaller than 44x44pt — they frustrate users and fail accessibility
+- Do NOT apply iOS UI conventions to Android or vice versa — respect platform-native design language
+- Do NOT assume constant connectivity — design for offline-first with graceful degradation
+- Do NOT block the main thread with I/O — use async operations and background threads
+- Do NOT skip keyboard-aware layout adjustments — content hidden behind the keyboard is unusable
+- If you think "I can just adapt a web design for mobile" — STOP. Start with mobile-native patterns.
+
 ## Documentation Lookup (Context7)
 
 Use `mcp__context7__resolve-library-id` then `mcp__context7__query-docs` for up-to-date docs. Returned docs override memorized knowledge.

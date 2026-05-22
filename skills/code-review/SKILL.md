@@ -219,6 +219,7 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 | `self-learning` | Review findings feed into learned patterns |
 | `acceptance-testing` | Review checks that acceptance tests exist for all criteria |
 | `systematic-debugging` | If review reveals a bug, switch to debugging skill |
+| `auto-improvement` | Upstream — tracks review effectiveness | When review findings need pattern analysis |
 | `security-review` | Security findings during review trigger deeper security analysis |
 
 ---
