@@ -155,10 +155,16 @@ ls docs/archive/plans/<date>_<topic>/           # plan files (plan.md, design.md
 _Last updated: YYYY-MM-DD — by archiving <directory-name>_
 ```
 
+4. **Ensure CLAUDE.md references `docs/global/index.md`** — if the `## Documentation Index` section in CLAUDE.md does not reference `docs/global/index.md` in the `## Core Index` table, add it:
+   ```markdown
+   | `docs/global/index.md` | `archive` skill | Global spec index — completed features, domain spec groupings |
+   ```
+
 ### STOP — Do NOT proceed to Phase 5 until:
 
 - [ ] `docs/global/index.md` exists and has the new archive row
 - [ ] Footer timestamp is updated to today's date
+- [ ] CLAUDE.md `## Documentation Index` references `docs/global/index.md`
 
 ---
 

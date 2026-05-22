@@ -134,6 +134,11 @@ Present documentation section by section:
 3. Include real examples from the codebase — never invented ones
 4. After approval, save to `docs/` directory
 5. Commit with message: `docs(<scope>): add/update <doc-type>`
+6. **Update `## Documentation Index` in CLAUDE.md** — add a row to the `## Technical Documentation` table:
+   ```markdown
+   | `docs/<path>` | <type> | <one-line description> |
+   ```
+   If the `## Documentation Index` section does not exist in CLAUDE.md, create it with the template from CLAUDE.md section 12.
 
 ### Accuracy Verification Checklist
 
