@@ -22,7 +22,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 ## What You Get
 
-| 64 Skills | 20 Agents | 31 Commands | Hooks | Memory System |
+| 65 Skills | 20 Agents | 32 Commands | Hooks | Memory System |
 |:---------:|:--------:|:-----------:|:-----:|:-------------:|
 | Structured workflows for every phase of development | Specialized sub-agents for parallel work | Slash commands that trigger skills | Session-start context injection | Persistent project knowledge |
 
@@ -212,7 +212,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 </details>
 
 <details>
-<summary><strong>Documentation (5)</strong> — PRDs, specs, and technical docs</summary>
+<summary><strong>Documentation (6)</strong> — PRDs, specs, and technical docs</summary>
 
 | Skill | Description |
 |-------|-------------|
@@ -221,6 +221,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `writing-skills` | Create new skills with TDD and best practices |
 | `spec-writing` | JTBD-based specification writing with acceptance criteria |
 | `reverse-engineering-specs` | Generate implementation-free specs from existing codebases |
+| `archive` | Archive completed features, update spec index, verify before archival |
 
 </details>
 
@@ -364,6 +365,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `/decompose` | Task decomposition | `task-decomposition` |
 | `/laravel` | Laravel development | `laravel-specialist` |
 | `/php` | Modern PHP development | `php-specialist` |
+| `/archive` | Archive completed features | `archive` |
 
 </details>
 
