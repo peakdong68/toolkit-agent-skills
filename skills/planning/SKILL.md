@@ -176,7 +176,20 @@ Save the plan to `docs/plans/<date>_<topic>/plan.md`.
 
 **Goal:** Hand off the approved plan to the appropriate execution skill.
 
-### Transition Decision Table
+### Step 1: Consider Worktree Isolation
+
+Before executing, evaluate whether the plan would benefit from an isolated git worktree:
+
+| Condition                                                     | Recommendation          |
+| ------------------------------------------------------------- | ----------------------- |
+| Multi-task plan that may conflict with current working branch | Create worktree         |
+| Need to run long processes (tests, builds) while continuing   | Create worktree         |
+| Working on parallel tasks/branches simultaneously             | Create worktree         |
+| Single isolated task, no other work in progress               | Skip — use current repo |
+
+If a worktree is appropriate, invoke `using-git-worktrees` skill and navigate to the created worktree before proceeding. Worktree creation is typically the first step of plan execution.
+
+### Step 2: Select Execution Skill
 
 | Situation                                    | Next Skill                    | Rationale                            |
 | -------------------------------------------- | ----------------------------- | ------------------------------------ |
@@ -252,6 +265,7 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 | `self-learning`                  | Bidirectional — informs and learns from planning            | Context loading and pattern storage            |
 | `verification-before-completion` | Downstream — verifies plan completeness                     | Before claiming plan is done                   |
 | `task-decomposition`             | Complementary — provides WBS for complex plans              | When plan needs hierarchical breakdown         |
+| `using-git-worktrees`            | Downstream — creates isolated development environment       | Before executing multi-task plans              |
 
 ---
 
