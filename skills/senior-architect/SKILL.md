@@ -110,7 +110,7 @@ description: '当用户需要系统设计、架构决策记录、可扩展性分
 
 ### ADR 格式
 
-将 ADR 存储在 docs/decisions/ 目录中，并按顺序编号：
+将 ADR 存储在 `docs/decisions/ADR-<number>-<Title>.md` 目录中，并按顺序编号：
 
 ```markdown
 # ADR-{编号}: {标题}
