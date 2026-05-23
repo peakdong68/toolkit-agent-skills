@@ -280,8 +280,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | 技能 | 描述 |
 |-------|-------------|
 | `file-organizer` | 项目结构、文件命名、目录架构 |
-| `email-composer` | 专业邮件撰写、语调调整 |
-
+ 
 </details>
 
 
@@ -347,7 +346,6 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `/devops` | DevOps 与基础设施 | `senior-devops` |
 | `/agent` | AI 代理开发 | `agent-development` |
 | `/seo` | SEO 优化 | `seo-optimizer` |
-| `/email` | 邮件撰写 | `email-composer` |
 | `/mcp` | MCP 服务器开发 | `mcp-builder` |
 | `/commit` | Git 提交助手 | `git-commit-helper` |
 | `/decompose` | 任务分解 | `task-decomposition` |

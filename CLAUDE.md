@@ -25,8 +25,7 @@
 **文档处理（3）：** `docx-processing`、`pdf-processing`、`xlsx-processing`
 
 **生产力（1）：** `file-organizer`
-
-**沟通（1）：** `email-composer` `/email`
+ 
 
 
 **刚性技能：** 严格遵循。**弹性技能：** 根据上下文灵活调整。

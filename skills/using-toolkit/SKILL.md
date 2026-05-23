@@ -155,12 +155,6 @@ description: 在开始任何对话、接收新任务或不确定哪个 skill 适
 | ---------------- | ---------------------------- |
 | `file-organizer` | 项目结构、文件命名、目录架构 |
 
-### 沟通 Skills（1 个）
-
-| Skill            | 使用场景               |
-| ---------------- | ---------------------- |
-| `email-composer` | 专业邮件起草、语气调整 |
-
 ---
 
 ## 决策表：选择合适的 Skill
@@ -183,7 +177,6 @@ description: 在开始任何对话、接收新任务或不确定哪个 skill 适
 | "自主"、"循环"、"ralph"              | `autonomous-loop`                                        | `ralph-status`、`circuit-breaker`            |
 | "安全"、"漏洞"、"认证"               | `security-review`                                        | `senior-backend`                             |
 | "SEO"、"meta 标签"、"搜索引擎"       | `seo-optimizer`                                          | `content-research-writer`                    |
-| "邮件"、"草稿"、"撰写"               | `email-composer`                                         | `content-creator`                            |
 | "PDF"、"Word"、"Excel"               | `pdf-processing` / `docx-processing` / `xlsx-processing` | —                                            |
 | "agent"、"AI"、"tool use"            | `agent-development`                                      | `mcp-builder`                                |
 | "MCP"、"服务器"、"transport"         | `mcp-builder`                                            | `agent-development`                          |
@@ -216,7 +209,6 @@ description: 在开始任何对话、接收新任务或不确定哪个 skill 适
 | "优化 SEO"           | seo-optimizer                                                               |
 | "撰写营销文案"       | content-creator                                                             |
 | "处理文档"           | docx-processing / pdf-processing / xlsx-processing                          |
-| "撰写邮件"           | email-composer                                                              |
 | "构建 AI agent"      | agent-development -> planning -> tdd                                        |
 | "设置基础设施"       | senior-devops -> deployment                                                 |
 | "拆解复杂任务"       | task-decomposition -> dispatching-parallel-agents                           |

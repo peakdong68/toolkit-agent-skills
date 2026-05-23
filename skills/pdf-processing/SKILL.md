@@ -48,17 +48,17 @@ description: >
 
 ## 库选择决策表
 
-| 任务 | 库 | 原因 | 替代方案 |
-|---|---|---|---|
-| 文本提取 | pdfplumber | 最佳准确性，处理布局能力强 | pypdf（更简单，准确性较低） |
-| 表格提取 | pdfplumber | 结构化表格解析 | camelot（专用表格工具） |
-| PDF 生成 | reportlab | 完全控制，专业级质量 | weasyprint（HTML 转 PDF） |
-| 合并 / 拆分 | pypdf | 简单、可靠、快速 | — |
-| 表单填充 | pypdf | 读取并填充 AcroForms | pdfrw（替代 API） |
-| 元数据读取/写入 | pypdf | 读取/写入 PDF 属性 | — |
-| OCR（扫描文档） | pytesseract + pdf2image | 扫描文档文本提取 | EasyOCR（深度学习） |
-| 添加水印 | pypdf + reportlab | 页面叠加 | — |
-| HTML 转 PDF | weasyprint | 基于 CSS 的布局，服务器友好 | playwright（浏览器渲染） |
+| 任务            | 库                      | 原因                        | 替代方案                    |
+| --------------- | ----------------------- | --------------------------- | --------------------------- |
+| 文本提取        | pdfplumber              | 最佳准确性，处理布局能力强  | pypdf（更简单，准确性较低） |
+| 表格提取        | pdfplumber              | 结构化表格解析              | camelot（专用表格工具）     |
+| PDF 生成        | reportlab               | 完全控制，专业级质量        | weasyprint（HTML 转 PDF）   |
+| 合并 / 拆分     | pypdf                   | 简单、可靠、快速            | —                           |
+| 表单填充        | pypdf                   | 读取并填充 AcroForms        | pdfrw（替代 API）           |
+| 元数据读取/写入 | pypdf                   | 读取/写入 PDF 属性          | —                           |
+| OCR（扫描文档） | pytesseract + pdf2image | 扫描文档文本提取            | EasyOCR（深度学习）         |
+| 添加水印        | pypdf + reportlab       | 页面叠加                    | —                           |
+| HTML 转 PDF     | weasyprint              | 基于 CSS 的布局，服务器友好 | playwright（浏览器渲染）    |
 
 ## 使用 ReportLab 生成 PDF
 
@@ -125,6 +125,7 @@ def generate_report(output_path, data):
 ```
 
 ### 自定义页面模板（页眉/页脚）
+
 ```python
 from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate
 from datetime import datetime
@@ -148,6 +149,7 @@ doc.addPageTemplates([PageTemplate(id='main', frames=[frame], onPage=add_header_
 ## 文本和表格提取
 
 ### pdfplumber
+
 ```python
 import pdfplumber
 
@@ -172,6 +174,7 @@ with pdfplumber.open('document.pdf') as pdf:
 ```
 
 ### 表格提取设置
+
 ```python
 table_settings = {
     "vertical_strategy": "lines",    # 或 "text", "explicit"
@@ -327,16 +330,16 @@ with open('updated.pdf', 'wb') as f:
 
 ## 反模式 / 常见错误
 
-| 反模式 | 失败原因 | 替代做法 |
-|---|---|---|
-| 对电子版（基于文本的）PDF 使用 OCR | 当文本已可提取时，速度慢且不准确 | 先检查是否可提取文本，仅当为空时使用 OCR |
-| 未处理加密 PDF | 崩溃或静默失败 | 检测加密，提示输入密码或优雅跳过 |
-| 将整个大型 PDF 加载到内存 | 服务器上内存耗尽 | 流式处理页面或分块处理 |
-| 忽略页面旋转元数据 | 文本提取返回乱码结果 | 提取前读取并应用旋转 |
-| 硬编码页面尺寸 | 在非 A4 文档上失效 | 从源 PDF 读取尺寸 |
-| 未关闭文件句柄 | 长期运行进程中资源泄漏 | 使用上下文管理器（`with` 语句） |
-| 生成后未在多阅读器中测试 | 不同阅读器渲染效果不同 | 在 Adobe Reader、Preview 和 Chrome 中测试 |
-| 提取表格时未调整设置 | 列对齐差、单元格合并错误 | 根据文档类型调整 `table_settings` |
+| 反模式                             | 失败原因                         | 替代做法                                  |
+| ---------------------------------- | -------------------------------- | ----------------------------------------- |
+| 对电子版（基于文本的）PDF 使用 OCR | 当文本已可提取时，速度慢且不准确 | 先检查是否可提取文本，仅当为空时使用 OCR  |
+| 未处理加密 PDF                     | 崩溃或静默失败                   | 检测加密，提示输入密码或优雅跳过          |
+| 将整个大型 PDF 加载到内存          | 服务器上内存耗尽                 | 流式处理页面或分块处理                    |
+| 忽略页面旋转元数据                 | 文本提取返回乱码结果             | 提取前读取并应用旋转                      |
+| 硬编码页面尺寸                     | 在非 A4 文档上失效               | 从源 PDF 读取尺寸                         |
+| 未关闭文件句柄                     | 长期运行进程中资源泄漏           | 使用上下文管理器（`with` 语句）           |
+| 生成后未在多阅读器中测试           | 不同阅读器渲染效果不同           | 在 Adobe Reader、Preview 和 Chrome 中测试 |
+| 提取表格时未调整设置               | 列对齐差、单元格合并错误         | 根据文档类型调整 `table_settings`         |
 
 ## 反合理化防护
 
@@ -348,14 +351,13 @@ with open('updated.pdf', 'wb') as f:
 
 ## 集成点
 
-| 技能 | 连接方式 |
-|---|---|
-| `docx-processing` | DOCX 转 PDF 转换流水线，或在格式间进行选择 |
-| `xlsx-processing` | Excel 数据填充 PDF 报告表格 |
-| `email-composer` | 生成的 PDF 作为附件添加到专业邮件中 |
-| `content-research-writer` | 研究成果格式化为 PDF 白皮书 |
-| `file-organizer` | 输出文件命名和目录结构规范 |
-| `deployment` | 服务器/CI 环境中的 PDF 生成流水线 |
+| 技能                      | 连接方式                                   |
+| ------------------------- | ------------------------------------------ |
+| `docx-processing`         | DOCX 转 PDF 转换流水线，或在格式间进行选择 |
+| `xlsx-processing`         | Excel 数据填充 PDF 报告表格                |
+| `content-research-writer` | 研究成果格式化为 PDF 白皮书                |
+| `file-organizer`          | 输出文件命名和目录结构规范                 |
+| `deployment`              | 服务器/CI 环境中的 PDF 生成流水线          |
 
 ## 技能类型
 

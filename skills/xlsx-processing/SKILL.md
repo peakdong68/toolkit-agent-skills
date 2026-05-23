@@ -48,20 +48,21 @@ description: >
 
 ## 库选择决策表
 
-| 场景 | 推荐库 | 原因 |
-|---|---|---|
-| 富格式（颜色、边框、字体） | openpyxl | 完整的格式 API |
-| 数据分析、聚合、数据透视 | pandas | DataFrame 操作 |
-| 基于数据分析生成带格式报表 | pandas + openpyxl | 结合两者优势 |
-| 仅读取数据，无需格式 | pandas | 最简单的 API |
-| 大文件（> 1 万行），写密集 | openpyxl write_only | 流式写入，低内存 |
-| 大文件（> 1 万行），读密集 | openpyxl read_only | 流式读取，低内存 |
-| CSV 与 Excel 互转 | pandas | 单行操作 |
-| 电子表格中的图表 | openpyxl | 完全控制的图表 API |
+| 场景                       | 推荐库              | 原因               |
+| -------------------------- | ------------------- | ------------------ |
+| 富格式（颜色、边框、字体） | openpyxl            | 完整的格式 API     |
+| 数据分析、聚合、数据透视   | pandas              | DataFrame 操作     |
+| 基于数据分析生成带格式报表 | pandas + openpyxl   | 结合两者优势       |
+| 仅读取数据，无需格式       | pandas              | 最简单的 API       |
+| 大文件（> 1 万行），写密集 | openpyxl write_only | 流式写入，低内存   |
+| 大文件（> 1 万行），读密集 | openpyxl read_only  | 流式读取，低内存   |
+| CSV 与 Excel 互转          | pandas              | 单行操作           |
+| 电子表格中的图表           | openpyxl            | 完全控制的图表 API |
 
 ## openpyxl 模式
 
 ### 创建工作簿
+
 ```python
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -111,6 +112,7 @@ wb.save('report.xlsx')
 ```
 
 ### 公式
+
 ```python
 # 基本公式
 ws['E2'] = '=C2/D2'                    # 除法
@@ -131,6 +133,7 @@ wb.defined_names.add(defn)
 ```
 
 ### 图表
+
 ```python
 from openpyxl.chart import BarChart, LineChart, PieChart, Reference
 
@@ -163,6 +166,7 @@ ws.add_chart(line, 'G20')
 ```
 
 ### 条件格式
+
 ```python
 from openpyxl.formatting.rule import CellIsRule, ColorScaleRule, DataBarRule
 
@@ -199,6 +203,7 @@ ws.conditional_formatting.add(
 ```
 
 ### 数据验证
+
 ```python
 from openpyxl.worksheet.datavalidation import DataValidation
 
@@ -224,6 +229,7 @@ dv_date.add('G2:G100')
 ## pandas 模式
 
 ### 读取 Excel
+
 ```python
 import pandas as pd
 
@@ -245,6 +251,7 @@ sheets = pd.read_excel('data.xlsx', sheet_name=None)  # DataFrame 字典
 ```
 
 ### 使用 pandas + openpyxl 写入 Excel
+
 ```python
 with pd.ExcelWriter('output.xlsx', engine='openpyxl') as writer:
     df_summary.to_excel(writer, sheet_name='Summary', index=False)
@@ -257,6 +264,7 @@ with pd.ExcelWriter('output.xlsx', engine='openpyxl') as writer:
 ```
 
 ### 数据透视表
+
 ```python
 # 创建数据透视表
 pivot = pd.pivot_table(
@@ -291,6 +299,7 @@ df = pd.read_csv('data.csv', encoding='latin-1')  # 或 'cp1252'
 ## 大文件处理
 
 ### 内存高效读取
+
 ```python
 # openpyxl 只读模式
 from openpyxl import load_workbook
@@ -305,6 +314,7 @@ wb.close()
 ```
 
 ### 分块写入
+
 ```python
 # 分块写入大数据集
 from openpyxl import Workbook
@@ -327,26 +337,26 @@ wb.save('output.xlsx')
 
 ### 性能决策表
 
-| 行数 | 策略 | 说明 |
-|---|---|---|
-| < 10,000 | 标准 openpyxl 或 pandas | 可使用完整格式 |
-| 1 万 - 10 万 | write_only / read_only 模式，分块处理 | write_only 模式下格式有限 |
-| 10 万 - 100 万 | write_only 模式，考虑改用 CSV | 接近 Excel 行数限制 |
-| > 100 万 | 使用 CSV 或 Parquet，不用 XLSX | Excel 限制：1,048,576 行 |
+| 行数           | 策略                                  | 说明                      |
+| -------------- | ------------------------------------- | ------------------------- |
+| < 10,000       | 标准 openpyxl 或 pandas               | 可使用完整格式            |
+| 1 万 - 10 万   | write_only / read_only 模式，分块处理 | write_only 模式下格式有限 |
+| 10 万 - 100 万 | write_only 模式，考虑改用 CSV         | 接近 Excel 行数限制       |
+| > 100 万       | 使用 CSV 或 Parquet，不用 XLSX        | Excel 限制：1,048,576 行  |
 
 ## 反模式 / 常见错误
 
-| 反模式 | 失败原因 | 正确做法 |
-|---|---|---|
-| 用 openpyxl 做纯数据分析 | 分析操作冗长且慢 | 使用 pandas 做数据操作 |
-| 将大文件加载到内存 | 内存耗尽、崩溃 | 使用 read_only / write_only 模式 |
-| 硬编码行号/列号 | 数据形状变化时代码失效 | 根据数据长度计算 |
-| 日期格式不一致 | 日期显示为数字或字符串 | 显式设置 number_format |
-| 不关闭 read_only 工作簿 | 资源泄漏 | 始终调用 `wb.close()` 或使用上下文管理器 |
-| 使用 .xls 格式 | 过时、有限制、有安全风险 | 始终使用 .xlsx |
-| 逐个单元格设置格式 | 大范围时极慢 | 对区域应用样式或使用命名样式 |
-| 未在实际 Excel 中测试 | 功能渲染效果不同 | 在 Excel、LibreOffice 和 Google Sheets 中测试 |
-| 忘记冻结表头行 | 滚动大数据时用户体验差 | 数据工作表始终冻结窗格 |
+| 反模式                   | 失败原因                 | 正确做法                                      |
+| ------------------------ | ------------------------ | --------------------------------------------- |
+| 用 openpyxl 做纯数据分析 | 分析操作冗长且慢         | 使用 pandas 做数据操作                        |
+| 将大文件加载到内存       | 内存耗尽、崩溃           | 使用 read_only / write_only 模式              |
+| 硬编码行号/列号          | 数据形状变化时代码失效   | 根据数据长度计算                              |
+| 日期格式不一致           | 日期显示为数字或字符串   | 显式设置 number_format                        |
+| 不关闭 read_only 工作簿  | 资源泄漏                 | 始终调用 `wb.close()` 或使用上下文管理器      |
+| 使用 .xls 格式           | 过时、有限制、有安全风险 | 始终使用 .xlsx                                |
+| 逐个单元格设置格式       | 大范围时极慢             | 对区域应用样式或使用命名样式                  |
+| 未在实际 Excel 中测试    | 功能渲染效果不同         | 在 Excel、LibreOffice 和 Google Sheets 中测试 |
+| 忘记冻结表头行           | 滚动大数据时用户体验差   | 数据工作表始终冻结窗格                        |
 
 ## 反合理化防护
 
@@ -358,14 +368,13 @@ wb.save('output.xlsx')
 
 ## 集成点
 
-| 技能 | 连接方式 |
-|---|---|
-| `pdf-processing` | Excel 数据输入到 PDF 报表生成 |
-| `docx-processing` | Excel 数据填充 Word 文档表格 |
-| `email-composer` | 生成的电子表格附加到专业邮件 |
-| `file-organizer` | 输出文件命名和目录结构规范 |
-| `database-schema-design` | 数据库导出到 Excel 用于报表 |
-| `deployment` | CI/CD 流水线中自动生成报表 |
+| 技能                     | 连接方式                      |
+| ------------------------ | ----------------------------- |
+| `pdf-processing`         | Excel 数据输入到 PDF 报表生成 |
+| `docx-processing`        | Excel 数据填充 Word 文档表格  |
+| `file-organizer`         | 输出文件命名和目录结构规范    |
+| `database-schema-design` | 数据库导出到 Excel 用于报表   |
+| `deployment`             | CI/CD 流水线中自动生成报表    |
 
 ## 技能类型
 

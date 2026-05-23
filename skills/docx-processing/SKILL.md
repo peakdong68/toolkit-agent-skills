@@ -371,7 +371,6 @@ def safe_generate_document(template_path, context, output_path):
 | ------------------------- | ------------------------------------ |
 | `pdf-processing`          | DOCX 转 PDF 转换，或直接选择生成 PDF |
 | `xlsx-processing`         | Excel 数据作为文档生成上下文的输入   |
-| `email-composer`          | 生成的文档作为专业邮件的附件         |
 | `content-research-writer` | 研究内容格式化为白皮书和报告         |
 | `file-organizer`          | 输出文件命名和目录结构约定           |
 | `deployment`              | CI/CD 或服务器环境中的文档生成流程   |
