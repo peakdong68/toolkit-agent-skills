@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SessionStart hook for @pixelandprocess/superkit-agents
-# Injects the using-toolkit skill and project memory into the session context
+# Injects the using-toolkit skill into the session context
 
 set -euo pipefail
 
@@ -10,21 +10,6 @@ PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 # Read using-toolkit skill content
 using_toolkit_content=$(cat "${PLUGIN_ROOT}/skills/using-toolkit/SKILL.md" 2>&1 || echo "Error reading using-toolkit skill")
-
-# Read memory files if they exist
-memory_context=""
-MEMORY_DIR="${PLUGIN_ROOT}/memory"
-if [ -d "$MEMORY_DIR" ]; then
-    for memfile in project-context.md learned-patterns.md user-preferences.md; do
-        filepath="${MEMORY_DIR}/${memfile}"
-        if [ -f "$filepath" ] && [ -s "$filepath" ]; then
-            content=$(cat "$filepath" 2>/dev/null || true)
-            if [ -n "$content" ]; then
-                memory_context="${memory_context}\n\n--- ${memfile} ---\n${content}"
-            fi
-        fi
-    done
-fi
 
 # Escape string for JSON embedding
 escape_for_json() {
@@ -38,9 +23,8 @@ escape_for_json() {
 }
 
 using_toolkit_escaped=$(escape_for_json "$using_toolkit_content")
-memory_escaped=$(escape_for_json "$memory_context")
 
-session_context="<superkit-agents>\n${using_toolkit_escaped}\n\n**Memory:**\n${memory_escaped}\n</superkit-agents>"
+session_context="<superkit-agents>\n${using_toolkit_escaped}\n</superkit-agents>"
 
 # Output context injection as JSON
 # Keep both shapes for compatibility:
