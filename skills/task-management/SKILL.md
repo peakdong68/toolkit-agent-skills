@@ -26,10 +26,11 @@ Task management converts approved plans into bite-sized, trackable tasks and orc
 **Goal:** Extract all tasks from the approved plan with correct ordering and dependencies.
 
 1. Read the approved plan document from start to finish
-2. Extract every implementation step as a discrete task
-3. Identify dependencies between tasks (what must complete first)
-4. Order tasks by dependency — independent tasks first
-5. Confirm task list with the user before beginning execution
+2. If `task-decomposition` has produced a WBS, load it — use pre-decomposed tasks, dependencies, and estimates instead of extracting manually
+3. Extract every implementation step as a discrete task (skip if WBS already provides them)
+4. Identify dependencies between tasks (what must complete first)
+5. Order tasks by dependency — independent tasks first
+6. Confirm task list with the user before beginning execution
 
 ### Task Granularity Rules
 
@@ -248,6 +249,7 @@ If you catch yourself thinking:
 | `Agent` tool                     | Dispatch mechanism for all subagent work                 | When parallelizing independent tasks |
 | `circuit-breaker`                | Safety net — detects stagnation                          | When tasks repeatedly fail           |
 | `autonomous-loop`                | Upstream — generates task lists from implementation plans | When transitioning from loop planning to tracked tasks |
+| `task-decomposition`             | Upstream — provides WBS for complex plans               | When a WBS exists, load it for pre-decomposed tasks |
 
 ---
 

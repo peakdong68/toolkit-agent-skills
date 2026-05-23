@@ -98,8 +98,8 @@ Each iteration selects and completes exactly one task from IMPLEMENTATION_PLAN.m
 
 ### Steps
 
-1. **Study** — Read specs and current IMPLEMENTATION_PLAN.md
-2. **Select** — Choose the most important remaining task
+1. **Study** — Read specs and current IMPLEMENTATION_PLAN.md. If `task-decomposition` has produced a WBS, load it for dependency-aware task ordering.
+2. **Select** — Choose the most important remaining task (use WBS critical path if available)
 3. **Search** — Find existing code patterns (do NOT assume implementations are missing)
 4. **Implement** — Write complete, production-quality code (no placeholders, no stubs)
 5. **Test** — Run tests immediately after implementation
@@ -305,6 +305,7 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 | `llm-as-judge`                   | Quality — evaluates subjective criteria       | Downstream steering            |
 | `verification-before-completion` | Final gate — verifies completion claim        | Before EXIT_SIGNAL: true       |
 | `planning`                       | Upstream — provides implementation plan       | When starting autonomous loop execution |
+| `task-decomposition`             | Upstream — provides WBS for task selection      | When IMPLEMENTATION_PLAN.md needs hierarchical breakdown |
 
 ---
 

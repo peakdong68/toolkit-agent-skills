@@ -219,6 +219,7 @@ Deploy up to 5 parallel subagents via the `Agent` tool (with `subagent_type="Exp
 | `code-review`               | Review verifies implementation against spec acceptance criteria |
 | `test-driven-development`   | Red phase writes tests matching spec acceptance criteria     |
 | `writing-skills`            | Skills can be specified using this methodology               |
+| `task-decomposition`        | Complementary — specs inform decomposition granularity and acceptance criteria |
 
 ## Concrete Example: Complete Spec File
 

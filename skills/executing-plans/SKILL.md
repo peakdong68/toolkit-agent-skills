@@ -25,10 +25,11 @@ This skill turns an approved plan document into working code through disciplined
 **Goal:** Thoroughly understand the plan before writing any code.
 
 1. Read the entire plan document from start to finish
-2. Identify all implementation steps and count them
-3. Map dependencies between steps (what must be done first)
-4. Note any ambiguities or open questions
-5. Confirm understanding with the user before proceeding
+2. If `task-decomposition` has produced a WBS for this plan, load it — the WBS provides pre-analyzed dependencies, estimates, and parallelization clusters
+3. Identify all implementation steps and count them
+4. Map dependencies between steps (what must be done first)
+5. Note any ambiguities or open questions
+6. Confirm understanding with the user before proceeding
 
 ### Plan Comprehension Checklist
 
@@ -317,6 +318,7 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 | `resilient-execution` | On failure — retry with alternatives | When task approaches fail |
 | `task-management` | Complementary — provides task tracking | Can be used together |
 | `dispatching-parallel-agents` | Complementary — parallel execution of independent plan tasks | When plan has independent subtasks |
+| `task-decomposition` | Upstream — provides WBS for batch creation | When plan needs hierarchical breakdown before batch creation |
 ---
 
 ## Concrete Examples

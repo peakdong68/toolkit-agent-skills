@@ -42,6 +42,7 @@ Every task dispatched to a subagent MUST include ALL of these:
 ### Pre-Dispatch Checklist
 
 - [ ] Task spec has all 7 sections filled
+- [ ] If `task-decomposition` produced a WBS, task specs align with WBS task boundaries and dependency ordering
 - [ ] Task is independent (no unresolved dependencies on in-progress tasks)
 - [ ] Acceptance criteria are specific and testable
 - [ ] Files to modify are identified and accessible
@@ -296,6 +297,7 @@ If you catch yourself thinking:
 | `resilient-execution` | On failure — retry strategies | When fix cycles exhaust |
 | `task-management` | Tracking — task status management | Progress tracking |
 | `Agent` tool | Dispatch mechanism for all subagent phases |
+| `task-decomposition` | Upstream — provides decomposed independent task sets | When WBS identifies parallelizable clusters for delegation |
 
 ---
 
