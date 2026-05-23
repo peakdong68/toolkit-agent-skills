@@ -293,7 +293,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 ## Agents & Commands
 
 <details>
-<summary><strong>20 Agents</strong> — Specialized sub-agents for parallel work</summary>
+<summary><strong>18 Agents</strong> — Specialized sub-agents for parallel work</summary>
 
 | Agent | Description |
 |-------|-------------|
@@ -315,13 +315,12 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `typescript-pro` | Advanced type patterns, conditional types, branded types |
 | `task-decomposer` | Hierarchical task breakdown, parallelization strategy |
 | `mobile-developer` | Cross-platform mobile, platform-specific patterns |
-| `laravel-developer` | Laravel specialist with Eloquent, Blade, Livewire, and Pest expertise |
-| `php-developer` | Modern PHP 8.x development with PSR compliance and static analysis |
+
 
 </details>
 
 <details>
-<summary><strong>31 Slash Commands</strong> — Trigger skills directly in Claude Code</summary>
+<summary><strong>29 Slash Commands</strong> — Trigger skills directly in Claude Code</summary>
 
 | Command | Description | Skill |
 |---------|-------------|-------|
