@@ -79,7 +79,7 @@ For each spec file, verify:
 Use `<int>-<descriptive-name>.md` convention:
 
 ```
-docs/specs/YYYY-MM-DD-<topic>/
+docs/specs/<date>-<topic>/
 ├── 01-color-extraction.md
 ├── 02-palette-rendering.md
 ├── 03-export-formats.md

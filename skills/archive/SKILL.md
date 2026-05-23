@@ -87,7 +87,7 @@ Match commit messages to task descriptions to confirm completion is genuine (not
 ```bash
 mkdir -p docs/archive/specs docs/archive/plans
 # Move spec directory into archive/specs/
-mv docs/specs/<YYYY-MM-DD-<topic>> docs/archive/specs/
+mv docs/specs/<date>_<topic> docs/archive/specs/
 # Move plan directory into archive/plans/
 mv docs/plans/<date>_<topic> docs/archive/plans/
 ```
@@ -95,11 +95,11 @@ mv docs/plans/<date>_<topic> docs/archive/plans/
 2. Verify both archive locations:
 
 ```bash
-ls docs/archive/specs/<YYYY-MM-DD-<topic>>/    # spec files (01-*.md, etc.)
+ls docs/archive/specs/<date>_<topic>/    # spec files (01-*.md, etc.)
 ls docs/archive/plans/<date>_<topic>/           # plan files (plan.md, design.md, etc.)
 ```
 
-3. **Fix relative path references** in archived documents — scan all `.md` files in `docs/archive/specs/<YYYY-MM-DD-<topic>>/` and `docs/archive/plans/<date>_<topic>/` for internal relative links (e.g., `[text](../specs/...)` or `[text](../plans/...)`). Since spec and plan directories preserve their sibling relationship under `docs/archive/`, relative paths between them remain valid. However, update paths that point to resources that stayed in `docs/` (not archived).
+3. **Fix relative path references** in archived documents — scan all `.md` files in `docs/archive/specs/<date>_<topic>/` and `docs/archive/plans/<date>_<topic>/` for internal relative links (e.g., `[text](../specs/...)` or `[text](../plans/...)`). Since spec and plan directories preserve their sibling relationship under `docs/archive/`, relative paths between them remain valid. However, update paths that point to resources that stayed in `docs/` (not archived).
 
 4. Confirm original locations are clean (directories no longer exist in `docs/specs/` or `docs/plans/`).
 

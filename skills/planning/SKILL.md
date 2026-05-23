@@ -126,7 +126,7 @@ For each approach, include:
 **Goal:** [One sentence]
 **Architecture:** [2-3 sentences]
 **Approach:** [Which approach was chosen and why]
-**Spec Reference:** [Path to spec file, e.g., `docs/specs/YYYY-MM-DD-<topic>/`]
+**Spec Reference:** [Path to spec file, e.g., `docs/specs/<date>_<topic>/`]
 
 ---
 
@@ -254,20 +254,20 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 
 ## Integration Points
 
-| Skill                            | Relationship                                                | When                                           |
-| -------------------------------- | ----------------------------------------------------------- | ---------------------------------------------- |
-| `brainstorming`                  | Upstream — provides design context                          | Planning follows brainstorming                 |
-| `spec-writing`                   | Upstream — provides acceptance criteria for task definition | When specs exist for the feature being planned |
-| `task-management`                | Downstream — receives approved plan                         | Standard execution path                        |
-| `executing-plans`                | Downstream — executes plan directly                         | Single-task execution                          |
-| `subagent-driven-development`    | Downstream — parallel execution                             | Large independent task sets                    |
-| `autonomous-loop`                | Downstream — iterative execution                            | Ralph-style sessions                           |
-| `self-learning`                  | Bidirectional — informs and learns from planning            | Context loading and pattern storage            |
-| `verification-before-completion` | Downstream — verifies plan completeness                     | Before claiming plan is done                   |
-| `task-decomposition`             | Complementary — provides WBS for complex plans              | When plan needs hierarchical breakdown         |
-| `using-git-worktrees`            | Downstream — creates isolated development environment       | Before executing multi-task plans              |
-| `code-review`                    | Downstream — reviews implementation against plan            | After plan execution completes                 |
-| `acceptance-testing`             | Downstream — validates plan execution against acceptance criteria | After implementation against spec       |
+| Skill                            | Relationship                                                      | When                                           |
+| -------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------- |
+| `brainstorming`                  | Upstream — provides design context                                | Planning follows brainstorming                 |
+| `spec-writing`                   | Upstream — provides acceptance criteria for task definition       | When specs exist for the feature being planned |
+| `task-management`                | Downstream — receives approved plan                               | Standard execution path                        |
+| `executing-plans`                | Downstream — executes plan directly                               | Single-task execution                          |
+| `subagent-driven-development`    | Downstream — parallel execution                                   | Large independent task sets                    |
+| `autonomous-loop`                | Downstream — iterative execution                                  | Ralph-style sessions                           |
+| `self-learning`                  | Bidirectional — informs and learns from planning                  | Context loading and pattern storage            |
+| `verification-before-completion` | Downstream — verifies plan completeness                           | Before claiming plan is done                   |
+| `task-decomposition`             | Complementary — provides WBS for complex plans                    | When plan needs hierarchical breakdown         |
+| `using-git-worktrees`            | Downstream — creates isolated development environment             | Before executing multi-task plans              |
+| `code-review`                    | Downstream — reviews implementation against plan                  | After plan execution completes                 |
+| `acceptance-testing`             | Downstream — validates plan execution against acceptance criteria | After implementation against spec              |
 
 ---
 

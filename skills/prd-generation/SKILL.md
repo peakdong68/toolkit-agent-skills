@@ -1,6 +1,6 @@
 ---
 name: prd-generation
-description: "Use when generating a Product Requirements Document from a high-level idea, feature request, or product vision — covers discovery questions, structured PRD drafting, section-by-section review, and transition to implementation planning"
+description: 'Use when generating a Product Requirements Document from a high-level idea, feature request, or product vision — covers discovery questions, structured PRD drafting, section-by-section review, and transition to implementation planning'
 ---
 
 # PRD Generation
@@ -21,30 +21,30 @@ STOP after discovery — present a summary of collected answers and get confirma
 
 ### Problem Space Questions
 
-| # | Question | Why It Matters |
-|---|----------|----------------|
-| 1 | What problem does this solve? | Anchors the entire PRD |
-| 2 | Who are the target users? (personas, roles) | Shapes user stories |
-| 3 | How are users currently solving this? | Identifies competitive landscape |
-| 4 | What is the impact of NOT solving this? | Justifies priority |
+| #   | Question                                    | Why It Matters                   |
+| --- | ------------------------------------------- | -------------------------------- |
+| 1   | What problem does this solve?               | Anchors the entire PRD           |
+| 2   | Who are the target users? (personas, roles) | Shapes user stories              |
+| 3   | How are users currently solving this?       | Identifies competitive landscape |
+| 4   | What is the impact of NOT solving this?     | Justifies priority               |
 
 ### Solution Space Questions
 
-| # | Question | Why It Matters |
-|---|----------|----------------|
-| 5 | What does success look like? (specific metrics) | Defines success metrics |
-| 6 | What are must-have vs nice-to-have features? | Sets priority tiers |
-| 7 | What are the explicit non-goals? | Prevents scope creep |
-| 8 | Are there existing solutions to learn from? | Informs design decisions |
+| #   | Question                                        | Why It Matters           |
+| --- | ----------------------------------------------- | ------------------------ |
+| 5   | What does success look like? (specific metrics) | Defines success metrics  |
+| 6   | What are must-have vs nice-to-have features?    | Sets priority tiers      |
+| 7   | What are the explicit non-goals?                | Prevents scope creep     |
+| 8   | Are there existing solutions to learn from?     | Informs design decisions |
 
 ### Constraint Questions
 
-| # | Question | Why It Matters |
-|---|----------|----------------|
-| 9 | What is the timeline? Any hard deadlines? | Scopes release plan |
-| 10 | What technical constraints exist? | Narrows solution space |
-| 11 | What resources are available? | Sets realistic expectations |
-| 12 | Are there compliance or regulatory requirements? | Identifies non-functional reqs |
+| #   | Question                                         | Why It Matters                 |
+| --- | ------------------------------------------------ | ------------------------------ |
+| 9   | What is the timeline? Any hard deadlines?        | Scopes release plan            |
+| 10  | What technical constraints exist?                | Narrows solution space         |
+| 11  | What resources are available?                    | Sets realistic expectations    |
+| 12  | Are there compliance or regulatory requirements? | Identifies non-functional reqs |
 
 ## Phase 2: Draft PRD
 
@@ -58,65 +58,79 @@ STOP after drafting — do NOT present as final until Phase 3 review is complete
 # [Product/Feature Name] — Product Requirements Document
 
 ## 1. Overview
+
 One paragraph summarizing what this is and why it matters.
 
 ## 2. Problem Statement
+
 - Current situation
 - Pain points
 - Impact of not solving
 
 ## 3. Goals & Non-Goals
+
 ### Goals
+
 - [ ] Goal 1 (measurable)
 - [ ] Goal 2 (measurable)
 
 ### Non-Goals
+
 - Explicitly NOT doing X
 - Explicitly NOT doing Y
 
 ## 4. User Stories
+
 As a [persona], I want to [action], so that [benefit].
 
 ## 5. Functional Requirements
+
 ### FR-1: [Requirement Name]
+
 - Description
 - Acceptance criteria
 - Priority (P0/P1/P2)
 
 ## 6. Non-Functional Requirements
+
 - Performance: [specific targets]
 - Security: [requirements]
 - Accessibility: [standards]
 - Scalability: [expectations]
 
 ## 7. Technical Constraints
+
 - Platform/stack requirements
 - Integration dependencies
 - Data requirements
 
 ## 8. Success Metrics
+
 | Metric | Current | Target | How to Measure |
-|--------|---------|--------|----------------|
+| ------ | ------- | ------ | -------------- |
 
 ## 9. Timeline & Milestones
+
 | Phase | Description | Target Date |
-|-------|-------------|-------------|
+| ----- | ----------- | ----------- |
 
 ## 10. Open Questions
+
 - [ ] Question 1
 - [ ] Question 2
 
 ## 11. Appendix
+
 References, mockups, related documents
 ```
 
 ### Priority Classification
 
-| Priority | Meaning | Rule |
-|----------|---------|------|
-| **P0** | Must-have for launch | Without this, the product does not ship |
-| **P1** | Important, ship soon after launch | Significant value but not blocking |
-| **P2** | Nice-to-have | Enhances experience, can wait |
+| Priority | Meaning                           | Rule                                    |
+| -------- | --------------------------------- | --------------------------------------- |
+| **P0**   | Must-have for launch              | Without this, the product does not ship |
+| **P1**   | Important, ship soon after launch | Significant value but not blocking      |
+| **P2**   | Nice-to-have                      | Enhances experience, can wait           |
 
 ## Phase 3: Review
 
@@ -136,31 +150,31 @@ STOP after review — get explicit "approved" confirmation before saving.
 
 After explicit approval:
 
-1. Save to `docs/prds/YYYY-MM-DD-<feature>.md`
-2. Commit the PRD with message: `docs(prd): add PRD for <feature>`
+1. Save to `docs/prds/<date>_<topic>/prd-<N>.md`
+2. Commit the PRD with message: `docs(prd): add PRD for <topic>`
 3. If implementation follows, invoke the `brainstorming` skill
 4. If specs are needed, invoke the `spec-writing` skill
 
 ### Transition Decision Table
 
-| User Intent | Next Skill | Rationale |
-|-------------|-----------|-----------|
+| User Intent        | Next Skill                   | Rationale                    |
+| ------------------ | ---------------------------- | ---------------------------- |
 | "Let's build this" | `brainstorming` → `planning` | Explore approaches then plan |
-| "Write the specs" | `spec-writing` | Break PRD into JTBD specs |
-| "Just save it" | None | PRD is the deliverable |
-| "Get estimates" | `task-decomposition` | Break into estimable tasks |
+| "Write the specs"  | `spec-writing`               | Break PRD into JTBD specs    |
+| "Just save it"     | None                         | PRD is the deliverable       |
+| "Get estimates"    | `task-decomposition`         | Break into estimable tasks   |
 
 ## Anti-Patterns / Common Mistakes
 
-| Mistake | Why It Is Wrong | What To Do Instead |
-|---------|----------------|-------------------|
-| Skipping discovery and jumping to draft | Produces assumptions-based PRD | Always complete Phase 1 first |
-| Goals without metrics | Cannot measure success | Every goal needs a number |
-| Missing non-goals | Scope creep guaranteed | Explicitly list what is out of scope |
-| User stories without acceptance criteria | Untestable requirements | Add Given/When/Then to each story |
-| Generic success metrics ("improve UX") | Unmeasurable | Use specific numbers: "reduce load time to <2s" |
-| Presenting entire PRD at once for review | User overwhelmed, gives superficial approval | Present section by section |
-| Copying competitor features verbatim | Misses actual user needs | Focus on user problems, not solutions |
+| Mistake                                  | Why It Is Wrong                              | What To Do Instead                              |
+| ---------------------------------------- | -------------------------------------------- | ----------------------------------------------- |
+| Skipping discovery and jumping to draft  | Produces assumptions-based PRD               | Always complete Phase 1 first                   |
+| Goals without metrics                    | Cannot measure success                       | Every goal needs a number                       |
+| Missing non-goals                        | Scope creep guaranteed                       | Explicitly list what is out of scope            |
+| User stories without acceptance criteria | Untestable requirements                      | Add Given/When/Then to each story               |
+| Generic success metrics ("improve UX")   | Unmeasurable                                 | Use specific numbers: "reduce load time to <2s" |
+| Presenting entire PRD at once for review | User overwhelmed, gives superficial approval | Present section by section                      |
+| Copying competitor features verbatim     | Misses actual user needs                     | Focus on user problems, not solutions           |
 
 ## Anti-Rationalization Guards
 
@@ -171,14 +185,14 @@ After explicit approval:
 
 ## Integration Points
 
-| Skill | Relationship |
-|-------|-------------|
-| `brainstorming` | Upstream: explores ideas before PRD; downstream: explores implementation after PRD |
-| `spec-writing` | Downstream: PRD provides high-level requirements; specs detail them with JTBD |
-| `planning` | Downstream: plan references PRD requirements for task breakdown |
-| `task-decomposition` | Downstream: breaks PRD into estimable work items |
-| `tech-docs-generator` | Parallel: PRD informs what documentation is needed |
-| `acceptance-testing` | Downstream: acceptance criteria from PRD feed test definitions |
+| Skill                 | Relationship                                                                       |
+| --------------------- | ---------------------------------------------------------------------------------- |
+| `brainstorming`       | Upstream: explores ideas before PRD; downstream: explores implementation after PRD |
+| `spec-writing`        | Downstream: PRD provides high-level requirements; specs detail them with JTBD      |
+| `planning`            | Downstream: plan references PRD requirements for task breakdown                    |
+| `task-decomposition`  | Downstream: breaks PRD into estimable work items                                   |
+| `tech-docs-generator` | Parallel: PRD informs what documentation is needed                                 |
+| `acceptance-testing`  | Downstream: acceptance criteria from PRD feed test definitions                     |
 
 ## Verification Gate
 

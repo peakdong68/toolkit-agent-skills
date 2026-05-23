@@ -68,7 +68,7 @@ STOP after topic breakdown — confirm the list of spec files before writing the
 **File naming convention:** `<int>-<descriptive-name>.md`
 
 ```
-docs/specs/YYYY-MM-DD-<topic>/
+docs/specs/<date>_<topic>/
 ├── 01-color-extraction.md
 ├── 02-palette-rendering.md
 ├── 03-export-formats.md
@@ -175,7 +175,7 @@ STOP after story map — get user confirmation on release slicing before finaliz
 
 When auditing existing specs (rather than writing new ones):
 
-1. Read all spec files in `docs/specs/YYYY-MM-DD-<topic>/`
+1. Read all spec files in `docs/specs/<date>_<topic>/`
 2. Check each against the Cardinal Rule (no code, no implementation details)
 3. Verify "One Sentence Without 'And'" test
 4. Ensure consistent naming convention
@@ -209,16 +209,16 @@ Deploy up to 5 parallel subagents via the `Agent` tool (with `subagent_type="Exp
 
 ## Integration Points
 
-| Skill                       | Relationship                                                 |
-| --------------------------- | ------------------------------------------------------------ |
-| `autonomous-loop`           | Planning mode reads specs to identify implementation gaps    |
-| `acceptance-testing`        | Tests are derived directly from spec acceptance criteria     |
-| `reverse-engineering-specs` | Generates specs from existing code (brownfield)              |
-| `prd-generation`            | PRD provides high-level requirements; specs detail them      |
-| `planning`                  | Plans reference spec acceptance criteria for task definition |
-| `code-review`               | Review verifies implementation against spec acceptance criteria |
-| `test-driven-development`   | Red phase writes tests matching spec acceptance criteria     |
-| `writing-skills`            | Skills can be specified using this methodology               |
+| Skill                       | Relationship                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------ |
+| `autonomous-loop`           | Planning mode reads specs to identify implementation gaps                      |
+| `acceptance-testing`        | Tests are derived directly from spec acceptance criteria                       |
+| `reverse-engineering-specs` | Generates specs from existing code (brownfield)                                |
+| `prd-generation`            | PRD provides high-level requirements; specs detail them                        |
+| `planning`                  | Plans reference spec acceptance criteria for task definition                   |
+| `code-review`               | Review verifies implementation against spec acceptance criteria                |
+| `test-driven-development`   | Red phase writes tests matching spec acceptance criteria                       |
+| `writing-skills`            | Skills can be specified using this methodology                                 |
 | `task-decomposition`        | Complementary — specs inform decomposition granularity and acceptance criteria |
 
 ## Concrete Example: Complete Spec File
