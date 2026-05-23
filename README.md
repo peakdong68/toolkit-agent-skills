@@ -27,9 +27,9 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 
 ---
-# 工作流示例
+## 工作流示例
 
-## 新功能（完整生命周期）
+### 新功能（完整生命周期）
 
 ```
 1. /brainstorm     → 探索想法，创建设计文档 （调用技能brainstorming）
@@ -41,7 +41,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 7. finish-branch   → 合并、创建 PR 或清理
 ```
 
-## 缺陷修复
+### 缺陷修复
 
 ```
 1. /debug          → 系统化的四阶段调试方法论
@@ -50,7 +50,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 4. /verify         → 使用全新证据确认修复生效
 ```
 
-## Ralph 自主会话
+### Ralph 自主会话
 
 ```
 1. /specs          → 编写或审计规范
@@ -63,7 +63,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 4. /verify         → 验证所有验收测试通过
 ```
 
-## 遗留代码库接入
+### 遗留代码库接入
 
 ```
 1. /learn          → 扫描并发现项目上下文
@@ -73,7 +73,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 5. /execute        → 在完整测试覆盖下实现
 ```
 
-## API 设计与实现
+### API 设计与实现
 
 ```
 1. api-design      → 设计端点，生成 OpenAPI 规范
@@ -84,7 +84,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 6. security-review → 检查漏洞
 ```
 
-## 前端组件开发
+### 前端组件开发
 
 ```
 1. frontend-ui-design → 组件架构、无障碍访问（a11y）、响应式设计
@@ -94,7 +94,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 5. /review            → 代码审查
 ```
 
-## 数据库架构变更
+### 数据库架构变更
 
 ```
 1. database-schema-design → 数据建模、规划迁移、索引
@@ -103,7 +103,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 4. /verify                → 验证迁移双向均可正常运行
 ```
 
-## 创建产品需求 PRD
+### 创建产品需求 PRD
 
 ```
 1. /prd            → 创建产品需求文档
@@ -113,14 +113,14 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 5. /execute        → 执行计划，遵循 TDD 并跟踪进度
 ```
 
-## 文档生成
+### 文档生成
 
 ```
 1. /docs           → 从代码生成技术文档
-3. llm-as-judge    → 评估文档质量
+2. llm-as-judge    → 评估文档质量
 ```
 
-## 安全审计
+### 安全审计
 
 ```
 1. security-review → OWASP Top 10、认证模式、输入验证
@@ -129,7 +129,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 4. /verify         → 确认所有问题已解决
 ```
 
-## 性能优化
+### 性能优化
 
 ```
 1. performance-optimization → 性能分析，识别瓶颈
@@ -371,8 +371,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 ---
 
-<details>
-<summary><strong>Ralph 集成</strong> — 自主迭代开发循环</summary>
+## Ralph 集成 — 自主迭代开发循环
 
 本工具包整合了 [Ralph](https://github.com/frankbria/ralph-claude-code) 和 [Ralph Playbook](https://github.com/ClaytonFarr/ralph-playbook) 的关键概念 — 这是 Geoffrey Huntley 提出的一种自主 AI 开发方法论。
 
@@ -407,13 +406,9 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 - **验收测试** — 背压链：规范 → 测试 → 代码（修复代码，而非规范）
 - **LLM-as-judge** — 针对主观标准（语调、用户体验、可读性）的结构化评分评估
-
-</details>
-
+ 
 ---
-
-
-
-## 许可证
+ 
+##  许可证
 
 [MIT](LICENSE)
