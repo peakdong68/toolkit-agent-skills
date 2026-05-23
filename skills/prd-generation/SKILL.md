@@ -150,8 +150,8 @@ STOP after review — get explicit "approved" confirmation before saving.
 
 After explicit approval:
 
-1. Save to `docs/prds/<date>_<topic>/prd-<N>.md`
-2. Commit the PRD with message: `docs(prd): add PRD for <topic>`
+1. Save to `docs/prds/YYYY-MM-DD-<feature>.md`
+2. Commit the PRD with message: `docs(prd): add PRD for <feature>`
 3. If implementation follows, invoke the `brainstorming` skill
 4. If specs are needed, invoke the `spec-writing` skill
 
