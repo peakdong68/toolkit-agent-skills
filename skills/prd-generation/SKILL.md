@@ -150,8 +150,8 @@ description: '当从高层级想法、功能请求或产品愿景生成产品需
 
 获得明确批准后：
 
-1. 保存至 `docs/prds/<date>_<topic>/prd-<N>.md`
-2. 提交 PRD，提交信息为：`docs(prd): add PRD for <topic>`
+1. 保存至 `docs/prds/YYYY-MM-DD-<feature>.md`
+2. 提交 PRD，提交信息为：`docs(prd): add PRD for <feature>`
 3. 如果后续需要实施，调用 `brainstorming` 技能
 4. 如果需要规格说明，调用 `spec-writing` 技能
 
