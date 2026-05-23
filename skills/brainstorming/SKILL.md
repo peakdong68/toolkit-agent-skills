@@ -174,7 +174,7 @@ description: '在任何创造性工作之前使用——创建功能、构建组
 
 **目标：**持久化设计并交接给规划技能。
 
-1. 将已验证的设计写入 `docs/plans/<date>_<id>_<topic>/design.md`
+1. 将已验证的设计写入 `docs/plans/<date>_<topic>/design.md`
 2. 提交设计文档
 3. 更新自学习记忆：
    - `memory/decisions-log.md` — 做出的任何架构决策

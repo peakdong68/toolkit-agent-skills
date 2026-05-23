@@ -78,7 +78,7 @@ model: inherit
 
 使用 `<int>-<descriptive-name>.md` 命名规范：
 ```
-docs/specs/YYYY-MM-DD-<topic>/
+docs/specs/<date>_<topic>/
 ├── 01-color-extraction.md
 ├── 02-palette-rendering.md
 ├── 03-export-formats.md
@@ -96,6 +96,6 @@ docs/specs/YYYY-MM-DD-<topic>/
 ## 输出
 
 交付：
-1. 组织好的 `specs/<date>_<id>_<topic>/` 目录，内含带编号的 .md 文件
+1. 组织好的 `docs/specs/<date>_<topic>/` 目录，内含带编号的 .md 文件
 2. 所识别出的所有 job 的摘要
 3. 如适用，提供 story map（能力 × 发布版本）
