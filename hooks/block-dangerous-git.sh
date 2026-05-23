@@ -15,10 +15,9 @@ if [ -z "$COMMAND" ]; then
 fi
 
 DANGEROUS_PATTERNS=(
-    "git push.*--force"
-    "git push.*[[:space:]]-f([[:space:]]|\$)"
-    "git push.*--delete"
+    "git push"
     "git reset --hard"
+    "git clean -fd"
     "git clean -f"
     "git branch -D"
     "git checkout \."
@@ -29,6 +28,8 @@ DANGEROUS_PATTERNS=(
     "git stash clear"
     "rm -rf .git"
     "git reflog expire"
+    "push --force"
+    "reset --hard"
 )
 
 for pattern in "${DANGEROUS_PATTERNS[@]}"; do
