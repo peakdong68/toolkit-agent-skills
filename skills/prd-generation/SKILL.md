@@ -193,7 +193,6 @@ After explicit approval:
 | `task-decomposition`  | Downstream: breaks PRD into estimable work items                                   |
 | `tech-docs-generator` | Parallel: PRD informs what documentation is needed                                 |
 | `acceptance-testing`  | Downstream: acceptance criteria from PRD feed test definitions                     |
-| `archive`             | Downstream: archives PRD to docs/archive/prds/ when feature is complete           |
 
 ## Verification Gate
 
