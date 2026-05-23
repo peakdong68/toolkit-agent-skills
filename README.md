@@ -277,7 +277,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 </details>
 
 <details>
-<summary><strong>Productivity & Communication (2)</strong></summary>
+<summary><strong>Productivity  </strong></summary>
 
 | Skill | Description |
 |-------|-------------|
