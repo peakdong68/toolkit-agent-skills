@@ -370,7 +370,7 @@ The toolkit integrates key concepts from [Ralph](https://github.com/frankbria/ra
 Iterative development cycle: **PLANNING** → **BUILDING** → **STATUS CHECK** → repeat until done.
 
 - **ONE task per loop** — each iteration selects and completes exactly one task
-- **Context efficiency** — main context at 40-60% utilization, up to 500 parallel read subagents
+- **Context efficiency** — main context at 40-60% utilization, up to 5 parallel read subagents
 - **Upstream/downstream steering** — specs shape inputs, tests/builds/lints create backpressure
 - **Dual-condition exit gate** — requires both completion language AND explicit `EXIT_SIGNAL: true`
 
