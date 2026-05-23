@@ -25,8 +25,7 @@
 **Doc Processing (3):** `docx-processing`, `pdf-processing`, `xlsx-processing`
 
 **Productivity (1):** `file-organizer`
-
-**Communication (1):** `email-composer` `/email`
+ 
 
 
 **Rigid skills:** Follow exactly. **Flexible skills:** Adapt to context.

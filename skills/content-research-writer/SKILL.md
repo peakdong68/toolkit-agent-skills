@@ -72,82 +72,95 @@ Apply this skill whenever content must be backed by evidence, cited properly, an
 
 ## Content Type Decision Table
 
-| Content Type | Word Count | Research Depth | Audience | Citation Style |
-|---|---|---|---|---|
-| Blog article | 1,500-3,000 | Tier 2-3 sources | General | Inline links |
-| Long-form article | 3,000-5,000 | Tier 1-3 sources | Informed readers | Parenthetical (APA) |
-| Whitepaper | 3,000-8,000 | Tier 1-2 mandatory | Decision-makers | Footnotes or numbered |
-| Case study | 1,000-2,500 | Primary + Tier 2 | Buyers | Inline attribution |
-| Technical report | 5,000-15,000 | Tier 1 mandatory | Experts | IEEE or APA |
-| Educational guide | 2,000-6,000 | Tier 1-3 mixed | Learners | Parenthetical |
+| Content Type      | Word Count   | Research Depth     | Audience         | Citation Style        |
+| ----------------- | ------------ | ------------------ | ---------------- | --------------------- |
+| Blog article      | 1,500-3,000  | Tier 2-3 sources   | General          | Inline links          |
+| Long-form article | 3,000-5,000  | Tier 1-3 sources   | Informed readers | Parenthetical (APA)   |
+| Whitepaper        | 3,000-8,000  | Tier 1-2 mandatory | Decision-makers  | Footnotes or numbered |
+| Case study        | 1,000-2,500  | Primary + Tier 2   | Buyers           | Inline attribution    |
+| Technical report  | 5,000-15,000 | Tier 1 mandatory   | Experts          | IEEE or APA           |
+| Educational guide | 2,000-6,000  | Tier 1-3 mixed     | Learners         | Parenthetical         |
 
 ## Source Evaluation Framework (CRAAP Test)
 
-| Criterion | Questions to Ask | Red Flags |
-|---|---|---|
-| **Currency** | When was it published? Updated? | > 5 years old for fast-moving topics |
-| **Relevance** | Does it directly address your topic? | Tangential connection, different context |
-| **Authority** | Who is the author? What are their credentials? | No author, no institutional affiliation |
-| **Accuracy** | Is it supported by evidence? Peer-reviewed? | No citations, unverifiable claims |
-| **Purpose** | Why does this exist? Inform, sell, persuade? | Strong commercial bias, advocacy without disclosure |
+| Criterion     | Questions to Ask                               | Red Flags                                           |
+| ------------- | ---------------------------------------------- | --------------------------------------------------- |
+| **Currency**  | When was it published? Updated?                | > 5 years old for fast-moving topics                |
+| **Relevance** | Does it directly address your topic?           | Tangential connection, different context            |
+| **Authority** | Who is the author? What are their credentials? | No author, no institutional affiliation             |
+| **Accuracy**  | Is it supported by evidence? Peer-reviewed?    | No citations, unverifiable claims                   |
+| **Purpose**   | Why does this exist? Inform, sell, persuade?   | Strong commercial bias, advocacy without disclosure |
 
 ### Source Tier System
 
-| Tier | Source Type | Credibility | Use For |
-|---|---|---|---|
-| Tier 1 | Peer-reviewed journals, official standards | Highest | Core claims, statistics |
-| Tier 2 | Industry reports (Gartner, McKinsey), textbooks | High | Market data, frameworks |
-| Tier 3 | Reputable news outlets, official documentation | Good | Context, current events |
-| Tier 4 | Expert blogs, conference talks, interviews | Moderate | Perspectives, opinions |
-| Tier 5 | Social media, forums, Wikipedia | Low | Discovery only, never cite directly |
+| Tier   | Source Type                                     | Credibility | Use For                             |
+| ------ | ----------------------------------------------- | ----------- | ----------------------------------- |
+| Tier 1 | Peer-reviewed journals, official standards      | Highest     | Core claims, statistics             |
+| Tier 2 | Industry reports (Gartner, McKinsey), textbooks | High        | Market data, frameworks             |
+| Tier 3 | Reputable news outlets, official documentation  | Good        | Context, current events             |
+| Tier 4 | Expert blogs, conference talks, interviews      | Moderate    | Perspectives, opinions              |
+| Tier 5 | Social media, forums, Wikipedia                 | Low         | Discovery only, never cite directly |
 
 ## Citation Formats
 
 ### Inline Citation Styles
+
 ```markdown
 # Parenthetical (APA-style)
+
 Research shows that 73% of enterprises have adopted cloud-native architectures
 (Smith & Johnson, 2025).
 
 # Narrative
+
 According to Smith and Johnson (2025), 73% of enterprises have adopted
 cloud-native architectures.
 
 # Footnote-style (Chicago)
+
 Research shows significant cloud adoption.[^1]
 
-[^1]: Smith, J., & Johnson, R. (2025). Cloud adoption trends.
-*Journal of Cloud Computing*, 12(3), 45-62.
+[^1]:
+    Smith, J., & Johnson, R. (2025). Cloud adoption trends.
+    _Journal of Cloud Computing_, 12(3), 45-62.
 
 # Numbered (IEEE-style)
+
 Research shows significant cloud adoption [1].
 
 ## References
-[1] J. Smith and R. Johnson, "Cloud adoption trends," *J. Cloud Computing*,
-    vol. 12, no. 3, pp. 45-62, 2025.
+
+[1] J. Smith and R. Johnson, "Cloud adoption trends," _J. Cloud Computing_,
+vol. 12, no. 3, pp. 45-62, 2025.
 ```
 
 ### Reference Format Templates
+
 ```markdown
 # Journal Article
-Author, A. B., & Author, C. D. (Year). Title of article. *Journal Name*,
+
+Author, A. B., & Author, C. D. (Year). Title of article. _Journal Name_,
 Volume(Issue), Pages. https://doi.org/xxxxx
 
 # Book
-Author, A. B. (Year). *Title of book* (Edition). Publisher.
+
+Author, A. B. (Year). _Title of book_ (Edition). Publisher.
 
 # Website
+
 Author or Organization. (Year, Month Day). Title of page. Site Name.
 https://www.example.com/page
 
 # Report
-Organization. (Year). *Title of report* (Report No. XXX).
+
+Organization. (Year). _Title of report_ (Report No. XXX).
 https://www.example.com/report.pdf
 ```
 
 ## Content Structure Templates
 
 ### Long-Form Article (2000-5000 words)
+
 ```
 1. Hook / Opening Anecdote (100-200 words)
 2. Context and Problem Statement (200-300 words)
@@ -174,6 +187,7 @@ https://www.example.com/report.pdf
 ```
 
 ### Whitepaper (3000-8000 words)
+
 ```
 1. Executive Summary (300-500 words)
 2. Introduction and Problem Statement (500-800 words)
@@ -189,6 +203,7 @@ https://www.example.com/report.pdf
 ```
 
 ### Case Study (1000-2500 words)
+
 ```
 1. Executive Summary (100-200 words)
 2. Challenge / Problem (200-400 words)
@@ -202,18 +217,21 @@ https://www.example.com/report.pdf
 ## Writing Quality Checklist
 
 ### Paragraph Level
+
 - Each paragraph has a clear topic sentence
 - Paragraphs are 3-6 sentences (avoid walls of text)
 - Transitions connect paragraphs logically
 - Evidence follows claims immediately
 
 ### Sentence Level
+
 - Vary sentence length (mix short and long)
 - Active voice preferred over passive
 - Avoid jargon without definition
 - Concrete language over abstract
 
 ### Document Level
+
 - Introduction establishes the "so what" clearly
 - Each section advances the central argument
 - No unsupported claims
@@ -223,6 +241,7 @@ https://www.example.com/report.pdf
 ## Fact-Checking Protocol
 
 ### Verification Steps
+
 1. **Primary source check**: Trace every claim back to its original source
 2. **Cross-reference**: Verify key facts with at least 2 independent sources
 3. **Statistical validation**: Check that numbers are current and in context
@@ -232,41 +251,41 @@ https://www.example.com/report.pdf
 
 ### Common Fact-Checking Pitfalls
 
-| Pitfall | Example | Prevention |
-|---|---|---|
-| Outdated statistics | "50% of..." from a 2018 study | Always note publication year, seek recent data |
-| Misattributed quotes | Einstein didn't say most "Einstein quotes" | Trace to primary source document |
-| Survivorship bias | "All successful companies do X" | Look for counterexamples |
-| Correlation as causation | "Countries that eat chocolate win more Nobels" | Distinguish correlation from causation |
-| Out-of-context numbers | "Revenue grew 500%" (from $1 to $5) | Always provide absolute numbers and context |
+| Pitfall                  | Example                                        | Prevention                                     |
+| ------------------------ | ---------------------------------------------- | ---------------------------------------------- |
+| Outdated statistics      | "50% of..." from a 2018 study                  | Always note publication year, seek recent data |
+| Misattributed quotes     | Einstein didn't say most "Einstein quotes"     | Trace to primary source document               |
+| Survivorship bias        | "All successful companies do X"                | Look for counterexamples                       |
+| Correlation as causation | "Countries that eat chocolate win more Nobels" | Distinguish correlation from causation         |
+| Out-of-context numbers   | "Revenue grew 500%" (from $1 to $5)            | Always provide absolute numbers and context    |
 
 ## Research Tools
 
-| Tool | Purpose | Best For |
-|---|---|---|
-| Google Scholar | Academic paper search | Peer-reviewed research |
-| Semantic Scholar | AI-powered paper discovery | Finding related work |
-| arXiv | Preprints | Cutting-edge CS/ML/Physics |
-| PubMed | Medical/bio research | Health and life sciences |
-| Statista | Statistics and market data | Industry data points |
-| Wayback Machine | Historical web pages | Verifying past claims |
-| Zotero / Mendeley | Reference management | Organizing sources |
-| Perplexity | AI-assisted research | Initial discovery |
+| Tool              | Purpose                    | Best For                   |
+| ----------------- | -------------------------- | -------------------------- |
+| Google Scholar    | Academic paper search      | Peer-reviewed research     |
+| Semantic Scholar  | AI-powered paper discovery | Finding related work       |
+| arXiv             | Preprints                  | Cutting-edge CS/ML/Physics |
+| PubMed            | Medical/bio research       | Health and life sciences   |
+| Statista          | Statistics and market data | Industry data points       |
+| Wayback Machine   | Historical web pages       | Verifying past claims      |
+| Zotero / Mendeley | Reference management       | Organizing sources         |
+| Perplexity        | AI-assisted research       | Initial discovery          |
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
-|---|---|---|
-| Claims without citations | Undermines credibility entirely | Cite every factual claim inline |
-| Single-source assertions | One source can be wrong or biased | Cross-reference with 2+ independent sources |
-| Citing secondary when primary exists | Telephone game distorts findings | Trace to and cite the original study |
-| Writing introduction first | Leads to misalignment with body | Write body first, introduction last |
-| Padding to reach word count | Readers detect filler immediately | Add depth or cut the target |
-| Weasel words without specifics | "Some experts say" means nothing | Name the expert, cite the source |
-| Retrofitting citations after drafting | Gaps in evidence go unnoticed | Integrate citations during writing |
-| Ignoring counterarguments | One-sided work lacks credibility | Address objections explicitly |
-| Paraphrasing too closely | Borderline plagiarism even with citation | Summarize in your own analytical voice |
-| No conflict-of-interest disclosure | Erodes trust when discovered | Disclose sponsorship or affiliations upfront |
+| Anti-Pattern                          | Why It Fails                             | What To Do Instead                           |
+| ------------------------------------- | ---------------------------------------- | -------------------------------------------- |
+| Claims without citations              | Undermines credibility entirely          | Cite every factual claim inline              |
+| Single-source assertions              | One source can be wrong or biased        | Cross-reference with 2+ independent sources  |
+| Citing secondary when primary exists  | Telephone game distorts findings         | Trace to and cite the original study         |
+| Writing introduction first            | Leads to misalignment with body          | Write body first, introduction last          |
+| Padding to reach word count           | Readers detect filler immediately        | Add depth or cut the target                  |
+| Weasel words without specifics        | "Some experts say" means nothing         | Name the expert, cite the source             |
+| Retrofitting citations after drafting | Gaps in evidence go unnoticed            | Integrate citations during writing           |
+| Ignoring counterarguments             | One-sided work lacks credibility         | Address objections explicitly                |
+| Paraphrasing too closely              | Borderline plagiarism even with citation | Summarize in your own analytical voice       |
+| No conflict-of-interest disclosure    | Erodes trust when discovered             | Disclose sponsorship or affiliations upfront |
 
 ## Anti-Rationalization Guards
 
@@ -278,14 +297,13 @@ https://www.example.com/report.pdf
 
 ## Integration Points
 
-| Skill | How It Connects |
-|---|---|
-| `seo-optimizer` | Research content needs SEO-optimized titles, meta descriptions, and structured data |
-| `content-creator` | Research findings feed into marketing copy and social media content |
-| `email-composer` | Research summaries inform stakeholder update emails and executive briefings |
-| `tech-docs-generator` | Technical research follows similar source evaluation and citation practices |
-| `llm-as-judge` | Evaluate research content quality against rubric dimensions |
-| `clean-code` | Writing quality checklist parallels clean code principles for prose |
+| Skill                 | How It Connects                                                                     |
+| --------------------- | ----------------------------------------------------------------------------------- |
+| `seo-optimizer`       | Research content needs SEO-optimized titles, meta descriptions, and structured data |
+| `content-creator`     | Research findings feed into marketing copy and social media content                 |
+| `tech-docs-generator` | Technical research follows similar source evaluation and citation practices         |
+| `llm-as-judge`        | Evaluate research content quality against rubric dimensions                         |
+| `clean-code`          | Writing quality checklist parallels clean code principles for prose                 |
 
 ## Skill Type
 

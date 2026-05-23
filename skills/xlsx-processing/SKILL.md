@@ -48,20 +48,21 @@ Apply this skill whenever Excel files need to be created, read, transformed, or 
 
 ## Library Decision Table
 
-| Scenario | Library | Why |
-|---|---|---|
-| Rich formatting (colors, borders, fonts) | openpyxl | Full formatting API |
-| Data analysis, aggregation, pivots | pandas | DataFrame operations |
-| Formatted report from data analysis | pandas + openpyxl | Combine strengths |
-| Reading data only, no formatting needed | pandas | Simplest API |
-| Large file (> 10K rows), write-heavy | openpyxl write_only | Streaming writes, low memory |
-| Large file (> 10K rows), read-heavy | openpyxl read_only | Streaming reads, low memory |
-| CSV to/from Excel conversion | pandas | One-liner operations |
-| Charts in spreadsheet | openpyxl | Chart API with full control |
+| Scenario                                 | Library             | Why                          |
+| ---------------------------------------- | ------------------- | ---------------------------- |
+| Rich formatting (colors, borders, fonts) | openpyxl            | Full formatting API          |
+| Data analysis, aggregation, pivots       | pandas              | DataFrame operations         |
+| Formatted report from data analysis      | pandas + openpyxl   | Combine strengths            |
+| Reading data only, no formatting needed  | pandas              | Simplest API                 |
+| Large file (> 10K rows), write-heavy     | openpyxl write_only | Streaming writes, low memory |
+| Large file (> 10K rows), read-heavy      | openpyxl read_only  | Streaming reads, low memory  |
+| CSV to/from Excel conversion             | pandas              | One-liner operations         |
+| Charts in spreadsheet                    | openpyxl            | Chart API with full control  |
 
 ## openpyxl Patterns
 
 ### Creating a Workbook
+
 ```python
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -111,6 +112,7 @@ wb.save('report.xlsx')
 ```
 
 ### Formulas
+
 ```python
 # Basic formulas
 ws['E2'] = '=C2/D2'                    # Division
@@ -131,6 +133,7 @@ wb.defined_names.add(defn)
 ```
 
 ### Charts
+
 ```python
 from openpyxl.chart import BarChart, LineChart, PieChart, Reference
 
@@ -163,6 +166,7 @@ ws.add_chart(line, 'G20')
 ```
 
 ### Conditional Formatting
+
 ```python
 from openpyxl.formatting.rule import CellIsRule, ColorScaleRule, DataBarRule
 
@@ -199,6 +203,7 @@ ws.conditional_formatting.add(
 ```
 
 ### Data Validation
+
 ```python
 from openpyxl.worksheet.datavalidation import DataValidation
 
@@ -224,6 +229,7 @@ dv_date.add('G2:G100')
 ## pandas Patterns
 
 ### Reading Excel
+
 ```python
 import pandas as pd
 
@@ -245,6 +251,7 @@ sheets = pd.read_excel('data.xlsx', sheet_name=None)  # Dict of DataFrames
 ```
 
 ### Writing Excel with pandas + openpyxl
+
 ```python
 with pd.ExcelWriter('output.xlsx', engine='openpyxl') as writer:
     df_summary.to_excel(writer, sheet_name='Summary', index=False)
@@ -257,6 +264,7 @@ with pd.ExcelWriter('output.xlsx', engine='openpyxl') as writer:
 ```
 
 ### Pivot Tables
+
 ```python
 # Create pivot table
 pivot = pd.pivot_table(
@@ -291,6 +299,7 @@ df = pd.read_csv('data.csv', encoding='latin-1')  # or 'cp1252'
 ## Large File Handling
 
 ### Memory-Efficient Reading
+
 ```python
 # openpyxl read-only mode
 from openpyxl import load_workbook
@@ -305,6 +314,7 @@ wb.close()
 ```
 
 ### Chunked Writing
+
 ```python
 # Write large datasets in chunks
 from openpyxl import Workbook
@@ -327,26 +337,26 @@ wb.save('output.xlsx')
 
 ### Performance Decision Table
 
-| Rows | Strategy | Notes |
-|---|---|---|
-| < 10,000 | Standard openpyxl or pandas | Full formatting available |
-| 10K - 100K | write_only / read_only mode, chunked | Limited formatting in write_only |
-| 100K - 1M | write_only mode, consider CSV instead | Near Excel row limit |
-| > 1M | Use CSV or Parquet, not XLSX | Excel limit: 1,048,576 rows |
+| Rows       | Strategy                              | Notes                            |
+| ---------- | ------------------------------------- | -------------------------------- |
+| < 10,000   | Standard openpyxl or pandas           | Full formatting available        |
+| 10K - 100K | write_only / read_only mode, chunked  | Limited formatting in write_only |
+| 100K - 1M  | write_only mode, consider CSV instead | Near Excel row limit             |
+| > 1M       | Use CSV or Parquet, not XLSX          | Excel limit: 1,048,576 rows      |
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
-|---|---|---|
-| openpyxl for pure data analysis | Verbose and slow for analytics | Use pandas for data operations |
-| Loading large files into memory | Memory exhaustion, crashes | Use read_only / write_only modes |
-| Hardcoding row/column numbers | Breaks when data shape changes | Calculate from data length |
-| Inconsistent date formats | Dates render as numbers or strings | Set number_format explicitly |
-| Not closing read_only workbooks | Resource leaks | Always call `wb.close()` or use context manager |
-| Using .xls format | Legacy, limited, security risks | Always use .xlsx |
-| Formatting cells one by one | Extremely slow for large ranges | Apply styles to ranges or use named styles |
-| Not testing in actual Excel | Features render differently | Test in Excel, LibreOffice, and Google Sheets |
-| Forgetting to freeze header row | Poor UX when scrolling large data | Always freeze panes for data sheets |
+| Anti-Pattern                    | Why It Fails                       | What To Do Instead                              |
+| ------------------------------- | ---------------------------------- | ----------------------------------------------- |
+| openpyxl for pure data analysis | Verbose and slow for analytics     | Use pandas for data operations                  |
+| Loading large files into memory | Memory exhaustion, crashes         | Use read_only / write_only modes                |
+| Hardcoding row/column numbers   | Breaks when data shape changes     | Calculate from data length                      |
+| Inconsistent date formats       | Dates render as numbers or strings | Set number_format explicitly                    |
+| Not closing read_only workbooks | Resource leaks                     | Always call `wb.close()` or use context manager |
+| Using .xls format               | Legacy, limited, security risks    | Always use .xlsx                                |
+| Formatting cells one by one     | Extremely slow for large ranges    | Apply styles to ranges or use named styles      |
+| Not testing in actual Excel     | Features render differently        | Test in Excel, LibreOffice, and Google Sheets   |
+| Forgetting to freeze header row | Poor UX when scrolling large data  | Always freeze panes for data sheets             |
 
 ## Anti-Rationalization Guards
 
@@ -358,14 +368,13 @@ wb.save('output.xlsx')
 
 ## Integration Points
 
-| Skill | How It Connects |
-|---|---|
-| `pdf-processing` | Excel data feeds into PDF report generation |
-| `docx-processing` | Excel data populates Word document tables |
-| `email-composer` | Generated spreadsheets attach to professional emails |
-| `file-organizer` | Output file naming and directory structure conventions |
-| `database-schema-design` | Database exports to Excel for reporting |
-| `deployment` | Automated report generation in CI/CD pipelines |
+| Skill                    | How It Connects                                        |
+| ------------------------ | ------------------------------------------------------ |
+| `pdf-processing`         | Excel data feeds into PDF report generation            |
+| `docx-processing`        | Excel data populates Word document tables              |
+| `file-organizer`         | Output file naming and directory structure conventions |
+| `database-schema-design` | Database exports to Excel for reporting                |
+| `deployment`             | Automated report generation in CI/CD pipelines         |
 
 ## Skill Type
 

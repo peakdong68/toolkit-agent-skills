@@ -155,12 +155,6 @@ Invoke in order: (1) Process (brainstorming, planning) → (2) Specialist (front
 | ---------------- | ------------------------------------------------------ |
 | `file-organizer` | Project structure, file naming, directory architecture |
 
-### Communication Skills (1)
-
-| Skill            | When to Use                                  |
-| ---------------- | -------------------------------------------- |
-| `email-composer` | Professional email drafting, tone adjustment |
-
 ---
 
 ## Decision Table: Choosing the Right Skill
@@ -183,7 +177,6 @@ Invoke in order: (1) Process (brainstorming, planning) → (2) Specialist (front
 | "autonomous", "loop", "ralph"          | `autonomous-loop`                                        | `ralph-status`, `circuit-breaker`            |
 | "security", "vulnerability", "auth"    | `security-review`                                        | `senior-backend`                             |
 | "SEO", "meta tags", "search engine"    | `seo-optimizer`                                          | `content-research-writer`                    |
-| "email", "draft", "compose"            | `email-composer`                                         | `content-creator`                            |
 | "PDF", "Word", "Excel"                 | `pdf-processing` / `docx-processing` / `xlsx-processing` | —                                            |
 | "agent", "AI", "tool use"              | `agent-development`                                      | `mcp-builder`                                |
 | "MCP", "server", "transport"           | `mcp-builder`                                            | `agent-development`                          |
@@ -216,7 +209,6 @@ Invoke in order: (1) Process (brainstorming, planning) → (2) Specialist (front
 | "Optimize SEO"                | seo-optimizer                                                               |
 | "Write marketing copy"        | content-creator                                                             |
 | "Process documents"           | docx-processing / pdf-processing / xlsx-processing                          |
-| "Compose email"               | email-composer                                                              |
 | "Build an AI agent"           | agent-development -> planning -> tdd                                        |
 | "Set up infrastructure"       | senior-devops -> deployment                                                 |
 | "Decompose complex task"      | task-decomposition -> dispatching-parallel-agents                           |

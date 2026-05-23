@@ -58,19 +58,20 @@ Apply this skill whenever content must persuade, engage, or convert an audience 
 
 ## Copywriting Framework Decision Table
 
-| Situation | Framework | Why |
-|---|---|---|
-| Product launch, new feature announcement | AIDA | Builds from attention to action progressively |
-| Audience aware of pain, needs motivation | PAS | Amplifies urgency before presenting solution |
-| Transformation story, before/after | BAB | Visualizes the change your product enables |
-| Testimonial-driven, social proof heavy | 4Ps | Leverages proof as primary persuasion lever |
-| Short-form (tweets, ads under 100 chars) | Hook + CTA | No room for frameworks -- lead with value |
-| Email nurture sequence | PAS or BAB | Builds relationship over multiple touches |
-| Landing page hero section | AIDA | Maps directly to hero, benefits, proof, CTA sections |
+| Situation                                | Framework  | Why                                                  |
+| ---------------------------------------- | ---------- | ---------------------------------------------------- |
+| Product launch, new feature announcement | AIDA       | Builds from attention to action progressively        |
+| Audience aware of pain, needs motivation | PAS        | Amplifies urgency before presenting solution         |
+| Transformation story, before/after       | BAB        | Visualizes the change your product enables           |
+| Testimonial-driven, social proof heavy   | 4Ps        | Leverages proof as primary persuasion lever          |
+| Short-form (tweets, ads under 100 chars) | Hook + CTA | No room for frameworks -- lead with value            |
+| Email nurture sequence                   | PAS or BAB | Builds relationship over multiple touches            |
+| Landing page hero section                | AIDA       | Maps directly to hero, benefits, proof, CTA sections |
 
 ## Copywriting Frameworks
 
 ### AIDA (Attention, Interest, Desire, Action)
+
 ```
 Attention: Hook that stops the scroll
 Interest:  Why this matters to the reader
@@ -79,6 +80,7 @@ Action:    Clear, specific CTA
 ```
 
 **Example:**
+
 ```
 Tired of spreadsheets that crash with 10,000 rows?        [Attention]
 Our engine handles 10 million rows in under a second.     [Interest]
@@ -88,6 +90,7 @@ Start your free trial — no credit card required.           [Action]
 ```
 
 ### PAS (Problem, Agitate, Solution)
+
 ```
 Problem:   Name the pain point directly
 Agitate:   Amplify the consequences of inaction
@@ -95,6 +98,7 @@ Solution:  Present your offering as the resolution
 ```
 
 **Example:**
+
 ```
 Your team wastes 6 hours/week on manual data entry.       [Problem]
 That's 312 hours a year — enough to launch two new        [Agitate]
@@ -104,6 +108,7 @@ data capture. See it in action →
 ```
 
 ### BAB (Before, After, Bridge)
+
 ```
 Before: Current painful state
 After:  Desired future state
@@ -111,6 +116,7 @@ Bridge: How to get there (your product/service)
 ```
 
 ### 4Ps (Promise, Picture, Proof, Push)
+
 ```
 Promise: Bold claim or benefit
 Picture: Help reader visualize the outcome
@@ -122,18 +128,19 @@ Push:    Urgency or clear next step
 
 ### Social Media Character Limits and Best Practices
 
-| Platform | Ideal Length | Best Practices |
-|---|---|---|
-| Twitter/X | 70-100 chars (engagement sweet spot) | Questions, threads, polls; 1-2 hashtags |
-| LinkedIn | 1300 chars (before "see more") | Professional tone, personal stories, carousels; 3-5 hashtags |
-| Instagram caption | 125 chars (before truncation) | Visual-first, emoji ok, 20-30 hashtags in comment |
-| Facebook | 40-80 chars (highest engagement) | Questions, storytelling, video preferred |
-| TikTok caption | 150 chars | Trending sounds, hooks in first 3 seconds |
-| YouTube title | 60 chars max | Keyword-front, emotional trigger, number |
-| Email subject | 30-50 chars | Personalization, curiosity gap, urgency |
-| Blog headline | 55-70 chars | How-to, numbered lists, power words |
+| Platform          | Ideal Length                         | Best Practices                                               |
+| ----------------- | ------------------------------------ | ------------------------------------------------------------ |
+| Twitter/X         | 70-100 chars (engagement sweet spot) | Questions, threads, polls; 1-2 hashtags                      |
+| LinkedIn          | 1300 chars (before "see more")       | Professional tone, personal stories, carousels; 3-5 hashtags |
+| Instagram caption | 125 chars (before truncation)        | Visual-first, emoji ok, 20-30 hashtags in comment            |
+| Facebook          | 40-80 chars (highest engagement)     | Questions, storytelling, video preferred                     |
+| TikTok caption    | 150 chars                            | Trending sounds, hooks in first 3 seconds                    |
+| YouTube title     | 60 chars max                         | Keyword-front, emotional trigger, number                     |
+| Email subject     | 30-50 chars                          | Personalization, curiosity gap, urgency                      |
+| Blog headline     | 55-70 chars                          | How-to, numbered lists, power words                          |
 
 ### Post Structure by Platform
+
 ```
 # LinkedIn
 [Hook line — bold statement or question]
@@ -178,15 +185,16 @@ CTA: Save this post / Tag someone who needs this
 
 ### Voice Attributes Matrix
 
-| Attribute | We Are | We Are Not | Example |
-|---|---|---|---|
-| Tone | Confident | Arrogant | "Here's what works" not "We're the best" |
-| Language | Clear | Simplistic | Explain complex topics simply |
-| Humor | Witty | Sarcastic | Light wordplay, never at reader's expense |
-| Formality | Professional | Stuffy | First person, contractions ok |
-| Emotion | Empathetic | Manipulative | Acknowledge pain, don't exploit it |
+| Attribute | We Are       | We Are Not   | Example                                   |
+| --------- | ------------ | ------------ | ----------------------------------------- |
+| Tone      | Confident    | Arrogant     | "Here's what works" not "We're the best"  |
+| Language  | Clear        | Simplistic   | Explain complex topics simply             |
+| Humor     | Witty        | Sarcastic    | Light wordplay, never at reader's expense |
+| Formality | Professional | Stuffy       | First person, contractions ok             |
+| Emotion   | Empathetic   | Manipulative | Acknowledge pain, don't exploit it        |
 
 ### Voice Consistency Checklist
+
 - Would a real person say this out loud?
 - Does it sound like the same person across all channels?
 - Is the vocabulary level appropriate for the audience?
@@ -196,6 +204,7 @@ CTA: Save this post / Tag someone who needs this
 ## Headline Formulas
 
 ### Proven Patterns
+
 ```
 How to [Achieve Desired Outcome] Without [Common Objection]
 [Number] [Adjective] Ways to [Achieve Goal] in [Timeframe]
@@ -209,17 +218,18 @@ Stop [Bad Practice]. Start [Good Practice]. Here's How.
 
 ### Headline Testing Criteria
 
-| Factor | Weight | Evaluation |
-|---|---|---|
-| Clarity | 30% | Reader knows what they'll get |
-| Specificity | 25% | Numbers, outcomes, timeframes |
-| Emotional trigger | 20% | Curiosity, fear, aspiration |
-| Relevance | 15% | Matches audience pain points |
-| Uniqueness | 10% | Stands out from competitors |
+| Factor            | Weight | Evaluation                    |
+| ----------------- | ------ | ----------------------------- |
+| Clarity           | 30%    | Reader knows what they'll get |
+| Specificity       | 25%    | Numbers, outcomes, timeframes |
+| Emotional trigger | 20%    | Curiosity, fear, aspiration   |
+| Relevance         | 15%    | Matches audience pain points  |
+| Uniqueness        | 10%    | Stands out from competitors   |
 
 ## Email Copy Patterns
 
 ### Welcome Email
+
 ```
 Subject: Welcome to [Brand] — here's your first win
 
@@ -241,6 +251,7 @@ human will answer.
 ```
 
 ### Promotional Email
+
 ```
 Subject: [Benefit] — [Time Limitation]
 
@@ -260,28 +271,28 @@ Here's what [Customer/Number] are saying:
 
 ## Content Calendar Template
 
-| Day | Platform | Content Type | Topic/Theme | CTA | Status |
-|---|---|---|---|---|---|
-| Mon | LinkedIn | Thought leadership | Industry trend | Comment | Draft |
-| Tue | Twitter | Thread | How-to tip | Follow | Scheduled |
-| Wed | Blog | Long-form article | Deep dive | Subscribe | Writing |
-| Thu | Instagram | Carousel | Quick tips | Save | Design |
-| Fri | Email | Newsletter | Weekly roundup | Read more | Template |
+| Day | Platform  | Content Type       | Topic/Theme    | CTA       | Status    |
+| --- | --------- | ------------------ | -------------- | --------- | --------- |
+| Mon | LinkedIn  | Thought leadership | Industry trend | Comment   | Draft     |
+| Tue | Twitter   | Thread             | How-to tip     | Follow    | Scheduled |
+| Wed | Blog      | Long-form article  | Deep dive      | Subscribe | Writing   |
+| Thu | Instagram | Carousel           | Quick tips     | Save      | Design    |
+| Fri | Email     | Newsletter         | Weekly roundup | Read more | Template  |
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
-|---|---|---|
-| Writing for the brand, not the audience | Self-serving content gets ignored | Lead with audience pain points and desires |
-| Same copy across all platforms | Ignores platform culture and format | Adapt tone, length, and structure per channel |
-| Burying the CTA in long copy | Reader never reaches the ask | Put CTA early or make it impossible to miss |
-| Leading with features, not benefits | "What it does" doesn't motivate action | Translate features into outcomes |
-| Corporate jargon ("leverage", "synergy") | Feels inauthentic and impersonal | Use plain language a friend would use |
-| No clear goal per content piece | Impossible to measure success | Define one measurable goal before drafting |
-| Clickbait headlines | Erodes trust when content doesn't deliver | Promise only what the content provides |
-| No A/B testing | Missing optimization opportunities | Test 2-3 headline and CTA variations |
-| Missing UTM tracking parameters | Cannot attribute traffic to content | Add UTMs to every outbound link |
-| Publishing without compliance check | Legal and regulatory risk | Review disclosures, disclaimers, and regulations |
+| Anti-Pattern                             | Why It Fails                              | What To Do Instead                               |
+| ---------------------------------------- | ----------------------------------------- | ------------------------------------------------ |
+| Writing for the brand, not the audience  | Self-serving content gets ignored         | Lead with audience pain points and desires       |
+| Same copy across all platforms           | Ignores platform culture and format       | Adapt tone, length, and structure per channel    |
+| Burying the CTA in long copy             | Reader never reaches the ask              | Put CTA early or make it impossible to miss      |
+| Leading with features, not benefits      | "What it does" doesn't motivate action    | Translate features into outcomes                 |
+| Corporate jargon ("leverage", "synergy") | Feels inauthentic and impersonal          | Use plain language a friend would use            |
+| No clear goal per content piece          | Impossible to measure success             | Define one measurable goal before drafting       |
+| Clickbait headlines                      | Erodes trust when content doesn't deliver | Promise only what the content provides           |
+| No A/B testing                           | Missing optimization opportunities        | Test 2-3 headline and CTA variations             |
+| Missing UTM tracking parameters          | Cannot attribute traffic to content       | Add UTMs to every outbound link                  |
+| Publishing without compliance check      | Legal and regulatory risk                 | Review disclosures, disclaimers, and regulations |
 
 ## Anti-Rationalization Guards
 
@@ -293,14 +304,13 @@ Here's what [Customer/Number] are saying:
 
 ## Integration Points
 
-| Skill | How It Connects |
-|---|---|
-| `seo-optimizer` | Keywords and meta tag strategy inform content headlines and structure |
-| `content-research-writer` | Research findings provide evidence for marketing claims |
-| `email-composer` | Brand voice and templates feed directly into email campaigns |
-| `llm-as-judge` | Evaluate content quality against brand voice rubric |
-| `frontend-ui-design` | Landing page copy must align with visual hierarchy and CTA placement |
-| `senior-prompt-engineer` | AI-generated copy benefits from structured prompt patterns |
+| Skill                     | How It Connects                                                       |
+| ------------------------- | --------------------------------------------------------------------- |
+| `seo-optimizer`           | Keywords and meta tag strategy inform content headlines and structure |
+| `content-research-writer` | Research findings provide evidence for marketing claims               |
+| `llm-as-judge`            | Evaluate content quality against brand voice rubric                   |
+| `frontend-ui-design`      | Landing page copy must align with visual hierarchy and CTA placement  |
+| `senior-prompt-engineer`  | AI-generated copy benefits from structured prompt patterns            |
 
 ## Skill Type
 

@@ -48,17 +48,17 @@ Apply this skill whenever PDFs need to be created, parsed, transformed, or combi
 
 ## Library Selection Decision Table
 
-| Task | Library | Why | Alternative |
-|---|---|---|---|
-| Text extraction | pdfplumber | Best accuracy, handles layouts | pypdf (simpler, less accurate) |
-| Table extraction | pdfplumber | Structured table parsing | camelot (dedicated table tool) |
-| PDF generation | reportlab | Full control, professional quality | weasyprint (HTML-to-PDF) |
-| Merge / split | pypdf | Simple, reliable, fast | — |
-| Form filling | pypdf | Reads and fills AcroForms | pdfrw (alternative API) |
-| Metadata read/write | pypdf | Read/write PDF properties | — |
-| OCR (scanned docs) | pytesseract + pdf2image | Scanned document text extraction | EasyOCR (deep learning) |
-| Watermarking | pypdf + reportlab | Overlay pages | — |
-| HTML to PDF | weasyprint | CSS-based layout, server-friendly | playwright (browser rendering) |
+| Task                | Library                 | Why                                | Alternative                    |
+| ------------------- | ----------------------- | ---------------------------------- | ------------------------------ |
+| Text extraction     | pdfplumber              | Best accuracy, handles layouts     | pypdf (simpler, less accurate) |
+| Table extraction    | pdfplumber              | Structured table parsing           | camelot (dedicated table tool) |
+| PDF generation      | reportlab               | Full control, professional quality | weasyprint (HTML-to-PDF)       |
+| Merge / split       | pypdf                   | Simple, reliable, fast             | —                              |
+| Form filling        | pypdf                   | Reads and fills AcroForms          | pdfrw (alternative API)        |
+| Metadata read/write | pypdf                   | Read/write PDF properties          | —                              |
+| OCR (scanned docs)  | pytesseract + pdf2image | Scanned document text extraction   | EasyOCR (deep learning)        |
+| Watermarking        | pypdf + reportlab       | Overlay pages                      | —                              |
+| HTML to PDF         | weasyprint              | CSS-based layout, server-friendly  | playwright (browser rendering) |
 
 ## PDF Generation with ReportLab
 
@@ -125,6 +125,7 @@ def generate_report(output_path, data):
 ```
 
 ### Custom Page Template (Headers/Footers)
+
 ```python
 from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate
 from datetime import datetime
@@ -148,6 +149,7 @@ doc.addPageTemplates([PageTemplate(id='main', frames=[frame], onPage=add_header_
 ## Text and Table Extraction
 
 ### pdfplumber
+
 ```python
 import pdfplumber
 
@@ -172,6 +174,7 @@ with pdfplumber.open('document.pdf') as pdf:
 ```
 
 ### Table Extraction Settings
+
 ```python
 table_settings = {
     "vertical_strategy": "lines",    # or "text", "explicit"
@@ -327,16 +330,16 @@ with open('updated.pdf', 'wb') as f:
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
-|---|---|---|
-| OCR on digital (text-based) PDFs | Slow and inaccurate when text is already extractable | Check if text extracts first, OCR only if empty |
-| Not handling encrypted PDFs | Crashes or silent failures | Detect encryption, prompt for password or skip gracefully |
-| Loading entire large PDFs into memory | Memory exhaustion on server | Stream pages or process in chunks |
-| Ignoring page rotation metadata | Text extraction returns garbled results | Read and apply rotation before extraction |
-| Hardcoding page dimensions | Breaks on non-A4 documents | Read dimensions from source PDF |
-| Not closing file handles | Resource leaks in long-running processes | Use context managers (`with` statements) |
-| Generating without multi-viewer testing | Rendering differences across viewers | Test in Adobe Reader, Preview, and Chrome |
-| Extracting tables without tuning settings | Poor column alignment, merged cells | Adjust `table_settings` per document type |
+| Anti-Pattern                              | Why It Fails                                         | What To Do Instead                                        |
+| ----------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------- |
+| OCR on digital (text-based) PDFs          | Slow and inaccurate when text is already extractable | Check if text extracts first, OCR only if empty           |
+| Not handling encrypted PDFs               | Crashes or silent failures                           | Detect encryption, prompt for password or skip gracefully |
+| Loading entire large PDFs into memory     | Memory exhaustion on server                          | Stream pages or process in chunks                         |
+| Ignoring page rotation metadata           | Text extraction returns garbled results              | Read and apply rotation before extraction                 |
+| Hardcoding page dimensions                | Breaks on non-A4 documents                           | Read dimensions from source PDF                           |
+| Not closing file handles                  | Resource leaks in long-running processes             | Use context managers (`with` statements)                  |
+| Generating without multi-viewer testing   | Rendering differences across viewers                 | Test in Adobe Reader, Preview, and Chrome                 |
+| Extracting tables without tuning settings | Poor column alignment, merged cells                  | Adjust `table_settings` per document type                 |
 
 ## Anti-Rationalization Guards
 
@@ -348,14 +351,13 @@ with open('updated.pdf', 'wb') as f:
 
 ## Integration Points
 
-| Skill | How It Connects |
-|---|---|
-| `docx-processing` | DOCX-to-PDF conversion pipeline, or choosing between formats |
-| `xlsx-processing` | Data from Excel populates PDF report tables |
-| `email-composer` | Generated PDFs attach to professional emails |
-| `content-research-writer` | Research output formatted as PDF whitepapers |
-| `file-organizer` | Output file naming and directory structure conventions |
-| `deployment` | PDF generation pipelines in server/CI environments |
+| Skill                     | How It Connects                                              |
+| ------------------------- | ------------------------------------------------------------ |
+| `docx-processing`         | DOCX-to-PDF conversion pipeline, or choosing between formats |
+| `xlsx-processing`         | Data from Excel populates PDF report tables                  |
+| `content-research-writer` | Research output formatted as PDF whitepapers                 |
+| `file-organizer`          | Output file naming and directory structure conventions       |
+| `deployment`              | PDF generation pipelines in server/CI environments           |
 
 ## Skill Type
 

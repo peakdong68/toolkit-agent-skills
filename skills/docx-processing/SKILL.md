@@ -48,18 +48,19 @@ Apply this skill whenever Word documents need to be created, populated, or trans
 
 ## Approach Decision Table
 
-| Scenario | Approach | Library | Why |
-|---|---|---|---|
-| One-off report generation | From scratch | python-docx | Full programmatic control |
-| Recurring reports with fixed layout | Template | docxtpl | Design layout in Word, fill with data |
-| Bulk letter generation (mail merge) | Template | docxtpl | One template, many outputs |
-| Complex formatting, custom styles | From scratch | python-docx | Direct access to document model |
-| Non-technical users design template | Template | docxtpl | Users edit in Word, developers bind data |
-| PDF output required | Either + conversion | libreoffice / docx2pdf | Post-processing step |
+| Scenario                            | Approach            | Library                | Why                                      |
+| ----------------------------------- | ------------------- | ---------------------- | ---------------------------------------- |
+| One-off report generation           | From scratch        | python-docx            | Full programmatic control                |
+| Recurring reports with fixed layout | Template            | docxtpl                | Design layout in Word, fill with data    |
+| Bulk letter generation (mail merge) | Template            | docxtpl                | One template, many outputs               |
+| Complex formatting, custom styles   | From scratch        | python-docx            | Direct access to document model          |
+| Non-technical users design template | Template            | docxtpl                | Users edit in Word, developers bind data |
+| PDF output required                 | Either + conversion | libreoffice / docx2pdf | Post-processing step                     |
 
 ## python-docx Patterns
 
 ### Document Creation
+
 ```python
 from docx import Document
 from docx.shared import Inches, Pt, Cm, RGBColor
@@ -105,6 +106,7 @@ doc.save('report.docx')
 ```
 
 ### Headers and Footers
+
 ```python
 from docx.enum.section import WD_ORIENT
 from docx.oxml.ns import qn
@@ -152,6 +154,7 @@ run3._r.append(fldChar2)
 ```
 
 ### Table Formatting
+
 ```python
 from docx.shared import Cm, Pt
 from docx.oxml.ns import nsdecls
@@ -180,6 +183,7 @@ for row in table.rows:
 ## docxtpl Template Patterns
 
 ### Template Syntax (Jinja2)
+
 ```
 Template file (template.docx) contains:
 
@@ -200,6 +204,7 @@ URGENT: This requires immediate attention.
 ```
 
 ### Template Rendering
+
 ```python
 from docxtpl import DocxTemplate, InlineImage
 from docx.shared import Mm
@@ -224,6 +229,7 @@ tpl.save('output.docx')
 ```
 
 ### Rich Text in Templates
+
 ```python
 from docxtpl import RichText
 
@@ -239,6 +245,7 @@ context = {'formatted_text': rt}
 ```
 
 ### Tables in Templates
+
 ```
 Template table row with loop:
 {% tr for row in table_data %}
@@ -271,6 +278,7 @@ with open('recipients.csv') as f:
 ## Style Management
 
 ### Custom Styles
+
 ```python
 from docx.enum.style import WD_STYLE_TYPE
 
@@ -288,6 +296,7 @@ doc.add_paragraph('Section Title', style='CustomHeading')
 ```
 
 ### Style Inheritance
+
 ```
 Normal → Heading 1 → Heading 2 → ...
 Normal → Body Text → List Paragraph
@@ -297,6 +306,7 @@ Normal → Table Normal → Table Grid
 ## Conversion Strategies
 
 ### DOCX to PDF
+
 ```python
 # Option 1: LibreOffice (most reliable, server-friendly)
 import subprocess
@@ -336,17 +346,17 @@ def safe_generate_document(template_path, context, output_path):
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
-|---|---|---|
-| Hardcoding font sizes instead of styles | Inconsistent formatting, hard to maintain | Define styles once, apply everywhere |
-| Not handling missing template variables | Runtime crashes on incomplete data | Use `jinja2.Undefined` or default filters |
-| Huge tables without pagination | Unreadable output, broken layouts | Break tables across pages or summarize |
-| Absolute image paths | Breaks portability across environments | Use relative paths or embed images |
-| Not testing with different Word versions | Formatting breaks silently | Test in Word, LibreOffice, and Google Docs |
-| Modifying XML directly when API exists | Fragile, version-dependent code | Use python-docx API methods first |
-| All direct formatting, no styles | Impossible to maintain consistency | Create and apply named styles |
-| Ignoring Unicode characters | Mojibake in generated documents | Test with accented characters, CJK, symbols |
-| Not re-loading template in mail merge | Corrupted output after first render | Re-instantiate DocxTemplate per iteration |
+| Anti-Pattern                             | Why It Fails                              | What To Do Instead                          |
+| ---------------------------------------- | ----------------------------------------- | ------------------------------------------- |
+| Hardcoding font sizes instead of styles  | Inconsistent formatting, hard to maintain | Define styles once, apply everywhere        |
+| Not handling missing template variables  | Runtime crashes on incomplete data        | Use `jinja2.Undefined` or default filters   |
+| Huge tables without pagination           | Unreadable output, broken layouts         | Break tables across pages or summarize      |
+| Absolute image paths                     | Breaks portability across environments    | Use relative paths or embed images          |
+| Not testing with different Word versions | Formatting breaks silently                | Test in Word, LibreOffice, and Google Docs  |
+| Modifying XML directly when API exists   | Fragile, version-dependent code           | Use python-docx API methods first           |
+| All direct formatting, no styles         | Impossible to maintain consistency        | Create and apply named styles               |
+| Ignoring Unicode characters              | Mojibake in generated documents           | Test with accented characters, CJK, symbols |
+| Not re-loading template in mail merge    | Corrupted output after first render       | Re-instantiate DocxTemplate per iteration   |
 
 ## Anti-Rationalization Guards
 
@@ -358,14 +368,13 @@ def safe_generate_document(template_path, context, output_path):
 
 ## Integration Points
 
-| Skill | How It Connects |
-|---|---|
-| `pdf-processing` | DOCX-to-PDF conversion, or choosing PDF generation directly |
-| `xlsx-processing` | Data from Excel feeds into document generation contexts |
-| `email-composer` | Generated documents attach to professional emails |
-| `content-research-writer` | Research content formatted into whitepapers and reports |
-| `file-organizer` | Output file naming and directory structure conventions |
-| `deployment` | Document generation pipelines in CI/CD or server environments |
+| Skill                     | How It Connects                                               |
+| ------------------------- | ------------------------------------------------------------- |
+| `pdf-processing`          | DOCX-to-PDF conversion, or choosing PDF generation directly   |
+| `xlsx-processing`         | Data from Excel feeds into document generation contexts       |
+| `content-research-writer` | Research content formatted into whitepapers and reports       |
+| `file-organizer`          | Output file naming and directory structure conventions        |
+| `deployment`              | Document generation pipelines in CI/CD or server environments |
 
 ## Skill Type
 
