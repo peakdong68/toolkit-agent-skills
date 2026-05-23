@@ -20,11 +20,6 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 ```
 
-## What You Get
-
-| 65 Skills | 20 Agents | 32 Commands | Hooks | Memory System |
-|:---------:|:--------:|:-----------:|:-----:|:-------------:|
-| Structured workflows for every phase of development | Specialized sub-agents for parallel work | Slash commands that trigger skills | Session-start context injection | Persistent project knowledge |
 
 
 ---
@@ -291,16 +286,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 </details>
 
-<details>
-<summary><strong>Frameworks & Languages (3)</strong> — Laravel and PHP</summary>
 
-| Skill | Description |
-|-------|-------------|
-| `laravel-specialist` | Laravel development — Eloquent, Blade, Livewire, queues, Pest testing |
-| `php-specialist` | Modern PHP 8.x — enums, fibers, readonly, PSR standards, static analysis |
-| `laravel-boost` | Laravel Boost performance optimization — caching, database, Octane |
-
-</details>
 
 ---
 
@@ -368,8 +354,6 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `/mcp` | MCP server development | `mcp-builder` |
 | `/commit` | Git commit helper | `git-commit-helper` |
 | `/decompose` | Task decomposition | `task-decomposition` |
-| `/laravel` | Laravel development | `laravel-specialist` |
-| `/php` | Modern PHP development | `php-specialist` |
 | `/archive` | Archive completed features | `archive` |
 
 </details>

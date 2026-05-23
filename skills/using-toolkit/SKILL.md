@@ -149,14 +149,6 @@ Invoke in order: (1) Process (brainstorming, planning) → (2) Specialist (front
 | `pdf-processing`  | PDF generation, form filling, OCR, merge/split |
 | `xlsx-processing` | Excel manipulation, formulas, charts           |
 
-### Frameworks & Languages Skills (3)
-
-| Skill                | When to Use                                                    |
-| -------------------- | -------------------------------------------------------------- |
-| `laravel-specialist` | Laravel development — Eloquent, Blade, Livewire, queues, Pest  |
-| `php-specialist`     | Modern PHP 8.x — PSR standards, static analysis, Composer      |
-| `laravel-boost`      | Laravel Boost performance optimization — caching, queries, N+1 |
-
 ### Productivity Skills (1)
 
 | Skill            | When to Use                                            |
@@ -173,31 +165,28 @@ Invoke in order: (1) Process (brainstorming, planning) → (2) Specialist (front
 
 ## Decision Table: Choosing the Right Skill
 
-| User Request Contains                      | Primary Skill                                            | Supporting Skills                            |
-| ------------------------------------------ | -------------------------------------------------------- | -------------------------------------------- |
-| "build", "implement", "create feature"     | `planning`                                               | `brainstorming`, `tdd`, `code-review`        |
-| "fix", "bug", "error", "broken"            | `systematic-debugging`                                   | `tdd`, `resilient-execution`                 |
-| "test", "coverage", "spec"                 | `test-driven-development`                                | `testing-strategy`, `acceptance-testing`     |
-| "review", "check", "audit"                 | `code-review`                                            | `security-review`, `clean-code`              |
-| "plan", "how should we"                    | `planning`                                               | `brainstorming`, `task-decomposition`        |
-| "deploy", "CI/CD", "pipeline"              | `deployment`                                             | `senior-devops`                              |
-| "API", "endpoint", "REST", "GraphQL"       | `api-design`                                             | `senior-backend`                             |
-| "React", "Next.js", "component"            | `senior-frontend`                                        | `react-best-practices`, `frontend-ui-design` |
-| "Laravel", "Eloquent", "Blade", "Livewire" | `laravel-specialist`                                     | `php-specialist`, `laravel-boost`            |
-| "PHP", "Composer", "PSR"                   | `php-specialist`                                         | `laravel-specialist`                         |
-| "database", "schema", "migration"          | `database-schema-design`                                 | `senior-backend`                             |
-| "design", "UI", "UX"                       | `ui-ux-pro-max`                                          | `ui-design-system`, `frontend-ui-design`     |
-| "mobile", "iOS", "Android"                 | `mobile-design`                                          | `ui-ux-pro-max`                              |
-| "document", "docs", "README"               | `tech-docs-generator`                                    | `prd-generation`                             |
-| "spec", "requirements", "PRD"              | `spec-writing`                                           | `prd-generation`                             |
-| "autonomous", "loop", "ralph"              | `autonomous-loop`                                        | `ralph-status`, `circuit-breaker`            |
-| "performance", "optimize", "slow"          | `performance-optimization`                               | `laravel-boost`                              |
-| "security", "vulnerability", "auth"        | `security-review`                                        | `senior-backend`                             |
-| "SEO", "meta tags", "search engine"        | `seo-optimizer`                                          | `content-research-writer`                    |
-| "email", "draft", "compose"                | `email-composer`                                         | `content-creator`                            |
-| "PDF", "Word", "Excel"                     | `pdf-processing` / `docx-processing` / `xlsx-processing` | —                                            |
-| "agent", "AI", "tool use"                  | `agent-development`                                      | `mcp-builder`                                |
-| "MCP", "server", "transport"               | `mcp-builder`                                            | `agent-development`                          |
+| User Request Contains                  | Primary Skill                                            | Supporting Skills                            |
+| -------------------------------------- | -------------------------------------------------------- | -------------------------------------------- |
+| "build", "implement", "create feature" | `planning`                                               | `brainstorming`, `tdd`, `code-review`        |
+| "fix", "bug", "error", "broken"        | `systematic-debugging`                                   | `tdd`, `resilient-execution`                 |
+| "test", "coverage", "spec"             | `test-driven-development`                                | `testing-strategy`, `acceptance-testing`     |
+| "review", "check", "audit"             | `code-review`                                            | `security-review`, `clean-code`              |
+| "plan", "how should we"                | `planning`                                               | `brainstorming`, `task-decomposition`        |
+| "deploy", "CI/CD", "pipeline"          | `deployment`                                             | `senior-devops`                              |
+| "API", "endpoint", "REST", "GraphQL"   | `api-design`                                             | `senior-backend`                             |
+| "React", "Next.js", "component"        | `senior-frontend`                                        | `react-best-practices`, `frontend-ui-design` |
+| "database", "schema", "migration"      | `database-schema-design`                                 | `senior-backend`                             |
+| "design", "UI", "UX"                   | `ui-ux-pro-max`                                          | `ui-design-system`, `frontend-ui-design`     |
+| "mobile", "iOS", "Android"             | `mobile-design`                                          | `ui-ux-pro-max`                              |
+| "document", "docs", "README"           | `tech-docs-generator`                                    | `prd-generation`                             |
+| "spec", "requirements", "PRD"          | `spec-writing`                                           | `prd-generation`                             |
+| "autonomous", "loop", "ralph"          | `autonomous-loop`                                        | `ralph-status`, `circuit-breaker`            |
+| "security", "vulnerability", "auth"    | `security-review`                                        | `senior-backend`                             |
+| "SEO", "meta tags", "search engine"    | `seo-optimizer`                                          | `content-research-writer`                    |
+| "email", "draft", "compose"            | `email-composer`                                         | `content-creator`                            |
+| "PDF", "Word", "Excel"                 | `pdf-processing` / `docx-processing` / `xlsx-processing` | —                                            |
+| "agent", "AI", "tool use"              | `agent-development`                                      | `mcp-builder`                                |
+| "MCP", "server", "transport"           | `mcp-builder`                                            | `agent-development`                          |
 
 ---
 
@@ -231,9 +220,6 @@ Invoke in order: (1) Process (brainstorming, planning) → (2) Specialist (front
 | "Build an AI agent"           | agent-development -> planning -> tdd                                        |
 | "Set up infrastructure"       | senior-devops -> deployment                                                 |
 | "Decompose complex task"      | task-decomposition -> dispatching-parallel-agents                           |
-| "Build Laravel feature"       | laravel-specialist -> planning -> tdd -> code-review                        |
-| "Optimize Laravel app"        | laravel-boost -> performance-optimization -> verification                   |
-| "Write PHP code"              | php-specialist -> tdd -> clean-code                                         |
 
 ---
 
@@ -268,7 +254,7 @@ Plan before coding. TDD always. Verify completion with evidence. Review before m
 ## Skill Types
 
 **Rigid** (TDD, debugging, planning, verification, code-review, autonomous-loop, circuit-breaker, spec-writing, acceptance-testing): Follow exactly.
-**Flexible** (brainstorming, tech-docs, api-design, frontend, database, performance, security-review, prd-generation, laravel-specialist, php-specialist): Adapt to context.
+**Flexible** (brainstorming, tech-docs, api-design, frontend, database, performance, security-review, prd-generation): Adapt to context.
 
 ---
 

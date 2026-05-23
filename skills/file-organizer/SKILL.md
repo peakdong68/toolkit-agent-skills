@@ -58,18 +58,19 @@ Apply this skill whenever a project's file organization needs to be established,
 
 ## Architecture Strategy Decision Table
 
-| Project Size | Team Size | Recommendation | Why |
-|---|---|---|---|
-| < 20 files | 1-2 devs | Layer-based | Simple, low overhead |
-| 20-100 files | 2-5 devs | Hybrid | Balance of simplicity and scalability |
-| 100+ files | 5+ devs | Feature-based | Self-contained modules reduce conflicts |
-| Multiple apps sharing code | Any | Monorepo | Shared packages with clear boundaries |
-| Rapid prototype / MVP | 1-3 devs | Layer-based | Speed over structure, refactor later |
-| Enterprise, multiple teams | 10+ devs | Feature-based + Monorepo | Team ownership per feature module |
+| Project Size               | Team Size | Recommendation           | Why                                     |
+| -------------------------- | --------- | ------------------------ | --------------------------------------- |
+| < 20 files                 | 1-2 devs  | Layer-based              | Simple, low overhead                    |
+| 20-100 files               | 2-5 devs  | Hybrid                   | Balance of simplicity and scalability   |
+| 100+ files                 | 5+ devs   | Feature-based            | Self-contained modules reduce conflicts |
+| Multiple apps sharing code | Any       | Monorepo                 | Shared packages with clear boundaries   |
+| Rapid prototype / MVP      | 1-3 devs  | Layer-based              | Speed over structure, refactor later    |
+| Enterprise, multiple teams | 10+ devs  | Feature-based + Monorepo | Team ownership per feature module       |
 
 ## Architecture Patterns
 
 ### Feature-Based (Domain-Driven)
+
 Organize by business domain. Each feature is self-contained.
 
 ```
@@ -113,6 +114,7 @@ src/
 **Best for**: Teams > 5 developers, medium-large applications, clear domain boundaries.
 
 ### Layer-Based (Technical)
+
 Organize by technical concern.
 
 ```
@@ -142,6 +144,7 @@ src/
 **Best for**: Small teams (1-3), simple applications, rapid prototyping.
 
 ### Hybrid (Recommended Default)
+
 Combine both: shared layer + feature modules.
 
 ```
@@ -167,6 +170,7 @@ src/
 ## Monorepo Patterns
 
 ### Turborepo / pnpm Workspaces
+
 ```
 root/
   apps/
@@ -193,6 +197,7 @@ root/
 ```
 
 ### Package Boundaries
+
 - Apps depend on packages, never on other apps
 - Packages can depend on other packages
 - No circular dependencies
@@ -200,6 +205,7 @@ root/
 - Shared packages export via `index.ts` barrel
 
 ### Configuration Sharing
+
 ```json
 // packages/config/typescript/base.json
 {
@@ -221,19 +227,20 @@ root/
 
 ### Files and Directories
 
-| Type | Convention | Example |
-|---|---|---|
-| Components | PascalCase | `UserProfile.tsx` |
-| Hooks | camelCase with `use` prefix | `useAuth.ts` |
-| Utilities | camelCase | `formatDate.ts` |
-| Types | camelCase with `.types` suffix | `auth.types.ts` |
-| Tests | same name with `.test` suffix | `UserProfile.test.tsx` |
-| Styles | same name with `.module.css` suffix | `UserProfile.module.css` |
-| Constants | camelCase or UPPER_SNAKE in file | `config.ts` |
-| API/Services | camelCase with `.api` or `.service` | `auth.api.ts` |
-| Directories | kebab-case | `user-profile/` |
+| Type         | Convention                          | Example                  |
+| ------------ | ----------------------------------- | ------------------------ |
+| Components   | PascalCase                          | `UserProfile.tsx`        |
+| Hooks        | camelCase with `use` prefix         | `useAuth.ts`             |
+| Utilities    | camelCase                           | `formatDate.ts`          |
+| Types        | camelCase with `.types` suffix      | `auth.types.ts`          |
+| Tests        | same name with `.test` suffix       | `UserProfile.test.tsx`   |
+| Styles       | same name with `.module.css` suffix | `UserProfile.module.css` |
+| Constants    | camelCase or UPPER_SNAKE in file    | `config.ts`              |
+| API/Services | camelCase with `.api` or `.service` | `auth.api.ts`            |
+| Directories  | kebab-case                          | `user-profile/`          |
 
 ### Component File Naming
+
 ```
 # Single-file component
 Button.tsx
@@ -248,6 +255,7 @@ Button/
 ```
 
 ### Import Ordering Convention
+
 ```typescript
 // 1. External packages
 import React from 'react';
@@ -270,6 +278,7 @@ import styles from './Auth.module.css';
 ## Index Files and Barrel Exports
 
 ### Barrel Export Pattern
+
 ```typescript
 // features/auth/index.ts — Public API
 export { LoginForm } from './components/LoginForm';
@@ -282,18 +291,19 @@ export type { User, AuthState } from './types/auth.types';
 
 ### Barrel Export Decision Table
 
-| Context | Use Barrel? | Why |
-|---|---|---|
-| Feature module public API | Yes, always | Clean boundary, controlled surface area |
-| Shared component library | Yes, always | Single import point for consumers |
-| Utility libraries | Yes, always | Discoverability for shared functions |
-| Inside a feature (internal) | No | Import directly, avoid indirection |
-| Would cause circular dependencies | No | Break the cycle, import directly |
-| Hurts tree-shaking (verified) | No | Use direct imports for bundle size |
+| Context                           | Use Barrel? | Why                                     |
+| --------------------------------- | ----------- | --------------------------------------- |
+| Feature module public API         | Yes, always | Clean boundary, controlled surface area |
+| Shared component library          | Yes, always | Single import point for consumers       |
+| Utility libraries                 | Yes, always | Discoverability for shared functions    |
+| Inside a feature (internal)       | No          | Import directly, avoid indirection      |
+| Would cause circular dependencies | No          | Break the cycle, import directly        |
+| Hurts tree-shaking (verified)     | No          | Use direct imports for bundle size      |
 
 ## Configuration File Placement
 
 ### Root-Level Configuration
+
 ```
 root/
   .editorconfig         # Editor settings
@@ -311,6 +321,7 @@ root/
 ```
 
 ### Environment Files
+
 ```
 .env                    # Local defaults (gitignored)
 .env.example            # Template with dummy values (committed)
@@ -321,6 +332,7 @@ root/
 ```
 
 ### Documentation Structure
+
 ```
 docs/
   architecture/
@@ -338,6 +350,7 @@ docs/
 ## Migration Strategy
 
 ### Incremental Migration (Recommended)
+
 1. Create the target structure alongside existing code
 2. Move one feature/module at a time
 3. Update imports using automated codemods
@@ -345,6 +358,7 @@ docs/
 5. Remove old structure after complete migration
 
 ### Automated Tools
+
 - `ts-morph`: programmatic TypeScript refactoring
 - `jscodeshift`: JavaScript codemods
 - IDE refactoring: rename/move with automatic import updates
@@ -352,18 +366,18 @@ docs/
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern | Why It Fails | What To Do Instead |
-|---|---|---|
-| Deeply nested folders (> 4 levels) | Hard to navigate, long import paths | Flatten structure, use path aliases |
-| `utils/` as a dumping ground | Becomes unmaintainable junk drawer | Organize utils by domain or purpose |
-| Circular dependencies between features | Build failures, unclear ownership | Features import only from shared or own modules |
-| Barrel exports re-exporting everything | Kills tree-shaking, bloats bundles | Export only the public API |
-| Inconsistent naming (mixed conventions) | Cognitive load, merge conflicts | Pick one convention, enforce with linter |
-| Config scattered across multiple locations | Hard to find and maintain | All config at project root |
-| Tests in separate directory tree | Hard to find tests for a file | Co-locate tests with source code |
-| 100+ files in one flat folder | Impossible to navigate | Group into sub-modules or features |
-| Index files containing logic | Unexpected side effects on import | Index files only re-export |
-| Big-bang migration (move everything at once) | High risk, hard to rollback | Incremental moves with tests after each |
+| Anti-Pattern                                 | Why It Fails                        | What To Do Instead                              |
+| -------------------------------------------- | ----------------------------------- | ----------------------------------------------- |
+| Deeply nested folders (> 4 levels)           | Hard to navigate, long import paths | Flatten structure, use path aliases             |
+| `utils/` as a dumping ground                 | Becomes unmaintainable junk drawer  | Organize utils by domain or purpose             |
+| Circular dependencies between features       | Build failures, unclear ownership   | Features import only from shared or own modules |
+| Barrel exports re-exporting everything       | Kills tree-shaking, bloats bundles  | Export only the public API                      |
+| Inconsistent naming (mixed conventions)      | Cognitive load, merge conflicts     | Pick one convention, enforce with linter        |
+| Config scattered across multiple locations   | Hard to find and maintain           | All config at project root                      |
+| Tests in separate directory tree             | Hard to find tests for a file       | Co-locate tests with source code                |
+| 100+ files in one flat folder                | Impossible to navigate              | Group into sub-modules or features              |
+| Index files containing logic                 | Unexpected side effects on import   | Index files only re-export                      |
+| Big-bang migration (move everything at once) | High risk, hard to rollback         | Incremental moves with tests after each         |
 
 ## Anti-Rationalization Guards
 
@@ -375,14 +389,13 @@ docs/
 
 ## Integration Points
 
-| Skill | How It Connects |
-|---|---|
-| `senior-frontend` | Frontend project structure follows feature-based or hybrid patterns |
-| `senior-architect` | Architecture decisions inform module boundaries and package structure |
-| `senior-fullstack` | Full-stack projects need coordinated frontend/backend organization |
-| `clean-code` | Naming conventions and module boundaries support clean code principles |
-| `deployment` | Monorepo structure affects CI/CD pipeline configuration |
-| `laravel-specialist` | Laravel projects follow framework-specific directory conventions |
+| Skill              | How It Connects                                                        |
+| ------------------ | ---------------------------------------------------------------------- |
+| `senior-frontend`  | Frontend project structure follows feature-based or hybrid patterns    |
+| `senior-architect` | Architecture decisions inform module boundaries and package structure  |
+| `senior-fullstack` | Full-stack projects need coordinated frontend/backend organization     |
+| `clean-code`       | Naming conventions and module boundaries support clean code principles |
+| `deployment`       | Monorepo structure affects CI/CD pipeline configuration                |
 
 ## Skill Type
 

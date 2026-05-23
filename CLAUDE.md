@@ -4,7 +4,7 @@
 
 ---
 
-## 1 SKILL CATALOG (65 Skills)
+## 1 SKILL CATALOG 
 
 **Core (6):** `using-toolkit`, `self-learning` `/learn`, `resilient-execution`, `circuit-breaker`, `auto-improvement`, `verification-before-completion` `/verify`
 
@@ -28,14 +28,12 @@
 
 **Communication (1):** `email-composer` `/email`
 
-**Frameworks (3):** `laravel-specialist` `/laravel`, `php-specialist` `/php`, `laravel-boost`
 
 **Rigid skills:** Follow exactly. **Flexible skills:** Adapt to context.
 
 ---
 
-## 2 AGENT DISPATCH TABLE (20 Agents)
-
+## 2 AGENT DISPATCH TABLE 
 
 | Agent                | Purpose                                                 | When to Dispatch                             | Expected Output                                                |
 | -------------------- | ------------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------- |
@@ -57,8 +55,7 @@
 | `typescript-pro`     | Advanced type patterns, branded types                   | TypeScript type design                       | Type definitions, utility types                                |
 | `task-decomposer`    | Hierarchical task breakdown                             | Task planning                                | Task tree, dependency graph                                    |
 | `mobile-developer`   | Cross-platform mobile patterns                          | Mobile development                           | Platform-specific code                                         |
-| `laravel-developer`  | Laravel specialist with Eloquent, Blade, Livewire, Pest | Laravel project work                         | Laravel-specific code                                          |
-| `php-developer`      | Modern PHP 8.x with PSR compliance, static analysis     | PHP project work                             | PHP-specific code                                              |
+                                           |
 
 
 ---
