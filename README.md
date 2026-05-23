@@ -275,7 +275,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 </details>
 
 <details>
-<summary><strong>生产力与沟通（2 项）</strong></summary>
+<summary><strong>生产力 </strong></summary>
 
 | 技能 | 描述 |
 |-------|-------------|
