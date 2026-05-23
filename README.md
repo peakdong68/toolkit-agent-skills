@@ -19,11 +19,6 @@ git clone https://github.com/peakdong68/toolkit-agent-skills.git
 claude --plugin-dir /path/to/toolkit-agent-skills
 
 ```
-## 您将获得什么
-
-| 65 项技能 | 20 个代理 | 32 条命令 | 钩子 | 记忆系统 |
-|:---------:|:--------:|:-----------:|:-----:|:-------------:|
-| 覆盖开发各阶段的结构化工作流 | 用于并行工作的专业化子代理 | 触发技能的斜杠命令 | 会话启动时的上下文注入 | 持久化的项目知识库 |
 
 
 ---
@@ -289,16 +284,6 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 </details>
 
-<details>
-<summary><strong>框架与语言（3 项）</strong> — Laravel 和 PHP</summary>
-
-| 技能 | 描述 |
-|-------|-------------|
-| `laravel-specialist` | Laravel 开发 — Eloquent、Blade、Livewire、队列、Pest 测试 |
-| `php-specialist` | 现代 PHP 8.x — 枚举、纤程、readonly、PSR 标准、静态分析 |
-| `laravel-boost` | Laravel Boost 性能优化 — 缓存、数据库、Octane |
-
-</details>
 
 ---
 
@@ -366,8 +351,6 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `/mcp` | MCP 服务器开发 | `mcp-builder` |
 | `/commit` | Git 提交助手 | `git-commit-helper` |
 | `/decompose` | 任务分解 | `task-decomposition` |
-| `/laravel` | Laravel 开发 | `laravel-specialist` |
-| `/php` | 现代 PHP 开发 | `php-specialist` |
 | `/archive` | 归档已完成功能 | `archive` |
 
 </details>
