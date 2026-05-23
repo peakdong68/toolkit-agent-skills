@@ -193,6 +193,7 @@ description: '当从高层级想法、功能请求或产品愿景生成产品需
 | `task-decomposition`  | 下游：将 PRD 拆解为可估算的工作项                  |
 | `tech-docs-generator` | 并行：PRD 告知需要哪些文档                         |
 | `acceptance-testing`  | 下游：PRD 中的验收标准用于测试定义                 |
+| `archive`             | 下游：功能完成后将 PRD 归档至 docs/archive/prds/           |
 
 ## 验证门禁
 
