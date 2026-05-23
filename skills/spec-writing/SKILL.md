@@ -219,6 +219,7 @@ docs/specs/YYYY-MM-DD-<topic>/
 | `planning`                  | 计划引用规范的验收标准以定义任务         |
 | `test-driven-development`   | 红绿测试阶段编写匹配规范验收标准的测试   |
 | `writing-skills`            | 可使用此方法论来编写其他技能             |
+| `task-decomposition`        | 互补——规范为分解粒度和验收标准提供依据 |
 
 ## 具体示例：完整规范文件
 

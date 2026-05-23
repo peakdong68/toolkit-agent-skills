@@ -98,8 +98,8 @@ IMPLEMENTATION_PLAN.md 已更新：
 
 ### 步骤
 
-1. **研究** — 阅读规范及当前的 `IMPLEMENTATION_PLAN.md`
-2. **选择** — 挑选最重要的剩余任务
+1. **研究** — 阅读规范及当前的 `IMPLEMENTATION_PLAN.md`。若 `task-decomposition` 已生成 WBS，则加载它以获取基于依赖关系的任务排序。
+2. **选择** — 挑选最重要的剩余任务（若有 WBS 则使用其关键路径）
 3. **搜索** — 查找现有代码模式（切勿假设实现缺失）
 4. **实现** — 编写完整、生产级质量的代码（无占位符，无桩代码）
 5. **测试** — 实现完成后立即运行测试
@@ -305,6 +305,7 @@ IMPLEMENTATION_PLAN.md 已更新：
 | `llm-as-judge`                   | 质量——评估主观标准         | 下游引导                    |
 | `verification-before-completion` | 最终门控——验证完成声明     | 设置 `EXIT_SIGNAL: true` 前 |
 | `planning` | 上游 —— 提供实施计划 | 启动自主循环执行时 |
+| `task-decomposition` | 上游——提供任务选择的 WBS | 当 IMPLEMENTATION_PLAN.md 需要层级化拆解时 |
 
 ---
 
