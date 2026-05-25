@@ -34,7 +34,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 2. /specs          → Write specifications with JTBD methodology
 3. /plan           → Create implementation plan with bite-sized tasks; choose execution skill:
    → `task-management`            : Standard execution (< 3 tasks), sequential tracked progress
-   → `subagent-driven-development`: Large execution (2+ independent tasks), parallel with review gates
+   → `subagent-driven-development`: Large execution (3+ independent tasks), parallel with review gates
    → `autonomous-loop`            : Autonomous development session, Ralph-style iterative execution
    → `executing-plans`            : Single focused task, direct plan execution (/execute)
 4. /execute        → Execute plan with TDD and tracked progress
@@ -105,7 +105,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 3. /tdd                   → Implement with migration tests
 4. /verify                → Verify migrations work both directions
 ```
-## Create Product Requirements PRD
+### Create Product Requirements PRD
 
 ```
 1. /prd            → Create Product Requirements Document
@@ -144,8 +144,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 ## Skills Overview
 
-<details>
-<summary><strong>Core (6)</strong> — Foundation skills always recommended</summary>
+### Core  — Foundation skills always recommended 
 
 | Skill | Description |
 |-------|-------------|
@@ -156,10 +155,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `auto-improvement` | Self-improving system, tracks effectiveness, learns from errors |
 | `verification-before-completion` | 5-step verification gate before any completion claim |
 
-</details>
-
-<details>
-<summary><strong>Process & Workflow (9)</strong> — Planning, execution, and autonomous loops</summary>
+### Process & Workflow — Planning, execution, and autonomous loops 
 
 | Skill | Description |
 |-------|-------------|
@@ -173,10 +169,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `ralph-status` | Structured status reporting with exit signal protocol |
 | `task-decomposition` | Hierarchical breakdown, dependency mapping, parallelization |
 
-</details>
-
-<details>
-<summary><strong>Quality Assurance (17)</strong> — Testing, review, debugging, and specialist roles</summary>
+### Quality Assurance  — Testing, review, debugging, and specialist roles 
 
 | Skill | Description |
 |-------|-------------|
@@ -197,11 +190,9 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `webapp-testing` | Playwright-based web testing, screenshots, browser logs |
 | `senior-prompt-engineer` | Prompt design, optimization, chain-of-thought |
 | `senior-data-scientist` | ML pipelines, statistical analysis, experiment design |
+| `file-organizer` | Project structure, file naming, directory architecture |
 
-</details>
-
-<details>
-<summary><strong>Design (3)</strong> — API, UI, and database design</summary>
+### Design   — API, UI, and database design 
 
 | Skill | Description |
 |-------|-------------|
@@ -209,10 +200,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `frontend-ui-design` | Component architecture, responsive design, accessibility |
 | `database-schema-design` | Data modeling, migrations, indexing, query optimization |
 
-</details>
-
-<details>
-<summary><strong>Documentation (6)</strong> — PRDs, specs, and technical docs</summary>
+### Documentation — PRDs, specs, and technical docs 
 
 | Skill | Description |
 |-------|-------------|
@@ -223,10 +211,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `reverse-engineering-specs` | Generate implementation-free specs from existing codebases |
 | `archive` | Archive completed features, update spec index, verify before archival |
 
-</details>
-
-<details>
-<summary><strong>Operations (7)</strong> — Git, CI/CD, DevOps, and MCP</summary>
+### Operations   — Git, CI/CD, DevOps, and MCP 
 
 | Skill | Description |
 |-------|-------------|
@@ -238,10 +223,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `mcp-builder` | MCP server development, tools, resources, transport layers |
 | `agent-development` | Building AI agents, tool use, memory, planning |
 
-</details>
-
-<details>
-<summary><strong>Creative (6)</strong> — UI/UX, design systems, mobile, and canvas</summary>
+### Creative   — UI/UX, design systems, mobile, and canvas 
 
 | Skill | Description |
 |-------|-------------|
@@ -252,38 +234,19 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `ux-researcher-designer` | User research, personas, journey maps, usability testing |
 | `artifacts-builder` | Generate standalone artifacts, interactive demos, prototypes |
 
-</details>
-
-<details>
-<summary><strong>Business (2)</strong> — SEO, content, and marketing</summary>
+### Business   —   content, and marketing 
 
 | Skill | Description |
 |-------|-------------|
 | `content-research-writer` | Research methodology, long-form content, citations |
 | `content-creator` | Marketing copy, social media, brand voice |
 
-</details>
-
-
-
-<details>
-<summary><strong>Productivity  </strong></summary>
-
-| Skill | Description |
-|-------|-------------|
-| `file-organizer` | Project structure, file naming, directory architecture |
  
-
-</details>
-
-
-
 ---
 
 ## Agents & Commands
 
-<details>
-<summary><strong>18 Agents</strong> — Specialized sub-agents for parallel work</summary>
+###  Agents  — Specialized sub-agents for parallel work 
 
 | Agent | Description |
 |-------|-------------|
@@ -307,10 +270,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `mobile-developer` | Cross-platform mobile, platform-specific patterns |
 
 
-</details>
-
-<details>
-<summary><strong>29 Slash Commands</strong> — Trigger skills directly in Claude Code</summary>
+### Slash Commands — Trigger skills directly in Claude Code 
 
 | Command | Description | Skill |
 |---------|-------------|-------|
@@ -342,15 +302,11 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `/commit` | Git commit helper | `git-commit-helper` |
 | `/decompose` | Task decomposition | `task-decomposition` |
 | `/archive` | Archive completed features | `archive` |
-
-</details>
-
+ 
 
 
----
 
-<details>
-<summary><strong>Ralph Integration</strong> — Autonomous iterative development loops</summary>
+## Ralph Integration  — Autonomous iterative development loops 
 
 The toolkit integrates key concepts from [Ralph](https://github.com/frankbria/ralph-claude-code) and the [Ralph Playbook](https://github.com/ClaytonFarr/ralph-playbook) — an autonomous AI development methodology by Geoffrey Huntley.
 
@@ -386,7 +342,7 @@ Jobs to Be Done methodology for writing implementation-free specs:
 - **Acceptance testing** — backpressure chain: specs → tests → code (fix code, not specs)
 - **LLM-as-judge** — structured rubric evaluation for subjective criteria (tone, UX, readability)
 
-</details>
+ 
 
 
 ---

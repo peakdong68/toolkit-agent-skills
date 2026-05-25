@@ -1,6 +1,6 @@
 ---
 name: executing-plans
-description: "Use when you have an approved implementation plan document and need to execute it step by step. Triggers on /execute command, when transitioning from planning with an approved plan, or when resuming execution of a partially completed plan. Provides batch-based execution with TDD, checkpoint reviews, and verification gates."
+description: 'Use when you have an approved implementation plan document and need to execute it step by step. Triggers on /execute command, when transitioning from planning with an approved plan, or when resuming execution of a partially completed plan. Provides batch-based execution with TDD, checkpoint reviews, and verification gates.'
 ---
 
 # Executing Plans
@@ -33,15 +33,16 @@ This skill turns an approved plan document into working code through disciplined
 
 ### Plan Comprehension Checklist
 
-| Check | Question |
-|-------|---------|
+| Check        | Question                                         |
+| ------------ | ------------------------------------------------ |
 | Goal clarity | Can you explain the plan's goal in one sentence? |
-| Step count | How many implementation steps are there? |
-| Dependencies | Which steps depend on which? |
-| Ambiguities | Are there any unclear or underspecified steps? |
-| Verification | Does every step have a verification method? |
+| Step count   | How many implementation steps are there?         |
+| Dependencies | Which steps depend on which?                     |
+| Ambiguities  | Are there any unclear or underspecified steps?   |
+| Verification | Does every step have a verification method?      |
 
 **STOP — Do NOT proceed to Phase 2 until:**
+
 - [ ] You can explain the plan's goal in one sentence
 - [ ] You can list all implementation steps
 - [ ] Dependencies are mapped
@@ -56,21 +57,21 @@ This skill turns an approved plan document into working code through disciplined
 
 ### Batch Size Decision Table
 
-| Task Complexity | Batch Size | Examples |
-|----------------|-----------|---------|
-| Simple (config, boilerplate) | Up to 5 tasks | ENV vars, imports, type definitions |
-| Standard (features, logic) | 3 tasks | Endpoints, services, components |
-| Complex (integrations, security) | 2 tasks | OAuth flows, payment processing |
-| Critical (data migration, auth) | 1 task | Database migrations, credential handling |
+| Task Complexity                  | Batch Size    | Examples                                 |
+| -------------------------------- | ------------- | ---------------------------------------- |
+| Simple (config, boilerplate)     | Up to 5 tasks | ENV vars, imports, type definitions      |
+| Standard (features, logic)       | 3 tasks       | Endpoints, services, components          |
+| Complex (integrations, security) | 2 tasks       | OAuth flows, payment processing          |
+| Critical (data migration, auth)  | 1 task        | Database migrations, credential handling |
 
 ### Task Requirements (STIC)
 
-| Criterion | Description |
-|-----------|------------|
-| **S**pecific | Clear definition of what to implement |
-| **T**estable | Can be verified with automated tests |
+| Criterion       | Description                                                   |
+| --------------- | ------------------------------------------------------------- |
+| **S**pecific    | Clear definition of what to implement                         |
+| **T**estable    | Can be verified with automated tests                          |
 | **I**ndependent | Minimal coupling to other tasks in the batch (where possible) |
-| **C**ompact | Completable in a focused session (2-5 minutes) |
+| **C**ompact     | Completable in a focused session (2-5 minutes)                |
 
 ### Task Template
 
@@ -86,6 +87,7 @@ Verification: [exact command to run]
 ```
 
 **STOP — Do NOT proceed to Phase 3 until:**
+
 - [ ] Tasks created for the current batch
 - [ ] Each task has clear acceptance criteria
 - [ ] Dependencies are satisfied (previous tasks complete)
@@ -116,26 +118,27 @@ Verification: [exact command to run]
 
 ### Execution Rules
 
-| Rule | Rationale |
-|------|-----------|
-| One task at a time | Do not start task 2 until task 1 is verified |
-| Follow TDD strictly | No production code without a failing test |
-| Do not deviate from the plan | If plan needs changes, stop and discuss with user |
-| Do not skip verification | Every task must pass verification before marking complete |
-| Report progress | Announce start and completion of each task |
+| Rule                         | Rationale                                                 |
+| ---------------------------- | --------------------------------------------------------- |
+| One task at a time           | Do not start task 2 until task 1 is verified              |
+| Follow TDD strictly          | No production code without a failing test                 |
+| Do not deviate from the plan | If plan needs changes, stop and discuss with user         |
+| Do not skip verification     | Every task must pass verification before marking complete |
+| Report progress              | Announce start and completion of each task                |
 
 ### Task Outcome Decision Table
 
-| Outcome | Action | Next Step |
-|---------|--------|-----------|
-| Verification passes | Mark complete | Next task |
-| Test failure, obvious fix | Fix and re-verify | Same task |
-| Test failure, unclear cause | Invoke `systematic-debugging` | Same task after fix |
-| Plan step is ambiguous | Stop and ask user | Wait for clarification |
-| Plan step is not feasible | Report blocker | Wait for direction |
-| Unexpected dependency found | Report and reorder | Adjust batch |
+| Outcome                     | Action                        | Next Step              |
+| --------------------------- | ----------------------------- | ---------------------- |
+| Verification passes         | Mark complete                 | Next task              |
+| Test failure, obvious fix   | Fix and re-verify             | Same task              |
+| Test failure, unclear cause | Invoke `systematic-debugging` | Same task after fix    |
+| Plan step is ambiguous      | Stop and ask user             | Wait for clarification |
+| Plan step is not feasible   | Report blocker                | Wait for direction     |
+| Unexpected dependency found | Report and reorder            | Adjust batch           |
 
 **STOP — Do NOT proceed to next task until:**
+
 - [ ] Current task's acceptance criteria are met
 - [ ] All tests pass (new and existing)
 - [ ] Verification-before-completion has been executed
@@ -187,6 +190,7 @@ Awaiting direction: Continue with next batch / Adjust plan / Other?
 ```
 
 **STOP — Do NOT proceed to next batch until:**
+
 - [ ] Full test suite passes
 - [ ] All verification commands pass
 - [ ] Checkpoint report presented to user
@@ -200,13 +204,13 @@ Awaiting direction: Continue with next batch / Adjust plan / Other?
 
 ### Direction Decision Table
 
-| User Direction | Action | Next Phase |
-|---------------|--------|-----------|
-| "Continue" | Create next batch of tasks | Phase 2 |
-| "Adjust plan" | Discuss changes, update plan document | Phase 2 (with updated plan) |
-| "Stop here" | Summarize progress, note remaining work | Completion |
-| "Skip ahead to [step]" | Verify dependencies are met, then jump | Phase 2 (at new step) |
-| "Go back and redo [task]" | Revert if needed, re-execute with corrections | Phase 3 |
+| User Direction            | Action                                        | Next Phase                  |
+| ------------------------- | --------------------------------------------- | --------------------------- |
+| "Continue"                | Create next batch of tasks                    | Phase 2                     |
+| "Adjust plan"             | Discuss changes, update plan document         | Phase 2 (with updated plan) |
+| "Stop here"               | Summarize progress, note remaining work       | Completion                  |
+| "Skip ahead to [step]"    | Verify dependencies are met, then jump        | Phase 2 (at new step)       |
+| "Go back and redo [task]" | Revert if needed, re-execute with corrections | Phase 3                     |
 
 Never proceed to the next batch without explicit user approval.
 
@@ -218,13 +222,13 @@ When you encounter something that prevents task completion, do NOT work around i
 
 ### Blocker Classification
 
-| Type | Examples | Action |
-|------|---------|--------|
-| Ambiguous spec | Plan step could mean multiple things | Present interpretations, ask user |
-| Missing dependency | Required API or library unavailable | Report with alternatives |
-| Contradiction | Step conflicts with another part of the plan | Identify both sides, ask user |
-| Security concern | Planned approach has vulnerability | Report risk, propose safer alternative |
-| Feasibility | Step cannot be implemented as described | Explain why, propose alternatives |
+| Type               | Examples                                     | Action                                 |
+| ------------------ | -------------------------------------------- | -------------------------------------- |
+| Ambiguous spec     | Plan step could mean multiple things         | Present interpretations, ask user      |
+| Missing dependency | Required API or library unavailable          | Report with alternatives               |
+| Contradiction      | Step conflicts with another part of the plan | Identify both sides, ask user          |
+| Security concern   | Planned approach has vulnerability           | Report risk, propose safer alternative |
+| Feasibility        | Step cannot be implemented as described      | Explain why, propose alternatives      |
 
 ### Blocker Report Format
 
@@ -252,12 +256,12 @@ For larger plans, individual tasks can be dispatched to subagents for parallel e
 
 ### When to Suggest Subagent Dispatch
 
-| Condition | Threshold |
-|-----------|-----------|
-| Independent tasks in plan | 10+ tasks with few dependencies |
+| Condition                  | Threshold                               |
+| -------------------------- | --------------------------------------- |
+| Independent tasks in plan  | 3+ tasks with few dependencies          |
 | Task specification quality | Each task has clear acceptance criteria |
-| Speed requirement | User has indicated urgency |
-| Task interdependency | Low coupling between tasks |
+| Speed requirement          | User has indicated urgency              |
+| Task interdependency       | Low coupling between tasks              |
 
 When conditions are met, suggest switching to the `subagent-driven-development` skill for the remaining work.
 
@@ -265,18 +269,18 @@ When conditions are met, suggest switching to the `subagent-driven-development` 
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern | Why It Fails | Correct Approach |
-|-------------|-------------|-----------------|
-| Implementing entire plan at once | No checkpoints, no quality gates | Batch-based execution with checkpoints |
-| Skipping TDD because "it's simple" | Bugs accumulate, regressions appear | Every task uses TDD, no exceptions |
-| Working around blockers silently | User unaware, wrong assumptions baked in | Stop and escalate blockers |
-| Proceeding without approval after batch | Direction may have changed | Always checkpoint and wait |
-| Deviating from the plan | Unauthorized changes, scope creep | Discuss changes before implementing |
-| Running only new tests | Regressions go undetected | Full test suite at checkpoints |
-| Marking tasks complete without verification | False progress, accumulated bugs | Verification is mandatory |
-| Batches larger than 5 tasks | Hard to review, too much risk per batch | Keep batches small |
-| Skipping checkpoint report | User loses visibility into progress | Always present full checkpoint |
-| Not committing at batch boundaries | Huge diffs, hard to revert | Commit after each batch |
+| Anti-Pattern                                | Why It Fails                             | Correct Approach                       |
+| ------------------------------------------- | ---------------------------------------- | -------------------------------------- |
+| Implementing entire plan at once            | No checkpoints, no quality gates         | Batch-based execution with checkpoints |
+| Skipping TDD because "it's simple"          | Bugs accumulate, regressions appear      | Every task uses TDD, no exceptions     |
+| Working around blockers silently            | User unaware, wrong assumptions baked in | Stop and escalate blockers             |
+| Proceeding without approval after batch     | Direction may have changed               | Always checkpoint and wait             |
+| Deviating from the plan                     | Unauthorized changes, scope creep        | Discuss changes before implementing    |
+| Running only new tests                      | Regressions go undetected                | Full test suite at checkpoints         |
+| Marking tasks complete without verification | False progress, accumulated bugs         | Verification is mandatory              |
+| Batches larger than 5 tasks                 | Hard to review, too much risk per batch  | Keep batches small                     |
+| Skipping checkpoint report                  | User loses visibility into progress      | Always present full checkpoint         |
+| Not committing at batch boundaries          | Huge diffs, hard to revert               | Commit after each batch                |
 
 ---
 
@@ -287,6 +291,7 @@ Do NOT skip any verification step. Do NOT proceed past a checkpoint without user
 </HARD-GATE>
 
 If you catch yourself thinking:
+
 - "I know what comes next, I'll skip the checkpoint..." — No. Report and wait.
 - "This verification is redundant..." — Run it anyway. Fresh evidence only.
 - "The plan is close enough, I'll adjust as I go..." — Discuss adjustments first.
@@ -295,11 +300,11 @@ If you catch yourself thinking:
 
 ## Subagent Dispatch Opportunities
 
-| Task Pattern | Dispatch To | When |
-|---|---|---|
+| Task Pattern                                | Dispatch To                         | When                                                     |
+| ------------------------------------------- | ----------------------------------- | -------------------------------------------------------- |
 | Independent plan steps with no shared state | Parallel subagents via `Agent` tool | When dependency analysis shows no blockers between steps |
-| Code review of completed step | `code-reviewer` agent | After each major plan step completion |
-| Test execution for completed features | Background `Bash` task | When tests can run independently of ongoing work |
+| Code review of completed step               | `code-reviewer` agent               | After each major plan step completion                    |
+| Test execution for completed features       | Background `Bash` task              | When tests can run independently of ongoing work         |
 
 Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 
@@ -307,18 +312,19 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 
 ## Integration Points
 
-| Skill | Relationship | When |
-|-------|-------------|------|
-| `planning` | Upstream — provides approved plan document | Plan is the input to this skill |
-| `test-driven-development` | Per-task — TDD cycle for every code task | Phase 3 execution |
-| `verification-before-completion` | Per-task — verification gate | Before marking any task complete |
-| `systematic-debugging` | On failure — investigate unexpected failures | When task encounters errors |
-| `code-review` | At checkpoints — review code quality | Phase 4 batch review |
-| `subagent-driven-development` | Alternative — parallel execution path | For large independent task sets |
-| `resilient-execution` | On failure — retry with alternatives | When task approaches fail |
-| `task-management` | Complementary — provides task tracking | Can be used together |
-| `dispatching-parallel-agents` | Complementary — parallel execution of independent plan tasks | When plan has independent subtasks |
-| `task-decomposition` | Upstream — provides WBS for batch creation | When plan needs hierarchical breakdown before batch creation |
+| Skill                            | Relationship                                                 | When                                                         |
+| -------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `planning`                       | Upstream — provides approved plan document                   | Plan is the input to this skill                              |
+| `test-driven-development`        | Per-task — TDD cycle for every code task                     | Phase 3 execution                                            |
+| `verification-before-completion` | Per-task — verification gate                                 | Before marking any task complete                             |
+| `systematic-debugging`           | On failure — investigate unexpected failures                 | When task encounters errors                                  |
+| `code-review`                    | At checkpoints — review code quality                         | Phase 4 batch review                                         |
+| `subagent-driven-development`    | Alternative — parallel execution path                        | For large independent task sets                              |
+| `resilient-execution`            | On failure — retry with alternatives                         | When task approaches fail                                    |
+| `task-management`                | Complementary — provides task tracking                       | Can be used together                                         |
+| `dispatching-parallel-agents`    | Complementary — parallel execution of independent plan tasks | When plan has independent subtasks                           |
+| `task-decomposition`             | Upstream — provides WBS for batch creation                   | When plan needs hierarchical breakdown before batch creation |
+
 ---
 
 ## Concrete Examples
@@ -356,6 +362,7 @@ Batch 2 (3 tasks):
 ## Completion Criteria
 
 The plan execution is complete when:
+
 1. All plan steps have been implemented as tasks
 2. All tasks have passed verification
 3. Full test suite passes

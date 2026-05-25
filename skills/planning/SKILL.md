@@ -194,7 +194,7 @@ If a worktree is appropriate, invoke `using-git-worktrees` skill and navigate to
 | Situation                                   | Next Skill                    | Rationale                            |
 | ------------------------------------------- | ----------------------------- | ------------------------------------ |
 | Standard implementation (< 3 tasks)         | `task-management`             | Sequential tracked execution         |
-| Large implementation (2+ independent tasks) | `subagent-driven-development` | Parallel execution with review gates |
+| Large implementation (3+ independent tasks) | `subagent-driven-development` | Parallel execution with review gates |
 | Autonomous development session              | `autonomous-loop`             | Ralph-style iterative execution      |
 | Single focused task                         | `executing-plans`             | Direct plan execution                |
 
