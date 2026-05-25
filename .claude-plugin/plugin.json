@@ -1,7 +1,7 @@
 {
   "name": "toolkit",
   "description": "Complete AI-optimized development environment with planning, code review, PRD generation, self-learning, task management, and more",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Peak Dong"
   },
