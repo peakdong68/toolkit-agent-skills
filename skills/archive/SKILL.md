@@ -19,23 +19,13 @@ Archive completed feature directories from `docs/specs/` and `docs/plans/` to `d
 
 ### Actions
 
-1. Scan `docs/specs/` and `docs/plans/` for feature directories:
-
-```bash
-ls docs/specs/
-ls docs/plans/
-```
+1. Use Grep Tool Scan `docs/specs/` and `docs/plans/` for feature directories:
 
 2. For each feature directory, check task completion status:
    - Read `plan.md` or `plan-*.md` files and inspect `[x]` / `[ ]` checkbox states
    - Identify directories where ALL tasks are marked `[x]`
 
-3. Scan `docs/prds/` for PRD files:
-
-```bash
-ls docs/prds/
-```
-
+3. Use Grep Tool Scan `docs/prds/` for PRD files:
    - PRD files follow the naming pattern `YYYY-MM-DD-<feature>.md` (single Markdown files, not directories)
    - PRDs do not have checkboxes — completion is determined by git history: check for commits referencing the PRD's feature name or the PRD commit itself
 
@@ -207,16 +197,16 @@ _Last updated: YYYY-MM-DD — by archiving <directory-name>_
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern                                | Why It Is Wrong                        | Correct Approach                          |
-| ------------------------------------------- | -------------------------------------- | ----------------------------------------- |
-| Archiving without git history check         | Checkboxes can be ticked prematurely   | Cross-reference `[x]` with `git log`      |
-| Archiving features with open tasks          | Incomplete work becomes invisible      | Only archive when ALL `[ ]` are resolved  |
-| Moving without user confirmation            | Destructive — user may need those docs | Always get explicit approval in Phase 2   |
-| Skipping the global index update            | Feature becomes undiscoverable         | Always update `docs/global/index.md`      |
-| Analyzing source code during archive        | This is archive, not code review       | Check only documents and git history      |
-| Archiving plan but not spec (or vice versa) | Leaves orphaned half-features          | Archive matching spec+plan pairs together |
-| Archiving PRD before feature implementation | PRD is still relevant to active work    | Only archive PRDs when their features are complete |
-| Forgetting to archive PRDs alongside specs/plans | PRD becomes stale in docs/prds/ | Archive PRDs with their matching spec+plan pair |
+| Anti-Pattern                                     | Why It Is Wrong                        | Correct Approach                                   |
+| ------------------------------------------------ | -------------------------------------- | -------------------------------------------------- |
+| Archiving without git history check              | Checkboxes can be ticked prematurely   | Cross-reference `[x]` with `git log`               |
+| Archiving features with open tasks               | Incomplete work becomes invisible      | Only archive when ALL `[ ]` are resolved           |
+| Moving without user confirmation                 | Destructive — user may need those docs | Always get explicit approval in Phase 2            |
+| Skipping the global index update                 | Feature becomes undiscoverable         | Always update `docs/global/index.md`               |
+| Analyzing source code during archive             | This is archive, not code review       | Check only documents and git history               |
+| Archiving plan but not spec (or vice versa)      | Leaves orphaned half-features          | Archive matching spec+plan pairs together          |
+| Archiving PRD before feature implementation      | PRD is still relevant to active work   | Only archive PRDs when their features are complete |
+| Forgetting to archive PRDs alongside specs/plans | PRD becomes stale in docs/prds/        | Archive PRDs with their matching spec+plan pair    |
 
 ---
 
@@ -240,7 +230,7 @@ _Last updated: YYYY-MM-DD — by archiving <directory-name>_
 | `planning`                       | Plans track tasks; archive verifies `[x]` before retirement                               |
 | `finishing-a-development-branch` | Branch cleanup often precedes archive                                                     |
 | `task-management`                | Task status feeds into archive completion check                                           |
-| `prd-generation`                 | PRDs define high-level requirements; archive retires them when features are implemented    |
+| `prd-generation`                 | PRDs define high-level requirements; archive retires them when features are implemented   |
 
 ---
 
