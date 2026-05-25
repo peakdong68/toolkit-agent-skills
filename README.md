@@ -31,7 +31,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 2. /specs          → 使用 JTBD 方法论编写规范 
 3. /plan           → 创建包含细粒度任务的实现计划,选择执行技能 
    → `task-management` ：标准实施（少于 3 个任务）,顺序跟踪执行
-   → `subagent-driven-development`：大型实施（2 个以上独立任务）,并行执行，带审查关卡
+   → `subagent-driven-development`：大型实施（包含 3 个及以上可独立实现的任务）,并行执行，带审查关卡
    → `autonomous-loop`：自主开发会话  ,Ralph 风格的迭代执行
    → `executing-plans`：单一聚焦任务 ,直接执行计划 （/execute）
 5. /execute          → 遵循 TDD 并跟踪进度
@@ -107,7 +107,6 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 ```
 1. /prd            → 创建产品需求文档
-2. /brainstorm     → 先探索方法再规划
 3. /specs          → PRD 提供高层级需求；规格说明用 JTBD 细化它们
 4. /plan           → 规划参考 PRD 需求进行任务拆解
 5. /execute        → 执行计划，遵循 TDD 并跟踪进度
