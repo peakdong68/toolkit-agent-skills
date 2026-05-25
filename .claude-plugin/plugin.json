@@ -20,6 +20,6 @@
     "deployment",
     "documentation"
   ],
-  "skills": "./skills/",
-  "commands": "./commands/"
+  "skills": ["./skills/"],
+  "commands": ["./commands/"]
 }
