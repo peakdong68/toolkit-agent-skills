@@ -304,13 +304,12 @@ Here's what [Customer/Number] are saying:
 
 ## Integration Points
 
-| Skill                     | How It Connects                                                       |
-| ------------------------- | --------------------------------------------------------------------- |
-| `seo-optimizer`           | Keywords and meta tag strategy inform content headlines and structure |
-| `content-research-writer` | Research findings provide evidence for marketing claims               |
-| `llm-as-judge`            | Evaluate content quality against brand voice rubric                   |
-| `frontend-ui-design`      | Landing page copy must align with visual hierarchy and CTA placement  |
-| `senior-prompt-engineer`  | AI-generated copy benefits from structured prompt patterns            |
+| Skill                     | How It Connects                                                      |
+| ------------------------- | -------------------------------------------------------------------- |
+| `content-research-writer` | Research findings provide evidence for marketing claims              |
+| `llm-as-judge`            | Evaluate content quality against brand voice rubric                  |
+| `frontend-ui-design`      | Landing page copy must align with visual hierarchy and CTA placement |
+| `senior-prompt-engineer`  | AI-generated copy benefits from structured prompt patterns           |
 
 ## Skill Type
 

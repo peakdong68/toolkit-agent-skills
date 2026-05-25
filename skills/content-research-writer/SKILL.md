@@ -297,13 +297,12 @@ https://www.example.com/report.pdf
 
 ## Integration Points
 
-| Skill                 | How It Connects                                                                     |
-| --------------------- | ----------------------------------------------------------------------------------- |
-| `seo-optimizer`       | Research content needs SEO-optimized titles, meta descriptions, and structured data |
-| `content-creator`     | Research findings feed into marketing copy and social media content                 |
-| `tech-docs-generator` | Technical research follows similar source evaluation and citation practices         |
-| `llm-as-judge`        | Evaluate research content quality against rubric dimensions                         |
-| `clean-code`          | Writing quality checklist parallels clean code principles for prose                 |
+| Skill                 | How It Connects                                                             |
+| --------------------- | --------------------------------------------------------------------------- |
+| `content-creator`     | Research findings feed into marketing copy and social media content         |
+| `tech-docs-generator` | Technical research follows similar source evaluation and citation practices |
+| `llm-as-judge`        | Evaluate research content quality against rubric dimensions                 |
+| `clean-code`          | Writing quality checklist parallels clean code principles for prose         |
 
 ## Skill Type
 

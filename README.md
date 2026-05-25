@@ -255,26 +255,16 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 </details>
 
 <details>
-<summary><strong>Business (3)</strong> — SEO, content, and marketing</summary>
+<summary><strong>Business (2)</strong> — SEO, content, and marketing</summary>
 
 | Skill | Description |
 |-------|-------------|
-| `seo-optimizer` | Technical SEO, meta tags, structured data, Core Web Vitals |
 | `content-research-writer` | Research methodology, long-form content, citations |
 | `content-creator` | Marketing copy, social media, brand voice |
 
 </details>
 
-<details>
-<summary><strong>Document Processing (3)</strong> — Word, PDF, and Excel</summary>
 
-| Skill | Description |
-|-------|-------------|
-| `docx-processing` | Word document generation, template filling |
-| `pdf-processing` | PDF generation, form filling, OCR, merge/split |
-| `xlsx-processing` | Excel manipulation, formulas, charts |
-
-</details>
 
 <details>
 <summary><strong>Productivity  </strong></summary>
@@ -348,7 +338,6 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `/clean` | Clean code review | `clean-code` |
 | `/devops` | DevOps and infrastructure | `senior-devops` |
 | `/agent` | AI agent development | `agent-development` |
-| `/seo` | SEO optimization | `seo-optimizer` |
 | `/mcp` | MCP server development | `mcp-builder` |
 | `/commit` | Git commit helper | `git-commit-helper` |
 | `/decompose` | Task decomposition | `task-decomposition` |

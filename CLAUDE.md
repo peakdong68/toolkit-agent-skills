@@ -20,9 +20,7 @@
 
 **Creative (6):** `ui-ux-pro-max` `/ui-ux`, `ui-design-system` `/design-system`, `canvas-design`, `mobile-design` `/mobile`, `ux-researcher-designer`, `artifacts-builder`
 
-**Business (3):** `seo-optimizer` `/seo`, `content-research-writer`, `content-creator`
-
-**Doc Processing (3):** `docx-processing`, `pdf-processing`, `xlsx-processing`
+**Business (2):**  `content-research-writer`, `content-creator`
 
 **Productivity (1):** `file-organizer`
  

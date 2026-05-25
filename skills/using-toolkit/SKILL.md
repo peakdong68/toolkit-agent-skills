@@ -133,21 +133,12 @@ Invoke in order: (1) Process (brainstorming, planning) → (2) Specialist (front
 | `ux-researcher-designer` | User research, personas, journey maps, usability testing                   |
 | `artifacts-builder`      | Generate standalone artifacts, interactive demos, prototypes               |
 
-### Business Skills (3)
+### Business Skills (2)
 
-| Skill                     | When to Use                                                |
-| ------------------------- | ---------------------------------------------------------- |
-| `seo-optimizer`           | Technical SEO, meta tags, structured data, Core Web Vitals |
-| `content-research-writer` | Research methodology, long-form content, citations         |
-| `content-creator`         | Marketing copy, social media, brand voice                  |
-
-### Document Processing Skills (3)
-
-| Skill             | When to Use                                    |
-| ----------------- | ---------------------------------------------- |
-| `docx-processing` | Word document generation, template filling     |
-| `pdf-processing`  | PDF generation, form filling, OCR, merge/split |
-| `xlsx-processing` | Excel manipulation, formulas, charts           |
+| Skill                     | When to Use                                        |
+| ------------------------- | -------------------------------------------------- |
+| `content-research-writer` | Research methodology, long-form content, citations |
+| `content-creator`         | Marketing copy, social media, brand voice          |
 
 ### Productivity Skills (1)
 
@@ -159,27 +150,25 @@ Invoke in order: (1) Process (brainstorming, planning) → (2) Specialist (front
 
 ## Decision Table: Choosing the Right Skill
 
-| User Request Contains                  | Primary Skill                                            | Supporting Skills                            |
-| -------------------------------------- | -------------------------------------------------------- | -------------------------------------------- |
-| "build", "implement", "create feature" | `planning`                                               | `brainstorming`, `tdd`, `code-review`        |
-| "fix", "bug", "error", "broken"        | `systematic-debugging`                                   | `tdd`, `resilient-execution`                 |
-| "test", "coverage", "spec"             | `test-driven-development`                                | `testing-strategy`, `acceptance-testing`     |
-| "review", "check", "audit"             | `code-review`                                            | `security-review`, `clean-code`              |
-| "plan", "how should we"                | `planning`                                               | `brainstorming`, `task-decomposition`        |
-| "deploy", "CI/CD", "pipeline"          | `deployment`                                             | `senior-devops`                              |
-| "API", "endpoint", "REST", "GraphQL"   | `api-design`                                             | `senior-backend`                             |
-| "React", "Next.js", "component"        | `senior-frontend`                                        | `react-best-practices`, `frontend-ui-design` |
-| "database", "schema", "migration"      | `database-schema-design`                                 | `senior-backend`                             |
-| "design", "UI", "UX"                   | `ui-ux-pro-max`                                          | `ui-design-system`, `frontend-ui-design`     |
-| "mobile", "iOS", "Android"             | `mobile-design`                                          | `ui-ux-pro-max`                              |
-| "document", "docs", "README"           | `tech-docs-generator`                                    | `prd-generation`                             |
-| "spec", "requirements", "PRD"          | `spec-writing`                                           | `prd-generation`                             |
-| "autonomous", "loop", "ralph"          | `autonomous-loop`                                        | `ralph-status`, `circuit-breaker`            |
-| "security", "vulnerability", "auth"    | `security-review`                                        | `senior-backend`                             |
-| "SEO", "meta tags", "search engine"    | `seo-optimizer`                                          | `content-research-writer`                    |
-| "PDF", "Word", "Excel"                 | `pdf-processing` / `docx-processing` / `xlsx-processing` | —                                            |
-| "agent", "AI", "tool use"              | `agent-development`                                      | `mcp-builder`                                |
-| "MCP", "server", "transport"           | `mcp-builder`                                            | `agent-development`                          |
+| User Request Contains                  | Primary Skill             | Supporting Skills                            |
+| -------------------------------------- | ------------------------- | -------------------------------------------- |
+| "build", "implement", "create feature" | `planning`                | `brainstorming`, `tdd`, `code-review`        |
+| "fix", "bug", "error", "broken"        | `systematic-debugging`    | `tdd`, `resilient-execution`                 |
+| "test", "coverage", "spec"             | `test-driven-development` | `testing-strategy`, `acceptance-testing`     |
+| "review", "check", "audit"             | `code-review`             | `security-review`, `clean-code`              |
+| "plan", "how should we"                | `planning`                | `brainstorming`, `task-decomposition`        |
+| "deploy", "CI/CD", "pipeline"          | `deployment`              | `senior-devops`                              |
+| "API", "endpoint", "REST", "GraphQL"   | `api-design`              | `senior-backend`                             |
+| "React", "Next.js", "component"        | `senior-frontend`         | `react-best-practices`, `frontend-ui-design` |
+| "database", "schema", "migration"      | `database-schema-design`  | `senior-backend`                             |
+| "design", "UI", "UX"                   | `ui-ux-pro-max`           | `ui-design-system`, `frontend-ui-design`     |
+| "mobile", "iOS", "Android"             | `mobile-design`           | `ui-ux-pro-max`                              |
+| "document", "docs", "README"           | `tech-docs-generator`     | `prd-generation`                             |
+| "spec", "requirements", "PRD"          | `spec-writing`            | `prd-generation`                             |
+| "autonomous", "loop", "ralph"          | `autonomous-loop`         | `ralph-status`, `circuit-breaker`            |
+| "security", "vulnerability", "auth"    | `security-review`         | `senior-backend`                             |
+| "agent", "AI", "tool use"              | `agent-development`       | `mcp-builder`                                |
+| "MCP", "server", "transport"           | `mcp-builder`             | `agent-development`                          |
 
 ---
 
@@ -206,9 +195,7 @@ Invoke in order: (1) Process (brainstorming, planning) → (2) Specialist (front
 | "Done with this branch"       | finishing-a-development-branch                                              |
 | "Design a UI"                 | ui-ux-pro-max -> ui-design-system -> frontend-ui-design                     |
 | "Build mobile app"            | mobile-design -> planning -> tdd                                            |
-| "Optimize SEO"                | seo-optimizer                                                               |
 | "Write marketing copy"        | content-creator                                                             |
-| "Process documents"           | docx-processing / pdf-processing / xlsx-processing                          |
 | "Build an AI agent"           | agent-development -> planning -> tdd                                        |
 | "Set up infrastructure"       | senior-devops -> deployment                                                 |
 | "Decompose complex task"      | task-decomposition -> dispatching-parallel-agents                           |
