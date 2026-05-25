@@ -142,8 +142,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 ## 技能概览
 
-<details>
-<summary><strong>核心（6 项）</strong> — 始终推荐的基础技能</summary>
+### 核心  — 始终推荐的基础技能 
 
 | 技能 | 描述 |
 |-------|-------------|
@@ -154,10 +153,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `auto-improvement` | 自我改进系统，跟踪有效性，从错误中学习 |
 | `verification-before-completion` | 在任何完成声明之前进行 5 步验证门控 |
 
-</details>
-
-<details>
-<summary><strong>流程与工作流（9 项）</strong> — 规划、执行和自主循环</summary>
+### 流程与工作流  — 规划、执行和自主循环 
 
 | 技能 | 描述 |
 |-------|-------------|
@@ -171,10 +167,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `ralph-status` | 带有退出信号协议的结构化状态报告 |
 | `task-decomposition` | 层次化分解、依赖映射、并行化 |
 
-</details>
-
-<details>
-<summary><strong>质量保证（17 项）</strong> — 测试、评审、调试和专业角色</summary>
+### 质量保证 — 测试、评审、调试和专业角色 
 
 | 技能 | 描述 |
 |-------|-------------|
@@ -195,11 +188,9 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `webapp-testing` | 基于 Playwright 的 Web 测试、截图、浏览器日志 |
 | `senior-prompt-engineer` | 提示词设计、优化、思维链 |
 | `senior-data-scientist` | ML 流水线、统计分析、实验设计 |
+| `file-organizer` | 项目结构、文件命名、目录架构 |
 
-</details>
-
-<details>
-<summary><strong>设计（3 项）</strong> — API、UI 和数据库设计</summary>
+### 设计  — API、UI 和数据库设计 
 
 | 技能 | 描述 |
 |-------|-------------|
@@ -207,10 +198,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `frontend-ui-design` | 组件架构、响应式设计、可访问性 |
 | `database-schema-design` | 数据建模、迁移、索引、查询优化 |
 
-</details>
-
-<details>
-<summary><strong>文档（6 项）</strong> — PRD、规范和技术文档</summary>
+### 文档  — PRD、规范和技术文档 
 
 | 技能 | 描述 |
 |-------|-------------|
@@ -221,10 +209,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `reverse-engineering-specs` | 从现有代码库生成无实现细节的规范 |
 | `archive` | 归档已完成功能、更新规范索引、归档前验证 |
 
-</details>
-
-<details>
-<summary><strong>运维（7 项）</strong> — Git、CI/CD、DevOps 和 MCP</summary>
+### 运维  — Git、CI/CD、DevOps 和 MCP 
 
 | 技能 | 描述 |
 |-------|-------------|
@@ -236,10 +221,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `mcp-builder` | MCP 服务器开发、工具、资源、传输层 |
 | `agent-development` | 构建 AI 代理、工具使用、记忆、规划 |
 
-</details>
-
-<details>
-<summary><strong>创意（6 项）</strong> — UI/UX、设计系统、移动端和画布</summary>
+### 创意  — UI/UX、设计系统、移动端和画布 
 
 | 技能 | 描述 |
 |-------|-------------|
@@ -250,36 +232,18 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `ux-researcher-designer` | 用户研究、人物画像、旅程地图、可用性测试 |
 | `artifacts-builder` | 生成独立工件、交互式演示、原型 |
 
-</details>
-
-<details>
-<summary><strong>商业（2 项）</strong> — SEO、内容和营销</summary>
+### 商业  — 内容和营销 
 
 | 技能 | 描述 |
 |-------|-------------|
 | `content-research-writer` | 研究方法、长篇内容、引用 |
 | `content-creator` | 营销文案、社交媒体、品牌语调 |
-
-</details>
-
-
-
-<details>
-<summary><strong>生产力 </strong></summary>
-
-| 技能 | 描述 |
-|-------|-------------|
-| `file-organizer` | 项目结构、文件命名、目录架构 |
  
-</details>
-
-
 ---
 
 ## 代理与命令
 
-<details>
-<summary><strong>20 个代理</strong> — 用于并行工作的专业化子代理</summary>
+### 用于并行工作的专业化子代理 
 
 | 代理 | 描述 |
 |-------|-------------|
@@ -303,10 +267,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `mobile-developer` | 跨平台移动开发、平台特定模式 |
 
 
-</details>
-
-<details>
-<summary><strong>31 条斜杠命令</strong> — 在 Claude Code 中直接触发技能</summary>
+### 斜杠命令 
 
 | 命令 | 描述 | 调用技能 |
 |---------|-------------|----------|
@@ -339,9 +300,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `/decompose` | 任务分解 | `task-decomposition` |
 | `/archive` | 归档已完成功能 | `archive` |
 
-</details>
-
-
+ 
 
 ---
 
