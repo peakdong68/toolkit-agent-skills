@@ -20,9 +20,8 @@
 
 **创意（6）：** `ui-ux-pro-max` `/ui-ux`、`ui-design-system` `/design-system`、`canvas-design`、`mobile-design` `/mobile`、`ux-researcher-designer`、`artifacts-builder`
 
-**商业（3）：** `seo-optimizer` `/seo`、`content-research-writer`、`content-creator`
+**商业（2）：** `content-research-writer`、`content-creator`
 
-**文档处理（3）：** `docx-processing`、`pdf-processing`、`xlsx-processing`
 
 **生产力（1）：** `file-organizer`
  

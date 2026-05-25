@@ -133,21 +133,12 @@ description: 在开始任何对话、接收新任务或不确定哪个 skill 适
 | `ux-researcher-designer` | 用户研究、人物画像、旅程地图、可用性测试                   |
 | `artifacts-builder`      | 生成独立的 artifacts、交互式演示、原型                     |
 
-### 业务 Skills（3 个）
+### 业务 Skills（2 个）
 
-| Skill                     | 使用场景                                         |
-| ------------------------- | ------------------------------------------------ |
-| `seo-optimizer`           | 技术 SEO、meta 标签、结构化数据、Core Web Vitals |
-| `content-research-writer` | 研究方法论、长文内容、引用                       |
-| `content-creator`         | 营销文案、社交媒体、品牌语调                     |
-
-### 文档处理 Skills（3 个）
-
-| Skill             | 使用场景                           |
-| ----------------- | ---------------------------------- |
-| `docx-processing` | Word 文档生成、模板填充            |
-| `pdf-processing`  | PDF 生成、表单填充、OCR、合并/拆分 |
-| `xlsx-processing` | Excel 操作、公式、图表             |
+| Skill                     | 使用场景                     |
+| ------------------------- | ---------------------------- |
+| `content-research-writer` | 研究方法论、长文内容、引用   |
+| `content-creator`         | 营销文案、社交媒体、品牌语调 |
 
 ### 生产力 Skills（1 个）
 
@@ -159,27 +150,25 @@ description: 在开始任何对话、接收新任务或不确定哪个 skill 适
 
 ## 决策表：选择合适的 Skill
 
-| 用户请求包含                         | 主要 Skill                                               | 辅助 Skills                                  |
-| ------------------------------------ | -------------------------------------------------------- | -------------------------------------------- |
-| "构建"、"实现"、"创建功能"           | `planning`                                               | `brainstorming`、`tdd`、`code-review`        |
-| "修复"、"bug"、"错误"、"坏了"        | `systematic-debugging`                                   | `tdd`、`resilient-execution`                 |
-| "测试"、"覆盖率"、"规格"             | `test-driven-development`                                | `testing-strategy`、`acceptance-testing`     |
-| "评审"、"检查"、"审计"               | `code-review`                                            | `security-review`、`clean-code`              |
-| "规划"、"我们应该如何"               | `planning`                                               | `brainstorming`、`task-decomposition`        |
-| "部署"、"CI/CD"、"流水线"            | `deployment`                                             | `senior-devops`                              |
-| "API"、"endpoint"、"REST"、"GraphQL" | `api-design`                                             | `senior-backend`                             |
-| "React"、"Next.js"、"组件"           | `senior-frontend`                                        | `react-best-practices`、`frontend-ui-design` |
-| "数据库"、"schema"、"迁移"           | `database-schema-design`                                 | `senior-backend`                             |
-| "设计"、"UI"、"UX"                   | `ui-ux-pro-max`                                          | `ui-design-system`、`frontend-ui-design`     |
-| "移动端"、"iOS"、"Android"           | `mobile-design`                                          | `ui-ux-pro-max`                              |
-| "文档"、"docs"、"README"             | `tech-docs-generator`                                    | `prd-generation`                             |
-| "规格"、"需求"、"PRD"                | `spec-writing`                                           | `prd-generation`                             |
-| "自主"、"循环"、"ralph"              | `autonomous-loop`                                        | `ralph-status`、`circuit-breaker`            |
-| "安全"、"漏洞"、"认证"               | `security-review`                                        | `senior-backend`                             |
-| "SEO"、"meta 标签"、"搜索引擎"       | `seo-optimizer`                                          | `content-research-writer`                    |
-| "PDF"、"Word"、"Excel"               | `pdf-processing` / `docx-processing` / `xlsx-processing` | —                                            |
-| "agent"、"AI"、"tool use"            | `agent-development`                                      | `mcp-builder`                                |
-| "MCP"、"服务器"、"transport"         | `mcp-builder`                                            | `agent-development`                          |
+| 用户请求包含                         | 主要 Skill                | 辅助 Skills                                  |
+| ------------------------------------ | ------------------------- | -------------------------------------------- |
+| "构建"、"实现"、"创建功能"           | `planning`                | `brainstorming`、`tdd`、`code-review`        |
+| "修复"、"bug"、"错误"、"坏了"        | `systematic-debugging`    | `tdd`、`resilient-execution`                 |
+| "测试"、"覆盖率"、"规格"             | `test-driven-development` | `testing-strategy`、`acceptance-testing`     |
+| "评审"、"检查"、"审计"               | `code-review`             | `security-review`、`clean-code`              |
+| "规划"、"我们应该如何"               | `planning`                | `brainstorming`、`task-decomposition`        |
+| "部署"、"CI/CD"、"流水线"            | `deployment`              | `senior-devops`                              |
+| "API"、"endpoint"、"REST"、"GraphQL" | `api-design`              | `senior-backend`                             |
+| "React"、"Next.js"、"组件"           | `senior-frontend`         | `react-best-practices`、`frontend-ui-design` |
+| "数据库"、"schema"、"迁移"           | `database-schema-design`  | `senior-backend`                             |
+| "设计"、"UI"、"UX"                   | `ui-ux-pro-max`           | `ui-design-system`、`frontend-ui-design`     |
+| "移动端"、"iOS"、"Android"           | `mobile-design`           | `ui-ux-pro-max`                              |
+| "文档"、"docs"、"README"             | `tech-docs-generator`     | `prd-generation`                             |
+| "规格"、"需求"、"PRD"                | `spec-writing`            | `prd-generation`                             |
+| "自主"、"循环"、"ralph"              | `autonomous-loop`         | `ralph-status`、`circuit-breaker`            |
+| "安全"、"漏洞"、"认证"               | `security-review`         | `senior-backend`                             |
+| "agent"、"AI"、"tool use"            | `agent-development`       | `mcp-builder`                                |
+| "MCP"、"服务器"、"transport"         | `mcp-builder`             | `agent-development`                          |
 
 ---
 
@@ -206,9 +195,7 @@ description: 在开始任何对话、接收新任务或不确定哪个 skill 适
 | "此分支已完成"       | finishing-a-development-branch                                              |
 | "设计 UI"            | ui-ux-pro-max -> ui-design-system -> frontend-ui-design                     |
 | "构建移动应用"       | mobile-design -> planning -> tdd                                            |
-| "优化 SEO"           | seo-optimizer                                                               |
 | "撰写营销文案"       | content-creator                                                             |
-| "处理文档"           | docx-processing / pdf-processing / xlsx-processing                          |
 | "构建 AI agent"      | agent-development -> planning -> tdd                                        |
 | "设置基础设施"       | senior-devops -> deployment                                                 |
 | "拆解复杂任务"       | task-decomposition -> dispatching-parallel-agents                           |

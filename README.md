@@ -253,26 +253,16 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 </details>
 
 <details>
-<summary><strong>商业（3 项）</strong> — SEO、内容和营销</summary>
+<summary><strong>商业（2 项）</strong> — SEO、内容和营销</summary>
 
 | 技能 | 描述 |
 |-------|-------------|
-| `seo-optimizer` | 技术 SEO、元标签、结构化数据、Core Web Vitals |
 | `content-research-writer` | 研究方法、长篇内容、引用 |
 | `content-creator` | 营销文案、社交媒体、品牌语调 |
 
 </details>
 
-<details>
-<summary><strong>文档处理（3 项）</strong> — Word、PDF 和 Excel</summary>
 
-| 技能 | 描述 |
-|-------|-------------|
-| `docx-processing` | Word 文档生成、模板填充 |
-| `pdf-processing` | PDF 生成、表单填充、OCR、合并/拆分 |
-| `xlsx-processing` | Excel 操作、公式、图表 |
-
-</details>
 
 <details>
 <summary><strong>生产力 </strong></summary>
@@ -311,8 +301,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `typescript-pro` | 高级类型模式、条件类型、品牌类型 |
 | `task-decomposer` | 层次化任务分解、并行化策略 |
 | `mobile-developer` | 跨平台移动开发、平台特定模式 |
-| `laravel-developer` | Laravel 专家，具备 Eloquent、Blade、Livewire 和 Pest 专业知识 |
-| `php-developer` | 现代 PHP 8.x 开发，符合 PSR 标准并支持静态分析 |
+
 
 </details>
 
@@ -345,7 +334,6 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `/clean` | 整洁代码评审 | `clean-code` |
 | `/devops` | DevOps 与基础设施 | `senior-devops` |
 | `/agent` | AI 代理开发 | `agent-development` |
-| `/seo` | SEO 优化 | `seo-optimizer` |
 | `/mcp` | MCP 服务器开发 | `mcp-builder` |
 | `/commit` | Git 提交助手 | `git-commit-helper` |
 | `/decompose` | 任务分解 | `task-decomposition` |
