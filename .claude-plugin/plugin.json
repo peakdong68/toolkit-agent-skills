@@ -19,5 +19,7 @@
     "testing",
     "deployment",
     "documentation"
-  ]
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/"
 }
