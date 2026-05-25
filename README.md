@@ -106,8 +106,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 ### 创建产品需求 PRD
 
 ```
-1. /prd            → 创建产品需求文档
-3. /specs          → PRD 提供高层级需求；规格说明用 JTBD 细化它们
+1. /prd            → 创建产品需求文档 
 4. /plan           → 规划参考 PRD 需求进行任务拆解
 5. /execute        → 执行计划，遵循 TDD 并跟踪进度
 ```
@@ -137,6 +136,40 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 4. /verify                  → 确认达到性能目标
 ```
 
+## 斜杠命令 
+
+| 命令 | 描述 | 调用技能 |
+|---------|-------------|----------|
+| `/plan` | 启动结构化规划 | `planning` |
+| `/brainstorm` | 启动头脑风暴会话 | `brainstorming` |
+| `/execute` | 执行已批准的计划 | `executing-plans` |
+| `/tdd` | 启动 TDD 工作流 | `test-driven-development` |
+| `/debug` | 启动调试方法 | `systematic-debugging` |
+| `/review` | 请求代码评审 | `code-review` |
+| `/verify` | 验证完成声明 | `verification-before-completion` |
+| `/prd` | 生成 PRD | `prd-generation` |
+| `/learn` | 扫描并学习项目上下文 | `self-learning` |
+| `/docs` | 生成技术文档 | `tech-docs-generator` |
+| `/worktree` | 设置 git worktree | `using-git-worktrees` |
+| `/ralph` | 启动 Ralph 自主开发循环 | `autonomous-loop` |
+| `/specs` | 编写或审计规范 | `spec-writing` |
+| `/loop` | 启动自主循环迭代 | `autonomous-loop` |
+| `/frontend` | 高级前端开发 | `senior-frontend` |
+| `/backend` | 高级后端开发 | `senior-backend` |
+| `/architect` | 架构设计与评审 | `senior-architect` |
+| `/fullstack` | 全栈开发 | `senior-fullstack` |
+| `/design-system` | 设计系统生成 | `ui-design-system` |
+| `/ui-ux` | UI/UX 设计智能 | `ui-ux-pro-max` |
+| `/mobile` | 移动端设计模式 | `mobile-design` |
+| `/clean` | 整洁代码评审 | `clean-code` |
+| `/devops` | DevOps 与基础设施 | `senior-devops` |
+| `/agent` | AI 代理开发 | `agent-development` |
+| `/mcp` | MCP 服务器开发 | `mcp-builder` |
+| `/commit` | Git 提交助手 | `git-commit-helper` |
+| `/decompose` | 任务分解 | `task-decomposition` |
+| `/archive` | 归档已完成功能 | `archive` |
+
+ 
 ---
 
 ## 技能概览
@@ -240,10 +273,8 @@ claude --plugin-dir /path/to/toolkit-agent-skills
  
 ---
 
-## 代理与命令
-
-### 用于并行工作的专业化子代理 
-
+## 代理 
+ 
 | 代理 | 描述 |
 |-------|-------------|
 | `planner` | 创建实现计划的高级架构师 |
@@ -266,40 +297,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `mobile-developer` | 跨平台移动开发、平台特定模式 |
 
 
-### 斜杠命令 
 
-| 命令 | 描述 | 调用技能 |
-|---------|-------------|----------|
-| `/plan` | 启动结构化规划 | `planning` |
-| `/brainstorm` | 启动头脑风暴会话 | `brainstorming` |
-| `/execute` | 执行已批准的计划 | `executing-plans` |
-| `/tdd` | 启动 TDD 工作流 | `test-driven-development` |
-| `/debug` | 启动调试方法 | `systematic-debugging` |
-| `/review` | 请求代码评审 | `code-review` |
-| `/verify` | 验证完成声明 | `verification-before-completion` |
-| `/prd` | 生成 PRD | `prd-generation` |
-| `/learn` | 扫描并学习项目上下文 | `self-learning` |
-| `/docs` | 生成技术文档 | `tech-docs-generator` |
-| `/worktree` | 设置 git worktree | `using-git-worktrees` |
-| `/ralph` | 启动 Ralph 自主开发循环 | `autonomous-loop` |
-| `/specs` | 编写或审计规范 | `spec-writing` |
-| `/loop` | 启动自主循环迭代 | `autonomous-loop` |
-| `/frontend` | 高级前端开发 | `senior-frontend` |
-| `/backend` | 高级后端开发 | `senior-backend` |
-| `/architect` | 架构设计与评审 | `senior-architect` |
-| `/fullstack` | 全栈开发 | `senior-fullstack` |
-| `/design-system` | 设计系统生成 | `ui-design-system` |
-| `/ui-ux` | UI/UX 设计智能 | `ui-ux-pro-max` |
-| `/mobile` | 移动端设计模式 | `mobile-design` |
-| `/clean` | 整洁代码评审 | `clean-code` |
-| `/devops` | DevOps 与基础设施 | `senior-devops` |
-| `/agent` | AI 代理开发 | `agent-development` |
-| `/mcp` | MCP 服务器开发 | `mcp-builder` |
-| `/commit` | Git 提交助手 | `git-commit-helper` |
-| `/decompose` | 任务分解 | `task-decomposition` |
-| `/archive` | 归档已完成功能 | `archive` |
-
- 
 
 ---
 
