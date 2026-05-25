@@ -110,7 +110,7 @@ Weight each quality attribute (1-5), score each option (1-5), multiply and sum.
 
 ### ADR Template Format
 
-Store ADRs in `docs/decisions/ADR-<number>-<Title>.md` with sequential numbering:
+Store ADRs in `docs/adr/ADR-<number>-<Title>.md` with sequential numbering:
 
 ```markdown
 # ADR-{number}: {Title}
