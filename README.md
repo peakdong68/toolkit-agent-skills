@@ -28,18 +28,19 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 ### New Feature (Full Lifecycle)
 
 ```
-1. /brainstorm     → Explore the idea, create design doc
-2. /specs          → Write specifications with JTBD methodology
-3. /plan           → Create implementation plan with bite-sized tasks; choose execution skill:
+1. /interview-me    → Clarify what the user actually wants before building
+2. /brainstorm     → Explore the idea, create design doc
+3. /specs          → Write specifications with JTBD methodology
+4. /plan           → Create implementation plan with bite-sized tasks; choose execution skill:
    → `task-management`            : Standard execution (< 3 tasks), sequential tracked progress
    → `subagent-driven-development`: Large execution (3+ independent tasks), parallel with review gates
    → `autonomous-loop`            : Autonomous development session, Ralph-style iterative execution
    → `executing-plans`            : Single focused task, direct plan execution (/execute)
-4. /execute        → Execute plan with TDD and tracked progress
-5. /review         → Verify against plan and standards
-6. /verify         → Confirm everything works with fresh evidence
-7. finishing-a-development-branch   → Merge, PR, or cleanup
-8. /archive        → Archive completed feature to docs/archive/
+5. /execute        → Execute plan with TDD and tracked progress
+6. /review         → Verify against plan and standards
+7. /verify         → Confirm everything works with fresh evidence
+8. finishing-a-development-branch   → Merge, PR, or cleanup
+9. /archive        → Archive completed feature to docs/archive/
 ```
 
 ### Bug Fix
@@ -296,6 +297,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | Command | Description | Skill |
 |---------|-------------|-------|
 | `/plan` | Start structured planning | `planning` |
+| `/interview-me` | Clarify intent before building | `interview-me` |
 | `/brainstorm` | Start brainstorming session | `brainstorming` |
 | `/execute` | Execute an approved plan | `executing-plans` |
 | `/tdd` | Start TDD workflow | `test-driven-development` |
