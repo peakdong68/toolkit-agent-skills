@@ -121,6 +121,42 @@ The gate is an explicit "yes." The following are **not** yes:
 
 If they correct you, fold the correction in and restate. Loop until you get an explicit yes.
 
+### Step 6: Route to downstream skill — never direct to code
+
+**[HARD-GATE:ROUTE]** After the user confirms the restate with an explicit yes, you MUST recommend the appropriate downstream skill. Interview-me is a Define-phase skill; its job is to clarify intent, not act on it. The confirmed intent feeds the next phase — it is never the final step before implementation.
+
+**Which downstream skill to recommend:**
+
+| Intent characteristic | Route to | Why |
+|---|---|---|
+| Concrete: clear who, what, why, success criteria, constraint | `/spec-writing` then `/plan` | Write the spec from confirmed intent, then plan implementation |
+| Needs scoping: "I want X but I don't know what shape it takes" | `/brainstorming` | Generate variations against the now-explicit intent, then re-check |
+| Trivial / self-contained action (rename, fix typo) | None — proceed directly | Interview-me shouldn't have been invoked; see "When NOT to use" |
+
+**Format the handoff explicitly.** After confirmation, produce the restate one final time and route:
+
+```
+Confirmed. Here's the summary:
+
+- Outcome:      <one line>
+- User:         <one line>
+- Why now:      <one line>
+- Success:      <one line>
+- Constraint:   <one line>
+- Out of scope: <one line>
+
+Next: I recommend /spec-writing to capture this as a spec, then /plan for implementation. Sound good?
+```
+
+**What NOT to do after confirmation:**
+
+- Start writing code or suggesting libraries, frameworks, file structures
+- Produce a task list, architecture sketch, or component tree
+- Generate any artifact beyond the restate and routing recommendation
+- Ask "want me to start coding?" — you already know the answer is no; route instead
+
+If the user pushes back and says "just start coding," remind them: the interview surfaced what they want, but not how to build it. Spec and plan exist to prevent building the wrong thing the right way.
+
 ### The 95% Confidence Stop
 
 You're done when you can answer yes to this:
@@ -133,7 +169,7 @@ This is a checkable test, not a vibe. It also has a floor: if you've gone severa
 
 ## Output
 
-The output of this skill is a **confirmed statement of intent**: the restate from Step 4, with an explicit yes from Step 5. That's the deliverable. Specs, plans, and task lists are downstream; they consume the intent this skill produces.
+The output of this skill is a **confirmed statement of intent paired with a downstream routing recommendation**: the restate from Step 4, an explicit yes from Step 5, and a routing recommendation from Step 6. The restate + routing is the deliverable. Code, task lists, and implementation are downstream; they consume the intent this skill produces — through the routed skill, never directly.
 
 If the user wants the intent to persist (a multi-session project, a handoff to another collaborator), offer to save it to `docs/intent/[topic].md`. Only save if they confirm.
 
@@ -172,16 +208,45 @@ GUESS: the second one. You have a list of experiments somewhere, but their resul
 
 User: First one actually. I literally don't have a list. They're spread across different docs.
 
-Agent: <continues>
+Agent: <continues interviewing, reaches 95%, user confirms>
+
+Here's what I now think you want:
+
+- Outcome:      A single list of all active experiments with their basic status
+- User:         You, personally, tracking your own experiments
+- Why now:      Experiments are spread across docs; you can't see them all at once
+- Success:      You open one page and see every experiment and its current stage
+- Constraint:   Must pull from existing docs; no new data entry workflows
+- Out of scope: Analytics, team dashboards, metric visualizations, reporting
+
+Confirmed.
+
+Next: I recommend /spec-writing to turn this into a formal spec, then /plan to build it. Sound good?
+User: yes
+Agent: <invokes spec-writing with the confirmed intent as input>
 ```
 
-Two questions in, the agent has discovered the actual ask isn't "a dashboard." It's "a list." Different artifact, different scope, different work. The dashboard would have been wrong.
+Two questions in, the agent has discovered the actual ask isn't "a dashboard." It's "a list." Different artifact, different scope, different work. The dashboard would have been wrong. And after confirmation, the agent routes to `/spec-writing` instead of jumping to code.
 
 ## Interaction with Other Skills
 
-- **`brainstorming`**: downstream. If the confirmed intent is "I want X but I don't know how to scope it," hand off to `brainstorming` to generate variations against the now-explicit intent.
-- **`spec-writing`**: downstream. If the confirmed intent is concrete ("I want X for Y users with Z success criteria"), hand off to `spec-writing` to write it down.
-- **`planning`**: Structured planning before any implementation work (after the spec).
+**[HARD-GATE]** Interview-me is the entry point of the Define phase. After confirmation, you MUST route to a downstream skill. Never jump directly to implementation.
+
+| Downstream skill | When to route | Relationship |
+|---|---|---|
+| `brainstorming` | Intent needs scoping or alternative approaches | Generate variations, then re-check intent |
+| `spec-writing` | Intent is concrete with clear success criteria | Formalize intent as a JTBD spec with Given/When/Then |
+| `planning` | After spec exists | Structured implementation plan from the spec |
+| `task-decomposition` | After plan exists | Break plan into executable subtasks |
+
+**Anti-pattern: skipping the chain.** The correct chain is:
+
+```
+interview-me → spec-writing → planning → task-decomposition → implementation
+                ↑ (or brainstorming if scoping needed)
+```
+
+Any step skipped is a rework risk. Interview-me's job ends at routing — it does not produce specs, plans, or code.
 
 ## Common Rationalizations
 
@@ -195,6 +260,8 @@ Two questions in, the agent has discovered the actual ask isn't "a dashboard." I
 | "If I attach my guess, I'm leading them"                  | Leading is the point. Reacting is faster than generating from scratch. The risk is sycophancy, not leading; mitigate by being visibly willing to be wrong.                    |
 | "We've talked enough, I get it"                           | Test it: can you predict their reaction to the next three questions? If not, you don't get it yet.                                                                            |
 | "The user said yes, we're done"                           | If the yes followed a vague restate or an open-ended "sounds good," the yes is hollow. Restate concretely and re-confirm.                                                     |
+| "The user confirmed the restate, let me start building"   | Confirmation is not a green light for code. It's a green light for the next Define-phase skill. Route to `/spec-writing` or `/brainstorming` — never skip to implementation.  |
+| "The intent is simple, we don't need a spec"              | Simple intents still benefit from spec-writing to surface edge cases and acceptance criteria you haven't thought of. If it's truly trivial, interview-me shouldn't have been invoked. |
 
 ## Red Flags
 
@@ -208,6 +275,8 @@ Two questions in, the agent has discovered the actual ask isn't "a dashboard." I
 - A confidence number below ~70% with no reason attached: the user can't help close the gap if they don't know what's missing
 - Saving the intent doc before the user has confirmed (the doc itself implies a yes the user didn't give)
 - Skipping the "Out of scope" line in the restate (silent disagreement about non-goals is half of misalignment)
+- Jumping to code, library suggestions, or file scaffolding after confirmation without routing to a downstream skill — this is the single most common failure mode after a successful interview
+- Asking "want me to start coding?" or "ready to build?" after confirmation — you already know the answer; route instead
 
 ## Verification
 
@@ -220,4 +289,6 @@ After applying interview-me:
 - [ ] A concrete restate (Outcome / User / Why now / Success / Constraint / Out of scope) was written back to the user
 - [ ] The user confirmed the restate with an explicit yes (not "whatever you think," not "sounds good," not silence)
 - [ ] At the stop point, the agent could predict reactions to the next three questions it would ask
-- [ ] Any handoff to a downstream skill (`brainstorming`, `spec-writing`, `planning`) was framed in terms of the confirmed intent, not the original underspecified ask
+- [ ] **[HARD-GATE]** After confirmation, the agent explicitly recommended a downstream skill (`/spec-writing`, `/brainstorming`) and did NOT jump to code, libraries, or implementation
+- [ ] The routing recommendation matched the intent characteristic (concrete → spec-writing, needs scoping → brainstorming)
+- [ ] Any handoff to a downstream skill was framed in terms of the confirmed intent, not the original underspecified ask
