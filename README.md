@@ -27,9 +27,10 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 ### 新功能（完整生命周期）
 
 ```
-1. /brainstorm     → 探索想法，创建设计文档 
-2. /specs          → 使用 JTBD 方法论编写规范 
-3. /plan           → 创建包含细粒度任务的实现计划,选择执行技能 
+1. /interview-me    → 访谈澄清用户真正想要什么，避免构建错误的东西
+2. /brainstorm     → 探索想法，创建设计文档 
+3. /specs          → 使用 JTBD 方法论编写规范 
+4. /plan           → 创建包含细粒度任务的实现计划,选择执行技能 
    → `task-management` ：标准实施（少于 3 个任务）,顺序跟踪执行
    → `subagent-driven-development`：大型实施（包含 3 个及以上可独立实现的任务）,并行执行，带审查关卡
    → `autonomous-loop`：自主开发会话  ,Ralph 风格的迭代执行
@@ -141,6 +142,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | 命令 | 描述 | 调用技能 |
 |---------|-------------|----------|
 | `/plan` | 启动结构化规划 | `planning` |
+| `/interview-me` | 访谈澄清用户意图 | `interview-me` |
 | `/brainstorm` | 启动头脑风暴会话 | `brainstorming` |
 | `/execute` | 执行已批准的计划 | `executing-plans` |
 | `/tdd` | 启动 TDD 工作流 | `test-driven-development` |
