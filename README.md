@@ -21,9 +21,7 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 ```
 
 
-
 ---
-
 
 ##  WORKFLOW EXAMPLES
 
@@ -144,133 +142,156 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 ## Skills Overview
 
-### Core  — Foundation skills always recommended 
+### Meta — Discover which skill applies
 
-| Skill | Description |
-|-------|-------------|
-| `using-toolkit` | Master skill — establishes how to find and use all toolkit skills |
-| `self-learning` | Auto-discover and remember project context |
-| `resilient-execution` | Never fail — retry with alternative approaches |
-| `circuit-breaker` | Loop stagnation detection, rate limiting, and recovery patterns |
-| `auto-improvement` | Self-improving system, tracks effectiveness, learns from errors |
-| `verification-before-completion` | 5-step verification gate before any completion claim |
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [using-toolkit](skills/using-toolkit/SKILL.md) | Entry point that establishes how to find, select, and use all toolkit skills | Starting a session, receiving a new task, or uncertain which skill applies |
+| [self-learning](skills/self-learning/SKILL.md) | Auto-discovers and remembers project context, patterns, and preferences | Onboarding to a new project, encountering unexpected patterns, or when assumptions are corrected |
 
-### Process & Workflow — Planning, execution, and autonomous loops 
+### Core — Always-on protection
 
-| Skill | Description |
-|-------|-------------|
-| `brainstorming` | Creative exploration and design before planning |
-| `planning` | Structured planning before any implementation work |
-| `task-management` | Break work into discrete tracked steps |
-| `executing-plans` | Step-by-step execution of approved plan documents |
-| `subagent-driven-development` | Same-session execution with two-stage review gates |
-| `dispatching-parallel-agents` | Coordinate multiple independent agents in parallel |
-| `autonomous-loop` | Ralph-style iterative development with autonomous planning and building loops |
-| `ralph-status` | Structured status reporting with exit signal protocol |
-| `task-decomposition` | Hierarchical breakdown, dependency mapping, parallelization |
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [resilient-execution](skills/resilient-execution/SKILL.md) | Retries with at least 3 genuinely different approaches before giving up | A task fails, an approach doesn't work, or errors are encountered |
+| [circuit-breaker](skills/circuit-breaker/SKILL.md) | Detects stalled loops, enforces rate limits, protects config files, manages cooldown recovery | Autonomous loops running, repeated operations, or stagnation patterns detected |
+| [auto-improvement](skills/auto-improvement/SKILL.md) | Continuously tracks effectiveness, classifies errors, recognizes patterns, improves workflows | Activates automatically every session — no manual invocation needed |
+| [verification-before-completion](skills/verification-before-completion/SKILL.md) | 5-step HARD-GATE protocol requiring fresh evidence before claiming completion | Before marking a task done, delivering a feature, or claiming "it's finished" |
 
-### Quality Assurance  — Testing, review, debugging, and specialist roles 
+### Define — Clarify what to build
 
-| Skill | Description |
-|-------|-------------|
-| `code-review` | Quality verification against plan and standards |
-| `test-driven-development` | TDD workflow with RED-GREEN-REFACTOR cycle |
-| `testing-strategy` | Choose testing approach based on project context |
-| `systematic-debugging` | 4-phase debugging methodology with root cause analysis |
-| `security-review` | OWASP Top 10, auth patterns, input validation, secrets |
-| `performance-optimization` | Profiling, caching, bundle optimization, Web Vitals |
-| `acceptance-testing` | Acceptance-driven backpressure with behavioral validation gates |
-| `llm-as-judge` | Non-deterministic validation for subjective quality criteria |
-| `senior-frontend` | React/Next.js/TypeScript specialist, >85% test coverage |
-| `senior-backend` | API design, microservices, event-driven architecture |
-| `senior-architect` | System design, scalability, trade-off analysis, ADRs |
-| `senior-fullstack` | End-to-end development across the full stack |
-| `clean-code` | SOLID, DRY, code smells, refactoring patterns |
-| `react-best-practices` | React hooks, context, suspense, server components |
-| `webapp-testing` | Playwright-based web testing, screenshots, browser logs |
-| `senior-prompt-engineer` | Prompt design, optimization, chain-of-thought |
-| `senior-data-scientist` | ML pipelines, statistical analysis, experiment design |
-| `file-organizer` | Project structure, file naming, directory architecture |
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [interview-me](skills/interview-me/SKILL.md) | One-question-at-a-time interview that extracts what the user actually wants instead of what they think they should want, until ~95% confidence | The ask is underspecified, or the user invokes "interview me" / "grill me" |
+| [brainstorming](skills/brainstorming/SKILL.md) | Structured divergent/convergent thinking to turn vague ideas into concrete proposals | You have a rough concept that needs exploration |
+| [spec-writing](skills/spec-writing/SKILL.md) | Write a PRD covering objectives, commands, structure, code style, testing, and boundaries before any code | Starting a new project, feature, or significant change |
+| [prd-generation](skills/prd-generation/SKILL.md) | Converts product vision into structured PRDs with user stories and priorities | A new product feature needs documented requirements |
+| [reverse-engineering-specs](skills/reverse-engineering-specs/SKILL.md) | Generates implementation-free behavioral specs from existing codebases | Inheriting legacy code, or needing specs for undocumented features |
 
-### Design   — API, UI, and database design 
+### Plan — Structure the implementation
 
-| Skill | Description |
-|-------|-------------|
-| `api-design` | Structured API endpoint design with OpenAPI spec |
-| `frontend-ui-design` | Component architecture, responsive design, accessibility |
-| `database-schema-design` | Data modeling, migrations, indexing, query optimization |
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [planning](skills/planning/SKILL.md) | Structured 5-phase planning: context → questions → approaches → document → handoff | Before any implementation task, feature request, bug fix, or refactor |
+| [task-decomposition](skills/task-decomposition/SKILL.md) | Hierarchical task breakdown, dependency mapping, parallelization analysis, critical path planning | Complex tasks need decomposition into manageable subtasks |
 
-### Documentation — PRDs, specs, and technical docs 
+### Execute — Build and deliver
 
-| Skill | Description |
-|-------|-------------|
-| `prd-generation` | Generate Product Requirements Documents |
-| `tech-docs-generator` | Generate technical documentation from code |
-| `writing-skills` | Create new skills with TDD and best practices |
-| `spec-writing` | JTBD-based specification writing with acceptance criteria |
-| `reverse-engineering-specs` | Generate implementation-free specs from existing codebases |
-| `archive` | Archive completed features, update spec index, verify before archival |
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [task-management](skills/task-management/SKILL.md) | Breaks work into discrete tracked steps with progress reporting and checkpoint reviews | An approved plan needs conversion to tracked tasks |
+| [executing-plans](skills/executing-plans/SKILL.md) | Executes approved plan documents in batches with TDD and checkpoint reviews | A single focused task with an approved plan to execute |
+| [subagent-driven-development](skills/subagent-driven-development/SKILL.md) | Dispatches subagents for parallel execution with two-stage review gates (spec compliance + code quality) | 3+ independent tasks, speed matters, tasks have clear acceptance criteria |
+| [dispatching-parallel-agents](skills/dispatching-parallel-agents/SKILL.md) | Coordinates multiple independent subagents working on unrelated subtasks in parallel | Subtasks touch different files, serial execution would be significantly slower |
+| [autonomous-loop](skills/autonomous-loop/SKILL.md) | Ralph-style iterative development: plan → build → status check → loop until done | Autonomous dev sessions, `/ralph` or `/loop` commands |
+| [ralph-status](skills/ralph-status/SKILL.md) | Structured progress reporting with EXIT_SIGNAL protocol and dual-condition exit gates | End of every autonomous loop iteration |
 
-### Operations   — Git, CI/CD, DevOps, and MCP 
+### QA — Test, review, and verify
 
-| Skill | Description |
-|-------|-------------|
-| `deployment` | CI/CD pipeline generation and deploy checklists |
-| `using-git-worktrees` | Isolated development environments with git worktrees |
-| `finishing-a-development-branch` | Structured branch completion with merge options |
-| `git-commit-helper` | Conventional commits, semantic versioning, changelogs |
-| `senior-devops` | CI/CD, Docker, Kubernetes, infrastructure-as-code |
-| `mcp-builder` | MCP server development, tools, resources, transport layers |
-| `agent-development` | Building AI agents, tool use, memory, planning |
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [code-review](skills/code-review/SKILL.md) | Reviews code against plans and standards, categorizes as Critical/Important/Suggestion | Task completion, before merge, verifying work meets requirements |
+| [test-driven-development](skills/test-driven-development/SKILL.md) | Enforces strict RED-GREEN-REFACTOR cycle — no production code without a failing test | Writing any new code, adding features, fixing bugs that require code changes |
+| [testing-strategy](skills/testing-strategy/SKILL.md) | Selects test frameworks, defines coverage thresholds, establishes testing patterns per project | New project setup, CI/CD pipeline design, coverage audit, framework migration |
+| [systematic-debugging](skills/systematic-debugging/SKILL.md) | 4-phase debugging: observe → hypothesize → experiment → fix, prevents shotgun debugging | Test failures, runtime errors, unexpected behavior, performance regressions |
+| [acceptance-testing](skills/acceptance-testing/SKILL.md) | Acceptance-driven backpressure with behavioral validation gates | Spec-to-code validation, feature completion verification, pre-merge acceptance gate |
+| [llm-as-judge](skills/llm-as-judge/SKILL.md) | Evaluates subjective quality criteria using structured rubrics (tone, UX feel, readability) | Documentation quality check, error message tone review, design aesthetic review |
+| [security-review](skills/security-review/SKILL.md) | OWASP Top 10, auth patterns, input validation, secrets management, dependency audit | Auth implementation, input handling, secrets management, pre-deployment security check |
+| [performance-optimization](skills/performance-optimization/SKILL.md) | Profiling, caching strategies, bundle optimization, Web Vitals, database query tuning | Slow page loads, poor Web Vitals, database timeouts, large bundle sizes |
+| [webapp-testing](skills/webapp-testing/SKILL.md) | Playwright-based E2E testing, screenshot comparison, browser log analysis, a11y audit | E2E test setup, visual regression testing, CI test pipeline |
 
-### Creative   — UI/UX, design systems, mobile, and canvas 
+### Specialize — Domain expertise
 
-| Skill | Description |
-|-------|-------------|
-| `ui-ux-pro-max` | Full UI/UX design intelligence with 67 styles, 161 palettes, 57 fonts |
-| `ui-design-system` | Design tokens, component libraries, Tailwind CSS, responsive patterns |
-| `canvas-design` | HTML Canvas, SVG, data visualization, generative art |
-| `mobile-design` | React Native, Flutter, SwiftUI, platform HIG compliance |
-| `ux-researcher-designer` | User research, personas, journey maps, usability testing |
-| `artifacts-builder` | Generate standalone artifacts, interactive demos, prototypes |
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [senior-frontend](skills/senior-frontend/SKILL.md) | React/Next.js/TypeScript expert with rigorous component architecture, state management, >85% test coverage | React component development, Next.js pages, state management design |
+| [senior-backend](skills/senior-backend/SKILL.md) | API design, microservices, event-driven systems, database integration, caching, observability | REST/GraphQL APIs, service architecture, message queues, health checks |
+| [senior-architect](skills/senior-architect/SKILL.md) | System design, scalability analysis, trade-off evaluation, ADR writing | New system design, technology selection, scaling strategy, infrastructure topology |
+| [senior-fullstack](skills/senior-fullstack/SKILL.md) | End-to-end TypeScript: database → API → UI, with tRPC/Prisma/Next.js/Auth | Full-stack feature implementation, DB-to-UI pipeline, auth setup |
+| [senior-devops](skills/senior-devops/SKILL.md) | CI/CD, Docker, Kubernetes, Terraform, monitoring, zero-downtime deployments | DevOps, containerization, infrastructure-as-code, observability |
+| [senior-data-scientist](skills/senior-data-scientist/SKILL.md) | ML pipelines, statistical analysis, feature engineering, model selection, experiment tracking | Dataset exploration, model training, hyperparameter tuning, visualization |
+| [senior-prompt-engineer](skills/senior-prompt-engineer/SKILL.md) | Prompt design, optimization, few-shot, chain-of-thought, structured output, evaluation frameworks | Creating new prompts, A/B testing prompts, building evaluation frameworks |
+| [clean-code](skills/clean-code/SKILL.md) | SOLID, DRY, code smell detection, naming conventions, complexity reduction, error handling | Code quality review, refactoring guidance, technical debt reduction |
+| [react-best-practices](skills/react-best-practices/SKILL.md) | React hooks design, component composition, Server Components, error boundaries, render optimization | Hook design, Server/Client component decisions, error boundary placement |
 
-### Business   —   content, and marketing 
+### Design — Architecture and interfaces
 
-| Skill | Description |
-|-------|-------------|
-| `content-research-writer` | Research methodology, long-form content, citations |
-| `content-creator` | Marketing copy, social media, brand voice |
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [api-design](skills/api-design/SKILL.md) | REST/GraphQL/tRPC endpoint design, request/response schemas, OpenAPI specifications | Designing API endpoints, generating OpenAPI specs, choosing API paradigms |
+| [database-schema-design](skills/database-schema-design/SKILL.md) | Data modeling, migration planning, index design, query optimization, SQL/NoSQL selection | Designing database schemas, creating migrations, modeling data relationships |
+| [frontend-ui-design](skills/frontend-ui-design/SKILL.md) | Component architecture, responsive layouts, design systems, state management selection | Designing UI components, creating component architectures, choosing state management |
+
+### Creative — Visual design and media
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [ui-ux-pro-max](skills/ui-ux-pro-max/SKILL.md) | Full UI/UX design intelligence: 67 styles, 161 palettes, 57 fonts, chart selection | Complete design, color palette, typography, accessibility, responsive design |
+| [ui-design-system](skills/ui-design-system/SKILL.md) | Design tokens, component libraries, theme systems, Tailwind CSS v4 responsive patterns | Building design systems, component libraries, dark mode tokens, brand themes |
+| [canvas-design](skills/canvas-design/SKILL.md) | HTML Canvas, SVG, D3.js data visualization, generative art | Canvas, SVG, charts, data visualization, interactive animations |
+| [mobile-design](skills/mobile-design/SKILL.md) | React Native/Flutter/SwiftUI patterns, platform HIG compliance, gestures, offline-first | Mobile app design, iOS/Android, cross-platform development |
+| [ux-researcher-designer](skills/ux-researcher-designer/SKILL.md) | User research, personas, journey maps, usability testing, information architecture | User research, usability tests, card sorting, heuristic evaluation |
+| [artifacts-builder](skills/artifacts-builder/SKILL.md) | Standalone HTML/CSS/JS artifacts, interactive demos, prototypes, visual tools | Standalone pages, interactive demos, prototypes with no build step |
+
+### Docs — Documentation and archiving
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [tech-docs-generator](skills/tech-docs-generator/SKILL.md) | Generates API references, architecture docs, READMEs, component docs from code | Generating or updating technical documentation |
+| [writing-skills](skills/writing-skills/SKILL.md) | Creates new skills with TDD: test prompts → minimal implementation → harden → validate | Creating new skills, commands, or agent definitions |
+| [archive](skills/archive/SKILL.md) | Archives completed features, updates global spec index, pre-archive validation | Feature completion, sprint wrap-up, cleaning up stale spec/plan directories |
+
+### Ops — Deploy and automate
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [deployment](skills/deployment/SKILL.md) | CI/CD pipelines, deployment configs, release checklists, environment management | New project needs deployment, migrating CI/CD, adding staging/production |
+| [using-git-worktrees](skills/using-git-worktrees/SKILL.md) | Creates isolated Git worktrees for parallel development without interference | Starting a new feature branch, working on multiple tasks without stashing |
+| [finishing-a-development-branch](skills/finishing-a-development-branch/SKILL.md) | Structured branch completion: merge, create PR, cleanup, archive | Branch work is done, ready to merge, creating a PR |
+| [git-commit-helper](skills/git-commit-helper/SKILL.md) | Conventional commits, semantic versioning, changelog generation | Help with commit messages, version bumping, changelog generation |
+| [mcp-builder](skills/mcp-builder/SKILL.md) | MCP server development: tool definitions, resource management, prompt templates, transport | Building MCP servers, creating tools for AI clients |
+| [agent-development](skills/agent-development/SKILL.md) | Build AI agents: tool use patterns, memory management, planning strategies, guardrails | Building AI agents, tool use, multi-agent coordination, safety guardrails |
+
+### Business — Content and marketing
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [content-research-writer](skills/content-research-writer/SKILL.md) | Research methodology, long-form content, academic citations, fact-checking | Whitepapers, research articles, case studies, evidence-based arguments |
+| [content-creator](skills/content-creator/SKILL.md) | Marketing copy, social media content, brand voice, ad copy, newsletters | Social media posts, email campaign copy, landing page text, ad copy |
+
+### Productivity — Project organization
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [file-organizer](skills/file-organizer/SKILL.md) | Project structure: monorepo patterns, feature-based architecture, naming conventions, barrel exports | Restructuring projects, setting up monorepos, defining naming conventions |
 
  
 ---
 
-## Agents & Commands
+## Agents
 
-###  Agents  — Specialized sub-agents for parallel work 
+| Agent | What It Does | Use When |
+|-------|-------------|-----------|
+| [planner](agents/planner.md) | Creates implementation plans, analyzes architecture, evaluates trade-offs | Multi-step feature work needs a structured plan before coding |
+| [code-reviewer](agents/code-reviewer.md) | Reviews code against plans and standards, categorizes Critical/Important/Suggestion | After task completion, before merge, quality verification needed |
+| [prd-writer](agents/prd-writer.md) | Generates structured PRDs with user stories and priorities from requirements | Product requirements need formal documentation |
+| [doc-generator](agents/doc-generator.md) | Generates API references, architecture docs, READMEs from code | Technical documentation needs generation or updating |
+| [spec-reviewer](agents/spec-reviewer.md) | Reviews implementation against spec acceptance criteria for compliance | After implementation, verifying spec compliance |
+| [quality-reviewer](agents/quality-reviewer.md) | Reviews code quality, patterns, performance, and security | Code review phase needs comprehensive quality assessment |
+| [loop-orchestrator](agents/loop-orchestrator.md) | Manages autonomous dev loops: task selection, exit evaluation, status reporting | Ralph-style iterative development sessions |
+| [spec-writer](agents/spec-writer.md) | Generates JTBD behavioral specs with Given/When/Then acceptance criteria | Formal specs needed for a feature |
+| [acceptance-judge](agents/acceptance-judge.md) | Evaluates subjective quality via structured scoring rubrics (tone, UX, readability) | LLM-as-judge evaluation pattern needed |
+| [frontend-developer](agents/frontend-developer.md) | Three-phase frontend dev: context discovery → component development → test handoff | Frontend feature development, React component implementation |
+| [ui-ux-designer](agents/ui-ux-designer.md) | Design system generation, component specs, style guides, color schemes | Building design systems, UI/UX design specs needed |
+| [backend-architect](agents/backend-architect.md) | Service boundary design, contract-first API, scalability planning | Backend service architecture design, API contract definition |
+| [context-manager](agents/context-manager.md) | Project context tracking, dependency mapping, tech stack documentation | Onboarding to a new project, understanding the full codebase |
+| [database-architect](agents/database-architect.md) | Multi-database strategy, data modeling, event sourcing, migration planning | Database architecture design, schema changes |
+| [architect-reviewer](agents/architect-reviewer.md) | Architecture review, scalability assessment, technical debt identification | Architecture decision review, system refactoring assessment |
+| [typescript-pro](agents/typescript-pro.md) | Advanced TypeScript type patterns, conditional types, branded types | Complex type design, type safety guarantees |
+| [task-decomposer](agents/task-decomposer.md) | Hierarchical task breakdown, dependency analysis, parallelization strategy | Complex tasks need WBS decomposition |
+| [mobile-developer](agents/mobile-developer.md) | Cross-platform mobile dev, React Native/Flutter/SwiftUI patterns | Mobile app development, platform-specific feature implementation |
 
-| Agent | Description |
-|-------|-------------|
-| `planner` | Senior architect creating implementation plans |
-| `code-reviewer` | Reviews code against plan and standards |
-| `prd-writer` | Generates PRD from collected requirements |
-| `doc-generator` | Generates technical documentation from code |
-| `spec-reviewer` | Reviews implementation against spec compliance |
-| `quality-reviewer` | Reviews code quality, patterns, performance, security |
-| `loop-orchestrator` | Manages autonomous development loop iterations |
-| `spec-writer` | Generates JTBD specifications with acceptance criteria |
-| `acceptance-judge` | Evaluates subjective quality via LLM-as-judge pattern |
-| `frontend-developer` | Three-phase frontend dev with context discovery, development, handoff |
-| `ui-ux-designer` | Design system generation, component specs, style guides |
-| `backend-architect` | Service boundaries, contract-first API, scaling |
-| `context-manager` | Project context tracking, dependency mapping |
-| `database-architect` | Multi-DB strategy, domain-driven design, event sourcing |
-| `architect-reviewer` | Architecture review, scalability assessment, tech debt |
-| `typescript-pro` | Advanced type patterns, conditional types, branded types |
-| `task-decomposer` | Hierarchical task breakdown, parallelization strategy |
-| `mobile-developer` | Cross-platform mobile, platform-specific patterns |
-
-
-### Slash Commands — Trigger skills directly in Claude Code 
+### Slash Commands
 
 | Command | Description | Skill |
 |---------|-------------|-------|
@@ -302,9 +323,8 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | `/commit` | Git commit helper | `git-commit-helper` |
 | `/decompose` | Task decomposition | `task-decomposition` |
 | `/archive` | Archive completed features | `archive` |
+
  
-
-
 
 ## Ralph Integration  — Autonomous iterative development loops 
 
@@ -343,7 +363,6 @@ Jobs to Be Done methodology for writing implementation-free specs:
 - **LLM-as-judge** — structured rubric evaluation for subjective criteria (tone, UX, readability)
 
  
-
 
 ---
 
