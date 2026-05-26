@@ -120,47 +120,137 @@ For each approach, include:
 
 ### Plan Document Format
 
-```markdown
-# [Feature Name] Implementation Plan
+**[Canonical template: `references/plan-template.md`]** — the reference template is the authoritative structure. The format below documents the required sections every plan must include.
 
-**Goal:** [One sentence]
-**Architecture:** [2-3 sentences]
+```markdown
+# [Feature Name] Implementation Plan ([N]) — [Phase Name]
+
+**Goal:** [One sentence — what this plan delivers]
+**Tech Stack:** [Frameworks, languages, key dependencies with versions]
+**Architecture:** [2-3 sentences describing the design]
 **Approach:** [Which approach was chosen and why]
-**Spec Reference:** [Path to spec file, e.g., `docs/specs/<date>_<topic>/`]
+**Design Doc:** [Path to spec/design doc, e.g., `docs/specs/<date>_<topic>/spec.md`]
+**Prerequisites:** [Preceding plans or conditions, e.g., "plan-1.md (Tasks 1-4) completed"]
+
+## Change Overview
+
+[One paragraph summarizing all changes — what's added, modified, key decisions.]
+
+- [Change point 1]
+- [Change point 2]
+- Key decision: [Most important technical decision and rationale]
 
 ---
 
-### Task N: [Component Name]
+### Task 0: Environment Preparation
 
-**Spec AC:** [Which acceptance criteria from the spec this task satisfies]
-
-**Files:**
-
-- Create: `exact/path/to/file.ext`
-- Modify: `exact/path/to/existing.ext`
-- Test: `tests/exact/path/to/test.ext`
+**Background:**
+Ensure build and test toolchains are available in the current dev environment to prevent downstream task blockage.
 
 **Steps:**
+- [ ] Verify runtime available
+  - `[verification command]`
+  - Expected: [expected output]
+- [ ] Verify build tool available
+  - `[build check command]`
+  - Expected: [expected output]
+- [ ] Verify test framework available
+  - `[test framework check command]`
+  - Expected: [expected output]
 
-1. Write the failing test (aligned to spec acceptance criteria above)
-2. Run test to verify it fails
-3. Write minimal implementation
-4. Run test to verify it passes
-5. Commit
+**Verification:**
+- [ ] Build command succeeds
+  - `[build command]`
+  - Expected: [expected output]
+- [ ] Existing tests pass (if any)
+  - `[test command]`
+  - Expected: [expected output]
 
-**Verification:** [Exact command to verify this task]
+---
+
+### Task [N]: [Short Descriptive Title]
+
+**Background:**
+- Context: [Where this task fits in the feature and its role]
+- Reason: [Why this change is needed, what problem it solves]
+- Impact: [Upstream tasks this depends on, downstream tasks that depend on it]
+
+**Spec AC:** [Which acceptance criteria from the spec this task satisfies — omit if no spec]
+
+**Files:**
+- Create: `path/to/new/file.ts`
+- Create: `path/to/new/file2.ts`
+- Modify: `path/to/existing/file.ts`
+- Test: `tests/path/to/test.ts`
+- (Omit categories with no files)
+
+**Steps:**
+- [ ] [Step title] — [One-line summary of what to do]
+  - Location: `path/to/file.ts:line-range` or `function/component name`
+  - Operation: [Concrete code change — not a vague description, an executable instruction]
+  - Reason: [Why this approach, not an alternative]
+- [ ] [Step title] — [Same structure as above]
+  - Location: [Same]
+  - Operation: [Same]
+  - Reason: [Same]
+
+**Verification:**
+- [ ] [Check item title]
+  - `[concrete shell command]`
+  - Expected: [Verifiable expected output — grep count, test pass flag, errors should be empty, etc.]
+- [ ] [Check item title]
+  - `[same]`
+  - Expected: [same]
+
+**Cognitive Changes (if applicable):**
+- [ ] [CLAUDE.md] [Info to persist to project memory — new files, exported functions, architectural conventions. Omit if nothing to record.]
+
+---
+
+[Repeat Task 1..N structure above. Tasks ordered by dependency: foundations first, dependents later. Insert checkpoint summaries every 2-3 tasks.]
+
+## Checkpoint [N] Summary
+
+[After every 2-3 tasks, insert a brief checkpoint summarizing what has been built and what remains.]
+
+---
+
+### Task [M]: [Phase Name] Acceptance
+
+**Prerequisites:**
+- [List all tasks that must be completed for this phase]
+- [List environment requirements]
+
+**End-to-End Verification:**
+
+1. ✅ [Verification item title]
+   - `[verification command]`
+   - Expected: [expected output]
+   - Troubleshoot: [what to check if this fails]
+
+2. ✅ [Verification item title]
+   - `[same]`
+   - Expected: [same]
+   - Troubleshoot: [same]
 ```
 
 ### Plan Quality Checklist
 
-| Criterion                               | Check                                 |
-| --------------------------------------- | ------------------------------------- |
-| Every task has exact file paths         | No "somewhere in src/"                |
-| Every task has a verification command   | No "eyeball it"                       |
-| Tasks reference spec AC when applicable | No orphan tasks without a spec anchor |
-| Tasks are ordered by dependency         | No forward references                 |
-| Tasks are 2-5 minutes each              | No "implement the whole module"       |
-| TDD steps are explicit                  | RED-GREEN-REFACTOR per task           |
+| Criterion | Check |
+|---|---|
+| Header has Goal, Tech Stack, Architecture, Design Doc, Prerequisites | No missing header fields |
+| Change Overview summarizes all modifications with bullet points | No vague "various changes" |
+| Task 0 verifies environment toolchain (runtime, build, test) | No "assume tools work" |
+| Every task has Background (Context, Reason, Impact) | No orphan tasks without purpose |
+| Every step has Location, Operation, Reason | No "fix the bug" without specificity |
+| Every verification has concrete command + expected output | No "eyeball it" or "tests pass" |
+| Tasks reference Spec AC when spec exists | No orphan tasks without a spec anchor |
+| Tasks are ordered by dependency | No forward references |
+| Tasks are 2-5 minutes each | No "implement the whole module" |
+| TDD steps are explicit (test first, then code) | RED-GREEN-REFACTOR per task |
+| Checkpoint summaries appear every 2-3 tasks | No unbroken chains of 5+ tasks |
+| Final acceptance task has E2E verification + troubleshooting | No "it should work" |
+| Cognitive changes recorded for new files/exports/conventions | No unrecorded project memory |
 
 Save the plan to `docs/plans/<date>_<topic>/plan.md`.
 
@@ -204,18 +294,20 @@ Invoke the chosen skill and pass the plan document path.
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern                  | Why It Fails                                     | Correct Approach                    |
-| ----------------------------- | ------------------------------------------------ | ----------------------------------- |
-| "This is too simple to plan"  | Simple tasks have unexamined assumptions         | Plan anyway — the plan can be short |
-| "I already know the approach" | Your approach may conflict with project patterns | Document it and get approval        |
-| "The user wants it fast"      | Bad code is slower than planned code             | Planning prevents rework            |
-| "It's just a bug fix"         | Bug fixes need root cause analysis               | Plan the fix, not just the patch    |
-| "I'll plan as I go"           | That is improvising, not planning                | Plan first, execute second          |
-| Asking 5 questions at once    | Overwhelms the user, gets vague answers          | One question per message            |
-| Proposing only 1 approach     | No trade-off analysis, may miss better options   | Always propose 2-3 approaches       |
-| Vague file references         | "Update the tests" — which tests?                | Exact file paths always             |
-| Tasks that take 30+ minutes   | Too large to track and verify                    | Break into 2-5 minute tasks         |
-| Starting code before approval | Wastes effort if direction changes               | Wait for explicit "yes"             |
+| Anti-Pattern                  | Why It Fails                                     | Correct Approach                             |
+| ----------------------------- | ------------------------------------------------ | -------------------------------------------- |
+| "This is too simple to plan"  | Simple tasks have unexamined assumptions         | Plan anyway — the plan can be short          |
+| "I already know the approach" | Your approach may conflict with project patterns | Document it and get approval                 |
+| "The user wants it fast"      | Bad code is slower than planned code             | Planning prevents rework                     |
+| "I'll plan as I go"           | That is improvising, not planning                | Plan first, execute second                   |
+| Asking 5 questions at once    | Overwhelms the user, gets vague answers          | One question per message                     |
+| Proposing only 1 approach     | No trade-off analysis, may miss better options   | Always propose 2-3 approaches                |
+| Vague file references         | "Update the tests" — which tests?                | Exact file paths always                      |
+| Tasks that take 30+ minutes   | Too large to track and verify                    | Break into 2-5 minute tasks                  |
+| Starting code before approval | Wastes effort if direction changes               | Wait for explicit "yes"                      |
+| Skipping Task 0               | Tools not verified, downstream tasks blocked     | Always verify toolchain first                |
+| Vague steps without Location  | "Add validation" — where exactly?                | Location, Operation, Reason per step         |
+| No expected output in check   | "Tests pass" — what does that look like?         | Concrete commands with expected output       |
 
 ---
 
@@ -276,23 +368,100 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 ### Example: Small Bug Fix Plan
 
 ```markdown
-# Fix: Login button disabled state not clearing
+# Fix: Login button disabled state not clearing — Plan (1) — Single Task
 
 **Goal:** Fix login button remaining disabled after failed login attempt
-**Architecture:** State management bug in LoginForm component
+**Tech Stack:** React 18, TypeScript, Jest, React Testing Library
+**Architecture:** State management bug in LoginForm component — isSubmitting not reset on error
 **Approach:** Reset `isSubmitting` state in the catch block of handleSubmit
+**Design Doc:** N/A (bug fix, no spec)
+**Prerequisites:** None
 
-### Task 1: Write failing test
+## Change Overview
 
-**Files:** Test: `tests/components/LoginForm.test.tsx`
-**Steps:** Write test that submits invalid credentials and verifies button re-enables
-**Verification:** `npm test -- --grep "re-enables button after failed login"`
+Single-line fix in LoginForm.tsx to reset isSubmitting state in the error catch block.
+No API or schema changes.
+
+- Modify: `src/components/LoginForm.tsx` — add setIsSubmitting(false) to catch block
+- Key decision: Catch block fix vs. finally block refactor — catch block is minimal change, lower risk
+
+---
+
+### Task 0: Environment Preparation
+
+**Background:**
+Verify the React/TypeScript/Jest toolchain is available.
+
+**Steps:**
+- [ ] Verify Node.js runtime
+  - `node --version`
+  - Expected: v18.x or higher
+- [ ] Verify npm available
+  - `npm --version`
+  - Expected: version number
+- [ ] Verify test framework
+  - `npx jest --version`
+  - Expected: version number
+
+**Verification:**
+- [ ] Build succeeds
+  - `npm run build`
+  - Expected: no errors
+- [ ] Existing tests pass
+  - `npm test`
+  - Expected: all tests passing
+
+---
+
+### Task 1: Write failing test for button re-enable
+
+**Background:**
+- Context: The login form disables the submit button during submission but fails to re-enable it after an error response
+- Reason: No test currently covers the disabled-to-enabled state transition after failure
+- Impact: Prerequisite for Task 2 fix; no downstream dependencies
+
+**Files:**
+- Modify: `tests/components/LoginForm.test.tsx`
+
+**Steps:**
+- [ ] Add test case for button re-enable after failed login
+  - Location: `tests/components/LoginForm.test.tsx` — within existing LoginForm describe block
+  - Operation: Add a test that mocks a failed API response, simulates form submission, and asserts the submit button is NOT disabled after the error
+  - Reason: The test must fail first (RED phase) to validate the fix is needed
+
+**Verification:**
+- [ ] New test fails (RED)
+  - `npm test -- --grep "re-enables button after failed login"`
+  - Expected: 1 failing test
+
+---
 
 ### Task 2: Fix the bug
 
-**Files:** Modify: `src/components/LoginForm.tsx`
-**Steps:** Add `setIsSubmitting(false)` to catch block in handleSubmit
-**Verification:** `npm test -- --grep "LoginForm"` — all pass
+**Background:**
+- Context: LoginForm handleSubmit function
+- Reason: isSubmitting is set to true before API call but never reset to false on error
+- Impact: Depends on Task 1 test; no downstream tasks
+
+**Files:**
+- Modify: `src/components/LoginForm.tsx`
+
+**Steps:**
+- [ ] Reset isSubmitting in error catch block
+  - Location: `src/components/LoginForm.tsx` — handleSubmit function, catch block
+  - Operation: Add `setIsSubmitting(false)` as the first line in the catch block
+  - Reason: The finally block approach would also work but modifies more code; catch block is minimal change for a bug fix
+
+**Verification:**
+- [ ] All LoginForm tests pass (GREEN)
+  - `npm test -- --grep "LoginForm"`
+  - Expected: all tests passing, including the new one from Task 1
+- [ ] Full test suite passes
+  - `npm test`
+  - Expected: no regressions
+
+**Cognitive Changes:**
+- [ ] [CLAUDE.md] LoginForm isSubmitting state must be reset in both success AND error paths
 ```
 
 ### Example: Transition Command
