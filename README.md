@@ -174,103 +174,129 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 ## 技能概览
 
-### Meta — Discover which skill applies
+### Meta — 发现适用技能
 
 | Skill | What It Does | Use When |
 |-------|-------------|-----------|
-| [using-toolkit](skills/using-toolkit/SKILL.md) | Maps incoming work to the right skill workflow and defines shared operating rules | Starting a session or deciding which skill applies |
-| [self-learning](skills/self-learning/SKILL.md) | Auto-discovers and remembers project context, patterns, and preferences | Onboarding to a new project, encountering unexpected patterns, or when assumptions are corrected |
+| [using-toolkit](skills/using-toolkit/SKILL.md) | 主入口，确立如何查找、选择和使用所有工具包技能 | 每次会话启动、接收新任务、不确定该用哪个技能时 |
+| [using-agent-skills](skills/using-agent-skills/SKILL.md) | 将任务匹配到正确的代理工作流，定义共享操作规则 | 开始会话或决定适用哪个代理时 |
+| [self-learning](skills/self-learning/SKILL.md) | 自动扫描项目、发现并记忆上下文、模式与偏好 | 接手新项目、遇到意外模式、用户纠正你的假设时 |
 
-### Define — Clarify what to build
-
-| Skill | What It Does | Use When |
-|-------|-------------|-----------|
-| [interview-me](skills/interview-me/SKILL.md) | One-question-at-a-time interview that extracts what the user actually wants instead of what they think they should want, until ~95% confidence | The ask is underspecified, or the user invokes "interview me" / "grill me" |
-| [brainstorming](skills/brainstorming/SKILL.md) | Structured divergent/convergent thinking to turn vague ideas into concrete proposals | You have a rough concept that needs exploration |
-| [spec-writing](skills/spec-writing/SKILL.md) | Write a PRD covering objectives, commands, structure, code style, testing, and boundaries before any code | Starting a new project, feature, or significant change |
-| [prd-generation](skills/prd-generation/SKILL.md) | Converts product vision into structured PRDs with user stories and priorities | A new product feature needs documented requirements |
-| [reverse-engineering-specs](skills/reverse-engineering-specs/SKILL.md) | Generates implementation-free behavioral specs from existing codebases | Inheriting legacy code, or needing specs for undocumented features |
-
-### Plan — Break it down
+### Core — 始终运行的守护机制
 
 | Skill | What It Does | Use When |
 |-------|-------------|-----------|
-| [planning](skills/planning/SKILL.md) | Decompose specs into small, verifiable tasks with acceptance criteria and dependency ordering | You have a spec and need implementable units |
-| [task-decomposition](skills/task-decomposition/SKILL.md) | Hierarchical task breakdown, dependency mapping, parallelization analysis, critical path planning | Complex tasks need decomposition into manageable subtasks |
+| [resilient-execution](skills/resilient-execution/SKILL.md) | 失败时至少尝试 3 种不同方法再放弃 | 任务失败、方法不奏效、遇到错误时 |
+| [circuit-breaker](skills/circuit-breaker/SKILL.md) | 检测停滞循环、限制速率、保护配置文件、冷却恢复 | 自主循环运行、重复操作、检测到停滞模式时 |
+| [auto-improvement](skills/auto-improvement/SKILL.md) | 持续追踪效果、分类错误、识别模式、改进工作流 | 每个会话自动激活，无需手动调用 |
+| [verification-before-completion](skills/verification-before-completion/SKILL.md) | 5 步 HARD-GATE 协议，强制要求全新证据才能声明完成 | 任务完成前、功能交付前、声明"已完成"前 |
 
-### Build — Write the code
-
-| Skill | What It Does | Use When |
-|-------|-------------|-----------|
-| [task-management](skills/task-management/SKILL.md) | Breaks work into discrete tracked steps with progress reporting and checkpoint reviews | An approved plan needs conversion to tracked tasks |
-| [executing-plans](skills/executing-plans/SKILL.md) | Executes approved plan documents in batches with TDD and checkpoint reviews | A single focused task with an approved plan to execute |
-| [subagent-driven-development](skills/subagent-driven-development/SKILL.md) | Dispatches subagents for parallel execution with two-stage review gates | 3+ independent tasks, speed matters, tasks have clear acceptance criteria |
-| [dispatching-parallel-agents](skills/dispatching-parallel-agents/SKILL.md) | Coordinates multiple independent subagents working on unrelated subtasks in parallel | Subtasks touch different files, serial execution would be significantly slower |
-| [autonomous-loop](skills/autonomous-loop/SKILL.md) | Ralph-style iterative development: plan → build → status check → loop until done | Autonomous dev sessions, `/ralph` or `/loop` commands |
-| [ralph-status](skills/ralph-status/SKILL.md) | Structured progress reporting with EXIT_SIGNAL protocol and dual-condition exit gates | End of every autonomous loop iteration |
-| [senior-frontend](skills/senior-frontend/SKILL.md) | React/Next.js/TypeScript expert with rigorous component architecture, >85% test coverage | React component development, Next.js pages, state management design |
-| [senior-backend](skills/senior-backend/SKILL.md) | API design, microservices, event-driven systems, database integration, caching, observability | REST/GraphQL APIs, service architecture, message queues, health checks |
-| [senior-architect](skills/senior-architect/SKILL.md) | System design, scalability analysis, trade-off evaluation, ADR writing | New system design, technology selection, scaling strategy |
-| [senior-fullstack](skills/senior-fullstack/SKILL.md) | End-to-end TypeScript: database → API → UI, with tRPC/Prisma/Next.js/Auth | Full-stack feature implementation, DB-to-UI pipeline, auth setup |
-| [senior-devops](skills/senior-devops/SKILL.md) | CI/CD, Docker, Kubernetes, Terraform, monitoring, zero-downtime deployments | DevOps, containerization, infrastructure-as-code, observability |
-| [senior-data-scientist](skills/senior-data-scientist/SKILL.md) | ML pipelines, statistical analysis, feature engineering, model selection, experiment tracking | Dataset exploration, model training, hyperparameter tuning, visualization |
-| [senior-prompt-engineer](skills/senior-prompt-engineer/SKILL.md) | Prompt design, optimization, few-shot, chain-of-thought, structured output, evaluation | Creating new prompts, A/B testing prompts, building evaluation frameworks |
-| [clean-code](skills/clean-code/SKILL.md) | SOLID, DRY, code smell detection, naming conventions, complexity reduction | Code quality review, refactoring guidance, technical debt reduction |
-| [react-best-practices](skills/react-best-practices/SKILL.md) | React hooks design, component composition, Server Components, error boundaries, render optimization | Hook design, Server/Client component decisions, error boundary placement |
-| [api-design](skills/api-design/SKILL.md) | REST/GraphQL/tRPC endpoint design, request/response schemas, OpenAPI specifications | Designing API endpoints, generating OpenAPI specs, choosing API paradigms |
-| [database-schema-design](skills/database-schema-design/SKILL.md) | Data modeling, migration planning, index design, query optimization, SQL/NoSQL selection | Designing database schemas, creating migrations, modeling data relationships |
-| [frontend-ui-design](skills/frontend-ui-design/SKILL.md) | Component architecture, responsive layouts, design systems, state management selection | Designing UI components, creating component architectures, choosing state management |
-| [ui-ux-pro-max](skills/ui-ux-pro-max/SKILL.md) | Full UI/UX design intelligence: 67 styles, 161 palettes, 57 fonts, chart selection | Complete design, color palette, typography, accessibility, responsive design |
-| [ui-design-system](skills/ui-design-system/SKILL.md) | Design tokens, component libraries, theme systems, Tailwind CSS v4 responsive patterns | Building design systems, component libraries, dark mode tokens, brand themes |
-| [canvas-design](skills/canvas-design/SKILL.md) | HTML Canvas, SVG, D3.js data visualization, generative art | Canvas, SVG, charts, data visualization, interactive animations |
-| [mobile-design](skills/mobile-design/SKILL.md) | React Native/Flutter/SwiftUI patterns, platform HIG compliance, gestures, offline-first | Mobile app design, iOS/Android, cross-platform development |
-| [ux-researcher-designer](skills/ux-researcher-designer/SKILL.md) | User research, personas, journey maps, usability testing, information architecture | User research, usability tests, card sorting, heuristic evaluation |
-| [artifacts-builder](skills/artifacts-builder/SKILL.md) | Standalone HTML/CSS/JS artifacts, interactive demos, prototypes, visual tools | Standalone pages, interactive demos, prototypes with no build step |
-| [tech-docs-generator](skills/tech-docs-generator/SKILL.md) | Generates API references, architecture docs, READMEs, component docs from code | Generating or updating technical documentation |
-| [writing-skills](skills/writing-skills/SKILL.md) | Creates new skills with TDD: test prompts → minimal implementation → harden → validate | Creating new skills, commands, or agent definitions |
-| [mcp-builder](skills/mcp-builder/SKILL.md) | MCP server development: tool definitions, resource management, prompt templates, transport | Building MCP servers, creating tools for AI clients |
-| [agent-development](skills/agent-development/SKILL.md) | Build AI agents: tool use patterns, memory management, planning strategies, guardrails | Building AI agents, tool use, multi-agent coordination, safety guardrails |
-| [content-research-writer](skills/content-research-writer/SKILL.md) | Research methodology, long-form content, academic citations, fact-checking | Whitepapers, research articles, case studies, evidence-based arguments |
-| [content-creator](skills/content-creator/SKILL.md) | Marketing copy, social media content, brand voice, ad copy, newsletters | Social media posts, email campaign copy, landing page text, ad copy |
-
-### Verify — Prove it works
+### Define — 定义要构建什么
 
 | Skill | What It Does | Use When |
 |-------|-------------|-----------|
-| [test-driven-development](skills/test-driven-development/SKILL.md) | Enforces strict RED-GREEN-REFACTOR cycle — no production code without a failing test | Writing any new code, adding features, fixing bugs that require code changes |
-| [testing-strategy](skills/testing-strategy/SKILL.md) | Selects test frameworks, defines coverage thresholds, establishes testing patterns per project | New project setup, CI/CD pipeline design, coverage audit, framework migration |
-| [systematic-debugging](skills/systematic-debugging/SKILL.md) | 4-phase debugging: observe → hypothesize → experiment → fix, prevents shotgun debugging | Test failures, runtime errors, unexpected behavior, performance regressions |
-| [acceptance-testing](skills/acceptance-testing/SKILL.md) | Acceptance-driven backpressure with behavioral validation gates | Spec-to-code validation, feature completion verification, pre-merge acceptance gate |
-| [llm-as-judge](skills/llm-as-judge/SKILL.md) | Evaluates subjective quality criteria using structured rubrics (tone, UX feel, readability) | Documentation quality check, error message tone review, design aesthetic review |
-| [webapp-testing](skills/webapp-testing/SKILL.md) | Playwright-based E2E testing, screenshot comparison, browser log analysis, a11y audit | E2E test setup, visual regression testing, CI test pipeline |
-| [verification-before-completion](skills/verification-before-completion/SKILL.md) | 5-step HARD-GATE protocol requiring fresh evidence before claiming completion | Before marking a task done, delivering a feature, or claiming "it's finished" |
+| [interview-me](skills/interview-me/SKILL.md) | 一次一问的访谈法，挖掘用户真正想要的东西而非表面需求 | 需求描述不充分、缺少"为谁/为何/成功标准"时 |
+| [brainstorming](skills/brainstorming/SKILL.md) | 创意探索，在规划前对比多种设计方案 | 开始新功能、探索想法、用户描述模糊目标时 |
+| [spec-writing](skills/spec-writing/SKILL.md) | 用 JTBD 方法论编写行为规格，Given/When/Then 验收标准 | 需要正式规格、从头脑风暴过渡到实现时 |
+| [prd-generation](skills/prd-generation/SKILL.md) | 将产品愿景转化为结构化 PRD，含用户故事和优先级 | 新产品功能、需要产品需求文档时 |
+| [reverse-engineering-specs](skills/reverse-engineering-specs/SKILL.md) | 从现有代码库生成无实现细节的行为规格 | 接手遗留代码、需要为已有功能补充规格时 |
 
-### Review — Quality gate before merge
+### Plan — 规划如何构建
 
 | Skill | What It Does | Use When |
 |-------|-------------|-----------|
-| [code-review](skills/code-review/SKILL.md) | Reviews code against plans and standards, categorizes as Critical/Important/Suggestion | Task completion, before merge, verifying work meets requirements |
-| [security-review](skills/security-review/SKILL.md) | OWASP Top 10, auth patterns, input validation, secrets management, dependency audit | Auth implementation, input handling, secrets management, pre-deployment security check |
-| [performance-optimization](skills/performance-optimization/SKILL.md) | Profiling, caching strategies, bundle optimization, Web Vitals, database query tuning | Slow page loads, poor Web Vitals, database timeouts, large bundle sizes |
+| [planning](skills/planning/SKILL.md) | 结构化 5 阶段规划：上下文→提问→方案对比→文档→执行交接 | 开始任何实现任务、功能请求、Bug 修复或重构前 |
+| [task-decomposition](skills/task-decomposition/SKILL.md) | 层次化任务拆解、依赖映射、并行化分析和关键路径规划 | 复杂任务需要拆解为可管理子任务时 |
 
-### Deploy — Ship with confidence
-
-| Skill | What It Does | Use When |
-|-------|-------------|-----------|
-| [deployment](skills/deployment/SKILL.md) | CI/CD pipelines, deployment configs, release checklists, environment management | New project needs deployment, migrating CI/CD, adding staging/production |
-| [using-git-worktrees](skills/using-git-worktrees/SKILL.md) | Creates isolated Git worktrees for parallel development without interference | Starting a new feature branch, working on multiple tasks without stashing |
-| [finishing-a-development-branch](skills/finishing-a-development-branch/SKILL.md) | Structured branch completion: merge, create PR, cleanup, archive | Branch work is done, ready to merge, creating a PR |
-| [git-commit-helper](skills/git-commit-helper/SKILL.md) | Conventional commits, semantic versioning, changelog generation | Help with commit messages, version bumping, changelog generation |
-| [archive](skills/archive/SKILL.md) | Archives completed features, updates global spec index, pre-archive validation | Feature completion, sprint wrap-up, cleaning up stale spec/plan directories |
-| [file-organizer](skills/file-organizer/SKILL.md) | Project structure: monorepo patterns, feature-based architecture, naming conventions, barrel exports | Restructuring projects, setting up monorepos, defining naming conventions |
-
-### Guard — Always-on protection
+### Execute — 构建与实现
 
 | Skill | What It Does | Use When |
 |-------|-------------|-----------|
-| [resilient-execution](skills/resilient-execution/SKILL.md) | Retries with at least 3 genuinely different approaches before giving up | A task fails, an approach doesn't work, or errors are encountered |
-| [circuit-breaker](skills/circuit-breaker/SKILL.md) | Detects stalled loops, enforces rate limits, protects config files, manages cooldown recovery | Autonomous loops running, repeated operations, or stagnation patterns detected |
-| [auto-improvement](skills/auto-improvement/SKILL.md) | Continuously tracks effectiveness, classifies errors, recognizes patterns, improves workflows | Activates automatically every session — no manual invocation needed |
+| [task-management](skills/task-management/SKILL.md) | 将工作拆分为离散步骤，在实现中追踪进度和检查点 | 已批准的计划需要转为可追踪任务时 |
+| [executing-plans](skills/executing-plans/SKILL.md) | 按批次逐步执行已批准的计划文档，含 TDD 和检查点审查 | 单一聚焦任务、有已批准计划需要执行时 |
+| [subagent-driven-development](skills/subagent-driven-development/SKILL.md) | 派发子代理并行执行，含两阶段审查门控（规格合规+代码质量） | 3+ 独立任务、追求执行速度、任务有清晰验收标准时 |
+| [dispatching-parallel-agents](skills/dispatching-parallel-agents/SKILL.md) | 协调多个独立子代理并行处理互不依赖的子任务 | 子任务操作不同文件、串行执行时间显著长于并行时 |
+| [autonomous-loop](skills/autonomous-loop/SKILL.md) | Ralph 风格迭代开发：规划→构建→状态检查→循环直至完成 | 自主开发会话、`/ralph` 或 `/loop` 命令时 |
+| [ralph-status](skills/ralph-status/SKILL.md) | 结构化进度报告，含 EXIT_SIGNAL 协议和双条件退出门控 | 每次自主循环迭代结束时自动输出 |
+
+### QA — 测试、审查与验证
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [code-review](skills/code-review/SKILL.md) | 对照计划和编码标准审查代码质量，分类为 Critical/Important/Suggestion | 任务完成、合并前、验证工作符合要求时 |
+| [test-driven-development](skills/test-driven-development/SKILL.md) | 严格执行 RED-GREEN-REFACTOR 循环，禁止无测试就写代码 | 编写任何新代码、添加功能、修复需要代码变更的 Bug 时 |
+| [testing-strategy](skills/testing-strategy/SKILL.md) | 根据项目选择测试框架、定义覆盖率阈值、建立测试模式 | 新项目搭建、CI/CD 设计、覆盖率审计、框架迁移时 |
+| [systematic-debugging](skills/systematic-debugging/SKILL.md) | 4 阶段调试法：观察→假设→实验→修复，防止散弹式调试 | 测试失败、运行时错误、意外行为、性能退化时 |
+| [acceptance-testing](skills/acceptance-testing/SKILL.md) | 验收驱动背压机制，行为验证门控，防止未通过测试就声明完成 | 规格到代码验证、功能完成验证、合并前验收门控时 |
+| [llm-as-judge](skills/llm-as-judge/SKILL.md) | 基于结构化评分量规评估主观质量标准（语调、UI 体验、可读性）| 文档质量检查、错误消息语调审查、设计美学评估时 |
+| [security-review](skills/security-review/SKILL.md) | OWASP Top 10、认证模式、输入验证、密钥管理、依赖审计 | 认证实现、输入处理、密钥管理、部署前安全检查时 |
+| [performance-optimization](skills/performance-optimization/SKILL.md) | 性能分析、缓存策略、打包优化、Web Vitals、数据库查询优化 | 页面加载慢、Web Vitals 差、数据库超时、打包体积大时 |
+| [webapp-testing](skills/webapp-testing/SKILL.md) | 基于 Playwright 的 E2E 测试、截图对比、浏览器日志分析、无障碍审计 | E2E 测试搭建、视觉回归测试、CI 测试流水线时 |
+
+### Specialize — 专业领域角色
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [senior-frontend](skills/senior-frontend/SKILL.md) | React/Next.js/TypeScript 专家，严格组件架构，状态管理，>85% 测试覆盖 | React 组件开发、Next.js 页面、状态管理设计时 |
+| [senior-backend](skills/senior-backend/SKILL.md) | API 设计、微服务、事件驱动、数据库集成、缓存、可观测性 | REST/GraphQL API、服务架构、消息队列、健康检查时 |
+| [senior-architect](skills/senior-architect/SKILL.md) | 系统设计、可扩展性分析、权衡评估、ADR 编写 | 新系统设计、技术选型、扩展策略、基础设施拓扑时 |
+| [senior-fullstack](skills/senior-fullstack/SKILL.md) | 端到端 TypeScript 开发：数据库→API→UI，含 tRPC/Prisma/Next.js/Auth | 全栈功能实现、数据库到 UI 管线、认证搭建时 |
+| [senior-devops](skills/senior-devops/SKILL.md) | CI/CD、Docker、Kubernetes、Terraform、监控、零停机部署 | DevOps、容器化、基础设施即代码、可观测性时 |
+| [senior-data-scientist](skills/senior-data-scientist/SKILL.md) | ML 流水线、统计分析、特征工程、模型选择、实验追踪 | 数据集探索、模型训练、超参数调优、可视化创建时 |
+| [senior-prompt-engineer](skills/senior-prompt-engineer/SKILL.md) | 提示词设计、优化、Few-shot、Chain-of-Thought、结构化输出、评分框架 | 创建新提示词、A/B 测试提示词、构建评分框架时 |
+| [clean-code](skills/clean-code/SKILL.md) | SOLID、DRY、代码异味识别、命名规范、复杂度降低、错误处理改进 | 代码质量审查、重构指导、需要减少技术债务时 |
+| [react-best-practices](skills/react-best-practices/SKILL.md) | React hooks 设计、组件组合、Server Components、错误边界、渲染优化 | React hooks 设计、Server/Client 组件决策、错误边界放置时 |
+
+### Design — 架构与接口设计
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [api-design](skills/api-design/SKILL.md) | REST/GraphQL/tRPC 端点设计、请求/响应 Schema、OpenAPI 规范 | 设计 API 端点、生成 OpenAPI 规范、选择 API 范式时 |
+| [database-schema-design](skills/database-schema-design/SKILL.md) | 数据建模、迁移规划、索引设计、查询优化、SQL/NoSQL 选型 | 设计数据库 Schema、创建迁移、建模数据关系时 |
+| [frontend-ui-design](skills/frontend-ui-design/SKILL.md) | 组件架构、响应式布局、设计系统、状态管理方案选型 | 设计 UI 组件、创建组件架构、选择状态管理方案时 |
+
+### Creative — 创意与视觉设计
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [ui-ux-pro-max](skills/ui-ux-pro-max/SKILL.md) | 全栈 UI/UX 设计智能：67 种风格、161 种配色、57 种字体、图表选型 | 需要完整设计方案、配色、字体、无障碍、响应式时 |
+| [ui-design-system](skills/ui-design-system/SKILL.md) | 设计令牌、组件库、主题系统、Tailwind CSS v4 响应式模式 | 构建设计系统、组件库、暗色模式令牌、品牌主题时 |
+| [canvas-design](skills/canvas-design/SKILL.md) | HTML Canvas、SVG、D3.js 数据可视化、生成艺术 | Canvas、SVG、图表、数据可视化、交互动画时 |
+| [mobile-design](skills/mobile-design/SKILL.md) | React Native/Flutter/SwiftUI 模式、平台 HIG 合规、手势、离线优先 | 移动端 App 设计、iOS/Android、跨平台开发时 |
+| [ux-researcher-designer](skills/ux-researcher-designer/SKILL.md) | 用户研究、人物画像、旅程地图、可用性测试、信息架构 | 用户研究、可用性测试、卡片分类、启发式评估时 |
+| [artifacts-builder](skills/artifacts-builder/SKILL.md) | 独立 HTML/CSS/JS 工件、交互演示、原型、可视化工具 | 需要独立页面、交互式演示、无需构建步骤的原型时 |
+
+### Docs — 文档与归档
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [tech-docs-generator](skills/tech-docs-generator/SKILL.md) | 从代码生成 API 参考、架构文档、README、组件文档 | 需要生成或更新技术文档时 |
+| [writing-skills](skills/writing-skills/SKILL.md) | 用 TDD 方法创建新技能：测试提示词→最小实现→硬化→验证 | 创建新技能、命令或代理定义时 |
+| [archive](skills/archive/SKILL.md) | 归档已完成功能，更新全局规格索引，pre-archive 验证 | 功能完成、Sprint 收尾、清理过期 spec/plan 目录时 |
+
+### Ops — 部署与自动化
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [deployment](skills/deployment/SKILL.md) | CI/CD 流水线、部署配置、发布检查清单、环境管理 | 新项目需要部署、迁移 CI/CD、添加 staging/production 环境时 |
+| [using-git-worktrees](skills/using-git-worktrees/SKILL.md) | 创建隔离 Git 工作树，并行开发互不干扰 | 开始新功能分支、同时处理多个任务无需 stash 时 |
+| [finishing-a-development-branch](skills/finishing-a-development-branch/SKILL.md) | 结构化分支完成流程：合并、创建 PR、清理归档 | 分支工作完成、准备合并、创建 PR 时 |
+| [git-commit-helper](skills/git-commit-helper/SKILL.md) | 约定式提交、语义版本控制、变更日志生成 | 需要帮助写 commit message、版本号管理、生成 changelog 时 |
+| [mcp-builder](skills/mcp-builder/SKILL.md) | MCP 服务器开发：工具定义、资源管理、提示模板、传输层 | 构建 MCP 服务器、为 AI 客户端创建工具时 |
+| [agent-development](skills/agent-development/SKILL.md) | 构建 AI 代理：工具使用模式、记忆管理、规划策略、安全护栏 | 构建 AI 代理、工具使用、多代理协调、护栏设计时 |
+
+### Business — 内容与营销
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [content-research-writer](skills/content-research-writer/SKILL.md) | 研究方法论、长篇内容、学术引用、事实核查 | 白皮书、研究文章、案例研究、证据驱动的论证时 |
+| [content-creator](skills/content-creator/SKILL.md) | 营销文案、社交媒体、品牌语调、广告文案、Newsletter | 社交媒体帖子、邮件活动文案、落地页文字、广告文案时 |
+
+### Productivity — 效率工具
+
+| Skill | What It Does | Use When |
+|-------|-------------|-----------|
+| [file-organizer](skills/file-organizer/SKILL.md) | 项目结构组织：Monorepo 模式、功能目录架构、命名约定、barrel export | 重构项目结构、搭建 Monorepo、定义命名规范、规划目录迁移时 |
 
  
 ---
@@ -279,24 +305,24 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 
 | Agent | What It Does | Use When |
 |-------|-------------|-----------|
-| [planner](agents/planner.md) | Creates implementation plans, analyzes architecture, evaluates trade-offs | Multi-step feature work needs a structured plan before coding |
-| [code-reviewer](agents/code-reviewer.md) | Reviews code against plans and standards, categorizes Critical/Important/Suggestion | After task completion, before merge, quality verification needed |
-| [prd-writer](agents/prd-writer.md) | Generates structured PRDs with user stories and priorities from requirements | Product requirements need formal documentation |
-| [doc-generator](agents/doc-generator.md) | Generates API references, architecture docs, READMEs from code | Technical documentation needs generation or updating |
-| [spec-reviewer](agents/spec-reviewer.md) | Reviews implementation against spec acceptance criteria for compliance | After implementation, verifying spec compliance |
-| [quality-reviewer](agents/quality-reviewer.md) | Reviews code quality, patterns, performance, and security | Code review phase needs comprehensive quality assessment |
-| [loop-orchestrator](agents/loop-orchestrator.md) | Manages autonomous dev loops: task selection, exit evaluation, status reporting | Ralph-style iterative development sessions |
-| [spec-writer](agents/spec-writer.md) | Generates JTBD behavioral specs with Given/When/Then acceptance criteria | Formal specs needed for a feature |
-| [acceptance-judge](agents/acceptance-judge.md) | Evaluates subjective quality via structured scoring rubrics (tone, UX, readability) | LLM-as-judge evaluation pattern needed |
-| [frontend-developer](agents/frontend-developer.md) | Three-phase frontend dev: context discovery → component development → test handoff | Frontend feature development, React component implementation |
-| [ui-ux-designer](agents/ui-ux-designer.md) | Design system generation, component specs, style guides, color schemes | Building design systems, UI/UX design specs needed |
-| [backend-architect](agents/backend-architect.md) | Service boundary design, contract-first API, scalability planning | Backend service architecture design, API contract definition |
-| [context-manager](agents/context-manager.md) | Project context tracking, dependency mapping, tech stack documentation | Onboarding to a new project, understanding the full codebase |
-| [database-architect](agents/database-architect.md) | Multi-database strategy, data modeling, event sourcing, migration planning | Database architecture design, schema changes |
-| [architect-reviewer](agents/architect-reviewer.md) | Architecture review, scalability assessment, technical debt identification | Architecture decision review, system refactoring assessment |
-| [typescript-pro](agents/typescript-pro.md) | Advanced TypeScript type patterns, conditional types, branded types | Complex type design, type safety guarantees |
-| [task-decomposer](agents/task-decomposer.md) | Hierarchical task breakdown, dependency analysis, parallelization strategy | Complex tasks need WBS decomposition |
-| [mobile-developer](agents/mobile-developer.md) | Cross-platform mobile dev, React Native/Flutter/SwiftUI patterns | Mobile app development, platform-specific feature implementation |
+| [planner](agents/planner.md) | 创建实现计划，分析架构，评估权衡 | 多步骤功能开发前需要结构化计划时 |
+| [code-reviewer](agents/code-reviewer.md) | 对照计划和标准审查代码，分类 Critical/Important/Suggestion | 任务完成后、合并前需要质量验证时 |
+| [prd-writer](agents/prd-writer.md) | 根据需求生成结构化 PRD，含用户故事和优先级 | 产品需求需要正式文档化时 |
+| [doc-generator](agents/doc-generator.md) | 从代码生成 API 参考、架构文档、README | 需要生成或更新技术文档时 |
+| [spec-reviewer](agents/spec-reviewer.md) | 对照规范验收标准审查实现合规性 | 实现完成后需要验证规范合规性时 |
+| [quality-reviewer](agents/quality-reviewer.md) | 审查代码质量、模式、性能、安全性 | 代码审查阶段需要全面质量评估时 |
+| [loop-orchestrator](agents/loop-orchestrator.md) | 管理自主开发循环：选择任务、评估退出、生成状态报告 | Ralph 风格迭代开发会话时 |
+| [spec-writer](agents/spec-writer.md) | 生成 JTBD 行为规格，Given/When/Then 验收标准 | 需要为功能编写正式规格时 |
+| [acceptance-judge](agents/acceptance-judge.md) | 通过结构化评分量规评估主观质量（语调、UX、可读性）| 需要 LLM-as-judge 模式评估时 |
+| [frontend-developer](agents/frontend-developer.md) | 三阶段前端开发：上下文发现→组件开发→测试交接 | 前端功能开发、React 组件实现时 |
+| [ui-ux-designer](agents/ui-ux-designer.md) | 设计系统生成、组件规范、风格指南、配色方案 | 构建设计系统、需要 UI/UX 设计规范时 |
+| [backend-architect](agents/backend-architect.md) | 服务边界设计、契约优先 API、扩展性规划 | 后端服务架构设计、API 契约定义时 |
+| [context-manager](agents/context-manager.md) | 项目上下文跟踪、依赖映射、技术栈文档化 | 接手新项目、需要了解项目全貌时 |
+| [database-architect](agents/database-architect.md) | 多数据库策略、数据建模、事件溯源、迁移规划 | 数据库架构设计、Schema 变更时 |
+| [architect-reviewer](agents/architect-reviewer.md) | 架构评审、可扩展性评估、技术债务识别 | 架构决策评审、系统重构评估时 |
+| [typescript-pro](agents/typescript-pro.md) | 高级 TypeScript 类型模式、条件类型、品牌类型 | 复杂类型设计、类型安全保障时 |
+| [task-decomposer](agents/task-decomposer.md) | 层次化任务拆解、依赖分析、并行化策略 | 复杂任务需要 WBS 拆解时 |
+| [mobile-developer](agents/mobile-developer.md) | 跨平台移动开发、React Native/Flutter/SwiftUI 模式 | 移动端 App 开发、平台特定功能实现时 |
 
 
 
