@@ -300,28 +300,28 @@ claude --plugin-dir /path/to/toolkit-agent-skills
  
 ---
 
-## 代理 
+## 代理
 
-| 代理 | 描述 |
-|-------|-------------|
-| `planner` | 创建实现计划的高级架构师 |
-| `code-reviewer` | 针对计划和标准审查代码 |
-| `prd-writer` | 根据收集的需求生成 PRD |
-| `doc-generator` | 从代码生成技术文档 |
-| `spec-reviewer` | 针对规范合规性审查实现 |
-| `quality-reviewer` | 审查代码质量、模式、性能、安全性 |
-| `loop-orchestrator` | 管理自主开发循环迭代 |
-| `spec-writer` | 生成带有验收标准的 JTBD 规范 |
-| `acceptance-judge` | 通过 LLM-as-judge 模式评估主观质量 |
-| `frontend-developer` | 三阶段前端开发：上下文发现、开发、交接 |
-| `ui-ux-designer` | 设计系统生成、组件规范、风格指南 |
-| `backend-architect` | 服务边界、契约优先 API、扩展性 |
-| `context-manager` | 项目上下文跟踪、依赖映射 |
-| `database-architect` | 多数据库策略、领域驱动设计、事件溯源 |
-| `architect-reviewer` | 架构评审、可扩展性评估、技术债务 |
-| `typescript-pro` | 高级类型模式、条件类型、品牌类型 |
-| `task-decomposer` | 层次化任务分解、并行化策略 |
-| `mobile-developer` | 跨平台移动开发、平台特定模式 |
+| Agent | What It Does | Use When |
+|-------|-------------|-----------|
+| [planner](agents/planner.md) | 创建实现计划，分析架构，评估权衡 | 多步骤功能开发前需要结构化计划时 |
+| [code-reviewer](agents/code-reviewer.md) | 对照计划和标准审查代码，分类 Critical/Important/Suggestion | 任务完成后、合并前需要质量验证时 |
+| [prd-writer](agents/prd-writer.md) | 根据需求生成结构化 PRD，含用户故事和优先级 | 需要产品需求文档文档化时 |
+| [doc-generator](agents/doc-generator.md) | 从代码生成 API 参考、架构文档、README | 需要生成或更新技术文档时 |
+| [spec-reviewer](agents/spec-reviewer.md) | 对照规范验收标准审查实现合规性 | 实现完成后需要验证是否符合规范时 |
+| [quality-reviewer](agents/quality-reviewer.md) | 审查代码质量、模式、性能、安全性 | 代码审查阶段需要全面质量评估时 |
+| [loop-orchestrator](agents/loop-orchestrator.md) | 管理自主开发循环：选择任务、评估退出、生成状态报告 | Ralph 风格迭代开发会话时 |
+| [spec-writer](agents/spec-writer.md) | 生成 JTBD 行为规格，Given/When/Then 验收标准 | 需要为功能编写正式规格时 |
+| [acceptance-judge](agents/acceptance-judge.md) | 通过结构化评分量规评估主观质量（语调、UX、可读性）| 需要 LLM-as-judge 模式评估时 |
+| [frontend-developer](agents/frontend-developer.md) | 三阶段前端开发：上下文发现→组件开发→测试交接 | 前端功能开发、React 组件实现时 |
+| [ui-ux-designer](agents/ui-ux-designer.md) | 设计系统生成、组件规范、风格指南、配色方案 | 构建设计系统、需要 UI/UX 设计规范时 |
+| [backend-architect](agents/backend-architect.md) | 服务边界设计、契约优先 API、扩展性规划 | 后端服务架构设计、API 契约定义时 |
+| [context-manager](agents/context-manager.md) | 项目上下文跟踪、依赖映射、技术栈文档化 | 接手新项目、需要了解项目全貌时 |
+| [database-architect](agents/database-architect.md) | 多数据库策略、数据建模、事件溯源、迁移规划 | 数据库架构设计、Schema 变更时 |
+| [architect-reviewer](agents/architect-reviewer.md) | 架构评审、可扩展性评估、技术债务识别 | 架构决策评审、系统重构评估时 |
+| [typescript-pro](agents/typescript-pro.md) | 高级 TypeScript 类型模式、条件类型、品牌类型 | 复杂类型设计、类型安全保障时 |
+| [task-decomposer](agents/task-decomposer.md) | 层次化任务拆解、依赖分析、并行化策略 | 复杂任务需要 WBS 拆解时 |
+| [mobile-developer](agents/mobile-developer.md) | 跨平台移动开发、React Native/Flutter/SwiftUI 模式 | 移动端 App 开发、平台特定功能实现时 |
 
 
 
