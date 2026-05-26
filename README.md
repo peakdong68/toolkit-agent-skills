@@ -181,7 +181,6 @@ claude --plugin-dir /path/to/toolkit-agent-skills
 | Skill | What It Does | Use When |
 |-------|-------------|-----------|
 | [using-toolkit](skills/using-toolkit/SKILL.md) | 主入口，确立如何查找、选择和使用所有工具包技能 | 每次会话启动、接收新任务、不确定该用哪个技能时 |
-| [using-agent-skills](skills/using-agent-skills/SKILL.md) | 将任务匹配到正确的代理工作流，定义共享操作规则 | 开始会话或决定适用哪个代理时 |
 | [self-learning](skills/self-learning/SKILL.md) | 自动扫描项目、发现并记忆上下文、模式与偏好 | 接手新项目、遇到意外模式、用户纠正你的假设时 |
 
 ### Core — 始终运行的守护机制
