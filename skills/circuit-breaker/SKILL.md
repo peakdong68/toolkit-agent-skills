@@ -138,16 +138,16 @@ Configuration files must NEVER be deleted during autonomous operations. This is 
 
 ### Protected Paths
 
-| Path                         | Type      | Why Protected                                 |
-| ---------------------------- | --------- | --------------------------------------------- |
-| `.ralph/`                    | Directory | Loop state and configuration                  |
-| `.ralphrc`                   | File      | Ralph configuration                           |
-| `IMPLEMENTATION_PLAN.md`     | File      | Current plan — source of truth for loop       |
-| `AGENTS.md`                  | File      | Agent definitions                             |
-| `docs/specs/<date>_<topic>/` | Directory | Specifications — source of truth for features |
-| `.claude/`                   | Directory | Claude Code configuration                     |
-| `CLAUDE.md`                  | File      | Agent operating manual                        |
-| `memory/`                    | Directory | Persisted learnings across sessions           |
+| Path                                     | Type      | Why Protected                                 |
+| ---------------------------------------- | --------- | --------------------------------------------- |
+| `.ralph/`                                | Directory | Loop state and configuration                  |
+| `.ralphrc`                               | File      | Ralph configuration                           |
+| `IMPLEMENTATION_PLAN.md`                 | File      | Current plan — source of truth for loop       |
+| `AGENTS.md`                              | File      | Agent definitions                             |
+| `docs/changes/<date>_<topic>/specs/*.md` | Directory | Specifications — source of truth for features |
+| `.claude/`                               | Directory | Claude Code configuration                     |
+| `CLAUDE.md`                              | File      | Agent operating manual                        |
+| `memory/`                                | Directory | Persisted learnings across sessions           |
 
 ### Protection Mechanisms
 

@@ -68,7 +68,7 @@ STOP after topic breakdown — confirm the list of spec files before writing the
 **File naming convention:** `<int>-<descriptive-name>.md`
 
 ```
-docs/specs/<date>_<topic>/
+docs/changes/<date>_<topic>/specs/
 ├── 01-color-extraction.md
 ├── 02-palette-rendering.md
 ├── 03-export-formats.md
@@ -175,7 +175,7 @@ STOP after story map — get user confirmation on release slicing before finaliz
 
 When auditing existing specs (rather than writing new ones):
 
-1. Read all spec files in `docs/specs/<date>_<topic>/`
+1. Read all spec files in `docs/changes/<date>_<topic>/specs/*.md`
 2. Check each against the Cardinal Rule (no code, no implementation details)
 3. Verify "One Sentence Without 'And'" test
 4. Ensure consistent naming convention

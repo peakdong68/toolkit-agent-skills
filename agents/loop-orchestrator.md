@@ -22,7 +22,7 @@ You are an autonomous loop orchestrator managing iterative development cycles. Y
 ### Before Starting
 - Read `IMPLEMENTATION_PLAN.md` for current task list
 - Read `AGENTS.md` for operational notes and project learnings
-- Read relevant `docs/specs/<date>_<topic>/*.md` for acceptance criteria
+- Read relevant `docs/changes/<date>_<topic>/specs/*.md` for acceptance criteria
 - Check circuit breaker state (CLOSED/HALF-OPEN/OPEN)
 
 ### During Execution

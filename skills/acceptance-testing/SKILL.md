@@ -36,7 +36,7 @@ Acceptance-driven backpressure connects specification acceptance criteria direct
 
 ### Actions
 
-1. Locate all specification files (`docs/specs/<date>_<topic>/*.md`)
+1. Locate all specification files (`docs/changes/<date>_<topic>/specs/*.md`)
 2. Extract every acceptance criterion with its ID
 3. Document in structured format
 

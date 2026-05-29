@@ -79,7 +79,7 @@ For each spec file, verify:
 Use `<int>-<descriptive-name>.md` convention:
 
 ```
-docs/specs/<date>-<topic>/
+docs/changes/<date>_<topic>/specs/
 ├── 01-color-extraction.md
 ├── 02-palette-rendering.md
 ├── 03-export-formats.md
@@ -97,6 +97,6 @@ docs/specs/<date>-<topic>/
 ## Output
 
 Deliver:
-1. Organized `docs/specs/<date>_<topic>/` directory with numbered .md files
+1. Organized `docs/changes/<date>_<topic>/specs/` directory with numbered .md files
 2. Summary of all jobs identified
 3. Story map if applicable (capabilities × releases)

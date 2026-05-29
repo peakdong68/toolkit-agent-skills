@@ -74,7 +74,7 @@ STOP after spec generation — run the completeness checklist before organizing.
 Create spec files following the naming convention:
 
 ```
-docs/specs/<date>_<topic>/
+docs/changes/<date>_<topic>/specs/
 ├── 01-[first-capability].md
 ├── 02-[second-capability].md
 ├── ...

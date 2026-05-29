@@ -200,7 +200,7 @@ Tests: 42 passing, 0 failing
 Build: passing | Lint: clean
 Commits: 5 (conventional format)
 
-All tasks from plan docs/plans/2026-05-15_tool-search/plan.md are complete.
+All tasks from plan docs/changes/2026-05-15_tool-search/plan.md are complete.
 Verification-before-completion: PASS
 ```
 
@@ -237,19 +237,19 @@ If you catch yourself thinking:
 
 ## Integration Points
 
-| Skill                            | Relationship                                             | When                                 |
-| -------------------------------- | -------------------------------------------------------- | ------------------------------------ |
-| `planning`                       | Upstream — provides approved plan                        | Task list source                     |
-| `executing-plans`                | Complementary — handles plan execution flow              | Can be used together                 |
-| `test-driven-development`        | Per-task — TDD cycle for code tasks                      | Every code task                      |
-| `verification-before-completion` | Per-task — verification gate                             | Before marking any task complete     |
-| `resilient-execution`            | On failure — retry with alternatives                     | When task verification fails         |
-| `code-review`                    | At checkpoints — batch quality review                    | Every 3 tasks or batch boundary      |
-| `subagent-driven-development`    | Alternative — parallel execution path (via `Agent` tool) | For independent task batches         |
-| `Agent` tool                     | Dispatch mechanism for all subagent work                 | When parallelizing independent tasks |
-| `circuit-breaker`                | Safety net — detects stagnation                          | When tasks repeatedly fail           |
+| Skill                            | Relationship                                              | When                                                   |
+| -------------------------------- | --------------------------------------------------------- | ------------------------------------------------------ |
+| `planning`                       | Upstream — provides approved plan                         | Task list source                                       |
+| `executing-plans`                | Complementary — handles plan execution flow               | Can be used together                                   |
+| `test-driven-development`        | Per-task — TDD cycle for code tasks                       | Every code task                                        |
+| `verification-before-completion` | Per-task — verification gate                              | Before marking any task complete                       |
+| `resilient-execution`            | On failure — retry with alternatives                      | When task verification fails                           |
+| `code-review`                    | At checkpoints — batch quality review                     | Every 3 tasks or batch boundary                        |
+| `subagent-driven-development`    | Alternative — parallel execution path (via `Agent` tool)  | For independent task batches                           |
+| `Agent` tool                     | Dispatch mechanism for all subagent work                  | When parallelizing independent tasks                   |
+| `circuit-breaker`                | Safety net — detects stagnation                           | When tasks repeatedly fail                             |
 | `autonomous-loop`                | Upstream — generates task lists from implementation plans | When transitioning from loop planning to tracked tasks |
-| `task-decomposition`             | Upstream — provides WBS for complex plans               | When a WBS exists, load it for pre-decomposed tasks |
+| `task-decomposition`             | Upstream — provides WBS for complex plans                 | When a WBS exists, load it for pre-decomposed tasks    |
 
 ---
 

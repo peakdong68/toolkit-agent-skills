@@ -6,8 +6,6 @@
 
 **Tech Stack:** [Frameworks, languages, key dependencies with versions]
 
-**Design Doc:** [Path to associated spec/design doc, e.g., `docs/specs/<date>_<topic>/spec.md`]
-
 **Prerequisites:** [Preceding plans or conditions, e.g., "plan-1.md (Tasks 1-4) completed"]
 
 ## Change Overview

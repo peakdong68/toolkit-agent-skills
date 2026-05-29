@@ -54,7 +54,7 @@ Planning mode produces NO implementation code. It is analysis and planning ONLY.
 ### Steps
 
 1. **Knowledge Gathering** — Deploy up to 5 parallel subagents via the `Agent` tool (with `subagent_type="Explore"` and `model="sonnet"`) to study specs, existing implementation plans, and utility libraries
-2. **Code Analysis** — Deploy up to 5 parallel subagents via the `Agent` tool (with `subagent_type="Explore"`) to study `src/*` against `docs/specs/<date>_<topic>/*`, identifying gaps between specification and implementation
+2. **Code Analysis** — Deploy up to 5 parallel subagents via the `Agent` tool (with `subagent_type="Explore"`) to study `src/*` against `docs/changes/<date>_<topic>/specs/*`, identifying gaps between specification and implementation
 3. **Synthesis** — Deploy a synthesis subagent via the `Agent` tool (with `model="opus"`) to synthesize findings and prioritize incomplete work
 4. **Plan Refresh** — Update `IMPLEMENTATION_PLAN.md` as organized, prioritized bullet list
 
@@ -237,12 +237,12 @@ This prevents false positives where completion language appears while productive
 
 The only persistent state between iterations is the file system:
 
-| File                             | Purpose                         | Managed By                  |
-| -------------------------------- | ------------------------------- | --------------------------- |
-| `IMPLEMENTATION_PLAN.md`         | Task list and progress          | Planning and Building modes |
-| `docs/specs/<date>_<topic>/*.md` | Specification files             | `spec-writing` skill        |
-| `AGENTS.md`                      | Operational notes and learnings | Building mode               |
-| Source code + tests              | The actual implementation       | Building mode               |
+| File                                     | Purpose                         | Managed By                  |
+| ---------------------------------------- | ------------------------------- | --------------------------- |
+| `IMPLEMENTATION_PLAN.md`                 | Task list and progress          | Planning and Building modes |
+| `docs/changes/<date>_<topic>/specs/*.md` | Specification files             | `spec-writing` skill        |
+| `AGENTS.md`                              | Operational notes and learnings | Building mode               |
+| Source code + tests                      | The actual implementation       | Building mode               |
 
 **IMPLEMENTATION_PLAN.md is disposable** — it can be regenerated from specs at any time by running a planning iteration.
 
@@ -294,18 +294,18 @@ Follow the `dispatching-parallel-agents` skill protocol when dispatching.
 
 ## Integration Points
 
-| Skill                            | Relationship                                  | When                           |
-| -------------------------------- | --------------------------------------------- | ------------------------------ |
-| `ralph-status`                   | Per-iteration — produces status blocks        | Phase 3: STATUS CHECK          |
-| `circuit-breaker`                | Safety net — monitors loop health             | Halts on stagnation            |
-| `spec-writing`                   | Upstream — creates specs consumed by planning | Before loop starts             |
-| `acceptance-testing`             | Validation — validates behavioral outcomes    | During building mode           |
-| `resilient-execution`            | Per-task — retry on failure                   | When task implementation fails |
-| `task-management`                | Tracking — tracks individual tasks            | Within iterations              |
-| `llm-as-judge`                   | Quality — evaluates subjective criteria       | Downstream steering            |
-| `verification-before-completion` | Final gate — verifies completion claim        | Before EXIT_SIGNAL: true       |
-| `planning`                       | Upstream — provides implementation plan       | When starting autonomous loop execution |
-| `task-decomposition`             | Upstream — provides WBS for task selection      | When IMPLEMENTATION_PLAN.md needs hierarchical breakdown |
+| Skill                            | Relationship                                  | When                                                     |
+| -------------------------------- | --------------------------------------------- | -------------------------------------------------------- |
+| `ralph-status`                   | Per-iteration — produces status blocks        | Phase 3: STATUS CHECK                                    |
+| `circuit-breaker`                | Safety net — monitors loop health             | Halts on stagnation                                      |
+| `spec-writing`                   | Upstream — creates specs consumed by planning | Before loop starts                                       |
+| `acceptance-testing`             | Validation — validates behavioral outcomes    | During building mode                                     |
+| `resilient-execution`            | Per-task — retry on failure                   | When task implementation fails                           |
+| `task-management`                | Tracking — tracks individual tasks            | Within iterations                                        |
+| `llm-as-judge`                   | Quality — evaluates subjective criteria       | Downstream steering                                      |
+| `verification-before-completion` | Final gate — verifies completion claim        | Before EXIT_SIGNAL: true                                 |
+| `planning`                       | Upstream — provides implementation plan       | When starting autonomous loop execution                  |
+| `task-decomposition`             | Upstream — provides WBS for task selection    | When IMPLEMENTATION_PLAN.md needs hierarchical breakdown |
 
 ---
 

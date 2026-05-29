@@ -127,11 +127,11 @@ If they correct you, fold the correction in and restate. Loop until you get an e
 
 **Which downstream skill to recommend:**
 
-| Intent characteristic | Route to | Why |
-|---|---|---|
-| Concrete: clear who, what, why, success criteria, constraint | `/spec-writing` then `/plan` | Write the spec from confirmed intent, then plan implementation |
-| Needs scoping: "I want X but I don't know what shape it takes" | `/brainstorming` | Generate variations against the now-explicit intent, then re-check |
-| Trivial / self-contained action (rename, fix typo) | None — proceed directly | Interview-me shouldn't have been invoked; see "When NOT to use" |
+| Intent characteristic                                          | Route to                     | Why                                                                |
+| -------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------ |
+| Concrete: clear who, what, why, success criteria, constraint   | `/spec-writing` then `/plan` | Write the spec from confirmed intent, then plan implementation     |
+| Needs scoping: "I want X but I don't know what shape it takes" | `/brainstorming`             | Generate variations against the now-explicit intent, then re-check |
+| Trivial / self-contained action (rename, fix typo)             | None — proceed directly      | Interview-me shouldn't have been invoked; see "When NOT to use"    |
 
 **Format the handoff explicitly.** After confirmation, produce the restate one final time and route:
 
@@ -171,7 +171,7 @@ This is a checkable test, not a vibe. It also has a floor: if you've gone severa
 
 The output of this skill is a **confirmed statement of intent paired with a downstream routing recommendation**: the restate from Step 4, an explicit yes from Step 5, and a routing recommendation from Step 6. The restate + routing is the deliverable. Code, task lists, and implementation are downstream; they consume the intent this skill produces — through the routed skill, never directly.
 
-If the user wants the intent to persist (a multi-session project, a handoff to another collaborator), offer to save it to `docs/intent/[topic].md`. Only save if they confirm.
+If the user wants the intent to persist (a multi-session project, a handoff to another collaborator), offer to save it to `docs/changes/<date>_<topic>/intent.md`. Only save if they confirm.
 
 ## Example
 
@@ -232,12 +232,12 @@ Two questions in, the agent has discovered the actual ask isn't "a dashboard." I
 
 **[HARD-GATE]** Interview-me is the entry point of the Define phase. After confirmation, you MUST route to a downstream skill. Never jump directly to implementation.
 
-| Downstream skill | When to route | Relationship |
-|---|---|---|
-| `brainstorming` | Intent needs scoping or alternative approaches | Generate variations, then re-check intent |
-| `spec-writing` | Intent is concrete with clear success criteria | Formalize intent as a JTBD spec with Given/When/Then |
-| `planning` | After spec exists | Structured implementation plan from the spec |
-| `task-decomposition` | After plan exists | Break plan into executable subtasks |
+| Downstream skill     | When to route                                  | Relationship                                         |
+| -------------------- | ---------------------------------------------- | ---------------------------------------------------- |
+| `brainstorming`      | Intent needs scoping or alternative approaches | Generate variations, then re-check intent            |
+| `spec-writing`       | Intent is concrete with clear success criteria | Formalize intent as a JTBD spec with Given/When/Then |
+| `planning`           | After spec exists                              | Structured implementation plan from the spec         |
+| `task-decomposition` | After plan exists                              | Break plan into executable subtasks                  |
 
 **Anti-pattern: skipping the chain.** The correct chain is:
 
@@ -250,17 +250,17 @@ Any step skipped is a rework risk. Interview-me's job ends at routing — it doe
 
 ## Common Rationalizations
 
-| Rationalization                                           | Reality                                                                                                                                                                       |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| "The ask is clear enough"                                 | If you can't write the user's desired outcome in one sentence right now, the ask isn't clear. Run Step 1 before deciding.                                                     |
-| "Asking too many questions wastes their time"             | Time wasted by 4–6 targeted questions is small. Time wasted by building the wrong thing is enormous, and the user is the one bearing that cost.                               |
-| "I'll figure it out as I build"                           | Switching costs after code exists are 10x what they are now. Discovery during implementation is rework.                                                                       |
-| "They said 'whatever you think,' so I should just decide" | "Whatever you think" is delegation, not decision. Re-ask with two concrete options as a choice.                                                                               |
-| "I should give them several options to pick from"         | Options work when the user knows what they want and is choosing between trade-offs. They don't know what they want yet. Listing options widens the search; asking narrows it. |
-| "If I attach my guess, I'm leading them"                  | Leading is the point. Reacting is faster than generating from scratch. The risk is sycophancy, not leading; mitigate by being visibly willing to be wrong.                    |
-| "We've talked enough, I get it"                           | Test it: can you predict their reaction to the next three questions? If not, you don't get it yet.                                                                            |
-| "The user said yes, we're done"                           | If the yes followed a vague restate or an open-ended "sounds good," the yes is hollow. Restate concretely and re-confirm.                                                     |
-| "The user confirmed the restate, let me start building"   | Confirmation is not a green light for code. It's a green light for the next Define-phase skill. Route to `/spec-writing` or `/brainstorming` — never skip to implementation.  |
+| Rationalization                                           | Reality                                                                                                                                                                               |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "The ask is clear enough"                                 | If you can't write the user's desired outcome in one sentence right now, the ask isn't clear. Run Step 1 before deciding.                                                             |
+| "Asking too many questions wastes their time"             | Time wasted by 4–6 targeted questions is small. Time wasted by building the wrong thing is enormous, and the user is the one bearing that cost.                                       |
+| "I'll figure it out as I build"                           | Switching costs after code exists are 10x what they are now. Discovery during implementation is rework.                                                                               |
+| "They said 'whatever you think,' so I should just decide" | "Whatever you think" is delegation, not decision. Re-ask with two concrete options as a choice.                                                                                       |
+| "I should give them several options to pick from"         | Options work when the user knows what they want and is choosing between trade-offs. They don't know what they want yet. Listing options widens the search; asking narrows it.         |
+| "If I attach my guess, I'm leading them"                  | Leading is the point. Reacting is faster than generating from scratch. The risk is sycophancy, not leading; mitigate by being visibly willing to be wrong.                            |
+| "We've talked enough, I get it"                           | Test it: can you predict their reaction to the next three questions? If not, you don't get it yet.                                                                                    |
+| "The user said yes, we're done"                           | If the yes followed a vague restate or an open-ended "sounds good," the yes is hollow. Restate concretely and re-confirm.                                                             |
+| "The user confirmed the restate, let me start building"   | Confirmation is not a green light for code. It's a green light for the next Define-phase skill. Route to `/spec-writing` or `/brainstorming` — never skip to implementation.          |
 | "The intent is simple, we don't need a spec"              | Simple intents still benefit from spec-writing to surface edge cases and acceptance criteria you haven't thought of. If it's truly trivial, interview-me shouldn't have been invoked. |
 
 ## Red Flags

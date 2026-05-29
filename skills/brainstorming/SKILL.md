@@ -27,19 +27,19 @@ Brainstorming transforms vague ideas into validated designs through structured c
 
 1. Check memory files (`project-context.md`, `learned-patterns.md`, `decisions-log.md`) for known patterns, stack, and conventions
 2. Read relevant existing code, docs, and recent commits
-3. Review existing designs in `docs/plans/` for related prior work
+3. Review existing designs in `docs/changes/<date>_<topic>/design.md` for related prior work
 4. Identify constraints from the existing architecture
 5. Note what you already know — do NOT re-ask the user for information you can discover
 
 ### Context Sources Priority
 
-| Source         | What to Extract                    | Priority |
-| -------------- | ---------------------------------- | -------- |
-| Memory files   | Stack, conventions, past decisions | Highest  |
-| CLAUDE.md      | Project structure, hard gates      | High     |
-| Existing code  | Current patterns, architecture     | High     |
-| Recent commits | Direction of development           | Medium   |
-| docs/plans/    | Prior designs and decisions        | Medium   |
+| Source                                  | What to Extract                    | Priority |
+| --------------------------------------- | ---------------------------------- | -------- |
+| Memory files                            | Stack, conventions, past decisions | Highest  |
+| CLAUDE.md                               | Project structure, hard gates      | High     |
+| Existing code                           | Current patterns, architecture     | High     |
+| Recent commits                          | Direction of development           | Medium   |
+| `docs/changes/<date>_<topic>/design.md` | Prior designs and decisions        | Medium   |
 
 **STOP — Do NOT proceed to Phase 2 until:**
 
@@ -174,7 +174,7 @@ Present one section at a time. Wait for user confirmation before proceeding.
 
 **Goal:** Persist the design and hand off to the planning skill.
 
-1. Write the validated design to `docs/plans/<date>_<topic>/design.md`
+1. Write the validated design to `docs/changes/<date>_<topic>/design.md`
 2. Commit the design document
 3. Update self-learning memory:
    - `memory/decisions-log.md` — any architectural decisions made
@@ -228,7 +228,7 @@ Invoke planning skill to create implementation plan.
 
 **STOP — Do NOT proceed until:**
 
-- [ ] Design document is saved to `docs/plans/`
+- [ ] Design document is saved to `docs/changes/<date>_<topic>/design.md`
 - [ ] Memory files are updated with new decisions/patterns
 - [ ] User has confirmed the design is complete
 
@@ -298,7 +298,7 @@ Phase 5: Save design doc, invoke planning skill
 ### Example: Transition to Planning
 
 ```
-Design approved and saved to docs/plans/2026-05-15_dark-mode/design.md.
+Design approved and saved to docs/changes/2026-05-15_dark-mode/design.md.
 Updated memory/decisions-log.md with theme system decision.
 Invoking planning skill to create implementation plan.
 ```

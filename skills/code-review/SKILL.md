@@ -26,17 +26,9 @@ git diff HEAD~N..HEAD          # or specific commit range
 git log --oneline HEAD~N..HEAD # what was done
 ```
 
-2. Locate the plan document:
+2. Locate the plan document:`docs/changes/<date>_<topic>/plan.md`
 
-```bash
-ls docs/plans/*.md | tail -1
-```
-
-3. **Check for existing specs in `docs/specs/`** — if a spec directory exists for this feature, load its acceptance criteria, data contracts, and edge cases; these are the authoritative behavioral expectations the implementation must satisfy
-
-```bash
-ls docs/specs/
-```
+3. **Check for existing specs in `docs/changes/<date>_<topic>/specs/*.md`** — if a spec directory exists for this feature, load its acceptance criteria, data contracts, and edge cases; these are the authoritative behavioral expectations the implementation must satisfy
 
 4. Load project conventions from `memory/learned-patterns.md`
 
@@ -64,7 +56,7 @@ ls docs/specs/
 ```
 Review the following changes against:
 1. Plan: [plan document or requirements]
-2. Spec: [spec file path, e.g., `docs/specs/<date>_<topic>/` — acceptance criteria, data contracts, edge cases]
+2. Spec: [spec file path, e.g., `docs/changes/<date>_<topic>/specs/*.md` — acceptance criteria, data contracts, edge cases]
 3. Conventions: [learned patterns from memory]
 4. Standards: [CLAUDE.md rules]
 

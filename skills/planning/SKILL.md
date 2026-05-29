@@ -28,8 +28,8 @@ Structured planning converts vague requirements into approved, documented implem
 
 1. Read relevant files, docs, recent commits, and CLAUDE.md
 2. Check memory files for known project context, stack, and conventions
-3. **Check for existing specs in `docs/specs/`** — if a spec file exists for this feature, load its acceptance criteria, data contracts, and edge cases; these become the authoritative source for task definition in Phase 4
-4. Review existing plans in `docs/plans/` for related or dependent work
+3. **Check for existing specs in `docs/changes/<date>_<topic>/specs/*.md`** — if a spec file exists for this feature, load its acceptance criteria, data contracts, and edge cases; these become the authoritative source for task definition in Phase 4
+4. Review existing plans in `docs/changes/<date>_<topic>/plan.md` for related or dependent work
 5. Identify existing patterns the new work should follow
 6. Note technical constraints discovered during exploration
 
@@ -38,7 +38,7 @@ Structured planning converts vague requirements into approved, documented implem
 - [ ] You have explored the relevant parts of the codebase
 - [ ] You understand the existing architecture and patterns
 - [ ] You have checked memory files for prior decisions
-- [ ] You have loaded any relevant specs from `docs/specs/` and extracted their acceptance criteria
+- [ ] You have loaded any relevant specs from `docs/changes/<date>_<topic>/specs/*.md` and extracted their acceptance criteria
 
 ---
 
@@ -124,35 +124,35 @@ For each approach, include:
 
 **Required document sections:**
 
-| Section | Purpose | Required |
-|---|---|---|
-| Header (Goal, Tech Stack, Design Doc, Prerequisites) | Define scope, stack, and dependencies | Always |
-| Change Overview | One-paragraph summary + bullet points + key decision | Always |
-| Task 0: Environment Preparation | Verify runtime, build tool, test framework | Always |
-| Task 1..N | Background (Context/Reason/Impact), Files, Steps (Location/Operation/Reason), Verification (command + expected output) | One per unit of work |
-| Cognitive Changes | New files/exports/conventions to record in CLAUDE.md | When applicable |
-| Checkpoint Summary | What was built, what remains | Every 2-3 tasks |
-| Final Acceptance | E2E verification with troubleshooting | Last task |
+| Section                                              | Purpose                                                                                                                | Required             |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| Header (Goal, Tech Stack, Design Doc, Prerequisites) | Define scope, stack, and dependencies                                                                                  | Always               |
+| Change Overview                                      | One-paragraph summary + bullet points + key decision                                                                   | Always               |
+| Task 0: Environment Preparation                      | Verify runtime, build tool, test framework                                                                             | Always               |
+| Task 1..N                                            | Background (Context/Reason/Impact), Files, Steps (Location/Operation/Reason), Verification (command + expected output) | One per unit of work |
+| Cognitive Changes                                    | New files/exports/conventions to record in CLAUDE.md                                                                   | When applicable      |
+| Checkpoint Summary                                   | What was built, what remains                                                                                           | Every 2-3 tasks      |
+| Final Acceptance                                     | E2E verification with troubleshooting                                                                                  | Last task            |
 
 ### Plan Quality Checklist
 
-| Criterion | Check |
-|---|---|
-| Header has Goal, Tech Stack, Design Doc, Prerequisites | No missing header fields |
-| Change Overview summarizes all modifications with bullet points | No vague "various changes" |
-| Task 0 verifies environment toolchain (runtime, build, test) | No "assume tools work" |
-| Every task has Background (Context, Reason, Impact) | No orphan tasks without purpose |
-| Every step has Location, Operation, Reason | No "fix the bug" without specificity |
-| Every verification has concrete command + expected output | No "eyeball it" or "tests pass" |
-| Tasks reference Spec AC when spec exists | No orphan tasks without a spec anchor |
-| Tasks are ordered by dependency | No forward references |
-| Tasks are 2-5 minutes each | No "implement the whole module" |
-| TDD steps are explicit (test first, then code) | RED-GREEN-REFACTOR per task |
-| Checkpoint summaries appear every 2-3 tasks | No unbroken chains of 5+ tasks |
-| Final acceptance task has E2E verification + troubleshooting | No "it should work" |
-| Cognitive changes recorded for new files/exports/conventions | No unrecorded project memory |
+| Criterion                                                       | Check                                 |
+| --------------------------------------------------------------- | ------------------------------------- |
+| Header has Goal, Tech Stack, Design Doc, Prerequisites          | No missing header fields              |
+| Change Overview summarizes all modifications with bullet points | No vague "various changes"            |
+| Task 0 verifies environment toolchain (runtime, build, test)    | No "assume tools work"                |
+| Every task has Background (Context, Reason, Impact)             | No orphan tasks without purpose       |
+| Every step has Location, Operation, Reason                      | No "fix the bug" without specificity  |
+| Every verification has concrete command + expected output       | No "eyeball it" or "tests pass"       |
+| Tasks reference Spec AC when spec exists                        | No orphan tasks without a spec anchor |
+| Tasks are ordered by dependency                                 | No forward references                 |
+| Tasks are 2-5 minutes each                                      | No "implement the whole module"       |
+| TDD steps are explicit (test first, then code)                  | RED-GREEN-REFACTOR per task           |
+| Checkpoint summaries appear every 2-3 tasks                     | No unbroken chains of 5+ tasks        |
+| Final acceptance task has E2E verification + troubleshooting    | No "it should work"                   |
+| Cognitive changes recorded for new files/exports/conventions    | No unrecorded project memory          |
 
-Save the plan to `docs/plans/<date>_<topic>/plan.md`.
+Save the plan to `docs/changes/<date>_<topic>/plan.md`.
 
 **STOP — Do NOT proceed to Phase 5 until:**
 
@@ -194,20 +194,20 @@ Invoke the chosen skill and pass the plan document path.
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern                  | Why It Fails                                     | Correct Approach                             |
-| ----------------------------- | ------------------------------------------------ | -------------------------------------------- |
-| "This is too simple to plan"  | Simple tasks have unexamined assumptions         | Plan anyway — the plan can be short          |
-| "I already know the approach" | Your approach may conflict with project patterns | Document it and get approval                 |
-| "The user wants it fast"      | Bad code is slower than planned code             | Planning prevents rework                     |
-| "I'll plan as I go"           | That is improvising, not planning                | Plan first, execute second                   |
-| Asking 5 questions at once    | Overwhelms the user, gets vague answers          | One question per message                     |
-| Proposing only 1 approach     | No trade-off analysis, may miss better options   | Always propose 2-3 approaches                |
-| Vague file references         | "Update the tests" — which tests?                | Exact file paths always                      |
-| Tasks that take 30+ minutes   | Too large to track and verify                    | Break into 2-5 minute tasks                  |
-| Starting code before approval | Wastes effort if direction changes               | Wait for explicit "yes"                      |
-| Skipping Task 0               | Tools not verified, downstream tasks blocked     | Always verify toolchain first                |
-| Vague steps without Location  | "Add validation" — where exactly?                | Location, Operation, Reason per step         |
-| No expected output in check   | "Tests pass" — what does that look like?         | Concrete commands with expected output       |
+| Anti-Pattern                  | Why It Fails                                     | Correct Approach                       |
+| ----------------------------- | ------------------------------------------------ | -------------------------------------- |
+| "This is too simple to plan"  | Simple tasks have unexamined assumptions         | Plan anyway — the plan can be short    |
+| "I already know the approach" | Your approach may conflict with project patterns | Document it and get approval           |
+| "The user wants it fast"      | Bad code is slower than planned code             | Planning prevents rework               |
+| "I'll plan as I go"           | That is improvising, not planning                | Plan first, execute second             |
+| Asking 5 questions at once    | Overwhelms the user, gets vague answers          | One question per message               |
+| Proposing only 1 approach     | No trade-off analysis, may miss better options   | Always propose 2-3 approaches          |
+| Vague file references         | "Update the tests" — which tests?                | Exact file paths always                |
+| Tasks that take 30+ minutes   | Too large to track and verify                    | Break into 2-5 minute tasks            |
+| Starting code before approval | Wastes effort if direction changes               | Wait for explicit "yes"                |
+| Skipping Task 0               | Tools not verified, downstream tasks blocked     | Always verify toolchain first          |
+| Vague steps without Location  | "Add validation" — where exactly?                | Location, Operation, Reason per step   |
+| No expected output in check   | "Tests pass" — what does that look like?         | Concrete commands with expected output |
 
 ---
 
@@ -293,6 +293,7 @@ No API or schema changes.
 Verify the React/TypeScript/Jest toolchain is available.
 
 **Steps:**
+
 - [ ] Verify Node.js runtime
   - `node --version`
   - Expected: v18.x or higher
@@ -304,6 +305,7 @@ Verify the React/TypeScript/Jest toolchain is available.
   - Expected: version number
 
 **Verification:**
+
 - [ ] Build succeeds
   - `npm run build`
   - Expected: no errors
@@ -316,20 +318,24 @@ Verify the React/TypeScript/Jest toolchain is available.
 ### Task 1: Write failing test for button re-enable
 
 **Background:**
+
 - Context: The login form disables the submit button during submission but fails to re-enable it after an error response
 - Reason: No test currently covers the disabled-to-enabled state transition after failure
 - Impact: Prerequisite for Task 2 fix; no downstream dependencies
 
 **Files:**
+
 - Modify: `tests/components/LoginForm.test.tsx`
 
 **Steps:**
+
 - [ ] Add test case for button re-enable after failed login
   - Location: `tests/components/LoginForm.test.tsx` — within existing LoginForm describe block
   - Operation: Add a test that mocks a failed API response, simulates form submission, and asserts the submit button is NOT disabled after the error
   - Reason: The test must fail first (RED phase) to validate the fix is needed
 
 **Verification:**
+
 - [ ] New test fails (RED)
   - `npm test -- --grep "re-enables button after failed login"`
   - Expected: 1 failing test
@@ -339,20 +345,24 @@ Verify the React/TypeScript/Jest toolchain is available.
 ### Task 2: Fix the bug
 
 **Background:**
+
 - Context: LoginForm handleSubmit function
 - Reason: isSubmitting is set to true before API call but never reset to false on error
 - Impact: Depends on Task 1 test; no downstream tasks
 
 **Files:**
+
 - Modify: `src/components/LoginForm.tsx`
 
 **Steps:**
+
 - [ ] Reset isSubmitting in error catch block
   - Location: `src/components/LoginForm.tsx` — handleSubmit function, catch block
   - Operation: Add `setIsSubmitting(false)` as the first line in the catch block
   - Reason: The finally block approach would also work but modifies more code; catch block is minimal change for a bug fix
 
 **Verification:**
+
 - [ ] All LoginForm tests pass (GREEN)
   - `npm test -- --grep "LoginForm"`
   - Expected: all tests passing, including the new one from Task 1
@@ -361,6 +371,7 @@ Verify the React/TypeScript/Jest toolchain is available.
   - Expected: no regressions
 
 **Cognitive Changes:**
+
 - [ ] [CLAUDE.md] LoginForm isSubmitting state must be reset in both success AND error paths
 ```
 
@@ -369,7 +380,7 @@ Verify the React/TypeScript/Jest toolchain is available.
 After plan approval:
 
 ```
-Plan approved and saved to docs/plans/2026-03-15_login-fix/plan.md.
+Plan approved and saved to docs/changes/2026-03-15_login-fix/plan.md.
 Invoking task-management skill to begin tracked execution.
 ```
 
@@ -379,10 +390,10 @@ Invoking task-management skill to begin tracked execution.
 
 Before claiming the plan is complete, verify:
 
-1. IDENTIFY: Plan document exists at `docs/plans/`
+1. IDENTIFY: Plan document exists at `docs/changes/<date>_<topic>/plan.md`
 2. RUN: Review plan for completeness against quality checklist
 3. READ: Verify all sections are filled with specific details
-4. SPEC-CHECK: If a spec exists in `docs/specs/`, verify every task references at least one acceptance criterion
+4. SPEC-CHECK: If a spec exists in `docs/changes/<date>_<topic>/specs/*.md`, verify every task references at least one acceptance criterion
 5. VERIFY: User has explicitly approved
 6. CLAIM: Only then transition to implementation
 
