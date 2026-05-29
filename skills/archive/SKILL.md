@@ -20,9 +20,11 @@ Archive completed feature directories from `docs/changes/` to `docs/archive/`, m
 ### Actions
 
 1. Use Glob to match all feature directories under `docs/changes/`:
+
    ```
    Glob: docs/changes/*/
    ```
+
    Directory naming format: `<date>_<topic>` (e.g., `2026-05-10_color-extraction`).
 
 2. For each feature directory, check task completion status:
@@ -69,7 +71,7 @@ Match commit messages to task descriptions to confirm completion is genuine (not
 ```
 | Feature Directory                                     | Tasks Done | Git Commits | Confidence |
 | ----------------------------------------------------- | ---------- | ----------- | ---------- |
-| docs/changes/2026-05-10_login/                        | 5/5 [x]    | 3 matching  | High       |
+| docs/changes/2026-05-10_login/plan.md                        | 5/5 [x]    | 3 matching  | High       |
 ```
 
 2. Ask ONE clear question: "Archive these completed features?"
@@ -85,11 +87,13 @@ Match commit messages to task descriptions to confirm completion is genuine (not
 ### Actions
 
 1. Ensure `docs/archive/` exists:
+
    ```bash
    mkdir -p docs/archive
    ```
 
 2. Move the entire feature directory into the archive:
+
    ```bash
    mv docs/changes/<date>_<topic> docs/archive/
    ```
@@ -97,11 +101,13 @@ Match commit messages to task descriptions to confirm completion is genuine (not
    All artifacts within the directory (`plan.md`, `design.md`, `intent.md`, `prd.md`, `specs/`, etc.) are archived together in a single move — structure remains intact.
 
 3. Verify archive content integrity — use Glob to confirm the directory structure:
+
    ```
    Glob: docs/archive/<date>_<topic>/
    Glob: docs/archive/<date>_<topic>/**/*
    ```
-   Expected contents: `plan.md`  `design.md`  `intent.md`  `prd.md`  `specs/*.md`
+
+   Expected contents: `plan.md` `design.md` `intent.md` `prd.md` `specs/*.md`
 
 4. **Fix relative path references** in archived documents — scan all `.md` files in `docs/archive/<date>_<topic>/` for internal relative links. Archived paths change from `../../changes/` to `../../archive/`; sibling directory relative paths remain valid. Update paths pointing to resources still in `docs/changes/` (not yet archived).
 
@@ -131,7 +137,7 @@ Match commit messages to task descriptions to confirm completion is genuine (not
 2. **Append archive row to `## Completed Features` table** — insert at the top:
 
 ```
-| [<directory-name>](../archive/2026-05-10_color-extraction/) | <one-line summary> | <domain> | <today-ISO-date> |
+| [<directory-name>](../archive/2026-05-10_color-extraction/plan.md) | <one-line summary> | <domain> | <today-ISO-date> |
 ```
 
 - **Summary:** Extract from `design.md` title/overview or `plan.md` goal field — one sentence max.
@@ -160,7 +166,7 @@ Match commit messages to task descriptions to confirm completion is genuine (not
 
 <!-- Domain-specific spec groupings -->
 
-*Last updated: YYYY-MM-DD — by archiving <directory-name>*
+_Last updated: YYYY-MM-DD — by archiving <directory-name>_
 ```
 
 5. **Ensure CLAUDE.md references `docs/global/index.md`** — if the `## Documentation Index` section in CLAUDE.md does not reference `docs/global/index.md` in the `## Core Index` table, add it:
@@ -229,15 +235,15 @@ docs/archive/<date>_<topic>/
 
 ## Anti-Patterns / Common Mistakes
 
-| Anti-Pattern                       | Why It Is Wrong                        | Correct Approach                             |
-| ---------------------------------- | -------------------------------------- | -------------------------------------------- |
-| Archiving without git history check | Checkboxes can be ticked prematurely   | Cross-reference `[x]` with `git log`         |
-| Archiving features with open tasks | Incomplete work becomes invisible      | Only archive when ALL `[ ]` are resolved     |
-| Moving without user confirmation   | Destructive — user may need those docs | Always get explicit approval in Phase 2      |
-| Skipping the global index update   | Feature becomes undiscoverable         | Always update `docs/global/index.md`         |
-| Analyzing source code during archive | This is archive, not code review     | Check only documents and git history         |
-| Splitting the directory (partial move) | Loses full feature context          | Always `mv` the entire `<date>_<topic>` dir  |
-| Archiving before feature is done   | Artifacts still relevant to active work | Only archive when plan.md tasks are all `[x]` |
+| Anti-Pattern                           | Why It Is Wrong                         | Correct Approach                              |
+| -------------------------------------- | --------------------------------------- | --------------------------------------------- |
+| Archiving without git history check    | Checkboxes can be ticked prematurely    | Cross-reference `[x]` with `git log`          |
+| Archiving features with open tasks     | Incomplete work becomes invisible       | Only archive when ALL `[ ]` are resolved      |
+| Moving without user confirmation       | Destructive — user may need those docs  | Always get explicit approval in Phase 2       |
+| Skipping the global index update       | Feature becomes undiscoverable          | Always update `docs/global/index.md`          |
+| Analyzing source code during archive   | This is archive, not code review        | Check only documents and git history          |
+| Splitting the directory (partial move) | Loses full feature context              | Always `mv` the entire `<date>_<topic>` dir   |
+| Archiving before feature is done       | Artifacts still relevant to active work | Only archive when plan.md tasks are all `[x]` |
 
 ---
 
