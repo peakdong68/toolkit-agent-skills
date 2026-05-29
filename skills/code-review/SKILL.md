@@ -26,17 +26,9 @@ git diff HEAD~N..HEAD          # 或指定提交范围
 git log --oneline HEAD~N..HEAD # 完成了什么
 ```
 
-2. 定位计划文档：
+2. 定位计划文档：`docs/changes/<date>_<topic>/plan.md`
 
-```bash
-ls docs/plans/*.md | tail -1
-```
-
-3. **检查 `docs/specs/` 中是否存在现有规范** —— 如果该功能有对应的规范目录，请加载其验收标准、数据契约和边界情况；这些是代码实现必须满足的权威性行为预期
-
-```bash
-ls docs/specs/
-```
+3. **检查 `docs/changes/<date>_<topic>/specs/` 中是否存在现有规范** —— 如果该功能有对应的规范目录，请加载其验收标准、数据契约和边界情况；这些是代码实现必须满足的权威性行为预期
 
 4. 从 `memory/learned-patterns.md` 加载项目规范
 
@@ -64,7 +56,7 @@ ls docs/specs/
 ```
 对照以下内容审查以下更改：
 1. 计划：[计划文档或需求]
-2. 规范：[规范文件路径，例如 `docs/specs/<date>_<topic>/` —— 验收标准、数据契约、边界情况]
+2. 规范：[规范文件路径，例如 `docs/changes/<date>_<topic>/specs/*.md` —— 验收标准、数据契约、边界情况]
 3. 规范惯例：[从记忆中学习的模式]
 4. 标准：[CLAUDE.md 规则]
 

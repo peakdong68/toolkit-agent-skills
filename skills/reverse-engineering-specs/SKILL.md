@@ -74,7 +74,7 @@ description: '适用于接入缺乏规范的现有代码库时——彻底追踪
 按照以下命名约定创建规范文件：
 
 ```
-docs/specs/<date>_<topic>/
+docs/changes/<date>_<topic>/specs/
 ├── 01-[第一项能力].md
 ├── 02-[第二项能力].md
 ├── ...

@@ -36,7 +36,7 @@ description: '用于验证实现是否满足规范要求的场景——应用由
 
 ### 执行步骤
 
-1. 定位所有规范文件（`docs/specs/<date>_<topic>/*.md`）
+1. 定位所有规范文件（`docs/changes/<date>_<topic>/specs/*.md`）
 2. 提取每一项验收标准及其对应 ID
 3. 以结构化格式进行记录
 

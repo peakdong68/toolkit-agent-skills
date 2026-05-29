@@ -22,7 +22,7 @@ model: inherit
 ### 开始之前
 - 读取 `IMPLEMENTATION_PLAN.md` 获取当前任务列表
 - 读取 `AGENTS.md` 获取操作笔记和项目经验
-- 读取相关 `docs/specs/<date>_<topic>/*.md` 获取验收标准
+- 读取相关 `docs/changes/<date>_<topic>/specs/*.md` 获取验收标准
 - 检查 circuit breaker 状态（CLOSED/HALF-OPEN/OPEN）
 
 ### 执行过程中
