@@ -1,12 +1,10 @@
 {
-  "name": "toolkit",
+  "name": "kit-core",
   "description": "Complete AI-optimized development environment with planning, code review, PRD generation, self-learning, task management, and more",
   "version": "1.0.0",
   "author": {
     "name": "Peak Dong"
   },
-  "homepage": "https://github.com/peakdong68/toolkit-agent-skills",
-  "repository": "https://github.com/peakdong68/toolkit-agent-skills",
   "license": "MIT",
   "keywords": [
     "skills",
@@ -19,5 +17,7 @@
     "testing",
     "deployment",
     "documentation"
-  ]
+  ],
+  "skills": ["./skills/"],
+  "commands": ["./commands/"]
 }
