@@ -7,7 +7,7 @@
 ```
 /plugin marketplace add peakdong68/toolkit-agent-skills
 
-/plugin install toolkit@toolkit-agents
+/plugin install kit-core@toolkit
 ```
 
 **Local / development:**
@@ -17,6 +17,6 @@
 git clone https://github.com/peakdong68/toolkit-agent-skills.git
 
 /plugin marketplace add ./path/to/toolkit-agent-skills
-/plugin install toolkit@toolkit-agents
+/plugin install kit-core@toolkit
 
 ```

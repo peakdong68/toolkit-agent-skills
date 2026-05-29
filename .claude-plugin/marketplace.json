@@ -1,5 +1,5 @@
 {
-  "name": "toolkit-agents",
+  "name": "toolkit",
   "owner": {
     "name": "Peak Dong"
   },
@@ -8,8 +8,8 @@
   },
   "plugins": [
     {
-      "name": "toolkit",
-      "source": "./plugins/toolkit",
+      "name": "kit-core",
+      "source": "./plugins/kit-core",
       "description": "Complete AI-optimized development environment with planning, code review, PRD generation, self-learning, task management, and more"
     }
   ]
