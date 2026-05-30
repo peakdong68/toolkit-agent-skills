@@ -11,6 +11,11 @@
       "name": "kit-core",
       "source": "./plugins/kit-core",
       "description": "Complete AI-optimized development environment with planning, code review, PRD generation, self-learning, task management, and more"
+    },
+    {
+      "name": "kit-commit",
+      "source": "./plugins/kit-commit",
+      "description": "Streamline your git workflow with simple commands for committing, pushing, and creating pull requests"
     }
   ]
 }
