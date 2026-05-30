@@ -3,9 +3,7 @@
   "owner": {
     "name": "Peak Dong"
   },
-  "metadata": {
-    "description": "Production-grade engineering skills for AI coding agents  "
-  },
+  "description": "Production-grade engineering skills for AI coding agents  ",
   "plugins": [
     {
       "name": "kit-core",
